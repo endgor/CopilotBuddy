@@ -2,8 +2,7 @@ namespace Tripper.Navigation
 {
     /// <summary>
     /// Navigation map constants.
-    /// WoW uses a 64x64 ADT grid with each ADT = 533.3333 yards.
-    /// CopilotBuddy uses 1x1 MaNGOS-style tiles: one Detour tile per ADT.
+    /// HB 6.2.3 uses 533.3333f and CopilotBuddy keeps the same world tile size.
     /// </summary>
     public static class MapConsts
     {
