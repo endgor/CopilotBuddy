@@ -18,14 +18,14 @@ namespace Styx.Logic.Profiles.Quest;
 
 public class ProfileHelperFunctionsBase
 {
-    private static readonly HashSet<QuestGiverStatus> hashSet_0 = new HashSet<QuestGiverStatus>()
+    private static readonly HashSet<QuestGiverStatus> _defaultQuestAvailableStatuses = new HashSet<QuestGiverStatus>()
     {
         QuestGiverStatus.Available,
         QuestGiverStatus.AvailableRepeatable,
         QuestGiverStatus.LowLevelAvailable,
         QuestGiverStatus.LowLevelAvailableRepeatable
     };
-    private static readonly Random random_0 = new Random(Environment.TickCount);
+    private static readonly Random _random = new Random(Environment.TickCount);
 
     protected LocalPlayer Me => ObjectManager.Me;
 
@@ -61,7 +61,7 @@ public class ProfileHelperFunctionsBase
 
     protected bool HasQuestAvailable(int objectId)
     {
-        return this.HasQuestAvailable(objectId, hashSet_0);
+        return this.HasQuestAvailable(objectId, _defaultQuestAvailableStatuses);
     }
 
     protected bool HasQuestAvailable(int objectId, string type)
@@ -172,8 +172,8 @@ public class ProfileHelperFunctionsBase
     protected bool Chance(double val)
     {
         bool flag;
-        lock (random_0)
-            flag = random_0.NextDouble() * 100.0 < val;
+        lock (_random)
+            flag = _random.NextDouble() * 100.0 < val;
         return flag;
     }
 
@@ -182,8 +182,8 @@ public class ProfileHelperFunctionsBase
     protected int Random(int min, int max)
     {
         int num;
-        lock (random_0)
-            num = random_0.Next(min, max);
+        lock (_random)
+            num = _random.Next(min, max);
         return num;
     }
 }
