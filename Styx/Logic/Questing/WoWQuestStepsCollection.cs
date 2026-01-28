@@ -10,16 +10,16 @@ namespace Styx.Logic.Questing
 	[StructLayout(LayoutKind.Sequential, Size = 12)]
 	public struct WoWQuestStepsCollection
 	{
-		private uint uint_0;
+		private uint _padding;
 		public uint StepsCount;
-		private uint uint_1;
+		private uint _stepsArrayPtr;
 
 		public WoWQuestStep[] Steps
 		{
 			get
 			{
-				if (uint_1 != 0U)
-					return ObjectManager.Wow.ReadStructArray<WoWQuestStep>(uint_1, (int)StepsCount);
+				if (_stepsArrayPtr != 0U)
+					return ObjectManager.Wow.ReadStructArray<WoWQuestStep>(_stepsArrayPtr, (int)StepsCount);
 				return new WoWQuestStep[StepsCount];
 			}
 		}

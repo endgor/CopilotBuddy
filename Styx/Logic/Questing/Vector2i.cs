@@ -5,6 +5,9 @@ namespace Styx.Logic.Questing
 {
 	/// <summary>
 	/// Integer 2D vector for quest area coordinates.
+	/// NOTE: This struct exists in HB 3.3.5a for grid-based quest step coordinates.
+	/// While not in HB 4.3.4, it's used by WoWQuestStep/QuestStepLocation for
+	/// integer tile coordinates from quest cache data.
 	/// </summary>
 	public struct Vector2i
 	{
