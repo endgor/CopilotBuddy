@@ -9,20 +9,20 @@ namespace Styx.Logic
 {
     public static class Blacklist
     {
-        private static readonly Dictionary<ulong, DateTime> dictionary_0;
+        private static readonly Dictionary<ulong, DateTime> _blacklistedGuids;
         private static Func<KeyValuePair<ulong, DateTime>, ulong> func_0;
 
         static Blacklist()
         {
-            Blacklist.dictionary_0 = new Dictionary<ulong, DateTime>();
+            Blacklist._blacklistedGuids = new Dictionary<ulong, DateTime>();
         }
 
         public static void Flush()
         {
-            if (Blacklist.dictionary_0.Count != 0)
+            if (Blacklist._blacklistedGuids.Count != 0)
             {
                 DateTime now = DateTime.Now;
-                IEnumerable<KeyValuePair<ulong, DateTime>> source = Blacklist.dictionary_0.Where(kvp => kvp.Value < now);
+                IEnumerable<KeyValuePair<ulong, DateTime>> source = Blacklist._blacklistedGuids.Where(kvp => kvp.Value < now);
                 if (Blacklist.func_0 == null)
                 {
                     Blacklist.func_0 = new Func<KeyValuePair<ulong, DateTime>, ulong>(GetKey);
@@ -30,7 +30,7 @@ namespace Styx.Logic
                 List<ulong> list = source.Select(Blacklist.func_0).ToList<ulong>();
                 foreach (ulong num in list)
                 {
-                    Blacklist.dictionary_0.Remove(num);
+                    Blacklist._blacklistedGuids.Remove(num);
                 }
             }
         }
@@ -51,24 +51,24 @@ namespace Styx.Logic
             {
                 Blacklist.Flush();
             }
-            if (Blacklist.dictionary_0.ContainsKey(guid))
+            if (Blacklist._blacklistedGuids.ContainsKey(guid))
             {
-                return (DateTime.Now <= Blacklist.dictionary_0[guid]);
+                return (DateTime.Now <= Blacklist._blacklistedGuids[guid]);
             }
             return false;
         }
 
         public static void Add(ulong guid, TimeSpan end)
         {
-            if (Blacklist.dictionary_0.ContainsKey(guid))
+            if (Blacklist._blacklistedGuids.ContainsKey(guid))
             {
-                Dictionary<ulong, DateTime> dictionary = Blacklist.dictionary_0;
+                Dictionary<ulong, DateTime> dictionary = Blacklist._blacklistedGuids;
                 DateTime now = DateTime.Now;
                 dictionary[guid] = now.Add(end);
             }
             else
             {
-                Dictionary<ulong, DateTime> dictionary2 = Blacklist.dictionary_0;
+                Dictionary<ulong, DateTime> dictionary2 = Blacklist._blacklistedGuids;
                 DateTime now2 = DateTime.Now;
                 dictionary2.Add(guid, now2.Add(end));
             }
