@@ -15,21 +15,21 @@ namespace Styx.Logic.AreaManagement
 	/// </summary>
 	public class HotspotManager
 	{
-		private readonly CircularQueue<WoWPoint> circularQueue_0;
-		private readonly Dictionary<WoWPoint, DateTime> dictionary_0 = new Dictionary<WoWPoint, DateTime>();
-		private readonly Random random_0 = new Random();
-		private static WoWPoint woWPoint_0;
-		private static Profile? profile_0;
-		private static WoWPoint woWPoint_1;
-		private static Stopwatch? stopwatch_0;
+		private readonly CircularQueue<WoWPoint> _hotspotQueue;
+		private readonly Dictionary<WoWPoint, DateTime> _blacklistedPoints = new Dictionary<WoWPoint, DateTime>();
+		private readonly Random _random = new Random();
+		private static WoWPoint _currentHotspot;
+		private static Profile? _cachedProfile;
+		private static WoWPoint _lastHotspot;
+		private static Stopwatch? _timer;
 
 		public List<WoWPoint> Hotspots { get; private set; }
 
 		public HotspotManager(IEnumerable<WoWPoint> points)
 		{
 			Hotspots = points.ToList();
-			circularQueue_0 = new CircularQueue<WoWPoint>();
-			Hotspots.ForEach(circularQueue_0.Enqueue);
+			_hotspotQueue = new CircularQueue<WoWPoint>();
+			Hotspots.ForEach(_hotspotQueue.Enqueue);
 			CycleToNearest();
 		}
 
@@ -123,14 +123,14 @@ namespace Styx.Logic.AreaManagement
 					Logging.WriteException(ex3);
 				}
 			}
-			circularQueue_0 = new CircularQueue<WoWPoint>();
-			Hotspots.ForEach(circularQueue_0.Enqueue);
+			_hotspotQueue = new CircularQueue<WoWPoint>();
+			Hotspots.ForEach(_hotspotQueue.Enqueue);
 			CycleToNearest();
 		}
 
 		static HotspotManager()
 		{
-			woWPoint_0 = WoWPoint.Zero;
+			_currentHotspot = WoWPoint.Zero;
 		}
 
 		public Dictionary<WoWPoint, DateTime> Blacklist
@@ -138,7 +138,7 @@ namespace Styx.Logic.AreaManagement
 			get
 			{
 				CleanupBlacklist();
-				return dictionary_0;
+				return _blacklistedPoints;
 			}
 		}
 
@@ -157,17 +157,17 @@ namespace Styx.Logic.AreaManagement
 			}
 			if (woWPoint != WoWPoint.Zero)
 			{
-				circularQueue_0.CycleTo(woWPoint);
+				_hotspotQueue.CycleTo(woWPoint);
 			}
 		}
 
 		public WoWPoint GetNextHotspot()
 		{
-			if (circularQueue_0.Count <= 0)
+			if (_hotspotQueue.Count <= 0)
 			{
 				return WoWPoint.Zero;
 			}
-			return circularQueue_0.Dequeue();
+			return _hotspotQueue.Dequeue();
 		}
 
 		public WoWPoint GetRandomHotspot()
@@ -177,35 +177,29 @@ namespace Styx.Logic.AreaManagement
 			{
 				return WoWPoint.Zero;
 			}
-			return list[random_0.Next(0, list.Count)];
-		}
-
-		public void BlacklistPoint(WoWPoint pnt, TimeSpan forTime)
-		{
-			DateTime now = DateTime.Now;
-			BlacklistPoint(pnt, now.Add(forTime));
+			return list[_random.Next(0, list.Count)];
 		}
 
 		public void BlacklistPoint(WoWPoint pnt, DateTime expiration)
 		{
-			if (!dictionary_0.ContainsKey(pnt))
+			if (!_blacklistedPoints.ContainsKey(pnt))
 			{
-				dictionary_0.Add(pnt, expiration);
+				_blacklistedPoints.Add(pnt, expiration);
 			}
 			else
 			{
-				dictionary_0[pnt] = expiration;
+				_blacklistedPoints[pnt] = expiration;
 			}
 		}
 
 		private void CleanupBlacklist()
 		{
 			DateTime now = DateTime.Now;
-			foreach (KeyValuePair<WoWPoint, DateTime> keyValuePair in dictionary_0)
+			foreach (KeyValuePair<WoWPoint, DateTime> keyValuePair in _blacklistedPoints)
 			{
 				if (now > keyValuePair.Value)
 				{
-					dictionary_0.Remove(keyValuePair.Key);
+					_blacklistedPoints.Remove(keyValuePair.Key);
 				}
 			}
 		}
@@ -226,20 +220,20 @@ namespace Styx.Logic.AreaManagement
 				{
 					Logging.WriteException(ex2);
 				}
-				return woWPoint_0;
+				return _currentHotspot;
 			}
 		}
 
 		public static WoWPoint LastHotSpot
 		{
-			get { return woWPoint_1; }
-			set { woWPoint_1 = value; }
+			get { return _lastHotspot; }
+			set { _lastHotspot = value; }
 		}
 
 		public static Stopwatch? Timer
 		{
-			get { return stopwatch_0; }
-			set { stopwatch_0 = value; }
+			get { return _timer; }
+			set { _timer = value; }
 		}
 
 		private static void UpdateCurrentHotspot()
@@ -254,18 +248,18 @@ namespace Styx.Logic.AreaManagement
 				Logging.Write("No suitable hotspots in {0}.", ProfileManager.CurrentProfile?.Name ?? "profile");
 				throw new UserException("No hotspots have been defined!");
 			}
-			if (ProfileManager.CurrentProfile != profile_0)
+			if (ProfileManager.CurrentProfile != _cachedProfile)
 			{
-				profile_0 = ProfileManager.CurrentProfile;
-				LastHotSpot = woWPoint_0;
-				woWPoint_0 = hotspotManager.GetNextHotspot();
+				_cachedProfile = ProfileManager.CurrentProfile;
+				LastHotSpot = _currentHotspot;
+				_currentHotspot = hotspotManager.GetNextHotspot();
 				Timer?.Reset();
 			}
 			TimeSpan elapsed = Timer?.Elapsed ?? TimeSpan.Zero;
-			if (elapsed.TotalMinutes > 5.0 || (LastHotSpot == woWPoint_0 && Targeting.Instance.TargetList.Count == 0))
+			if (elapsed.TotalMinutes > 5.0 || (LastHotSpot == _currentHotspot && Targeting.Instance.TargetList.Count == 0))
 			{
-				LastHotSpot = woWPoint_0;
-				woWPoint_0 = hotspotManager.GetNextHotspot();
+				LastHotSpot = _currentHotspot;
+				_currentHotspot = hotspotManager.GetNextHotspot();
 				Timer?.Reset();
 			}
 		}
