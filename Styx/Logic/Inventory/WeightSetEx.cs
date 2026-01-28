@@ -309,7 +309,11 @@ public class WeightSetEx : IDisposable
       WeightSetEx.ienumerable_0 = (IEnumerable<WeightSetEx>) weightSetExList;
     }
     else
+    {
       Logging.WriteDebug("Unable to find Data and/or 'Weight Sets' folder, cannot parse weight set's. ");
+      // Initialize to empty collection to prevent null reference exceptions
+      WeightSetEx.ienumerable_0 = Enumerable.Empty<WeightSetEx>();
+    }
   }
 
   public override string ToString()

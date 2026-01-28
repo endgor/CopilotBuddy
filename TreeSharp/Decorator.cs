@@ -32,7 +32,8 @@ namespace TreeSharp
 
         protected virtual bool CanRun(object context)
         {
-            return true;
+            // HB 4.3.4: Check Runner delegate if set, otherwise return true
+            return this.Runner == null || this.Runner(context);
         }
 
         public override void Start(object context)

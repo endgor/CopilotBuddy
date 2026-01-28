@@ -51,17 +51,11 @@ public class ForcedQuestPickUp : ForcedBehavior
     {
         get
         {
-            // Skip if quest is already turned in (completed history)
-            var completedQuests = ObjectManager.Me.QuestLog.GetCompletedQuests();
-            if (completedQuests != null && completedQuests.Contains(this.QuestId))
+            if (ObjectManager.Me.QuestLog.GetCompletedQuests().Contains(this.QuestId))
                 return true;
-
-            // Skip if quest is already in quest log (either complete or in-progress)
-            // This allows the profile to continue with quest objectives or turn-in
-            if (ObjectManager.Me.QuestLog.ContainsQuest(this.QuestId))
+            if (ObjectManager.Me.QuestLog.GetQuestById(this.QuestId) != null)
                 return true;
-
-            return false;
+            return ObjectManager.Me.QuestLog.ContainsQuest(this.QuestId);
         }
     }
 
@@ -134,9 +128,10 @@ public class ForcedQuestPickUp : ForcedBehavior
                     (Composite)new WaitContinue(2, (CanRunDecoratorDelegate)(object_0 => false), (Composite)new ActionAlwaysSucceed())
                 }))
             })),
-            (Composite)new Decorator((CanRunDecoratorDelegate)(object_0 => !(BotPoi.Current.AsObject != (WoWObject)null) ? (double)ForcedQuestPickUp.Me.Location.DistanceSqr(BotPoi.Current.Location) > 16.0 : !BotPoi.Current.AsObject.WithinInteractRange), (Composite)new ActionMoveToPoi()),
+            (Composite)new Decorator((CanRunDecoratorDelegate)(object_0 => !(BotPoi.Current.AsObject != (WoWObject)null) ? (double)ForcedQuestPickUp.Me.Location.DistanceSqr(BotPoi.Current.Location) > 6.25 : !BotPoi.Current.AsObject.WithinInteractRange), (Composite)new ActionMoveToPoi()),
             (Composite)new Decorator((CanRunDecoratorDelegate)(object_0 => BotPoi.Current.AsObject != (WoWObject)null && BotPoi.Current.AsObject.WithinInteractRange), (Composite)new Sequence((ContextChangeHandler)(object_0 => (object)BotPoi.Current.AsObject), new Composite[10]
             {
+                // HB 4.3.4: 10 elements in sequence
                 (Composite)new ActionMoveStop(),
                 (Composite)new TreeSharp.Action((ActionDelegate)(object_0 => this.method_2(object_0))),
                 (Composite)new DecoratorContinue((CanRunDecoratorDelegate)(object_0 => object_0 is WoWUnit), (Composite)new TreeSharp.Action((ActionSucceedDelegate)(object_0 => ((WoWUnit)object_0).Target()))),
@@ -225,11 +220,13 @@ public class ForcedQuestPickUp : ForcedBehavior
 
     private bool method_5(object object_0)
     {
-        bool isVisible;
-        return isVisible = QuestFrame.Instance.IsVisible;
+        return QuestFrame.Instance.IsVisible;
     }
 
-    private bool method_6(object object_0) => ForcedQuestPickUp.frame_1.IsVisible;
+    private bool method_6(object object_0)
+    {
+        return ForcedQuestPickUp.frame_1.IsVisible;
+    }
 
     private RunStatus method_7(object object_0)
     {

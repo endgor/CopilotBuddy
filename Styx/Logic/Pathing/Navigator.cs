@@ -18,7 +18,7 @@ namespace Styx.Logic.Pathing
 		private static IMover? _playerMover;
 		private static IStuckHandler? _stuckHandler;
 
-		public static float PathPrecision { get; set; } = 1.6f;
+		public static float PathPrecision { get; set; } = 2.0f;
 		public static int LoadTilesAroundRadius { get; set; } = 2;
 		public static float FlyingMountHeight { get; set; } = 25f;
 
@@ -247,17 +247,21 @@ namespace Styx.Logic.Pathing
 			}
 
 			// Move along path
-			// Use smaller precision for intermediate waypoints, larger for final destination
+			// HB 4.3.4: Check both 2D distance and Z difference, push waypoint ahead
 			if (_currentPath.Count > 0 && _currentPathIndex < _currentPath.Count)
 			{
 				WoWPoint nextPoint = _currentPath[_currentPathIndex];
 				
-				// For intermediate waypoints, use PathPrecision (1.6)
+				// For intermediate waypoints, use PathPrecision (2.0)
 				// For final waypoint, use requested precision
 				bool isFinalPoint = (_currentPathIndex == _currentPath.Count - 1);
 				float waypointPrecision = isFinalPoint ? precision : PathPrecision;
 
-				if (me.Location.Distance(nextPoint) < waypointPrecision)
+				// HB: Check 2D distance AND Z difference (< 4.5 yards)
+				float distance2DSqr = me.Location.Distance2DSqr(nextPoint);
+				float zDiff = Math.Abs(me.Location.Z - nextPoint.Z);
+				
+				if (distance2DSqr < waypointPrecision * waypointPrecision && zDiff < 4.5f)
 				{
 					_currentPathIndex++;
 					if (_currentPathIndex >= _currentPath.Count)
@@ -267,8 +271,15 @@ namespace Styx.Logic.Pathing
 					nextPoint = _currentPath[_currentPathIndex];
 				}
 
-				// HB 3.3.5a: Simply call ClickToMove - anti-spam is handled there
-				// WoWMovement.ClickToMove already checks if we're moving to the same destination
+				// HB: Push waypoint ahead by PathPrecision in movement direction
+				WoWPoint direction = nextPoint - me.Location;
+				float length = (float)Math.Sqrt(direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
+				if (length > 0.01f)
+				{
+					direction = new WoWPoint(direction.X / length, direction.Y / length, direction.Z / length);
+					nextPoint = nextPoint + direction * PathPrecision;
+				}
+
 				WoWMovement.ClickToMove(nextPoint);
 				
 				return MoveResult.Moved;

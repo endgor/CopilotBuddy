@@ -47,7 +47,16 @@ namespace TreeSharp
         [DebuggerStepThrough]
         protected sealed override IEnumerable<RunStatus> Execute(object context)
         {
-            yield return RunAction(context);
+            // HB 4.3.4: Loop while action returns Running, then yield final status
+            while (true)
+            {
+                RunStatus? nullable = this.LastStatus = new RunStatus?(this.RunAction(context));
+                if ((nullable.GetValueOrDefault() != RunStatus.Running ? 0 : (nullable.HasValue ? 1 : 0)) != 0)
+                    yield return RunStatus.Running;
+                else
+                    break;
+            }
+            yield return this.LastStatus.Value;
         }
     }
 }
