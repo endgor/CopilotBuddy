@@ -36,7 +36,7 @@ namespace Bots.Quest;
 
 public class QuestBot : BotBase
 {
-    private static Composite composite_0;
+    private static Composite rootBehavior;
 
     public override string Name => "Questing";
 
@@ -58,9 +58,9 @@ public class QuestBot : BotBase
     {
         get
         {
-            Composite root = QuestBot.composite_0;
+            Composite root = QuestBot.rootBehavior;
             if ((object)root == null)
-                root = QuestBot.composite_0 = QuestBot.CreateRoot();
+                root = QuestBot.rootBehavior = QuestBot.CreateRoot();
             return root;
         }
     }
@@ -86,12 +86,12 @@ public class QuestBot : BotBase
             throw new HonorbuddyUnableToStartException("Could not construct all quest behaviors.");
     }
 
-    private static bool CheckQuestBehaviors(Profile profile_0)
+    private static bool CheckQuestBehaviors(Profile profile)
     {
         bool flag = true;
-        if (profile_0.QuestOrder != null && profile_0.QuestOrder.Count > 0 && !CheckNodeContainer((INodeContainer)profile_0.QuestOrder))
+        if (profile.QuestOrder != null && profile.QuestOrder.Count > 0 && !CheckNodeContainer((INodeContainer)profile.QuestOrder))
             flag = false;
-        foreach (Profile subProfile in profile_0.SubProfiles)
+        foreach (Profile subProfile in profile.SubProfiles)
         {
             if (subProfile != (Profile)null && subProfile.QuestOrder != null && subProfile.QuestOrder.Count > 0 && !CheckNodeContainer((INodeContainer)subProfile.QuestOrder))
                 flag = false;
@@ -99,12 +99,12 @@ public class QuestBot : BotBase
         return flag;
     }
 
-    private static bool CheckNodeContainer(INodeContainer inodeContainer_0)
+    private static bool CheckNodeContainer(INodeContainer container)
     {
         bool flag = true;
-        foreach (OrderNode node in inodeContainer_0.GetNodes())
+        foreach (OrderNode node in container.GetNodes())
         {
-            if (node is INodeContainer inodeContainer_0_1 && !CheckNodeContainer(inodeContainer_0_1))
+            if (node is INodeContainer subContainer && !CheckNodeContainer(subContainer))
                 flag = false;
             if (node is CodeNode codeNode)
             {
@@ -150,10 +150,10 @@ public class QuestBot : BotBase
 
     private static Composite CreateTargetingBehavior()
     {
-        return (Composite)new Decorator((CanRunDecoratorDelegate)(object_0 => StyxWoW.Me.IsMoving), (Composite)new DecoratorIsNotPoiType(PoiType.Kill, (Composite)new Decorator((CanRunDecoratorDelegate)(object_0 => !StyxWoW.Me.Combat), (Composite)new DecoratorNeedToFindTarget((Composite)new Sequence(new Composite[2]
+        return (Composite)new Decorator((CanRunDecoratorDelegate)(context => StyxWoW.Me.IsMoving), (Composite)new DecoratorIsNotPoiType(PoiType.Kill, (Composite)new Decorator((CanRunDecoratorDelegate)(context => !StyxWoW.Me.Combat), (Composite)new DecoratorNeedToFindTarget((Composite)new Sequence(new Composite[2]
         {
             (Composite)new ActionSetTarget(),
-            (Composite)new Wait(5, (CanRunDecoratorDelegate)(object_0 => (WoWObject)StyxWoW.Me.CurrentTarget != (WoWObject)null), (Composite)new ActionSetPoi((RetrieveBotPoiDelegate)(object_0 => new BotPoi((WoWObject)StyxWoW.Me.CurrentTarget, PoiType.Kill))))
+            (Composite)new Wait(5, (CanRunDecoratorDelegate)(context => (WoWObject)StyxWoW.Me.CurrentTarget != (WoWObject)null), (Composite)new ActionSetPoi((RetrieveBotPoiDelegate)(context => new BotPoi((WoWObject)StyxWoW.Me.CurrentTarget, PoiType.Kill))))
         })))));
     }
 

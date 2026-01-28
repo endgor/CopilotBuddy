@@ -11,9 +11,9 @@ namespace Bots.Quest.Objectives;
 
 public static class DropDatabase
 {
-    private static readonly Dictionary<uint, HashSet<uint>> dictionary_0 = new Dictionary<uint, HashSet<uint>>();
-    private static readonly Dictionary<uint, HashSet<uint>> dictionary_1 = new Dictionary<uint, HashSet<uint>>();
-    private static readonly Dictionary<uint, HashSet<uint>> dictionary_2 = new Dictionary<uint, HashSet<uint>>();
+    private static readonly Dictionary<uint, HashSet<uint>> mobDrops = new Dictionary<uint, HashSet<uint>>();
+    private static readonly Dictionary<uint, HashSet<uint>> gameObjectDrops = new Dictionary<uint, HashSet<uint>>();
+    private static readonly Dictionary<uint, HashSet<uint>> vendorItems = new Dictionary<uint, HashSet<uint>>();
 
     static DropDatabase()
     {
@@ -147,7 +147,7 @@ public static class DropDatabase
         get
         {
             Dictionary<uint, HashSet<uint>> mobs = new Dictionary<uint, HashSet<uint>>();
-            foreach (KeyValuePair<uint, HashSet<uint>> keyValuePair in dictionary_0)
+            foreach (KeyValuePair<uint, HashSet<uint>> keyValuePair in mobDrops)
             {
                 HashSet<uint> uintSet = new HashSet<uint>(keyValuePair.Value);
                 mobs.Add(keyValuePair.Key, uintSet);
@@ -161,7 +161,7 @@ public static class DropDatabase
         get
         {
             Dictionary<uint, HashSet<uint>> gameObjects = new Dictionary<uint, HashSet<uint>>();
-            foreach (KeyValuePair<uint, HashSet<uint>> keyValuePair in dictionary_1)
+            foreach (KeyValuePair<uint, HashSet<uint>> keyValuePair in gameObjectDrops)
             {
                 HashSet<uint> uintSet = new HashSet<uint>(keyValuePair.Value);
                 gameObjects.Add(keyValuePair.Key, uintSet);
@@ -175,7 +175,7 @@ public static class DropDatabase
         get
         {
             Dictionary<uint, HashSet<uint>> vendors = new Dictionary<uint, HashSet<uint>>();
-            foreach (KeyValuePair<uint, HashSet<uint>> keyValuePair in dictionary_2)
+            foreach (KeyValuePair<uint, HashSet<uint>> keyValuePair in vendorItems)
             {
                 HashSet<uint> uintSet = new HashSet<uint>(keyValuePair.Value);
                 vendors.Add(keyValuePair.Key, uintSet);
@@ -186,43 +186,43 @@ public static class DropDatabase
 
     public static void AddMobDrop(uint mobId, uint dropItemId)
     {
-        if (dictionary_0.ContainsKey(mobId))
-            dictionary_0[mobId].Add(dropItemId);
+        if (mobDrops.ContainsKey(mobId))
+            mobDrops[mobId].Add(dropItemId);
         else
-            dictionary_0[mobId] = new HashSet<uint>() { dropItemId };
+            mobDrops[mobId] = new HashSet<uint>() { dropItemId };
     }
 
     public static void AddGameObjectDrop(uint gameObjId, uint dropItemId)
     {
-        if (dictionary_1.ContainsKey(gameObjId))
-            dictionary_1[gameObjId].Add(dropItemId);
+        if (gameObjectDrops.ContainsKey(gameObjId))
+            gameObjectDrops[gameObjId].Add(dropItemId);
         else
-            dictionary_1[gameObjId] = new HashSet<uint>() { dropItemId };
+            gameObjectDrops[gameObjId] = new HashSet<uint>() { dropItemId };
     }
 
     public static void AddVendorDrop(uint vendorId, uint itemId)
     {
-        if (dictionary_2.ContainsKey(vendorId))
-            dictionary_2[vendorId].Add(itemId);
+        if (vendorItems.ContainsKey(vendorId))
+            vendorItems[vendorId].Add(itemId);
         else
-            dictionary_2[vendorId] = new HashSet<uint>() { itemId };
+            vendorItems[vendorId] = new HashSet<uint>() { itemId };
     }
 
     public static bool UnitDropsItem(uint mobId, uint itemId)
     {
         HashSet<uint> uintSet;
-        return dictionary_0.TryGetValue(mobId, out uintSet) && uintSet.Contains(itemId);
+        return mobDrops.TryGetValue(mobId, out uintSet) && uintSet.Contains(itemId);
     }
 
     public static bool GameObjectDropsItem(uint gameObjId, uint itemId)
     {
         HashSet<uint> uintSet;
-        return dictionary_1.TryGetValue(gameObjId, out uintSet) && uintSet.Contains(itemId);
+        return gameObjectDrops.TryGetValue(gameObjId, out uintSet) && uintSet.Contains(itemId);
     }
 
     public static bool VendorSellsItem(uint vendorId, uint itemId)
     {
         HashSet<uint> uintSet;
-        return dictionary_2.TryGetValue(vendorId, out uintSet) && uintSet.Contains(itemId);
+        return vendorItems.TryGetValue(vendorId, out uintSet) && uintSet.Contains(itemId);
     }
 }

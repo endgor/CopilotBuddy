@@ -28,9 +28,9 @@ namespace Bots.Quest.Objectives;
 
 public class GrindObjective : QuestObjective
 {
-    private readonly KillMobObjectiveInfo killMobObjectiveInfo_0;
-    private WoWPoint? nullable_0;
-    private Composite composite_0;
+    private readonly KillMobObjectiveInfo killMobInfo;
+    private WoWPoint? cachedObjectiveLocation;
+    private Composite behaviorTree;
 
     public GrindObjective(
         PlayerQuest quest,
@@ -42,10 +42,10 @@ public class GrindObjective : QuestObjective
         this.Objective = questObjective;
         if (this.OverridedQuestInfo != null)
         {
-            this.killMobObjectiveInfo_0 = this.OverridedQuestInfo.FindKillMob((uint)this.Objective.ID);
-            if (this.killMobObjectiveInfo_0 == null)
+            this.killMobInfo = this.OverridedQuestInfo.FindKillMob((uint)this.Objective.ID);
+            if (this.killMobInfo == null)
             {
-                foreach (KillMobObjectiveInfo mobObjectiveInfo in this.OverridedQuestInfo.Objectives.OfType<KillMobObjectiveInfo>().Where<KillMobObjectiveInfo>((Func<KillMobObjectiveInfo, bool>)(killMobObjectiveInfo_1 => killMobObjectiveInfo_1.Type == ObjectiveType.KillMob)))
+                foreach (KillMobObjectiveInfo mobObjectiveInfo in this.OverridedQuestInfo.Objectives.OfType<KillMobObjectiveInfo>().Where<KillMobObjectiveInfo>((Func<KillMobObjectiveInfo, bool>)(info => info.Type == ObjectiveType.KillMob)))
                 {
                     WoWCache.InfoBlock infoBlockById = StyxWoW.Cache[CacheDb.Creature].GetInfoBlockById(mobObjectiveInfo.MobID);
                     if (infoBlockById != null)
@@ -53,31 +53,31 @@ public class GrindObjective : QuestObjective
                         WoWCache.CreatureCacheEntry creature = infoBlockById.Creature;
                         if ((long)creature.GroupID == (long)this.Objective.ID || (long)creature.GroupID2 == (long)this.Objective.ID)
                         {
-                            this.killMobObjectiveInfo_0 = mobObjectiveInfo;
+                            this.killMobInfo = mobObjectiveInfo;
                             break;
                         }
                     }
                 }
             }
         }
-        Targeting.Instance.IncludeTargetsFilter += new IncludeTargetsFilterDelegate(this.method_0);
+        Targeting.Instance.IncludeTargetsFilter += new IncludeTargetsFilterDelegate(this.FilterObjectsForTargeting);
     }
 
     public Styx.Logic.Questing.Quest.QuestObjective Objective { get; private set; }
 
     public override void Dispose()
     {
-        Targeting.Instance.IncludeTargetsFilter -= new IncludeTargetsFilterDelegate(this.method_0);
+        Targeting.Instance.IncludeTargetsFilter -= new IncludeTargetsFilterDelegate(this.FilterObjectsForTargeting);
     }
 
-    private void method_0(List<WoWObject> list_1, HashSet<WoWObject> hashSet_0)
+    private void FilterObjectsForTargeting(List<WoWObject> objects, HashSet<WoWObject> validTargets)
     {
         if (this.IsCompleted || StyxWoW.Me.IsActuallyInCombat)
             return;
-        foreach (WoWObject woWobject in list_1)
+        foreach (WoWObject obj in objects)
         {
-            if (woWobject is WoWUnit && this.method_2(woWobject.ToUnit()))
-                hashSet_0.Add(woWobject);
+            if (obj is WoWUnit && this.IsMobObjective(obj.ToUnit()))
+                validTargets.Add(obj);
         }
     }
 
@@ -90,20 +90,20 @@ public class GrindObjective : QuestObjective
         }
     }
 
-    public override bool CanComplete => this.DonePrerequisites && this.method_1();
+    public override bool CanComplete => this.DonePrerequisites && this.HasValidHotspots();
 
     public override Composite CreateBranch()
     {
         int level = StyxWoW.Me.Level;
-        if (this.composite_0 == (Composite)null)
+        if (this.behaviorTree == (Composite)null)
         {
             GrindArea area;
-            if (this.killMobObjectiveInfo_0 != null && this.killMobObjectiveInfo_0.OverridedHotspots != null && this.killMobObjectiveInfo_0.OverridedHotspots.Count > 0)
+            if (this.killMobInfo != null && this.killMobInfo.OverridedHotspots != null && this.killMobInfo.OverridedHotspots.Count > 0)
             {
-                area = new GrindArea(new HotspotManager((IEnumerable<WoWPoint>)this.killMobObjectiveInfo_0.OverridedHotspots))
+                area = new GrindArea(new HotspotManager((IEnumerable<WoWPoint>)this.killMobInfo.OverridedHotspots))
                 {
-                    TargetMaxLevel = this.killMobObjectiveInfo_0.TargetMaxLevel > 0 ? this.killMobObjectiveInfo_0.TargetMaxLevel : level + 5,
-                    TargetMinLevel = this.killMobObjectiveInfo_0.TargetMinLevel > 0 ? this.killMobObjectiveInfo_0.TargetMinLevel : this.Quest.Level - 5
+                    TargetMaxLevel = this.killMobInfo.TargetMaxLevel > 0 ? this.killMobInfo.TargetMaxLevel : level + 5,
+                    TargetMinLevel = this.killMobInfo.TargetMinLevel > 0 ? this.killMobInfo.TargetMinLevel : this.Quest.Level - 5
                 };
             }
             else
@@ -114,25 +114,25 @@ public class GrindObjective : QuestObjective
                 area = (GrindArea)this.QuestArea;
             }
             StyxWoW.AreaManager.SetArea(area);
-            this.composite_0 = (Composite)new DecoratorIsNotPoiType((IEnumerable<PoiType>)new PoiType[2]
+            this.behaviorTree = (Composite)new DecoratorIsNotPoiType((IEnumerable<PoiType>)new PoiType[2]
             {
                 PoiType.Loot,
                 PoiType.Skin
             }, (Composite)LevelBot.CreateRoamBehavior());
         }
-        return this.composite_0;
+        return this.behaviorTree;
     }
 
     public override WoWPoint GetObjectiveLocation()
     {
-        List<WoWUnit> list = ObjectManager.GetObjectsOfType<WoWUnit>().Where<WoWUnit>((Func<WoWUnit, bool>)(woWUnit_0 => this.method_2(woWUnit_0))).ToList<WoWUnit>();
+        List<WoWUnit> list = ObjectManager.GetObjectsOfType<WoWUnit>().Where<WoWUnit>((Func<WoWUnit, bool>)(unit => this.IsMobObjective(unit))).ToList<WoWUnit>();
         if (list.Count <= 0)
         {
-            if (!this.nullable_0.HasValue)
+            if (!this.cachedObjectiveLocation.HasValue)
             {
-                if (this.killMobObjectiveInfo_0 != null && this.killMobObjectiveInfo_0.OverridedHotspots != null && this.killMobObjectiveInfo_0.OverridedHotspots.Count > 0)
+                if (this.killMobInfo != null && this.killMobInfo.OverridedHotspots != null && this.killMobInfo.OverridedHotspots.Count > 0)
                 {
-                    this.nullable_0 = new WoWPoint?(this.killMobObjectiveInfo_0.OverridedHotspots.FindClosestTo(ObjectManager.Me.Location));
+                    this.cachedObjectiveLocation = new WoWPoint?(this.killMobInfo.OverridedHotspots.FindClosestTo(ObjectManager.Me.Location));
                 }
                 else
                 {
@@ -141,13 +141,13 @@ public class GrindObjective : QuestObjective
                     if (!Navigator.FindHeight(ref xnaVec))
                     {
                         Logging.Write("GrindObjective: Could not find mesh height for quest {0} on step {1}", (object)this.Quest.Name, (object)closestQuestStep.PoiID);
-                        this.nullable_0 = new WoWPoint?(WoWPoint.Zero);
+                        this.cachedObjectiveLocation = new WoWPoint?(WoWPoint.Zero);
                     }
                     else
-                        this.nullable_0 = new WoWPoint?(new WoWPoint(xnaVec.X, xnaVec.Y, xnaVec.Z));
+                        this.cachedObjectiveLocation = new WoWPoint?(new WoWPoint(xnaVec.X, xnaVec.Y, xnaVec.Z));
                 }
             }
-            return this.nullable_0.Value;
+            return this.cachedObjectiveLocation.Value;
         }
         WoWPoint location1 = ObjectManager.Me.Location;
         WoWPoint objectiveLocation = list[0].Location;
@@ -165,23 +165,23 @@ public class GrindObjective : QuestObjective
         return objectiveLocation;
     }
 
-    private bool method_1()
+    private bool HasValidHotspots()
     {
-        if (this.killMobObjectiveInfo_0 != null && this.killMobObjectiveInfo_0.OverridedHotspots != null && this.killMobObjectiveInfo_0.OverridedHotspots.Count > 0)
+        if (this.killMobInfo != null && this.killMobInfo.OverridedHotspots != null && this.killMobInfo.OverridedHotspots.Count > 0)
             return true;
         if (!this.QuestArea.HotspotsCreated)
             this.QuestArea.CreateHotspots();
         return this.QuestArea.Hotspots.Count > 0;
     }
 
-    private bool method_2(WoWUnit woWUnit_0)
+    private bool IsMobObjective(WoWUnit unit)
     {
-        if (woWUnit_0 is WoWPlayer)
+        if (unit is WoWPlayer)
             return false;
-        if ((long)woWUnit_0.Entry == (long)this.Objective.ID)
+        if ((long)unit.Entry == (long)this.Objective.ID)
             return true;
         WoWCache.CreatureCacheEntry info;
-        if (!woWUnit_0.GetCachedInfo(out info))
+        if (!unit.GetCachedInfo(out info))
             return false;
         return (long)info.GroupID == (long)this.Objective.ID || (long)info.GroupID2 == (long)this.Objective.ID;
     }

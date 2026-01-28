@@ -14,19 +14,19 @@ namespace Bots.Quest.Objectives;
 
 public class DecoratorCanMoveToGrindArea : Decorator
 {
-    private readonly GrindArea grindArea_0;
+    private readonly GrindArea grindArea;
 
     public DecoratorCanMoveToGrindArea(GrindArea area, Composite decorated)
         : base(decorated)
     {
-        this.grindArea_0 = area;
+        this.grindArea = area;
     }
 
     protected override bool CanRun(object context)
     {
-        return (!((Area)this.grindArea_0 != (Area)null) || this.grindArea_0.Hotspots.Count != 0) && 
-               (Area)this.grindArea_0 != (Area)null && 
+        return (!((Area)this.grindArea != (Area)null) || this.grindArea.Hotspots.Count != 0) && 
+               (Area)this.grindArea != (Area)null && 
                LootTargeting.Instance.FirstObject == (WoWObject)null && 
-               this.grindArea_0.HotspotChanged;
+               this.grindArea.HotspotChanged;
     }
 }

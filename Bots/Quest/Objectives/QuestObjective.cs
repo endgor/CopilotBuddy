@@ -22,7 +22,7 @@ namespace Bots.Quest.Objectives;
 
 public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
 {
-    private Guid guid_0;
+    private Guid uniqueId;
     public readonly List<QuestObjective> Prerequisites;
 
     protected QuestObjective(
@@ -44,7 +44,7 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
         Profile currentProfile = ProfileManager.CurrentProfile;
         QuestInfo quest1;
         this.OverridedQuestInfo = !(currentProfile != (Profile)null) || (quest1 = currentProfile.FindQuest(quest.Id)) == null ? (QuestInfo)null : quest1;
-        this.guid_0 = Guid.NewGuid();
+        this.uniqueId = Guid.NewGuid();
     }
 
     public QuestArea QuestArea { get; private set; }
@@ -63,7 +63,7 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
     {
         get
         {
-            return this.Prerequisites.All<QuestObjective>((Func<QuestObjective, bool>)(questObjective_0 => questObjective_0.IsCompleted));
+            return this.Prerequisites.All<QuestObjective>((Func<QuestObjective, bool>)(prerequisite => prerequisite.IsCompleted));
         }
     }
 
@@ -101,13 +101,13 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
     }
 
     private static int CompareQuestSteps(
-        WoWPoint woWPoint_0,
-        WoWQuestStep woWQuestStep_0,
-        WoWQuestStep woWQuestStep_1)
+        WoWPoint playerLocation,
+        WoWQuestStep stepA,
+        WoWQuestStep stepB)
     {
-        WoWPoint other1 = new WoWPoint((float)woWQuestStep_0.StepPosition.X, (float)woWQuestStep_0.StepPosition.Y, 0.0f);
-        WoWPoint other2 = new WoWPoint((float)woWQuestStep_1.StepPosition.X, (float)woWQuestStep_1.StepPosition.Y, 0.0f);
-        return woWPoint_0.Distance2DSqr(other1).CompareTo(woWPoint_0.Distance2DSqr(other2));
+        WoWPoint locationA = new WoWPoint((float)stepA.StepPosition.X, (float)stepA.StepPosition.Y, 0.0f);
+        WoWPoint locationB = new WoWPoint((float)stepB.StepPosition.X, (float)stepB.StepPosition.Y, 0.0f);
+        return playerLocation.Distance2DSqr(locationA).CompareTo(playerLocation.Distance2DSqr(locationB));
     }
 
     public bool IsPointInArea(Vector2 pnt)
@@ -121,14 +121,14 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
         return this.QuestArea.AreaDefinitions.Any(area => IsPointInPolygon(area, ref pnt));
     }
 
-    private static bool IsPointInPolygon(IList<Vector3> ilist_0, ref Vector3 vector3_0)
+    private static bool IsPointInPolygon(IList<Vector3> polygon, ref Vector3 point)
     {
         bool flag = false;
         int index1 = 0;
-        int index2 = ilist_0.Count - 1;
-        for (; index1 < ilist_0.Count - 1; index2 = index1++)
+        int index2 = polygon.Count - 1;
+        for (; index1 < polygon.Count - 1; index2 = index1++)
         {
-            if ((double)ilist_0[index1].Y > (double)vector3_0.Y != (double)ilist_0[index2].Y > (double)vector3_0.Y && (double)vector3_0.X < ((double)ilist_0[index2].X - (double)ilist_0[index1].X) * ((double)vector3_0.Y - (double)ilist_0[index1].Y) / ((double)ilist_0[index2].Y - (double)ilist_0[index1].Y) + (double)ilist_0[index1].X)
+            if ((double)polygon[index1].Y > (double)point.Y != (double)polygon[index2].Y > (double)point.Y && (double)point.X < ((double)polygon[index2].X - (double)polygon[index1].X) * ((double)point.Y - (double)polygon[index1].Y) / ((double)polygon[index2].Y - (double)polygon[index1].Y) + (double)polygon[index1].X)
                 flag = !flag;
         }
         return flag;
@@ -142,7 +142,7 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
     {
         if (object.ReferenceEquals((object)null, (object)other))
             return false;
-        return object.ReferenceEquals((object)this, (object)other) || other.guid_0.Equals(this.guid_0);
+        return object.ReferenceEquals((object)this, (object)other) || other.uniqueId.Equals(this.uniqueId);
     }
 
     public override bool Equals(object obj)
@@ -150,7 +150,7 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
         return !object.ReferenceEquals((object)null, obj) && this.Equals(obj as QuestObjective);
     }
 
-    public override int GetHashCode() => this.guid_0.GetHashCode();
+    public override int GetHashCode() => this.uniqueId.GetHashCode();
 
     public static bool operator ==(QuestObjective left, QuestObjective right)
     {

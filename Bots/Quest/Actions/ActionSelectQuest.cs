@@ -16,16 +16,16 @@ namespace Bots.Quest.Actions;
 
 public class ActionSelectQuest : Action
 {
-    private readonly int int_0;
+    private readonly int questId;
 
-    public ActionSelectQuest() => this.int_0 = -1;
+    public ActionSelectQuest() => this.questId = -1;
 
-    public ActionSelectQuest(int id) => this.int_0 = id;
+    public ActionSelectQuest(int id) => this.questId = id;
 
     protected override RunStatus Run(object context)
     {
         Styx.Helpers.Logging.Write("[ActionSelectQuest] Called with QuestId: {0}, QuestFrame.IsVisible: {1}, GossipFrame.IsVisible: {2}", 
-            this.int_0, 
+            this.questId, 
             QuestManager.QuestFrame.IsVisible, 
             QuestManager.GossipFrame.IsVisible);
         
@@ -41,11 +41,11 @@ public class ActionSelectQuest : Action
             for (int index = 0; index < activeQuests.Count; ++index)
             {
                 Styx.Helpers.Logging.Write("[ActionSelectQuest] Checking GossipQuest[{0}]: Id={1}, Index={2}", index, activeQuests[index].Id, activeQuests[index].Index);
-                if (this.int_0 == -1 || activeQuests[index].Id == this.int_0)
+                if (this.questId == -1 || activeQuests[index].Id == this.questId)
                 {
                     PlayerQuest questById = ObjectManager.Me.QuestLog.GetQuestById((uint)activeQuests[index].Id);
                     Styx.Helpers.Logging.Write("[ActionSelectQuest] Quest {0} - IsCompleted: {1}", activeQuests[index].Id, questById != null ? questById.IsCompleted.ToString() : "null");
-                    if (this.int_0 != -1 || questById.IsCompleted)
+                    if (this.questId != -1 || questById.IsCompleted)
                     {
                         Styx.Helpers.Logging.Write("[ActionSelectQuest] Selecting active quest at Index {0} (QuestId: {1})", activeQuests[index].Index, activeQuests[index].Id);
                         QuestManager.GossipFrame.SelectActiveQuest(activeQuests[index].Index);
@@ -59,20 +59,20 @@ public class ActionSelectQuest : Action
         {
             List<uint> quests = QuestManager.QuestFrame.Quests;
             Styx.Helpers.Logging.Write("[ActionSelectQuest] QuestFrame quests count: {0}", quests.Count);
-            if (this.int_0 != -1 && !quests.Contains((uint)this.int_0))
+            if (this.questId != -1 && !quests.Contains((uint)this.questId))
             {
-                Styx.Helpers.Logging.Write("[ActionSelectQuest] Quest {0} not in QuestFrame list - closing and returning Failure", this.int_0);
+                Styx.Helpers.Logging.Write("[ActionSelectQuest] Quest {0} not in QuestFrame list - closing and returning Failure", this.questId);
                 QuestManager.QuestFrame.Close();
                 return RunStatus.Failure;
             }
             for (int index = 0; index < quests.Count; ++index)
             {
                 Styx.Helpers.Logging.Write("[ActionSelectQuest] Checking QuestFrame Quest[{0}]: Id={1}", index, quests[index]);
-                if (this.int_0 == -1 || (long)quests[index] == (long)this.int_0)
+                if (this.questId == -1 || (long)quests[index] == (long)this.questId)
                 {
                     PlayerQuest questById = ObjectManager.Me.QuestLog.GetQuestById(quests[index]);
                     Styx.Helpers.Logging.Write("[ActionSelectQuest] Quest {0} - IsCompleted: {1}", quests[index], questById != null ? questById.IsCompleted.ToString() : "null");
-                    if (this.int_0 != -1 || questById.IsCompleted)
+                    if (this.questId != -1 || questById.IsCompleted)
                     {
                         Styx.Helpers.Logging.Write("[ActionSelectQuest] Calling GossipFrame.Instance.SelectActiveQuest({0})", quests[index]);
                         GossipFrame.Instance.SelectActiveQuest((int)quests[index]);

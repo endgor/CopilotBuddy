@@ -22,8 +22,8 @@ public static class QuestManager
     public static readonly QuestFrame QuestFrame = new QuestFrame();
     public static readonly List<QuestObjective> Objectives = new List<QuestObjective>();
     public static readonly List<PlayerQuest> Quests = new List<PlayerQuest>();
-    private static readonly Random random_0 = new Random();
-    private static readonly char[] char_0 = "ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz".ToCharArray();
+    private static readonly Random randomGenerator = new Random();
+    private static readonly char[] alphaChars = "ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz".ToCharArray();
 
     [Obsolete("Use ObjectManager.Me.QuestLog.GetCompletedQuests() instead.")]
     public static List<uint> GetCompletedQuests()
@@ -31,30 +31,30 @@ public static class QuestManager
         return new List<uint>((IEnumerable<uint>)StyxWoW.Me.QuestLog.GetCompletedQuests());
     }
 
-    private static string smethod_0(int int_0, int int_1)
+    private static string GenerateRandomString(int minLength, int maxLength)
     {
-        int capacity = random_0.Next(int_0, int_1 + 1);
+        int capacity = randomGenerator.Next(minLength, maxLength + 1);
         StringBuilder stringBuilder = new StringBuilder(capacity);
         for (int index = 0; index < capacity; ++index)
-            stringBuilder.Append(char_0[random_0.Next(0, char_0.Length)]);
+            stringBuilder.Append(alphaChars[randomGenerator.Next(0, alphaChars.Length)]);
         return stringBuilder.ToString();
     }
 
-    internal static QuestObjective smethod_1(
-        Styx.Logic.Questing.Quest.QuestObjective questObjective_0,
-        PlayerQuest playerQuest_0,
-        List<WoWQuestStep> list_0,
-        List<QuestObjective> list_1)
+    internal static QuestObjective CreateObjectiveFromCache(
+        Styx.Logic.Questing.Quest.QuestObjective cacheObjective,
+        PlayerQuest quest,
+        List<WoWQuestStep> questSteps,
+        List<QuestObjective> objectivePool)
     {
-        switch (questObjective_0.Type)
+        switch (cacheObjective.Type)
         {
             case Styx.Logic.Questing.Quest.QuestObjectiveType.CollectIntermediateItem:
             case Styx.Logic.Questing.Quest.QuestObjectiveType.CollectItem:
-                return new CollectItemObjective(playerQuest_0, list_0, questObjective_0, list_1);
+                return new CollectItemObjective(quest, questSteps, cacheObjective, objectivePool);
             case Styx.Logic.Questing.Quest.QuestObjectiveType.KillMob:
-                return new GrindObjective(playerQuest_0, list_0, questObjective_0, list_1);
+                return new GrindObjective(quest, questSteps, cacheObjective, objectivePool);
             case Styx.Logic.Questing.Quest.QuestObjectiveType.UseGameObject:
-                return new UseGameObjectObjective(playerQuest_0, list_0, questObjective_0, list_1);
+                return new UseGameObjectObjective(quest, questSteps, cacheObjective, objectivePool);
             default:
                 return null;
         }
@@ -66,7 +66,7 @@ public static class QuestManager
         List<WoWQuestStep> poiSteps,
         List<QuestObjective> objectivePool)
     {
-        return smethod_1(questObjective, quest, poiSteps, objectivePool);
+        return CreateObjectiveFromCache(questObjective, quest, poiSteps, objectivePool);
     }
 
     internal delegate void Delegate9(QuestObjective objective);

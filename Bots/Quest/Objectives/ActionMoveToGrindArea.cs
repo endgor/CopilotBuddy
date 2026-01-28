@@ -14,13 +14,13 @@ namespace Bots.Quest.Objectives;
 
 public class ActionMoveToGrindArea : NavigationAction
 {
-    private readonly GrindArea grindArea_0;
+    private readonly GrindArea grindArea;
 
-    public ActionMoveToGrindArea(GrindArea area) => this.grindArea_0 = area;
+    public ActionMoveToGrindArea(GrindArea area) => this.grindArea = area;
 
     protected override RunStatus Run(object context)
     {
-        Mount.StateMount((LocationRetriever)(() => this.grindArea_0.CurrentHotSpot.Position));
-        return base.Run((object)this.grindArea_0.CurrentHotSpot.Position);
+        Mount.StateMount((LocationRetriever)(() => this.grindArea.CurrentHotSpot.Position));
+        return base.Run((object)this.grindArea.CurrentHotSpot.Position);
     }
 }
