@@ -181,6 +181,8 @@ namespace Tripper.Navigation
         #endregion
 
         #region Poly Reference Functions
+        // Note: dtPolyRef is unsigned long long (64-bit) with DT_POLYREF64 defined
+        // This matches HB 4.3.4 Tripper.RecastManaged.Detour.PolygonReference
 
         /// <summary>
         /// Finds the nearest polygon reference to a position.
@@ -355,6 +357,44 @@ namespace Tripper.Navigation
         internal static extern void SetTileStreamingEnabled(
             [MarshalAs(UnmanagedType.I1)] bool enabled);
 
+        /// <summary>
+        /// Ensures tiles around position are loaded (HB-style streaming).
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="position">Center position.</param>
+        /// <param name="ring">Tile ring radius (2 = 5x5 tiles).</param>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void EnsureTiles(
+            uint mapId,
+            XYZ position,
+            int ring);
+
+        /// <summary>
+        /// Prefetches tiles in movement direction for smoother streaming.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="position">Current position.</param>
+        /// <param name="velocity">Current velocity/direction.</param>
+        /// <param name="ring">Base tile ring radius.</param>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void EnsureTilesDirectional(
+            uint mapId,
+            XYZ position,
+            XYZ velocity,
+            int ring);
+
+        /// <summary>
+        /// Gets direct pointer to dtNavMeshQuery (for advanced NavBridge use).
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr GetNavMeshQuery(uint mapId);
+
+        /// <summary>
+        /// Gets direct pointer to default dtQueryFilter (for advanced use).
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr GetDefaultFilter();
+
         #endregion
 
         #region Path Following
@@ -383,6 +423,28 @@ namespace Tripper.Navigation
         internal static extern void SetPathRandomization(
             [MarshalAs(UnmanagedType.I1)] bool enabled,
             float magnitude);
+
+        #endregion
+
+        #region Raycast - HB Style
+
+        /// <summary>
+        /// Performs a raycast on the navmesh from startRef polygon.
+        /// Returns dtStatus, t=1.0 means no hit (clear path to end).
+        /// HB-style: returns visited polygon path for shortcuts.
+        /// Note: dtPolyRef is ulong (64-bit) with DT_POLYREF64.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint Raycast(
+            uint mapId,
+            ulong startRef,
+            XYZ startPos,
+            XYZ endPos,
+            out float outT,
+            out XYZ outHitNormal,
+            [In, Out] ulong[] outPath,
+            out int outPathCount,
+            int maxPath);
 
         #endregion
 
