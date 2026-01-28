@@ -58,9 +58,9 @@ public abstract class OrderNode
         return _nodeFactories[nullable.Value](element);
     }
 
-    private static OrderNodeType? ParseNodeType(string string_0)
+    private static OrderNodeType? ParseNodeType(string nodeTypeName)
     {
-        switch (string_0.ToLowerInvariant())
+        switch (nodeTypeName.ToLowerInvariant())
         {
             case "checkpoint":
                 return new OrderNodeType?(OrderNodeType.Checkpoint);
