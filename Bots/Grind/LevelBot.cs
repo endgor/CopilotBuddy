@@ -246,7 +246,11 @@ namespace Bots.Grind
             WoWUnit currentTarget = StyxWoW.Me.CurrentTarget;
             if (currentTarget == null)
                 return false;
-            return currentTarget.InLineOfSpellSight && currentTarget.Distance <= Targeting.PullDistance;
+            
+            // Only check distance, NOT LoS. The CustomClass (Singular) will handle moving to LoS in its PullBehavior
+            // via Movement.CreateMoveToLosBehavior(). If we check LoS here, the bot never calls PullBehavior when
+            // the mob is behind a wall, causing it to get stuck.
+            return currentTarget.Distance <= Targeting.PullDistance;
         }
 
         #endregion
@@ -1134,7 +1138,7 @@ namespace Bots.Grind
                 {
                     if (LootTargeting.LootMobs &&
                         unit.Distance <= LootTargeting.LootRadius &&
-                        unit.IsDead &&
+                        unit.Dead &&
                         !Blacklist.Contains(unit.Guid) &&
                         (unit.KilledByMe && unit.CanLoot ||
                          unit.CanSkin && LootTargeting.SkinMobs && (CharacterSettings.Instance.NinjaSkin || unit.KilledByMe)))
