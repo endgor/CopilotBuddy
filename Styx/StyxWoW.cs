@@ -135,6 +135,7 @@ namespace Styx
                 {
                     case 5057: return 0x0BD0; // Pet spells array offset in LocalPlayer struct
                     case 5005: return 0x00ACFDF4; // COMPLETED_QUEST_LIST_HEAD (11337204U from HB 3.3.5a)
+                    case 2833: return Styx.Offsets.GlobalOffsets.CGWorldFrame_Intersect; // CGWorldFrame::Intersect function
                     default: return 0; // Unknown offset
                 }
             }
