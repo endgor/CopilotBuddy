@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Threading;
 using Styx.Helpers;
+using Styx.Logic.Inventory;
 using Styx.WoWInternals;
 using Styx.WoWInternals.WoWObjects;
 
@@ -117,12 +119,20 @@ public static class Rest
     public static void FeedImmediate()
     {
         var me = ObjectManager.Me;
-        if (me == null || string.IsNullOrEmpty(LevelbotSettings.Instance.FoodName))
+        if (me == null)
             return;
 
-        if (me.CarriedItems.Any(i => i.Name == LevelbotSettings.Instance.FoodName))
+        // Auto-detect best food
+        WoWItem food = Consumable.GetBestFood(false);
+        if (food != null)
         {
-            Lua.DoString($"UseItemByName(\"{LevelbotSettings.Instance.FoodName}\")");
+            Logging.WriteDebug($"Using food: {food.Name}");
+            food.UseContainerItem();
+        }
+        else
+        {
+            NoFood = true;
+            Logging.Write("No food found in bags!");
         }
     }
 
@@ -133,12 +143,20 @@ public static class Rest
     public static void DrinkImmediate()
     {
         var me = ObjectManager.Me;
-        if (me == null || string.IsNullOrEmpty(LevelbotSettings.Instance.DrinkName))
+        if (me == null)
             return;
 
-        if (me.CarriedItems.Any(i => i.Name == LevelbotSettings.Instance.DrinkName))
+        // Auto-detect best drink
+        WoWItem drink = Consumable.GetBestDrink(false);
+        if (drink != null)
         {
-            Lua.DoString($"UseItemByName(\"{LevelbotSettings.Instance.DrinkName}\")");
+            Logging.WriteDebug($"Using drink: {drink.Name}");
+            drink.UseContainerItem();
+        }
+        else
+        {
+            NoDrink = true;
+            Logging.Write("No drink found in bags!");
         }
     }
 }
