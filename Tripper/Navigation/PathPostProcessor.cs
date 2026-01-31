@@ -168,9 +168,10 @@ namespace Tripper.Navigation
         {
             // Find distance to nearest wall
             NativeMethods.XYZ hitPoint;
+            NativeMethods.XYZ hitNormal;
             float distance;
             
-            // Use polygon-specific query if we have a valid polyRef
+            // Use polygon-specific query if we have a valid polyRef (like HB WoD method_2)
             if (polyRef != 0)
             {
                 distance = NativeMethods.FindDistanceToWallFromPoly(
@@ -178,8 +179,9 @@ namespace Tripper.Navigation
                     polyRef,
                     new NativeMethods.XYZ(point),
                     edgeDistance,
-                    out hitPoint);
-                Log($"FindDistanceToWallFromPoly({point}, polyRef=0x{polyRef:X}) = {distance}");
+                    out hitPoint,
+                    out hitNormal);
+                Log($"FindDistanceToWallFromPoly({point}, polyRef=0x{polyRef:X}) = {distance}, normal={hitNormal.ToVector3()}");
             }
             else
             {
@@ -188,6 +190,12 @@ namespace Tripper.Navigation
                     new NativeMethods.XYZ(point),
                     edgeDistance,
                     out hitPoint);
+                // Calculate normal manually when using basic FindDistanceToWall
+                Vector3 toWall = hitPoint.ToVector3() - point;
+                float len = toWall.Length();
+                hitNormal = len > 0.01f 
+                    ? new NativeMethods.XYZ(-toWall.X / len, -toWall.Y / len, -toWall.Z / len)
+                    : new NativeMethods.XYZ(1, 0, 0);
                 Log($"FindDistanceToWall({point}) = {distance}");
             }
 
@@ -195,24 +203,27 @@ namespace Tripper.Navigation
             if (distance >= edgeDistance || distance < 0.01f)
                 return false;
 
-            // Calculate direction away from wall
+            // Use hitNormal to calculate direction away from wall (like HB WoD)
             Vector3 wallPos = hitPoint.ToVector3();
-            Vector3 awayDir = point - wallPos;
+            Vector3 awayDir = hitNormal.ToVector3();
             float awayLength = awayDir.Length();
             
             if (awayLength < 0.01f)
             {
-                // Point is exactly on wall, pick arbitrary direction
-                awayDir = new Vector3(1, 0, 0);
-                awayLength = 1f;
+                // Fallback: calculate from point to wall
+                awayDir = point - wallPos;
+                awayLength = awayDir.Length();
+                if (awayLength < 0.01f)
+                {
+                    awayDir = new Vector3(1, 0, 0);
+                    awayLength = 1f;
+                }
             }
-            else
-            {
-                awayDir /= awayLength; // Normalize
-            }
+            
+            awayDir /= awayLength; // Normalize
 
-            // Calculate new position away from wall
-            Vector3 newPos = wallPos + awayDir * edgeDistance;
+            // Calculate new position: wallPos + normal * edgeDistance * 2 (like HB WoD)
+            Vector3 newPos = wallPos + awayDir * edgeDistance * 2f;
 
             // Verify new position is on navmesh
             NativeMethods.XYZ nearestPoint;

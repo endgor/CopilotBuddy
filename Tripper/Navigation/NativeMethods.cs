@@ -150,7 +150,7 @@ namespace Tripper.Navigation
 
         /// <summary>
         /// Finds distance to nearest wall/boundary with extended output.
-        /// Returns the polygon reference of the point as well.
+        /// Returns hitNormal in addition to hitPoint (like HB WoD).
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern float FindDistanceToWallEx(
@@ -158,11 +158,11 @@ namespace Tripper.Navigation
             XYZ position,
             float maxRadius,
             out XYZ hitPoint,
-            out ulong polyRef);
+            out XYZ hitNormal);
 
         /// <summary>
         /// Finds distance to nearest wall from a specific polygon.
-        /// Used when we already know which polygon the point is on.
+        /// Used when we already know which polygon the point is on (like HB WoD method_2).
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern float FindDistanceToWallFromPoly(
@@ -170,7 +170,8 @@ namespace Tripper.Navigation
             ulong polyRef,
             XYZ position,
             float maxRadius,
-            out XYZ hitPoint);
+            out XYZ hitPoint,
+            out XYZ hitNormal);
 
         /// <summary>
         /// Checks if a point is on the navmesh.
