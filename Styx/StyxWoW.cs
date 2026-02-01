@@ -128,7 +128,7 @@ namespace Styx
             /// <summary>
             /// Maps offset index to actual WotLK 3.3.5a offset value
             /// </summary>
-            public static uint method_0(int index)
+            public static uint GetOffsetByIndex(int index)
             {
                 // For WotLK 3.3.5a, most offsets are direct struct member offsets
                 switch (index)
@@ -139,11 +139,6 @@ namespace Styx
                     default: return 0; // Unknown offset
                 }
             }
-
-            /// <summary>
-            /// Alias for method_0 - used by cleaner code
-            /// </summary>
-            public static uint GetOffsetByIndex(int index) => method_0(index);
         }
     }
 }
