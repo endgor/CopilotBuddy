@@ -26,15 +26,17 @@ namespace Styx.WoWInternals.WoWObjects
         
         #region Descriptor Offsets - GAMEOBJECT_FIELD
         
-        // GameObjectFields pour 3.3.5a (0x0 offset + index * 4)
-        private const int GAMEOBJECT_CREATED_BY = 0x0;      // 8 bytes (ulong)
-        private const int GAMEOBJECT_DISPLAYID = 0x8;       // 4 bytes
-        private const int GAMEOBJECT_FLAGS = 0xC;           // 4 bytes
-        private const int GAMEOBJECT_PARENTROTATION = 0x10; // 16 bytes (4 floats)
-        private const int GAMEOBJECT_DYNAMIC = 0x20;        // 2 bytes (state + type)
-        private const int GAMEOBJECT_FACTION = 0x24;        // 4 bytes
-        private const int GAMEOBJECT_LEVEL = 0x28;          // 4 bytes
-        private const int GAMEOBJECT_BYTES_1 = 0x2C;        // 4 bytes (state, type, artkit, anim)
+        // GameObjectFields pour 3.3.5a (Offsets.txt ligne 4989-4997: indices × 4)
+        // Source: Offsets.txt WoWGameObjectFields
+        // Note: GetDescriptorField() attend des byte offsets, pas des indices
+        private const int GAMEOBJECT_CREATED_BY = 0x6 * 4;   // 24 bytes - Owner GUID (8 bytes ulong)
+        private const int GAMEOBJECT_DISPLAYID = 0x8 * 4;    // 32 bytes - Display ID
+        private const int GAMEOBJECT_FLAGS = 0x9 * 4;        // 36 bytes - Flags
+        private const int GAMEOBJECT_PARENTROTATION = 0xA * 4; // 40 bytes - Quaternion (16 bytes, 4 floats)
+        private const int GAMEOBJECT_DYNAMIC = 0xE * 4;      // 56 bytes - Dynamic flags (2 bytes)
+        private const int GAMEOBJECT_FACTION = 0xF * 4;      // 60 bytes - Faction template
+        private const int GAMEOBJECT_LEVEL = 0x10 * 4;       // 64 bytes - Level
+        private const int GAMEOBJECT_BYTES_1 = 0x11 * 4;     // 68 bytes - State, Type, ArtKit, Anim
         
         #endregion
         
@@ -123,9 +125,9 @@ namespace Styx.WoWInternals.WoWObjects
             get
             {
                 float x = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 0);
-                float y = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 1);
-                float z = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 2);
-                float w = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 3);
+                float y = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 4);
+                float z = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 8);
+                float w = GetDescriptorField<float>(GAMEOBJECT_PARENTROTATION + 12);
                 return new Vector4(x, y, z, w);
             }
         }
