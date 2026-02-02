@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
 
 namespace Tripper.Navigation
@@ -23,20 +22,6 @@ namespace Tripper.Navigation
         /// Maximum recursion depth for path fixing.
         /// </summary>
         private const int MaxRecursionDepth = 5;
-
-        private static readonly string LogPath = Path.Combine(
-            Path.GetDirectoryName(typeof(PathPostProcessor).Assembly.Location) ?? ".",
-            "PathPostProcessor.log");
-
-        private static void Log(string line)
-        {
-            try
-            {
-                System.Diagnostics.Debug.WriteLine($"[PathPostProcessor] {line}");
-                File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss.fff} {line}\n");
-            }
-            catch { }
-        }
 
         /// <summary>
         /// Post-processes a path by moving waypoints away from edges.
@@ -75,8 +60,6 @@ namespace Tripper.Navigation
             if (points == null || points.Length < 2)
                 return;
 
-            Log($"MoveAwayFromEdges called: {points.Length} points, edgeDistance={edgeDistance}, hasPolygons={polygons != null}");
-
             // Convert to lists for easier manipulation
             var pointsList = new List<Vector3>(points);
             var flagsList = new List<StraightPathFlags>(flags);
@@ -93,8 +76,6 @@ namespace Tripper.Navigation
             flags = flagsList.ToArray();
             if (polyList != null)
                 polygons = polyList.ToArray();
-
-            Log($"MoveAwayFromEdges done: {points.Length} points after processing");
         }
 
         /// <summary>
@@ -181,7 +162,6 @@ namespace Tripper.Navigation
                     edgeDistance,
                     out hitPoint,
                     out hitNormal);
-                Log($"FindDistanceToWallFromPoly({point}, polyRef=0x{polyRef:X}) = {distance}, normal={hitNormal.ToVector3()}");
             }
             else
             {
@@ -196,7 +176,6 @@ namespace Tripper.Navigation
                 hitNormal = len > 0.01f 
                     ? new NativeMethods.XYZ(-toWall.X / len, -toWall.Y / len, -toWall.Z / len)
                     : new NativeMethods.XYZ(1, 0, 0);
-                Log($"FindDistanceToWall({point}) = {distance}");
             }
 
             // If we're far enough from walls, nothing to do
