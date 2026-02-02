@@ -15,11 +15,11 @@ namespace Styx.WoWInternals.WoWObjects
         private const uint DescRace = 0x34;              // Race dans le descriptor
         private const uint DescClass = 0x34;             // Classe (partagé avec race, bits différents)
         private const uint DescGender = 0x34;            // Genre (partagé, bits différents)
-        private const uint DescCoinage = 0x105;          // Player coinage (copper)
-        private const uint DescHonor = 0x109;            // Player honor
-        private const uint DescXP = 0x107;               // Player experience
-        private const uint DescNextLevelXP = 0x108;      // Next level XP
-        private const uint DescPlayerFlags = 0x106;      // Player flags (AFK, DND, GM, etc)
+        private const uint DescPlayerFlags = 0x96;       // PLAYER_FLAGS (absolute descriptor index)
+        private const uint DescXP = 0x1E3;               // PLAYER_XP
+        private const uint DescNextLevelXP = 0x1E4;      // PLAYER_NEXT_LEVEL_XP
+        private const uint DescCoinage = 0x492;          // PLAYER_FIELD_COINAGE
+        private const uint DescHonor = 0x4FD;            // PLAYER_FIELD_HONOR_CURRENCY
         
         // Race, Class, Gender are inherited from WoWUnit (offset 0x17 - UNIT_FIELD_BYTES_0)
         
