@@ -100,10 +100,12 @@ namespace CommonBehaviors.Actions
 			{
 				case PoiType.Hotspot:
 				case PoiType.Kill:
+					precision = 15f;
+					break;
 				case PoiType.Loot:
 				case PoiType.Skin:
 				case PoiType.Harvest:
-					precision = 15f;
+					precision = 4.5f;  // Close enough to interact
 					break;
 				case PoiType.Quest:
 				case PoiType.QuestPickUp:
