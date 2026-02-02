@@ -7,6 +7,7 @@
 using Bots.Grind;
 using CommonBehaviors.Decorators;
 using Styx;
+using Styx.Database;
 using Styx.Helpers;
 using Styx.Logic;
 using Styx.Logic.AreaManagement;
@@ -98,21 +99,66 @@ public class GrindObjective : QuestObjective
         if (this.behaviorTree == (Composite)null)
         {
             GrindArea area;
+            
+            // Priority 1: Profile-defined hotspots (OverridedHotspots)
             if (this.killMobInfo != null && this.killMobInfo.OverridedHotspots != null && this.killMobInfo.OverridedHotspots.Count > 0)
             {
+                Logging.WriteDebug("[GrindObjective] Using profile hotspots ({0} points) for mob {1}", 
+                    this.killMobInfo.OverridedHotspots.Count, this.killMobInfo.MobID);
+                    
                 area = new GrindArea(new HotspotManager((IEnumerable<WoWPoint>)this.killMobInfo.OverridedHotspots))
                 {
                     TargetMaxLevel = this.killMobInfo.TargetMaxLevel > 0 ? this.killMobInfo.TargetMaxLevel : level + 5,
                     TargetMinLevel = this.killMobInfo.TargetMinLevel > 0 ? this.killMobInfo.TargetMinLevel : this.Quest.Level - 5
                 };
             }
-            else
+            // Priority 2: Quest area from client DB
+            else if (this.QuestArea != null && this.QuestArea.AreaDefinitions.Count > 0 && 
+                     this.QuestArea.AreaDefinitions.Any(a => a.Count > 0))
             {
+                Logging.WriteDebug("[GrindObjective] Using client quest area for quest {0}", this.Quest.Name);
                 this.QuestArea.CreateHotspots();
                 this.QuestArea.TargetMaxLevel = level + 5;
                 this.QuestArea.TargetMinLevel = this.Quest.Level - 5;
                 area = (GrindArea)this.QuestArea;
             }
+            // Priority 3: Auto-generate from CreatureSpawns.db
+            else if (this.killMobInfo != null && CreatureSpawnQueries.IsAvailable)
+            {
+                var mobId = (uint)this.killMobInfo.MobID;
+                var mapId = StyxWoW.Me.MapId;
+                var autoHotspots = CreatureSpawnQueries.GenerateHotspots(mobId, mapId);
+                
+                if (autoHotspots.Count > 0)
+                {
+                    Logging.Write("[GrindObjective] Auto-generated {0} hotspots from spawn database for mob {1}", 
+                        autoHotspots.Count, mobId);
+                        
+                    area = new GrindArea(new HotspotManager((IEnumerable<WoWPoint>)autoHotspots))
+                    {
+                        TargetMaxLevel = this.killMobInfo.TargetMaxLevel > 0 ? this.killMobInfo.TargetMaxLevel : level + 5,
+                        TargetMinLevel = this.killMobInfo.TargetMinLevel > 0 ? this.killMobInfo.TargetMinLevel : this.Quest.Level - 5
+                    };
+                }
+                else
+                {
+                    // Fallback to empty quest area
+                    Logging.Write("[GrindObjective] No hotspots found for mob {0} - using default quest area", mobId);
+                    this.QuestArea.CreateHotspots();
+                    this.QuestArea.TargetMaxLevel = level + 5;
+                    this.QuestArea.TargetMinLevel = this.Quest.Level - 5;
+                    area = (GrindArea)this.QuestArea;
+                }
+            }
+            else
+            {
+                // Final fallback
+                this.QuestArea.CreateHotspots();
+                this.QuestArea.TargetMaxLevel = level + 5;
+                this.QuestArea.TargetMinLevel = this.Quest.Level - 5;
+                area = (GrindArea)this.QuestArea;
+            }
+            
             StyxWoW.AreaManager.SetArea(area);
             this.behaviorTree = (Composite)new DecoratorIsNotPoiType((IEnumerable<PoiType>)new PoiType[2]
             {
