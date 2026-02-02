@@ -110,7 +110,7 @@ namespace Styx.WoWInternals.World
 
         /// <summary>
         /// Native WoW TraceLine using CGWorldFrame::Intersect.
-        /// Ported from HB 3.3.5a - uses offset 0x7A3B70 (8010608).
+        /// Ported from HB 3.3.5a - uses offset 0x0077F310.
         /// </summary>
         private static bool TraceLine(WoWPoint from, WoWPoint to, float distance, CGWorldFrameHitFlags flags, out WoWPoint hitPoint)
         {
@@ -142,7 +142,7 @@ namespace Styx.WoWInternals.World
                         executor.AddLine("push {0}", memory["IntersectionPoint"]);
                         executor.AddLine("push {0}", memory["To"]);
                         executor.AddLine("push {0}", memory["From"]);
-                        executor.AddLine("call {0}", 8010608U);  // HB 3.3.5a offset: 0x7A3B70
+                        executor.AddLine("call {0}", 7861008U);  // HB 3.3.5a offset: 0x0077F310
                         executor.AddLine("add esp, 0x18");
                         executor.AddLine("retn");
                         executor.Execute();
@@ -220,7 +220,6 @@ namespace Styx.WoWInternals.World
 
         /// <summary>
         /// Trace plusieurs lignes avec flags différents et retourne les points de collision.
-        /// Utilise TraceLine en boucle (pas optimal mais fonctionnel).
         /// </summary>
         public static void MassTraceLine(WorldLine[] lines, TraceLineHitFlags[] flags, out bool[] hitResults, out WoWPoint[] hitPoints)
         {
@@ -236,16 +235,88 @@ namespace Styx.WoWInternals.World
             }
         }
 
-        public static void MassTraceLine(WorldLine[] lines, CGWorldFrameHitFlags[] flags, out bool[] hitResults, out WoWPoint[] hitPoints)
+        public static unsafe void MassTraceLine(WorldLine[] lines, CGWorldFrameHitFlags[] flags, out bool[] hitResults, out WoWPoint[] hitPoints)
         {
             if (flags.Length != lines.Length)
                 throw new ArgumentException("flags.Length is not the same as lines.Length!");
 
-            TraceLineHitFlags[] mapped = new TraceLineHitFlags[flags.Length];
-            for (int i = 0; i < flags.Length; i++)
-                mapped[i] = MapFlags(flags[i]);
+            GreenMagic.ExecutorRand? executor = ObjectManager.Executor;
+            if (executor == null)
+            {
+                // Fallback: boucle managée si pas d'executor disponible
+                TraceLineHitFlags[] mappedFallback = new TraceLineHitFlags[flags.Length];
+                for (int i = 0; i < flags.Length; i++)
+                    mappedFallback[i] = MapFlags(flags[i]);
 
-            MassTraceLine(lines, mapped, out hitResults, out hitPoints);
+                MassTraceLine(lines, mappedFallback, out hitResults, out hitPoints);
+                return;
+            }
+
+            lock (executor.AssemblyLock)
+            {
+                // Chaque entrée InputData = 4 (flags) + 12 (to) + 12 (from) = 28 bytes
+                using (var memory = new AllocatedMemory(lines.Length + (lines.Length * 12) + (lines.Length * 28) + 4))
+                {
+                    memory.AllocateOfChunk("HitResults", lines.Length);
+                    memory.AllocateOfChunk("HitPoints", lines.Length * 12);
+                    memory.AllocateOfChunk("InputData", lines.Length * 28);
+                    memory.AllocateOfChunk("Distance", 4);
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        int offset = i * 28;
+                        memory.Write("InputData", offset, (uint)flags[i]);
+                        memory.Write("InputData", offset + 4, lines[i].End);
+                        memory.Write("InputData", offset + 16, lines[i].Start);
+                    }
+
+                    uint distanceBits = BitConverter.ToUInt32(BitConverter.GetBytes(1f), 0);
+
+                    executor.Clear();
+                    executor.AddLine("mov ebx, 0");
+                    executor.AddLine("mov esi, {0}", memory["HitPoints"]);
+                    executor.AddLine("mov edi, {0}", memory["InputData"]);
+                    executor.AddLine("@loop:");
+                    executor.AddLine("mov eax, {0}", memory["Distance"]);
+                    executor.AddLine("mov edx, {0}", distanceBits);
+                    executor.AddLine("mov [eax], edx");
+                    executor.AddLine("push 0");
+                    executor.AddLine("mov eax, edi");
+                    executor.AddLine("mov eax, [eax]");
+                    executor.AddLine("push eax");
+                    executor.AddLine("push {0}", memory["Distance"]);
+                    executor.AddLine("push esi");
+                    executor.AddLine("mov eax, edi");
+                    executor.AddLine("add eax, 4");
+                    executor.AddLine("push eax");
+                    executor.AddLine("add eax, 12");
+                    executor.AddLine("push eax");
+                    executor.AddLine("call {0}", 7861008U);  // CGWorldFrame::Intersect 3.3.5a
+                    executor.AddLine("add esp, 0x18");
+                    executor.AddLine("mov edx, {0}", memory["HitResults"]);
+                    executor.AddLine("add edx, ebx");
+                    executor.AddLine("mov [edx], al");
+                    executor.AddLine("inc ebx");
+                    executor.AddLine("add esi, 12");
+                    executor.AddLine("add edi, 28");
+                    executor.AddLine("cmp ebx, {0}", lines.Length);
+                    executor.AddLine("jl @loop");
+                    executor.AddLine("retn");
+                    executor.Execute();
+
+                    hitResults = new bool[lines.Length];
+                    fixed (bool* resultPtr = hitResults)
+                    {
+                        executor.Memory.ReadBytes(memory["HitResults"], resultPtr, lines.Length);
+                    }
+
+                    hitPoints = new WoWPoint[lines.Length];
+                    fixed (WoWPoint* pointPtr = hitPoints)
+                    {
+                        executor.Memory.ReadBytes(memory["HitPoints"], pointPtr, lines.Length * 12);
+                    }
+                }
+            }
         }
     }
 }
