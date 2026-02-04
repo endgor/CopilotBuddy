@@ -43,7 +43,8 @@ namespace Styx.WoWInternals
 			}
 		}
 
-		public static bool IsFacing => ClickToMoveInfo.Type == ClickToMoveType.Face;
+		// Bug fix #11: Should check ConstantFace, not Face (HB 3.3.5a & 4.3.4)
+		public static bool IsFacing => ClickToMoveInfo.Type == ClickToMoveType.ConstantFace;
 
 		public static InputControl ActiveInputControl
 		{

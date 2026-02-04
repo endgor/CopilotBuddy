@@ -7,14 +7,16 @@ namespace Styx.WoWInternals.WoWObjects
     {
         #region Descriptor Offsets - CONTAINER_FIELD
         
-        // ContainerFields pour 3.3.5a (offset depuis descriptors)
-        // Note: Container hérite de Item, donc les premiers offsets sont Item fields
-        private const int CONTAINER_FIELD_NUM_SLOTS = 0x0;     // 4 bytes - après ItemFields
-        private const int CONTAINER_FIELD_ALIGN_PAD = 0x4;     // 4 bytes - padding
+        // ContainerFields pour 3.3.5a (depuis Offsets.txt)
+        // OBJECT_FIELD_COUNT=6 + ITEM_FIELD_CREATE_PLAYED_TIME=0x3E(62) + PAD=1 = 63
+        // Base offset = 63 * 4 bytes = 252 (0xFC)
+        // Note: Offsets.txt utilise indices absolus, on multiplie par 4 pour byte offset
+        private const int CONTAINER_FIELD_NUM_SLOTS = 0x6;     // Indice absolu depuis Offsets.txt
+        private const int CONTAINER_ALIGN_PAD = 0x7;           // padding
         private const int CONTAINER_FIELD_SLOT_1 = 0x8;        // Array de 36 x 8 bytes (36 slots max)
         
-        // Offset de base pour les container fields (après tous les item fields)
-        private const int CONTAINER_FIELDS_BASE = 0xCC;        // Après ITEM_FIELD_CREATE_PLAYED_TIME + 4
+        // Offset de base pour les container fields (après ITEM_FIELD_PAD)
+        private const int CONTAINER_FIELDS_BASE = 0xFC;        // (63 indices * 4 bytes)
         
         #endregion
         
@@ -30,7 +32,8 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                return GetDescriptorField<uint>(CONTAINER_FIELDS_BASE + CONTAINER_FIELD_NUM_SLOTS);
+                // Utilise indice absolu * 4 pour byte offset
+                return GetDescriptorField<uint>(CONTAINER_FIELD_NUM_SLOTS * 4);
             }
         }
         public uint FreeSlotsCount
@@ -78,8 +81,11 @@ namespace Styx.WoWInternals.WoWObjects
         {
             if (slotIndex >= NumSlots)
                 return 0;
-                
-            int offset = CONTAINER_FIELDS_BASE + CONTAINER_FIELD_SLOT_1 + (int)(slotIndex * 8);
+            
+            // CONTAINER_FIELD_SLOT_1 = 0x8 (indice absolu)
+            // Chaque slot = 2 indices (8 bytes pour ulong)
+            // Offset byte = (indice_absolu + slotIndex * 2) * 4
+            int offset = (CONTAINER_FIELD_SLOT_1 + (int)(slotIndex * 2)) * 4;
             return GetDescriptorField<ulong>(offset);
         }
         public WoWItem? GetSlotItem(uint slotIndex)
