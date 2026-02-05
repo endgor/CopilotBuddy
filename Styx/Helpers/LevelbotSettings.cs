@@ -4,6 +4,12 @@ using System.Reflection;
 
 namespace Styx.Helpers
 {
+	/// <summary>
+	/// LevelbotSettings delegates all UI-visible settings to CharacterSettings.
+	/// This ensures that when the code reads LevelbotSettings.Instance.X,
+	/// it actually reads CharacterSettings.Instance.X which is bound to the UI.
+	/// This pattern matches HonorBuddy 4.3.4 architecture.
+	/// </summary>
 	public class LevelbotSettings : Settings
 	{
 		private static string GetSettingsPath()
@@ -17,73 +23,122 @@ namespace Styx.Helpers
 		{
 		}
 
-		[Setting]
-		[DefaultValue("")]
-		public string MailRecipient { get; set; }
+		// ===========================================
+		// Delegating properties to CharacterSettings
+		// (UI binds to CharacterSettings, code uses LevelbotSettings)
+		// ===========================================
 
-		[Setting]
-		[DefaultValue("Food Name Here")]
-		public string FoodName { get; set; }
+		public string MailRecipient
+		{
+			get => CharacterSettings.Instance.MailRecipient;
+			set => CharacterSettings.Instance.MailRecipient = value;
+		}
 
-		[Setting]
-		[DefaultValue("Drink Name Here")]
-		public string DrinkName { get; set; }
+		public string FoodName
+		{
+			get => CharacterSettings.Instance.FoodName;
+			set => CharacterSettings.Instance.FoodName = value;
+		}
 
-		[Setting]
-		[DefaultValue("Mount Name Here")]
-		public string MountName { get; set; }
+		public string DrinkName
+		{
+			get => CharacterSettings.Instance.DrinkName;
+			set => CharacterSettings.Instance.DrinkName = value;
+		}
 
-		[DefaultValue(true)]
-		[Setting]
-		public bool LootMobs { get; set; }
+		public string MountName
+		{
+			get => CharacterSettings.Instance.MountName;
+			set => CharacterSettings.Instance.MountName = value;
+		}
 
-		[DefaultValue(false)]
-		[Setting]
-		public bool SkinMobs { get; set; }
+		public bool LootMobs
+		{
+			get => CharacterSettings.Instance.LootMobs;
+			set => CharacterSettings.Instance.LootMobs = value;
+		}
 
-		[Setting]
-		[DefaultValue(false)]
-		public bool NinjaSkin { get; set; }
+		public bool SkinMobs
+		{
+			get => CharacterSettings.Instance.SkinMobs;
+			set => CharacterSettings.Instance.SkinMobs = value;
+		}
 
-		[DefaultValue(true)]
-		[Setting]
-		public bool LootChests { get; set; }
+		public bool NinjaSkin
+		{
+			get => CharacterSettings.Instance.NinjaSkin;
+			set => CharacterSettings.Instance.NinjaSkin = value;
+		}
 
-		[Setting]
-		[DefaultValue(false)]
-		public bool HarvestMinerals { get; set; }
+		public bool LootChests
+		{
+			get => CharacterSettings.Instance.LootChests;
+			set => CharacterSettings.Instance.LootChests = value;
+		}
 
-		[Setting]
-		[DefaultValue(false)]
-		public bool HarvestHerbs { get; set; }
+		public bool HarvestMinerals
+		{
+			get => CharacterSettings.Instance.HarvestMinerals;
+			set => CharacterSettings.Instance.HarvestMinerals = value;
+		}
 
-		[Setting]
-		[DefaultValue(false)]
-		public bool UseMount { get; set; }
+		public bool HarvestHerbs
+		{
+			get => CharacterSettings.Instance.HarvestHerbs;
+			set => CharacterSettings.Instance.HarvestHerbs = value;
+		}
 
-		[Setting]
-		[DefaultValue(30)]
-		public int PullDistance { get; set; }
+		public bool UseMount
+		{
+			get => CharacterSettings.Instance.UseMount;
+			set => CharacterSettings.Instance.UseMount = value;
+		}
 
-		[Setting]
-		[DefaultValue(75)]
-		public int MountDistance { get; set; }
+		public int PullDistance
+		{
+			get => CharacterSettings.Instance.PullDistance;
+			set => CharacterSettings.Instance.PullDistance = value;
+		}
 
-		[Setting]
-		[DefaultValue(45)]
-		public int LootRadius { get; set; }
+		public int MountDistance
+		{
+			get => CharacterSettings.Instance.MountDistance;
+			set => CharacterSettings.Instance.MountDistance = value;
+		}
 
-		[Setting]
-		[DefaultValue(false)]
-		public bool FindVendorsAutomatically { get; set; }
+		public int LootRadius
+		{
+			get => CharacterSettings.Instance.LootRadius;
+			set => CharacterSettings.Instance.LootRadius = value;
+		}
 
-		[DefaultValue(false)]
-		[Setting]
-		public bool TrainNewSkills { get; set; }
+		public bool FindVendorsAutomatically
+		{
+			get => CharacterSettings.Instance.FindVendorsAutomatically;
+			set => CharacterSettings.Instance.FindVendorsAutomatically = value;
+		}
 
-		[Setting]
-		[DefaultValue(true)]
-		public bool LearnFlightPaths { get; set; }
+		public bool TrainNewSkills
+		{
+			get => CharacterSettings.Instance.TrainNewSkills;
+			set => CharacterSettings.Instance.TrainNewSkills = value;
+		}
+
+		public bool LearnFlightPaths
+		{
+			get => CharacterSettings.Instance.LearnFlightPaths;
+			set => CharacterSettings.Instance.LearnFlightPaths = value;
+		}
+
+		public bool UseFlightPaths
+		{
+			get => CharacterSettings.Instance.UseFlightPaths;
+			set => CharacterSettings.Instance.UseFlightPaths = value;
+		}
+
+		// ===========================================
+		// Local settings (not in UI, stored in LevelbotSettings file)
+		// ===========================================
 
 		[DefaultValue(false)]
 		[Setting]
