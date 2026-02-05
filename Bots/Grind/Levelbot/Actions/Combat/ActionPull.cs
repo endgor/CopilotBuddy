@@ -35,7 +35,7 @@ namespace Levelbot.Actions.Combat
             // Check if target is dead
             if (target.Dead)
             {
-                Blacklist.Add(Me.CurrentTargetGuid, TimeSpan.FromSeconds(5));
+                Blacklist.Add(Me.CurrentTargetGuid, TimeSpan.FromMinutes(5));
                 Me.ClearTarget();
                 return RunStatus.Failure;
             }
@@ -44,7 +44,7 @@ namespace Levelbot.Actions.Combat
             if (target.TaggedByOther && !target.TaggedByMe && !Me.IsInParty && !Me.IsInRaid)
             {
                 Logging.Write("{0} is tagged", targetName);
-                Blacklist.Add(Me.CurrentTargetGuid, TimeSpan.FromSeconds(5));
+                Blacklist.Add(Me.CurrentTargetGuid, TimeSpan.FromMinutes(5));
                 Me.ClearTarget();
                 return RunStatus.Failure;
             }
@@ -67,7 +67,7 @@ namespace Levelbot.Actions.Combat
             }
 
             RoutineManager.Current.Pull();
-            return RunStatus.Running;
+            return RunStatus.Success;
         }
     }
 }
