@@ -1,4 +1,5 @@
 #nullable disable
+using System;
 using Styx.Logic.Pathing;
 
 namespace Styx.Logic.Profiles
@@ -6,7 +7,7 @@ namespace Styx.Logic.Profiles
     /// <summary>
     /// Represents a blackspot - an area to avoid during navigation.
     /// </summary>
-    public struct Blackspot
+    public struct Blackspot : IEquatable<Blackspot>
     {
         /// <summary>
         /// Gets or sets the center location of the blackspot.
@@ -56,6 +57,33 @@ namespace Styx.Logic.Profiles
         public override string ToString()
         {
             return $"[Blackspot Location: {Location}, Radius: {Radius}, Height: {Height}]";
+        }
+
+        public bool Equals(Blackspot other)
+        {
+            return Location.Equals(other.Location) && 
+                   Math.Abs(Radius - other.Radius) < 0.001f && 
+                   Math.Abs(Height - other.Height) < 0.001f;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Blackspot other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Location, Radius, Height);
+        }
+
+        public static bool operator ==(Blackspot left, Blackspot right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Blackspot left, Blackspot right)
+        {
+            return !left.Equals(right);
         }
     }
 }
