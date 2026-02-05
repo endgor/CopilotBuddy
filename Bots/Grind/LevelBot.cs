@@ -988,8 +988,14 @@ namespace Bots.Grind
             return Vendors.ForceRepair || StyxWoW.Me.LowestDurabilityPercent <= ProfileManager.CurrentProfile.MinDurability;
         }
 
+        /// <summary>
+        /// HB 4.3.4 smethod_14 - Check if need to buy food/drink.
+        /// Note: Unlike Sell/Repair, HB 4.3.4 does NOT check FindVendorsAutomatically for buying.
+        /// The FoodAmount/DrinkAmount sliders are the explicit opt-in.
+        /// </summary>
         private static bool NeedToBuy()
         {
+            // HB 4.3.4: Minimum 1 gold required to buy
             if (StyxWoW.Me.Copper < 10000)
             {
                 if (Vendors.ForceBuy)
@@ -1003,18 +1009,27 @@ namespace Bots.Grind
             if (Vendors.ForceBuy)
                 return true;
 
-            // Respecter le setting FindVendorsAutomatically (CharacterSettings car lié à l'UI)
-            if (!CharacterSettings.Instance.FindVendorsAutomatically)
+            // HB 4.3.4: Check if food vendor exists (from profile or NPC database)
+            var foodVendor = ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Food);
+            if (foodVendor == null)
                 return false;
 
-            if (ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Food) == null)
-                return false;
-
+            // HB 4.3.4: Check if need drink (mana users only)
             bool usesMana = StyxWoW.Me.PowerType == WoWPowerType.Mana || StyxWoW.Me.Class == WoWClass.Druid;
             if (usesMana && Consumable.GetBestDrink(false) == null && CharacterSettings.Instance.DrinkAmount > 0)
+            {
+                Logging.WriteDebug("[NeedToBuy] Need drink: DrinkAmount={0}, Vendor={1}", 
+                    CharacterSettings.Instance.DrinkAmount, foodVendor.Name);
                 return true;
+            }
+            
+            // HB 4.3.4: Check if need food
             if (Consumable.GetBestFood(false) == null && CharacterSettings.Instance.FoodAmount > 0)
+            {
+                Logging.WriteDebug("[NeedToBuy] Need food: FoodAmount={0}, Vendor={1}", 
+                    CharacterSettings.Instance.FoodAmount, foodVendor.Name);
                 return true;
+            }
 
             return false;
         }

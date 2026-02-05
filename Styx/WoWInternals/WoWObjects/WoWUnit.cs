@@ -355,7 +355,11 @@ namespace Styx.WoWInternals.WoWObjects
             }
         }
 
-        public bool IsMoving => WoWMovementInfo.TimeMoved > 0;
+        /// <summary>
+        /// Whether the unit is currently moving.
+        /// Uses MovementInfo.IsMoving which checks movement flags (HB 4.3.4 style).
+        /// </summary>
+        public bool IsMoving => WoWMovementInfo.IsMoving;
 
         public bool IsPet => SummonedBy != null;
 

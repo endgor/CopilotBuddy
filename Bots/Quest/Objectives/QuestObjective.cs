@@ -123,15 +123,15 @@ public abstract class QuestObjective : IDisposable, IEquatable<QuestObjective>
 
     private static bool IsPointInPolygon(IList<Vector3> polygon, ref Vector3 point)
     {
-        bool flag = false;
-        int index1 = 0;
-        int index2 = polygon.Count - 1;
-        for (; index1 < polygon.Count - 1; index2 = index1++)
+        bool isInside = false;
+        int currentIndex = 0;
+        int previousIndex = polygon.Count - 1;
+        for (; currentIndex < polygon.Count - 1; previousIndex = currentIndex++)
         {
-            if ((double)polygon[index1].Y > (double)point.Y != (double)polygon[index2].Y > (double)point.Y && (double)point.X < ((double)polygon[index2].X - (double)polygon[index1].X) * ((double)point.Y - (double)polygon[index1].Y) / ((double)polygon[index2].Y - (double)polygon[index1].Y) + (double)polygon[index1].X)
-                flag = !flag;
+            if ((double)polygon[currentIndex].Y > (double)point.Y != (double)polygon[previousIndex].Y > (double)point.Y && (double)point.X < ((double)polygon[previousIndex].X - (double)polygon[currentIndex].X) * ((double)point.Y - (double)polygon[currentIndex].Y) / ((double)polygon[previousIndex].Y - (double)polygon[currentIndex].Y) + (double)polygon[currentIndex].X)
+                isInside = !isInside;
         }
-        return flag;
+        return isInside;
     }
 
     public virtual void Dispose()

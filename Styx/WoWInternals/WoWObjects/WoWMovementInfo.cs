@@ -290,9 +290,11 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Whether the unit is currently moving (TimeMoved > 0).
+        /// Whether the unit is currently moving.
+        /// Uses movement flags like HB 4.3.4 instead of TimeMoved for accurate detection.
+        /// This prevents false positives during facing/turning operations.
         /// </summary>
-        public bool IsMoving => TimeMoved > 0U;
+        public bool IsMoving => (MovementFlags & (uint)MovementFlag.MotionMask) != 0;
 
         /// <summary>
         /// Whether the unit is moving forward.
@@ -419,6 +421,7 @@ namespace Styx.WoWInternals.WoWObjects
 
         /// <summary>
         /// Movement flags for WoW 3.3.5a.
+        /// Ported from HB 4.3.4.
         /// </summary>
         [Flags]
         public enum MovementFlag : uint
@@ -454,7 +457,15 @@ namespace Styx.WoWInternals.WoWObjects
             SplineEnabled = 0x08000000,
             Waterwalking = 0x10000000,
             FallingSlow = 0x20000000,
-            Hover = 0x40000000
+            Hover = 0x40000000,
+            
+            // Masks (ported from HB 4.3.4)
+            TurnMask = TurnRight | TurnLeft,
+            StrafeMask = StrafeRight | StrafeLeft,
+            PitchMask = PitchDown | PitchUp,
+            MoveMask = TurnMask | StrafeMask | Backward | Forward,
+            FallMask = FallingFar | Falling,
+            MotionMask = PitchMask | StrafeMask | TurnMask | Backward | Forward
         }
 
         /// <summary>

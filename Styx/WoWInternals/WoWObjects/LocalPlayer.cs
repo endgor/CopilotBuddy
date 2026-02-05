@@ -997,7 +997,8 @@ namespace Styx.WoWInternals.WoWObjects
 
         /// <summary>
         /// Sets the player's facing to a specific angle (in radians).
-        /// Uses ClickToMove with Face type like HB 3.3.5a for proper server sync and animation.
+        /// Uses ClickToMove with Face type like HB 4.3.4 for proper server sync and animation.
+        /// Adding epsilon (1E-06f) like HB 4.3.4 to prevent precision issues.
         /// </summary>
         public void SetFacing(float facing)
         {
@@ -1006,8 +1007,8 @@ namespace Styx.WoWInternals.WoWObjects
             while (facing >= 2 * Math.PI) facing -= (float)(2 * Math.PI);
 
             // Use ClickToMove with Face type (2) for proper server-side facing update
-            // This is how HB 3.3.5a does it - triggers animation and syncs with server
-            WoWMovement.ClickToMove(0UL, WoWPoint.Empty, facing, WoWMovement.ClickToMoveType.Face);
+            // Adding small epsilon like HB 4.3.4 to prevent floating-point precision issues
+            WoWMovement.ClickToMove(0UL, WoWPoint.Empty, facing + 1E-06f, WoWMovement.ClickToMoveType.Face);
         }
 
         #endregion
