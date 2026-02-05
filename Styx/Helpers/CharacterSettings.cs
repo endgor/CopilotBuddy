@@ -374,5 +374,25 @@ namespace Styx.Helpers
         {
             _propertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// Reinitializes settings for the current character after game attachment.
+        /// Must be called after StyxWoW.Me is available.
+        /// Pattern from HB 4.3.4.
+        /// </summary>
+        public void ReinitializeForCharacter()
+        {
+            if (StyxWoW.Me == null || string.IsNullOrEmpty(StyxWoW.Me.Name))
+            {
+                Logging.WriteDebug("[CharacterSettings] Cannot reinitialize - character not available");
+                return;
+            }
+
+            string newPath = Path.Combine(Logging.ApplicationPath, 
+                string.Format("Settings\\CharacterSettings_{0}.xml", StyxWoW.Me.Name));
+            
+            Logging.WriteDebug("[CharacterSettings] Reinitializing for character: {0}", StyxWoW.Me.Name);
+            Reinitialize(newPath);
+        }
     }
 }
