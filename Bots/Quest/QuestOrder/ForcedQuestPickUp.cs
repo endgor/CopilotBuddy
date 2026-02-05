@@ -113,9 +113,9 @@ public class ForcedQuestPickUp : ForcedBehavior
         }
         if (string.IsNullOrEmpty(this.QuestName))
             return string.Format("Picking up quest with ID {0}", (object)this.QuestId);
-        string str1 = string.Format("Picking up {0}", (object)this.QuestName);
-        Logging.WriteDebug("{0} : {1}", (object)str1, (object)this.QuestId);
-        return str1;
+        string questInfo = string.Format("Picking up {0}", (object)this.QuestName);
+        Logging.WriteDebug("{0} : {1}", (object)questInfo, (object)this.QuestId);
+        return questInfo;
     }
 
     private static LocalPlayer Me => ObjectManager.Me;
