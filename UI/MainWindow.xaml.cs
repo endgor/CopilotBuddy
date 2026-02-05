@@ -154,16 +154,8 @@ namespace CopilotBuddy.UI
                     {
                         Logging.Write(Colors.LightGreen, $"Successfully attached to WoW (PID: {wowPid})");
 
-                        // Load settings
-                        try
-                        {
-                            CharacterSettings.Instance.Load();
-                            StyxSettings.Instance.Load();
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.WriteException(ex);
-                        }
+                        // Reinitialize and load settings for this character (HB 4.3.4 pattern)
+                        LoadSettings();
 
                         // Initialize Combat Routines (compile and load from Routines folder)
                         // This must be done AFTER attachment when ObjectManager.Me is available
@@ -189,6 +181,29 @@ namespace CopilotBuddy.UI
                         }
                         catch (Exception ex)
                         {
+                            Logging.WriteException(ex);
+                        }
+
+                        // Initialize plugins (compile and load from Plugins folder)
+                        try
+                        {
+                            Logging.Write("Initializing Plugins...");
+                            
+                            // Pre-load System.Drawing.Common for plugin compilation
+                            try
+                            {
+                                // Force load System.Drawing.Common into AppDomain
+                                var _ = System.Drawing.Font.FromHdc(IntPtr.Zero);
+                            }
+                            catch { /* Ignore, just ensure assembly is loaded */ }
+                            
+                            // Load previously enabled plugins from CharacterSettings
+                            var enabledPlugins = CharacterSettings.Instance.EnabledPlugins ?? new string[0];
+                            Styx.Plugins.PluginManager.Initialize(enabledPlugins);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Write(Colors.Red, "Failed to initialize plugins: {0}", ex.Message);
                             Logging.WriteException(ex);
                         }
 
@@ -248,6 +263,9 @@ namespace CopilotBuddy.UI
             {
                 StopBot();
             }
+
+            // Save all settings (HB 4.3.4 pattern - save at close)
+            SaveSettings();
 
             // Save window position/size
             try
@@ -381,6 +399,9 @@ namespace CopilotBuddy.UI
                 return;
             }
 
+            // Save settings before starting bot (HB 4.3.4 pattern)
+            SaveSettings();
+
             _isRunning = true;
             btnStart.Visibility = Visibility.Hidden;
             btnStop.Visibility = Visibility.Visible;
@@ -434,9 +455,8 @@ namespace CopilotBuddy.UI
             {
                 BotManager.Instance.SetCurrent(bot);
                 
-                // Save selected bot index (HB 4.3.4 pattern)
+                // Update selected bot index (no immediate save - HB 4.3.4 pattern)
                 CharacterSettings.Instance.SelectedBotIndex = cmbBotSelector.SelectedIndex;
-                CharacterSettings.Instance.Save();
             }
         }
 
@@ -507,8 +527,11 @@ namespace CopilotBuddy.UI
 
         private void btnPlugins_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Open plugins window
-            Logging.Write("Plugins - Not implemented yet");
+            var pluginsWindow = new PluginsWindow
+            {
+                Owner = this
+            };
+            pluginsWindow.ShowDialog();
         }
 
         private void btnDevTools_Click(object sender, RoutedEventArgs e)
@@ -542,6 +565,62 @@ namespace CopilotBuddy.UI
             // Save setting
             UISettings.Instance.EnhancedMode = false;
             UISettings.Instance.Save();
+        }
+
+        #endregion
+
+        #region Settings Management (HB 4.3.4 Pattern)
+
+        /// <summary>
+        /// Loads all settings after game attachment. Reinitializes CharacterSettings with proper character name.
+        /// Pattern from HB 4.3.4.
+        /// </summary>
+        private static void LoadSettings()
+        {
+            if (ObjectManager.Wow == null || !StyxWoW.IsInGame)
+                return;
+
+            try
+            {
+                // Reinitialize CharacterSettings for the current character
+                CharacterSettings.Instance.ReinitializeForCharacter();
+                
+                // Load other settings
+                UISettings.Instance.Load();
+                StyxSettings.Instance.Load();
+                LevelbotSettings.Instance.Load();
+                
+                Logging.WriteDebug("[Settings] Loaded settings for character: {0}", StyxWoW.Me?.Name ?? "Unknown");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Saves all settings. Called at app close and before bot start.
+        /// Pattern from HB 4.3.4.
+        /// </summary>
+        private static void SaveSettings()
+        {
+            try
+            {
+                if (ObjectManager.Wow == null || !ObjectManager.IsInGame)
+                    return;
+
+                UISettings.Instance.Save();
+                CharacterSettings.Instance.Save();
+                StyxSettings.Instance.Save();
+                LevelbotSettings.Instance.Save();
+                
+                Logging.WriteDebug("[Settings] Saved all settings");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteDebug("[Settings] Error saving settings");
+                Logging.WriteException(ex);
+            }
         }
 
         #endregion
