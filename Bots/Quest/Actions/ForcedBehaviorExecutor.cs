@@ -125,14 +125,30 @@ public class ForcedBehaviorExecutor : Composite
             case OrderNodeType.While:
                 return (ForcedBehavior)new ForcedWhile((WhileNode)orderNode);
             case OrderNodeType.PickUp:
-                return (ForcedBehavior)CreateQuestPickUp((PickUpNode)orderNode);
+                ForcedQuestPickUp pickUp = CreateQuestPickUp((PickUpNode)orderNode);
+                // If PickUp returns null (already completed or error), use ForcedNothing to skip
+                return pickUp != null ? (ForcedBehavior)pickUp : (ForcedBehavior)new ForcedNothing();
             case OrderNodeType.TurnIn:
-                return (ForcedBehavior)CreateQuestTurnIn((TurnInNode)orderNode);
+                ForcedQuestTurnIn turnIn = CreateQuestTurnIn((TurnInNode)orderNode);
+                // If TurnIn returns null (already completed), use ForcedNothing to skip
+                return turnIn != null ? (ForcedBehavior)turnIn : (ForcedBehavior)new ForcedNothing();
             case OrderNodeType.Objective:
                 ObjectiveNode objectiveNode = (ObjectiveNode)orderNode;
+                // Check if quest is already completed before trying to create objective
+                if (ObjectManager.Me.QuestLog.GetCompletedQuests().Contains(objectiveNode.QuestId))
+                {
+                    Logging.WriteDebug("Quest {0} is already completed. Skipping Objective.", (object)objectiveNode.QuestId);
+                    return (ForcedBehavior)new ForcedNothing();
+                }
                 Bots.Quest.Objectives.QuestObjective objective = CreateQuestObjective(objectiveNode);
                 if (objective != (Bots.Quest.Objectives.QuestObjective)null)
                     return (ForcedBehavior)new ForcedQuestObjective(objective);
+                // If quest is not in log (maybe completed between nodes), skip instead of stopping
+                if (!ObjectManager.Me.QuestLog.ContainsQuest(objectiveNode.QuestId))
+                {
+                    Logging.WriteDebug("Quest {0} not in log. Skipping Objective.", (object)objectiveNode.QuestId);
+                    return (ForcedBehavior)new ForcedNothing();
+                }
                 Logging.Write("Could not create a performable quest objective for objective with ID {0}.", (object)objectiveNode.ObjectiveId);
                 return (ForcedBehavior)null;
             case OrderNodeType.SetGrindArea:
@@ -241,6 +257,16 @@ public class ForcedBehaviorExecutor : Composite
 
     private static ForcedQuestTurnIn CreateQuestTurnIn(TurnInNode turnInNode)
     {
+        // Check if quest is already completed (turned in previously)
+        // If so, return null - the caller will use ForcedNothing
+        if (ObjectManager.Me.QuestLog.GetCompletedQuests().Contains(turnInNode.QuestId))
+        {
+            Logging.WriteDebug("Quest {0} (ID: {1}) is already completed. Skipping TurnIn.", 
+                (object)Utilities.GetObjectString((object)turnInNode.QuestName, "(null)"), 
+                (object)turnInNode.QuestId);
+            return (ForcedQuestTurnIn)null;
+        }
+        
         PlayerQuest questById = ObjectManager.Me.QuestLog.GetQuestById(turnInNode.QuestId);
         if (questById == null)
         {
