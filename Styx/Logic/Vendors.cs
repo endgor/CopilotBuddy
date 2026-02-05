@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Styx.Combat.CombatRoutine;
 using Styx.Helpers;
 using Styx.Logic.Inventory;
 using Styx.Logic.Inventory.Frames.Gossip;
 using Styx.Logic.Inventory.Frames.MailBox;
 using Styx.Logic.Inventory.Frames.Merchant;
 using Styx.Logic.Inventory.Frames.Trainer;
+using Styx.Logic.POI;
 using Styx.Logic.Profiles;
 using Styx.WoWInternals;
 using Styx.WoWInternals.WoWObjects;
@@ -47,6 +50,8 @@ namespace Styx.Logic
 			_mailFrame = new MailFrame();
 			_gossipFrame = new GossipFrame();
 			BotEvents.Player.OnLevelUp += OnLevelUp;
+			// HB 3.3.5a: NeedClassTraining is ONLY set on level up, not on startup
+			// This prevents the bot from going to trainer when all spells are already learned
 		}
 
 		/// <summary>
@@ -65,9 +70,15 @@ namespace Styx.Logic
 
 		private static void OnLevelUp(BotEvents.Player.LevelUpEventArgs args)
 		{
-			if (LevelbotSettings.Instance.TrainNewSkills)
+			// Utiliser CharacterSettings car lié à la checkbox de l'UI
+			if (!CharacterSettings.Instance.TrainNewSkills)
+				return;
+
+			// En 3.3.5a, nouveaux sorts disponibles aux niveaux pairs
+			if (args != null && args.NewLevel % 2 == 0)
 			{
-				NeedClassTraining = args.NewLevel % 2 == 0;
+				NeedClassTraining = true;
+				Logging.Write("New spells available at trainer (level {0})!", args.NewLevel);
 			}
 		}
 
@@ -79,6 +90,9 @@ namespace Styx.Logic
 			_trainerFrame.BuyAll();
 			NeedClassTraining = false;
 			ForceTrainer = false;
+			
+			// Refresh SpellManager cache so newly learned spells are available
+			Styx.Logic.Combat.SpellManager.Refresh();
 		}
 
 		/// <summary>
@@ -215,12 +229,14 @@ namespace Styx.Logic
 		}
 
 		/// <summary>
-		/// Buys items from vendor based on OnBuyItems event handlers.
+		/// Buys items from vendor based on OnBuyItems event handlers and food/drink settings.
+		/// Ported from HB 4.3.4.
 		/// </summary>
 		public static void BuyItems()
 		{
 			var itemsToBuy = new Dictionary<uint, int>();
 
+			// Handle OnBuyItems event
 			if (OnBuyItems != null)
 			{
 				var args = new BuyItemsEventArgs();
@@ -251,6 +267,53 @@ namespace Styx.Logic
 						_merchantFrame.BuyItem(merchantItem.Index, itemsToBuy[merchantItem.ItemId]);
 				}
 			}
+
+			// Handle automatic food/drink buying based on settings (HB 4.3.4 logic)
+			Vendor asVendor = BotPoi.Current.AsVendor;
+			if (asVendor == null || (asVendor.Type != Vendor.VendorType.Food && asVendor.Type != Vendor.VendorType.Restock))
+				return;
+
+			bool usesMana = StyxWoW.Me.PowerType == WoWPowerType.Mana || StyxWoW.Me.Class == WoWClass.Druid;
+			int bestDrinkIndex = _merchantFrame.GetBestDrinkFromVendor();
+			int bestFoodIndex = _merchantFrame.GetBestFoodFromVendor();
+
+			// If vendor doesn't sell food or drink, blacklist it
+			if (bestDrinkIndex == -1 && bestFoodIndex == -1)
+			{
+				Logging.Write("[Vendors] Vendor does not sell food or water. Blacklisting it.");
+				ProfileManager.CurrentProfile?.VendorManager?.Blacklist.Add(BotPoi.Current.AsVendor);
+				BotPoi.Clear("Blacklisted Vendor");
+				return;
+			}
+
+			// Buy drinks if needed
+			if (Consumable.GetBestDrink(false) == null && bestDrinkIndex != -1 && usesMana && 
+			    CharacterSettings.Instance.DrinkAmount > 0)
+			{
+				var drinkItem = _merchantFrame.GetMerchantItemByIndex(bestDrinkIndex);
+				if (drinkItem != null)
+				{
+					Logging.Write("[Vendors] Buying {0}x {1}", CharacterSettings.Instance.DrinkAmount, drinkItem.Name);
+					_merchantFrame.BuyItem(bestDrinkIndex, CharacterSettings.Instance.DrinkAmount);
+				}
+			}
+
+			// Buy food if needed
+			if (Consumable.GetBestFood(false) == null && bestFoodIndex != -1 &&
+			    CharacterSettings.Instance.FoodAmount > 0)
+			{
+				var foodItem = _merchantFrame.GetMerchantItemByIndex(bestFoodIndex);
+				if (foodItem != null)
+				{
+					Logging.Write("[Vendors] Buying {0}x {1}", CharacterSettings.Instance.FoodAmount, foodItem.Name);
+					_merchantFrame.BuyItem(bestFoodIndex, CharacterSettings.Instance.FoodAmount);
+				}
+			}
+
+			Thread.Sleep(2000);
+			_merchantFrame.Close();
+			ForceBuy = false;
+			BotPoi.Clear("Restocked");
 		}
 	}
 }
