@@ -292,9 +292,9 @@ namespace Styx.WoWInternals
 
         private static string GenerateRandomString(int minLength, int maxLength)
         {
-            int num = LuaEvents._random.Next(minLength, maxLength + 1);
-            StringBuilder stringBuilder = new StringBuilder(num);
-            for (int i = 0; i < num; i++)
+            int randomLength = LuaEvents._random.Next(minLength, maxLength + 1);
+            StringBuilder stringBuilder = new StringBuilder(randomLength);
+            for (int i = 0; i < randomLength; i++)
             {
                 stringBuilder.Append(LuaEvents._validChars[LuaEvents._random.Next(0, LuaEvents._validChars.Length)]);
             }
