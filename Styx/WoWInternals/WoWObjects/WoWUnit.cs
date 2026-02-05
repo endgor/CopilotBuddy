@@ -559,6 +559,7 @@ namespace Styx.WoWInternals.WoWObjects
         internal int InternalLevel => GetDescriptor<int>(UnitFields.Level);
 
         public uint FactionId => GetDescriptor<uint>(UnitFields.FactionTemplate);
+        
         #endregion
 
         #region Target & Relationships
