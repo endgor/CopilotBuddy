@@ -81,12 +81,12 @@ namespace Styx.Logic.Inventory.Frames.Quest
             get
             {
                 List<uint> list = new List<uint>();
-                uint num = 13227856U;
+                uint questListPointer = 13227856U;
                 Memory wow = ObjectManager.Wow;
-                for (uint num2 = wow.Read<uint>(13227856U); num2 != 0U; num2 = ObjectManager.Wow.Read<uint>(num))
+                for (uint questId = wow.Read<uint>(13227856U); questId != 0U; questId = ObjectManager.Wow.Read<uint>(questListPointer))
                 {
-                    list.Add(num2);
-                    num += 4U;
+                    list.Add(questId);
+                    questListPointer += 4U;
                 }
                 return list;
             }
