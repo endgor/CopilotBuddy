@@ -584,10 +584,10 @@ namespace Styx.WoWInternals
 
         private static uint GetChatMessagePtr(uint index)
         {
-            uint num = WoWChat.Position - 1U;
-            uint num2 = (num + index) % 60U;
-            uint num3 = 12016224U + num2 * 6080U;
-            return num3;
+            uint circularBufferPosition = WoWChat.Position - 1U;
+            uint adjustedIndex = (circularBufferPosition + index) % 60U;
+            uint messagePtr = 12016224U + adjustedIndex * 6080U;
+            return messagePtr;
         }
 
         internal static void Update()
@@ -602,21 +602,21 @@ namespace Styx.WoWInternals
                 uint position = WoWChat.Position;
                 if (position != WoWChat._lastReadPosition)
                 {
-                    uint num;
+                    uint messageCount;
                     if (position > WoWChat._lastReadPosition)
                     {
-                        num = position - WoWChat._lastReadPosition;
+                        messageCount = position - WoWChat._lastReadPosition;
                     }
                     else
                     {
-                        int num2 = (int)(WoWChat._lastReadPosition - 60U);
-                        num2 += (int)position;
-                        num2 = Math.Abs(num2);
-                        num = (uint)num2;
+                        int positionDiff = (int)(WoWChat._lastReadPosition - 60U);
+                        positionDiff += (int)position;
+                        positionDiff = Math.Abs(positionDiff);
+                        messageCount = (uint)positionDiff;
                     }
-                    for (uint num3 = 0U; num3 < num; num3 += 1U)
+                    for (uint messageIndex = 0U; messageIndex < messageCount; messageIndex += 1U)
                     {
-                        WoWChatMessage woWChatMessage = new WoWChatMessage(WoWChat.GetChatMessagePtr(num3));
+                        WoWChatMessage woWChatMessage = new WoWChatMessage(WoWChat.GetChatMessagePtr(messageIndex));
                         WoWChat.RaiseChatEvent(new ChatMessageEventArgs(woWChatMessage));
                     }
                     WoWChat._lastReadPosition = position;
