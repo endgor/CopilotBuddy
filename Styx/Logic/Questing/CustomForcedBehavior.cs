@@ -189,19 +189,15 @@ public abstract class CustomForcedBehavior
       return (object) null;
     string attributeValue = this.Args[str];
     T convertedValue;
-    object result;
     try
     {
       convertedValue = this.ConvertStringToType<T>(str, attributeValue);
-      goto label_7;
     }
     catch (Exception ex)
     {
       this.IsAttributeProblem = true;
-      result = (object) null;
+      return (object) null;
     }
-    return result;
-label_7:
     string format = constraintChecker.Check(str, convertedValue);
     if (format == null)
       return (object) convertedValue;
@@ -213,51 +209,51 @@ label_7:
   private object ParseWoWPointArray(string attributeName, bool isRequired, string[] aliases)
   {
     bool flag = false;
-    string str1 = this.FindAttributeKeyOrAlias(isRequired, attributeName, aliases);
+    string attributeKey = this.FindAttributeKeyOrAlias(isRequired, attributeName, aliases);
     List<WoWPoint> woWpointList = new List<WoWPoint>();
     char[] separator1 = new char[2]{ ' ', ',' };
     char[] separator2 = new char[2]{ '|', ';' };
-    if (str1 != null && this.Args.ContainsKey(str1))
+    if (attributeKey != null && this.Args.ContainsKey(attributeKey))
     {
-      foreach (string str2 in this.Args[str1].Split(separator2, StringSplitOptions.RemoveEmptyEntries))
+      foreach (string coordinateGroup in this.Args[attributeKey].Split(separator2, StringSplitOptions.RemoveEmptyEntries))
       {
-        string[] strArray = str2.Split(separator1, StringSplitOptions.RemoveEmptyEntries);
+        string[] strArray = coordinateGroup.Split(separator1, StringSplitOptions.RemoveEmptyEntries);
         if (strArray.Length != 3)
         {
-          this.LogMessage("error", "The '{0}' attribute's value contribution (saw '{1}') doesn't have three coordinates (counted {2}).\nExpect entries of the form \"x1,y1,z1 | x2,y2,z2 | x3,...\", or \"x1,y1,z1; x2,y2,z2; x3,...\"", (object) str1, (object) str2, (object) strArray.Length);
+          this.LogMessage("error", "The '{0}' attribute's value contribution (saw '{1}') doesn't have three coordinates (counted {2}).\nExpect entries of the form \"x1,y1,z1 | x2,y2,z2 | x3,...\", or \"x1,y1,z1; x2,y2,z2; x3,...\"", (object) attributeKey, (object) coordinateGroup, (object) strArray.Length);
           flag = true;
         }
         else
         {
-          double? nullable1 = new double?();
+          double? xCoord = new double?();
           try
           {
-            nullable1 = new double?(this.ConvertStringToType<double>(str1, strArray[0]));
+            xCoord = new double?(this.ConvertStringToType<double>(attributeKey, strArray[0]));
           }
           catch (Exception ex)
           {
             flag = true;
           }
-          double? nullable2 = new double?();
+          double? yCoord = new double?();
           try
           {
-            nullable2 = new double?(this.ConvertStringToType<double>(str1, strArray[1]));
+            yCoord = new double?(this.ConvertStringToType<double>(attributeKey, strArray[1]));
           }
           catch (Exception ex)
           {
             flag = true;
           }
-          double? nullable3 = new double?();
+          double? zCoord = new double?();
           try
           {
-            nullable3 = new double?(this.ConvertStringToType<double>(str1, strArray[2]));
+            zCoord = new double?(this.ConvertStringToType<double>(attributeKey, strArray[2]));
           }
           catch (Exception ex)
           {
             flag = true;
           }
-          if (nullable1.HasValue && nullable2.HasValue && nullable3.HasValue)
-            woWpointList.Add(new WoWPoint(nullable1.Value, nullable2.Value, nullable3.Value));
+          if (xCoord.HasValue && yCoord.HasValue && zCoord.HasValue)
+            woWpointList.Add(new WoWPoint(xCoord.Value, yCoord.Value, zCoord.Value));
         }
       }
       if (flag)
@@ -284,21 +280,21 @@ label_7:
       yAliases = ((IEnumerable<string>) aliases).Select<string, string>((Func<string, string>) (alias => alias + "Y")).ToArray<string>();
       zAliases = ((IEnumerable<string>) aliases).Select<string, string>((Func<string, string>) (alias => alias + "Z")).ToArray<string>();
     }
-    string str1 = this.FindAttributeKeyOrAlias(false, attributeBaseName + "X", xAliases);
-    string str2 = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Y", yAliases);
-    string str3 = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Z", zAliases);
-    string str4 = str1 ?? str2 ?? str3;
-    string str5;
-    if (str4 != null)
+    string xAttributeKey = this.FindAttributeKeyOrAlias(false, attributeBaseName + "X", xAliases);
+    string yAttributeKey = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Y", yAliases);
+    string zAttributeKey = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Z", zAliases);
+    string foundAttributeKey = xAttributeKey ?? yAttributeKey ?? zAttributeKey;
+    string finalBaseName;
+    if (foundAttributeKey != null)
     {
-      str5 = str4.Substring(0, str4.Length - 1);
+      finalBaseName = foundAttributeKey.Substring(0, foundAttributeKey.Length - 1);
       isRequired = true;
     }
     else
-      str5 = attributeBaseName;
-    double? nullable1 = (double?) this.GetAttributeValueAsObject<double>(str5 + "X", isRequired, (CustomForcedBehavior.IConstraintChecker<double>) null, (string[]) null);
-    double? nullable2 = (double?) this.GetAttributeValueAsObject<double>(str5 + "Y", isRequired, (CustomForcedBehavior.IConstraintChecker<double>) null, (string[]) null);
-    double? nullable3 = (double?) this.GetAttributeValueAsObject<double>(str5 + "Z", isRequired, (CustomForcedBehavior.IConstraintChecker<double>) null, (string[]) null);
+      finalBaseName = attributeBaseName;
+    double? nullable1 = (double?) this.GetAttributeValueAsObject<double>(finalBaseName + "X", isRequired, (CustomForcedBehavior.IConstraintChecker<double>) null, (string[]) null);
+    double? nullable2 = (double?) this.GetAttributeValueAsObject<double>(finalBaseName + "Y", isRequired, (CustomForcedBehavior.IConstraintChecker<double>) null, (string[]) null);
+    double? nullable3 = (double?) this.GetAttributeValueAsObject<double>(finalBaseName + "Z", isRequired, (CustomForcedBehavior.IConstraintChecker<double>) null, (string[]) null);
     return nullable1.HasValue && nullable2.HasValue && nullable3.HasValue ? (object) new WoWPoint(nullable1.Value, nullable2.Value, nullable3.Value) : (object) null;
   }
 
@@ -541,7 +537,7 @@ label_7:
 
   protected virtual Composite CreateBehavior()
   {
-    return (Composite) new Decorator((CanRunDecoratorDelegate) (object_0 => this.Execute()), (Composite) new TreeSharp.Action((ActionSucceedDelegate) (object_0 => { })));
+    return (Composite) new Decorator((CanRunDecoratorDelegate) (_ => this.Execute()), (Composite) new TreeSharp.Action((ActionSucceedDelegate) (_ => { })));
   }
 
   protected virtual bool Execute() => true;
@@ -570,23 +566,23 @@ label_7:
     string[] attributeNameAliases)
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsNullable<boolean>(\"{attributeName}\", {isAttributeRequired}, null, {(attributeNameAliases == null ? (object) "null" : (object) "ATTRIBUTE_ALIASES")})");
-    string str1 = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
-    if (str1 == null)
+    string attributeKey = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
+    if (attributeKey == null)
       return new bool?();
-    string str2 = this.Args[str1];
-    int result1;
-    bool result2;
-    if (int.TryParse(str2, out result1))
+    string attributeValue = this.Args[attributeKey];
+    int intParseResult;
+    bool boolParseResult;
+    if (int.TryParse(attributeValue, out intParseResult))
     {
-      result2 = result1 != 0;
-      this.LogMessage("warning", "Attribute's '{0}' value was provided as an integer (saw '{1}')--a boolean was expected.\nThe integral value '{1}' was converted to Boolean({2}).\nPlease update the profile to provide 'true' or 'false' for this value", (object) str1, (object) str2, (object) result2);
+      boolParseResult = intParseResult != 0;
+      this.LogMessage("warning", "Attribute's '{0}' value was provided as an integer (saw '{1}')--a boolean was expected.\nThe integral value '{1}' was converted to Boolean({2}).\nPlease update the profile to provide 'true' or 'false' for this value", (object) attributeKey, (object) attributeValue, (object) boolParseResult);
     }
-    else if (!bool.TryParse(str2, out result2))
+    else if (!bool.TryParse(attributeValue, out boolParseResult))
     {
-      this.UtilReportMalformed(str1, str2);
+      this.UtilReportMalformed(attributeKey, attributeValue);
       return new bool?();
     }
-    return new bool?(result2);
+    return new bool?(boolParseResult);
   }
 
   [Obsolete("Use GetAttributeAsNullable<Color>(attributeName, isAttributeRequired, null, attributeNameAliases), instead")]
@@ -609,8 +605,8 @@ label_7:
     string[] attributeNameAliases)
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsNullable<double>(\"{attributeName}\", {isAttributeRequired}, {(minValue != double.MinValue || maxValue != double.MaxValue ? (object) $"new ConstrainTo.Domain<double>({minValue}, {maxValue})" : (object) "null")}, {(attributeNameAliases == null ? (object) "null" : (object) "ATTRIBUTE_ALIASES")})");
-    string str = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
-    return str != null ? this.ParseDoubleWithRange(str, this.Args[str], minValue, maxValue) : new double?();
+    string attributeKey = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
+    return attributeKey != null ? this.ParseDoubleWithRange(attributeKey, this.Args[attributeKey], minValue, maxValue) : new double?();
   }
 
   [Obsolete("Use GetAttributeAsArray<double>(attributeName, isAttributeRequired, new ConstrainTo.Domain<double>(lowerBound, upperBound), attributeNameAliases, null), instead")]
@@ -622,16 +618,16 @@ label_7:
     string[] attributeNameAliases)
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsArray<double>(\"{attributeName}\", {isAttributeRequired}, {(minValue != double.MinValue || maxValue != double.MaxValue ? (object) $"new ConstrainTo.Domain<double>({minValue}, {maxValue})" : (object) "null")}, {(attributeNameAliases == null ? (object) "null" : (object) "ATTRIBUTE_ALIASES")}, null)");
-    string str1 = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
-    if (str1 == null)
+    string attributeKey = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
+    if (attributeKey == null)
       return (double[]) null;
     List<double> doubleList = new List<double>();
     bool flag = false;
-    string str2 = this.Args[str1];
+    string attributeValue = this.Args[attributeKey];
     char[] separator = new char[2]{ ' ', ',' };
-    foreach (string segment in str2.Split(separator, StringSplitOptions.RemoveEmptyEntries))
+    foreach (string segment in attributeValue.Split(separator, StringSplitOptions.RemoveEmptyEntries))
     {
-      double? nullable = this.ParseDoubleWithRange(str1, segment, minValue, maxValue);
+      double? nullable = this.ParseDoubleWithRange(attributeKey, segment, minValue, maxValue);
       if (nullable.HasValue)
         doubleList.Add(nullable.Value);
       else
@@ -651,19 +647,19 @@ label_7:
     Type enumType = typeof (T);
     if (!enumType.IsEnum)
       throw new ArgumentException("Type parameter must be an enum.");
-    string str = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
-    if (str == null)
+    string attributeKey = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
+    if (attributeKey == null)
       return new T?();
     T? attributeAsEnum;
     try
     {
-      string s = this.Args[str];
+      string s = this.Args[attributeKey];
       T obj = (T) Enum.Parse(enumType, s, true);
       if (Enum.IsDefined(enumType, (object) obj))
       {
         int result;
         if (int.TryParse(s, out result))
-          this.LogMessage("warning", "The '{0}' attribute's value (saw '{1}') has been implicitly converted to the corresponding enumeration '{2}'.\nPlease repair the profile to use the enumeration name '{2}' instead of a number.", (object) str, (object) result, (object) obj.ToString());
+          this.LogMessage("warning", "The '{0}' attribute's value (saw '{1}') has been implicitly converted to the corresponding enumeration '{2}'.\nPlease repair the profile to use the enumeration name '{2}' instead of a number.", (object) attributeKey, (object) result, (object) obj.ToString());
         attributeAsEnum = new T?(obj);
         goto label_10;
       }
@@ -671,7 +667,7 @@ label_7:
     catch (ArgumentException ex)
     {
     }
-    this.UtilReportValueFail(str, this.Args[str], $"'{string.Join("', '", Enum.GetNames(enumType))}'");
+    this.UtilReportValueFail(attributeKey, this.Args[attributeKey], $"'{string.Join("', '", Enum.GetNames(enumType))}'");
     return new T?();
 label_10:
     return attributeAsEnum;
@@ -719,16 +715,16 @@ label_10:
     string[] attributeNameAliases)
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsArray<int>(\"{attributeName}\", {isAttributeRequired}, {(minValue != int.MinValue || maxValue != int.MaxValue ? (object) $"new ConstrainTo.Domain<int>({minValue}, {maxValue})" : (object) "null")}, {(attributeNameAliases == null ? (object) "null" : (object) "ATTRIBUTE_ALIASES")}, null)");
-    string str1 = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
-    if (str1 == null)
+    string attributeKey = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
+    if (attributeKey == null)
       return (int[]) null;
     bool flag = false;
     List<int> intList = new List<int>();
-    string str2 = this.Args[str1];
+    string attributeValue = this.Args[attributeKey];
     char[] separator = new char[2]{ ' ', ',' };
-    foreach (string segment in str2.Split(separator, StringSplitOptions.RemoveEmptyEntries))
+    foreach (string segment in attributeValue.Split(separator, StringSplitOptions.RemoveEmptyEntries))
     {
-      int? nullable = this.ParseIntWithRange(str1, segment, minValue, maxValue);
+      int? nullable = this.ParseIntWithRange(attributeKey, segment, minValue, maxValue);
       if (nullable.HasValue)
         intList.Add(nullable.Value);
       else
@@ -870,22 +866,22 @@ label_10:
       yAliases = ((IEnumerable<string>) attributeBaseNameAliases).Select<string, string>((Func<string, string>) (alias => alias + "Y")).ToArray<string>();
       zAliases = ((IEnumerable<string>) attributeBaseNameAliases).Select<string, string>((Func<string, string>) (alias => alias + "Z")).ToArray<string>();
     }
-    string str1 = this.FindAttributeKeyOrAlias(false, attributeBaseName + "X", xAliases);
-    string str2 = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Y", yAliases);
-    string str3 = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Z", zAliases);
-    string str4 = str1 ?? str2 ?? str3;
-    string str5;
-    if (str4 != null)
+    string xAttributeKey = this.FindAttributeKeyOrAlias(false, attributeBaseName + "X", xAliases);
+    string yAttributeKey = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Y", yAliases);
+    string zAttributeKey = this.FindAttributeKeyOrAlias(false, attributeBaseName + "Z", zAliases);
+    string foundAttributeKey = xAttributeKey ?? yAttributeKey ?? zAttributeKey;
+    string finalBaseName;
+    if (foundAttributeKey != null)
     {
-      str5 = str4.Substring(0, str4.Length - 1);
+      finalBaseName = foundAttributeKey.Substring(0, foundAttributeKey.Length - 1);
       isAttributeRequired = true;
     }
     else
-      str5 = attributeBaseName;
-    double? attributeAsDouble1 = this.GetAttributeAsDouble(str5 + "X", isAttributeRequired, double.MinValue, double.MaxValue, (string[]) null);
-    double? attributeAsDouble2 = this.GetAttributeAsDouble(str5 + "Y", isAttributeRequired, double.MinValue, double.MaxValue, (string[]) null);
-    double? attributeAsDouble3 = this.GetAttributeAsDouble(str5 + "Z", isAttributeRequired, double.MinValue, double.MaxValue, (string[]) null);
-    return attributeAsDouble1.HasValue && attributeAsDouble2.HasValue && attributeAsDouble3.HasValue ? new WoWPoint?(new WoWPoint(attributeAsDouble1.Value, attributeAsDouble2.Value, attributeAsDouble3.Value)) : new WoWPoint?();
+      finalBaseName = attributeBaseName;
+    double? xCoord = this.GetAttributeAsDouble(finalBaseName + "X", isAttributeRequired, double.MinValue, double.MaxValue, (string[]) null);
+    double? yCoord = this.GetAttributeAsDouble(finalBaseName + "Y", isAttributeRequired, double.MinValue, double.MaxValue, (string[]) null);
+    double? zCoord = this.GetAttributeAsDouble(finalBaseName + "Z", isAttributeRequired, double.MinValue, double.MaxValue, (string[]) null);
+    return xCoord.HasValue && yCoord.HasValue && zCoord.HasValue ? new WoWPoint?(new WoWPoint(xCoord.Value, yCoord.Value, zCoord.Value)) : new WoWPoint?();
   }
 
   [Obsolete("Use GetAttributeAsArray<WoWPoint>(attributeName, isAttributeRequired, null, attributeNameAliases, null), instead")]
@@ -895,26 +891,26 @@ label_10:
     string[] attributeNameAliases)
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsArray<WoWPoint>(\"{attributeName}\", {isAttributeRequired}, ConstrainAs.WoWPointNonEmpty, {(attributeNameAliases == null ? (object) "null" : (object) "ATTRIBUTE_ALIASES")}, null)");
-    string str1 = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
-    if (str1 == null)
+    string attributeKey = this.FindAttributeKeyOrAlias(isAttributeRequired, attributeName, attributeNameAliases);
+    if (attributeKey == null)
       return (WoWPoint[]) null;
     bool flag = false;
     List<WoWPoint> woWpointList = new List<WoWPoint>();
     char[] separator1 = new char[1]{ '|' };
     char[] separator2 = new char[2]{ ' ', ',' };
-    foreach (string str2 in this.Args[str1].Split(separator1, StringSplitOptions.RemoveEmptyEntries))
+    foreach (string coordinateGroup in this.Args[attributeKey].Split(separator1, StringSplitOptions.RemoveEmptyEntries))
     {
-      string[] strArray = str2.Split(separator2, StringSplitOptions.RemoveEmptyEntries);
+      string[] strArray = coordinateGroup.Split(separator2, StringSplitOptions.RemoveEmptyEntries);
       if (strArray.Length != 3)
       {
-        this.LogMessage("error", "The '{0}' attribute's value contribution (saw '{1}') doesn't have three coordinates (counted {2}).\nExpect entries of the form \"x1,y1,z1 | x2,y2,z2  | x3,...\"", (object) str1, (object) str2, (object) strArray.Length);
+        this.LogMessage("error", "The '{0}' attribute's value contribution (saw '{1}') doesn't have three coordinates (counted {2}).\nExpect entries of the form \"x1,y1,z1 | x2,y2,z2  | x3,...\"", (object) attributeKey, (object) coordinateGroup, (object) strArray.Length);
         flag = true;
       }
       else
       {
-        double? nullable1 = this.ParseDoubleWithRange(str1, strArray[0], double.MinValue, double.MaxValue);
-        double? nullable2 = this.ParseDoubleWithRange(str1, strArray[1], double.MinValue, double.MaxValue);
-        double? nullable3 = this.ParseDoubleWithRange(str1, strArray[2], double.MinValue, double.MaxValue);
+        double? nullable1 = this.ParseDoubleWithRange(attributeKey, strArray[0], double.MinValue, double.MaxValue);
+        double? nullable2 = this.ParseDoubleWithRange(attributeKey, strArray[1], double.MinValue, double.MaxValue);
+        double? nullable3 = this.ParseDoubleWithRange(attributeKey, strArray[2], double.MinValue, double.MaxValue);
         if (nullable1.HasValue && nullable2.HasValue && nullable3.HasValue)
           woWpointList.Add(new WoWPoint(nullable1.Value, nullable2.Value, nullable3.Value));
         else
@@ -926,30 +922,30 @@ label_10:
     return !flag ? woWpointList.ToArray() : (WoWPoint[]) null;
   }
 
-  private bool IsKeyMatchingBaseName(string string_1, string string_2)
+  private bool IsKeyMatchingBaseName(string baseName, string key)
   {
-    if (!string_2.StartsWith(string_1))
+    if (!key.StartsWith(baseName))
       return false;
-    string s = string_2.Substring(string_1.Length);
+    string s = key.Substring(baseName.Length);
     return s.Length == 0 || int.TryParse(s, out int _);
   }
 
   private void ProcessNumberedIntegerAttributes(
-    IEnumerable<string> ienumerable_0,
-    string string_1,
-    int int_0,
-    int int_1,
-    ref List<int> list_1)
+    IEnumerable<string> attributeKeys,
+    string preferredBaseName,
+    int minValue,
+    int maxValue,
+    ref List<int> resultList)
   {
-    foreach (string string_1_1 in ienumerable_0)
+    foreach (string attributeKey in attributeKeys)
     {
-      string str = this.FindAttributeKeyOrAlias(false, string_1_1, (string[]) null);
-      int? nullable = this.ParseIntWithRange(str, this.Args[str], int_0, int_1);
+      string str = this.FindAttributeKeyOrAlias(false, attributeKey, (string[]) null);
+      int? nullable = this.ParseIntWithRange(str, this.Args[str], minValue, maxValue);
       if (nullable.HasValue)
       {
-        if (!string_1_1.StartsWith(string_1))
-          this.LogMessage("warning", "The attribute '{0}' is an alias for '{1}N'.\nPlease modify the profile to use the preferred base name of '{1}', instead.", (object) string_1_1, (object) string_1);
-        list_1.Add(nullable.Value);
+        if (!attributeKey.StartsWith(preferredBaseName))
+          this.LogMessage("warning", "The attribute '{0}' is an alias for '{1}N'.\nPlease modify the profile to use the preferred base name of '{1}', instead.", (object) attributeKey, (object) preferredBaseName);
+        resultList.Add(nullable.Value);
       }
       else
         this.IsAttributeProblem = true;
@@ -970,10 +966,10 @@ label_10:
 
     this.LogDeprecatedMethodUsage($"GetNumberedAttributesAsArray<int>(\"{capturedBaseName}\", {countRequired}, {(minValue != int.MinValue || maxValue != int.MaxValue ? (object) $"new ConstrainTo.Domain<int>({minValue}, {maxValue})" : (object) "null")}, {(aliasBaseNames == null ? (object) "null" : (object) "ATTRIBUTE_ALIASES")}, null)");
 
-    List<int> list_1 = new List<int>();
+    List<int> resultList = new List<int>();
 
     // Filter keys matching base name pattern
-    this.ProcessNumberedIntegerAttributes(this.Args.Keys.Where<string>(key => capturedThis.IsKeyMatchingBaseName(capturedBaseName, key)), capturedBaseName, minValue, maxValue, ref list_1);
+    this.ProcessNumberedIntegerAttributes(this.Args.Keys.Where<string>(key => capturedThis.IsKeyMatchingBaseName(capturedBaseName, key)), capturedBaseName, minValue, maxValue, ref resultList);
 
     if (aliasBaseNames != null)
     {
@@ -983,15 +979,15 @@ label_10:
           (Func<string, string, AttributeNamePair<string, string>>) ((alias, key) => new AttributeNamePair<string, string>(alias, key)))
         .Where<AttributeNamePair<string, string>>(pair => this.IsKeyMatchingBaseName(pair.aliasBaseName, pair.attributeName))
         .Select<AttributeNamePair<string, string>, string>((Func<AttributeNamePair<string, string>, string>) (pair => pair.attributeName)),
-        capturedBaseName, minValue, maxValue, ref list_1);
+        capturedBaseName, minValue, maxValue, ref resultList);
     }
 
-    if (list_1.Count == 0)
+    if (resultList.Count == 0)
       return (int[]) null;
-    if (list_1.Count >= countRequired)
-      return list_1.ToArray();
+    if (resultList.Count >= countRequired)
+      return resultList.ToArray();
 
-    this.LogMessage("error", "The attribute '{0}N' must be provided at least {1} times (saw it '{2}' times).\n(E.g., MobId1, MobId2, MobId3, ...)\nPlease modify the profile to supply {1} attributes with a base name of '{0}'.", (object) capturedBaseName, (object) countRequired, (object) list_1.Count);
+    this.LogMessage("error", "The attribute '{0}N' must be provided at least {1} times (saw it '{2}' times).\n(E.g., MobId1, MobId2, MobId3, ...)\nPlease modify the profile to supply {1} attributes with a base name of '{0}'.", (object) capturedBaseName, (object) countRequired, (object) resultList.Count);
     return (int[]) null;
   }
 
@@ -1013,36 +1009,36 @@ label_10:
   }
 
   [Obsolete]
-  private double? ParseDoubleWithRange(string string_1, string string_2, double double_0, double double_1)
+  private double? ParseDoubleWithRange(string attributeName, string stringValue, double minValue, double maxValue)
   {
     bool flag = false;
     double result;
-    if (!double.TryParse(string_2, out result))
+    if (!double.TryParse(stringValue, out result))
     {
-      this.UtilReportMalformed(string_1, string_2);
+      this.UtilReportMalformed(attributeName, stringValue);
       flag = true;
     }
-    else if (result < double_0 || result > double_1)
+    else if (result < minValue || result > maxValue)
     {
-      this.UtilReportValueFail(string_1, string_2, $"{double_0}..{double_1}");
+      this.UtilReportValueFail(attributeName, stringValue, $"{minValue}..{maxValue}");
       flag = true;
     }
     return !flag ? new double?(result) : new double?();
   }
 
   [Obsolete]
-  private int? ParseIntWithRange(string string_1, string string_2, int int_0, int int_1)
+  private int? ParseIntWithRange(string attributeName, string stringValue, int minValue, int maxValue)
   {
     bool flag = false;
     int result;
-    if (!int.TryParse(string_2, out result))
+    if (!int.TryParse(stringValue, out result))
     {
-      this.UtilReportMalformed(string_1, string_2);
+      this.UtilReportMalformed(attributeName, stringValue);
       flag = true;
     }
-    else if (result < int_0 || result > int_1)
+    else if (result < minValue || result > maxValue)
     {
-      this.UtilReportValueFail(string_1, string_2, $"{int_0}..{int_1}");
+      this.UtilReportValueFail(attributeName, stringValue, $"{minValue}..{maxValue}");
       flag = true;
     }
     return !flag ? new int?(result) : new int?();
@@ -1094,7 +1090,7 @@ label_10:
     if (!enumType.IsEnum)
       throw new ArgumentException("Type parameter must be an enum.");
     returnedValue = defaultValue;
-    Dictionary<string, object> dictionary = Enum.GetValues(enumType).Cast<object>().ToDictionary<object, string, object>((Func<object, string>) (object_0 => object_0.ToString()), (Func<object, object>) (object_0 => (object) null));
+    Dictionary<string, object> dictionary = Enum.GetValues(enumType).Cast<object>().ToDictionary<object, string, object>((Func<object, string>) (enumValue => enumValue.ToString()), (Func<object, object>) (enumValue => (object) null));
     string returnedValue1;
     if (!this.GetAttributeAsSpecificString(attributeName, isAttributeRequired, defaultValue.ToString(), dictionary, out returnedValue1))
       return false;
@@ -1142,13 +1138,13 @@ label_8:
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsNullable<bool>(\"{attributeName}\", {isAttributeRequired}, null, ATTRIBUTE_ALIASES)");
     returnedValue = false;
-    string string_3;
-    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out string_3))
+    string attributeValue;
+    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out attributeValue))
       return false;
     bool result;
-    if (!bool.TryParse(string_3, out result))
+    if (!bool.TryParse(attributeValue, out result))
     {
-      this.UtilReportValueFail(attributeName, string_3, "true, false");
+      this.UtilReportValueFail(attributeName, attributeValue, "true, false");
       return false;
     }
     returnedValue = result;
@@ -1166,13 +1162,13 @@ label_8:
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsNullable<double>(\"{attributeName}\", {isAttributeRequired}, {((double) minValueAllowed != -3.4028234663852886E+38 || (double) maxValueAllowed != 3.4028234663852886E+38 ? (object) $"new ConstrainTo.Domain<double>({minValueAllowed}, {maxValueAllowed})" : (object) "null")}, ATTRIBUTE_ALIASES)");
     returnedValue = 0.0f;
-    string string_3;
-    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out string_3))
+    string attributeValue;
+    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out attributeValue))
       return false;
     float result;
-    if (!float.TryParse(string_3, out result))
+    if (!float.TryParse(attributeValue, out result))
     {
-      this.UtilReportMalformed(attributeName, string_3);
+      this.UtilReportMalformed(attributeName, attributeValue);
       return false;
     }
     if ((double) result >= (double) minValueAllowed && (double) result <= (double) maxValueAllowed)
@@ -1180,7 +1176,7 @@ label_8:
       returnedValue = result;
       return true;
     }
-    this.UtilReportValueFail(attributeName, string_3, $"{minValueAllowed}..{maxValueAllowed}");
+    this.UtilReportValueFail(attributeName, attributeValue, $"{minValueAllowed}..{maxValueAllowed}");
     return false;
   }
 
@@ -1195,13 +1191,13 @@ label_8:
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAsNullable<int>(\"{attributeName}\", {isAttributeRequired}, {(minValueAllowed != int.MinValue || maxValueAllowed != int.MaxValue ? (object) $"new ConstrainTo.Domain<int>({minValueAllowed}, {maxValueAllowed})" : (object) "null")}, ATTRIBUTE_ALIASES)");
     returnedValue = 0;
-    string string_3;
-    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out string_3))
+    string attributeValue;
+    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out attributeValue))
       return false;
     int result;
-    if (!int.TryParse(string_3, out result))
+    if (!int.TryParse(attributeValue, out result))
     {
-      this.UtilReportMalformed(attributeName, string_3);
+      this.UtilReportMalformed(attributeName, attributeValue);
       return false;
     }
     if (result >= minValueAllowed && result <= maxValueAllowed)
@@ -1209,7 +1205,7 @@ label_8:
       returnedValue = result;
       return true;
     }
-    this.UtilReportValueFail(attributeName, string_3, $"{minValueAllowed}..{maxValueAllowed}");
+    this.UtilReportValueFail(attributeName, attributeValue, $"{minValueAllowed}..{maxValueAllowed}");
     return false;
   }
 
@@ -1222,10 +1218,10 @@ label_8:
   {
     this.LogDeprecatedMethodUsage($"GetAttributeAs<string>(\"{attributeName}\", {isAttributeRequired}, null, ATTRIBUTE_ALIASES)");
     returnedValue = (string) null;
-    string string_3;
-    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out string_3))
+    string attributeValue;
+    if (!this.TryGetAttributeOrDefault(attributeName, isAttributeRequired, defaultValueAsString, out attributeValue))
       return false;
-    returnedValue = string_3;
+    returnedValue = attributeValue;
     return true;
   }
 
@@ -1268,69 +1264,69 @@ label_8:
       str = str.Substring(str.Length - 1);
     this.LogDeprecatedMethodUsage($"GetAttributeAsNullable<WoWPoint>(\"{str}\", {isAttributeRequired}, ConstrainAs.WoWPointNonEmpty, ATTRIBUTE_ALIASES))");
     returnedValue = new WoWPoint(defaultValue.X, defaultValue.Y, defaultValue.Z);
-    string string_3_1 = (string) null;
-    string string_3_2 = (string) null;
-    string string_3_3 = (string) null;
+    string xValue = (string) null;
+    string yValue = (string) null;
+    string zValue = (string) null;
     if (this.Args.ContainsKey(attributeNameX) || this.Args.ContainsKey(attributeNameY) || this.Args.ContainsKey(attributeNameZ))
       isAttributeRequired = true;
     bool flag;
-    if (!(flag = this.TryGetAttributeOrDefault(attributeNameX, isAttributeRequired, defaultValue.X.ToString(), out string_3_1) & this.TryGetAttributeOrDefault(attributeNameY, isAttributeRequired, defaultValue.Y.ToString(), out string_3_2) & this.TryGetAttributeOrDefault(attributeNameZ, isAttributeRequired, defaultValue.Z.ToString(), out string_3_3)))
+    if (!(flag = this.TryGetAttributeOrDefault(attributeNameX, isAttributeRequired, defaultValue.X.ToString(), out xValue) & this.TryGetAttributeOrDefault(attributeNameY, isAttributeRequired, defaultValue.Y.ToString(), out yValue) & this.TryGetAttributeOrDefault(attributeNameZ, isAttributeRequired, defaultValue.Z.ToString(), out zValue)))
       return false;
-    float result1;
-    if (!float.TryParse(string_3_1, out result1))
+    float xParsed;
+    if (!float.TryParse(xValue, out xParsed))
     {
-      this.UtilReportMalformed(attributeNameX, string_3_1);
+      this.UtilReportMalformed(attributeNameX, xValue);
       return false;
     }
-    float result2;
-    if (!float.TryParse(string_3_2, out result2))
+    float yParsed;
+    if (!float.TryParse(yValue, out yParsed))
     {
-      this.UtilReportMalformed(attributeNameY, string_3_2);
+      this.UtilReportMalformed(attributeNameY, yValue);
       return false;
     }
-    float result3;
-    if (!float.TryParse(string_3_3, out result3))
+    float zParsed;
+    if (!float.TryParse(zValue, out zParsed))
     {
-      this.UtilReportMalformed(attributeNameZ, string_3_3);
+      this.UtilReportMalformed(attributeNameZ, zValue);
       return false;
     }
-    returnedValue.X = result1;
-    returnedValue.Y = result2;
-    returnedValue.Z = result3;
+    returnedValue.X = xParsed;
+    returnedValue.Y = yParsed;
+    returnedValue.Z = zParsed;
     return true;
   }
 
-  private bool TryGetAttributeOrDefault(string string_1, bool bool_1, string string_2, out string string_3)
+  private bool TryGetAttributeOrDefault(string attributeName, bool isRequired, string defaultValue, out string returnedValue)
   {
-    bool flag = this.Args.TryGetValue(string_1, out string_3);
-    if (bool_1 && !flag)
+    bool flag = this.Args.TryGetValue(attributeName, out returnedValue);
+    if (isRequired && !flag)
     {
-      this.LogMessage("error", "The '{0}' attribute is required, but missing.  (Attribute names are case-sensitive.)", (object) string_1);
+      this.LogMessage("error", "The '{0}' attribute is required, but missing.  (Attribute names are case-sensitive.)", (object) attributeName);
       return false;
     }
     if (!flag)
-      string_3 = string_2;
+      returnedValue = defaultValue;
     return true;
   }
 
-  private bool ValidateRequiredAttribute(string string_1, bool bool_1)
+  private bool ValidateRequiredAttribute(string attributeName, bool isRequired)
   {
     bool flag = true;
-    if (bool_1 && !this.Args.ContainsKey(string_1))
+    if (isRequired && !this.Args.ContainsKey(attributeName))
     {
-      this.LogMessage("error", "The '{0}' attribute is required, but missing.  (Attribute names are case-sensitive.)", (object) string_1);
+      this.LogMessage("error", "The '{0}' attribute is required, but missing.  (Attribute names are case-sensitive.)", (object) attributeName);
       flag = false;
     }
     return flag;
   }
 
-  private void LogDeprecatedMethodUsage(string string_1)
+  private void LogDeprecatedMethodUsage(string replacementMethodSignature)
   {
     string name = new StackTrace().GetFrame(1).GetMethod().Name;
     string format = "This method '{0}' is deprecated.\nPlease update your behavior to use one of the replacement methods provided by the CustomForcedBehavior class.";
-    if (string_1 != null)
+    if (replacementMethodSignature != null)
       format += "Your replacement line is:\n    {1}\n";
-    this.LogMessage("warning", format, (object) name, (object) string_1);
+    this.LogMessage("warning", format, (object) name, (object) replacementMethodSignature);
   }
 
   public static class ConstrainAs
@@ -1371,22 +1367,22 @@ label_8:
 
     public class Domain<T> : CustomForcedBehavior.IConstraintChecker<T>
     {
-      private T gparam_0;
-      private T gparam_1;
+      private T maxValue;
+      private T minValue;
 
       public Domain(T minValue, T maxValue)
       {
-        this.gparam_0 = maxValue;
-        this.gparam_1 = minValue;
+        this.maxValue = maxValue;
+        this.minValue = minValue;
       }
 
       public override string Check(string attributeName, T value)
       {
-        bool flag1 = Comparer<T>.Default.Compare(value, this.gparam_0) > 0;
-        bool flag2;
-        if (!(flag2 = Comparer<T>.Default.Compare(value, this.gparam_1) < 0) && !flag1)
+        bool isValueTooHigh = Comparer<T>.Default.Compare(value, this.maxValue) > 0;
+        bool isValueTooLow;
+        if (!(isValueTooLow = Comparer<T>.Default.Compare(value, this.minValue) < 0) && !isValueTooHigh)
           return (string) null;
-        return $"The '{attributeName}' attribute's value (saw '{value}') is not on the closed interval [{this.gparam_1}..{this.gparam_0}].";
+        return $"The '{attributeName}' attribute's value (saw '{value}') is not on the closed interval [{this.minValue}..{this.maxValue}].";
       }
     }
 
@@ -1408,35 +1404,35 @@ label_8:
 
     public class QuestId<T> : CustomForcedBehavior.ConstrainTo.Domain<int>
     {
-      private CustomForcedBehavior customForcedBehavior_0;
+      private CustomForcedBehavior behaviorInstance;
 
       public QuestId(CustomForcedBehavior cfb)
         : base(1, int.MaxValue)
       {
-        this.customForcedBehavior_0 = cfb;
+        this.behaviorInstance = cfb;
       }
 
       public override string Check(string attributeName, int value)
       {
         if (value != 0)
           return base.Check(attributeName, value);
-        this.customForcedBehavior_0.LogMessage("warning", new Color?(Color.Red), "The '{0}' attribute's value may not be zero.  For now, we allow it for purposes of backward compatibility; however, it will be ignored.  In a future release, a QuestId of zero will be explicitly disallowed.", (object) attributeName);
+        this.behaviorInstance.LogMessage("warning", new Color?(Color.Red), "The '{0}' attribute's value may not be zero.  For now, we allow it for purposes of backward compatibility; however, it will be ignored.  In a future release, a QuestId of zero will be explicitly disallowed.", (object) attributeName);
         return (string) null;
       }
     }
 
     public class SpecificValues<T> : CustomForcedBehavior.IConstraintChecker<T>
     {
-      private T[] gparam_0;
+      private T[] allowedValues;
 
-      public SpecificValues(T[] allowedValues) => this.gparam_0 = allowedValues;
+      public SpecificValues(T[] allowedValues) => this.allowedValues = allowedValues;
 
       public override string Check(string attributeName, T value)
       {
-        if (((IEnumerable<T>) this.gparam_0).Contains<T>(value))
+        if (((IEnumerable<T>) this.allowedValues).Contains<T>(value))
           return (string) null;
-        Array.Sort<T>(this.gparam_0);
-        string[] strArray = Array.ConvertAll<T, string>(this.gparam_0, (Converter<T, string>) (gparam_1 => gparam_1.ToString()));
+        Array.Sort<T>(this.allowedValues);
+        string[] strArray = Array.ConvertAll<T, string>(this.allowedValues, (Converter<T, string>) (convertedValue => convertedValue.ToString()));
         return $"The '{attributeName}' attribute's value (saw '{value}') is not one of the allowed values...\n    [{$"'{string.Join("', '", strArray)}'"}].";
       }
     }
