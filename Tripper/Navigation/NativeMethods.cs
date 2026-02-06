@@ -255,6 +255,55 @@ namespace Tripper.Navigation
             XYZ position,
             out XYZ closestPoint);
 
+        #endregion
+
+        #region Polygon Area/Flags Manipulation (for blackspot marking)
+
+        /// <summary>
+        /// Sets the user defined area for a polygon.
+        /// Used for marking blackspots - like HB Tripper.RecastManaged.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">The polygon reference.</param>
+        /// <param name="area">The new area id for the polygon. [Limit: &lt; DT_MAX_AREAS]</param>
+        /// <returns>dtStatus - DT_SUCCESS or error flags.</returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint SetPolyArea(uint mapId, ulong polyRef, byte area);
+
+        /// <summary>
+        /// Gets the user defined area for a polygon.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">The polygon reference.</param>
+        /// <param name="outArea">The area id for the polygon.</param>
+        /// <returns>dtStatus - DT_SUCCESS or error flags.</returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint GetPolyArea(uint mapId, ulong polyRef, out byte outArea);
+
+        /// <summary>
+        /// Sets the user defined flags for a polygon.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">The polygon reference.</param>
+        /// <param name="flags">The new flags for the polygon.</param>
+        /// <returns>dtStatus - DT_SUCCESS or error flags.</returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint SetPolyFlags(uint mapId, ulong polyRef, ushort flags);
+
+        /// <summary>
+        /// Gets the user defined flags for a polygon.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">The polygon reference.</param>
+        /// <param name="outFlags">The polygon flags.</param>
+        /// <returns>dtStatus - DT_SUCCESS or error flags.</returns>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint GetPolyFlags(uint mapId, ulong polyRef, out ushort outFlags);
+
+        #endregion
+
+        #region Polygon Queries
+
         /// <summary>
         /// Queries polygons within a bounding box.
         /// </summary>
@@ -342,6 +391,18 @@ namespace Tripper.Navigation
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void SetExcludeFlags(ushort flags);
+
+        /// <summary>
+        /// Gets current polygon include flags.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern ushort GetIncludeFlags();
+
+        /// <summary>
+        /// Gets current polygon exclude flags.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern ushort GetExcludeFlags();
 
         /// <summary>
         /// Sets traversal cost for an area type.

@@ -565,14 +565,89 @@ class ZygorParser:
                             cls = c
                 return race, cls, negate
             
+            def is_action_line(l):
+                """Check if a line is an action line (accept, turnin, collect, kill, talk, click, use)"""
+                l = l.strip().lower()
+                return any(l.startswith(kw) for kw in ('accept', 'turnin', 'collect', 'kill', 'talk', 'click', 'use', 'buy', 'learn'))
+            
+            # Find all action line indices
+            action_indices = []
+            for idx, scan_line in enumerate(lines):
+                scan_line = scan_line.strip()
+                if is_action_line(scan_line):
+                    action_indices.append(idx)
+            
+            # Detect step-level |only: a trailing |only that follows the LAST action
+            # and is the ONLY |only in the step block
+            step_level_race = None
+            step_level_class = None
+            step_level_negate = False
+            
+            if action_indices:
+                last_action_idx = max(action_indices)
+                # Check if there's a trailing |only after the last action
+                trailing_only_filter = None
+                for idx in range(last_action_idx + 1, len(lines)):
+                    scan_line = lines[idx].strip()
+                    if scan_line.startswith('|only'):
+                        r, c, neg = extract_filter(scan_line)
+                        if r or c:
+                            trailing_only_filter = (r, c, neg, idx)
+                        break
+                
+                if trailing_only_filter:
+                    # Count how many |only exist in the entire step block
+                    only_count = 0
+                    for scan_line in lines:
+                        scan_line = scan_line.strip()
+                        if '|only' in scan_line:
+                            only_count += 1
+                    
+                    # If there's only ONE |only in the whole block (the trailing one), it's step-level
+                    if only_count == 1:
+                        step_level_race, step_level_class, step_level_negate, _ = trailing_only_filter
+            
+            # Build a map: for each action line, what |only does it have?
+            # (either inline OR on the immediately following line, UNLESS it's the trailing step-level one)
+            action_has_only = {}  # idx -> (race, class, negate) or None
+            for idx in action_indices:
+                scan_line = lines[idx].strip()
+                # Check inline |only
+                r, c, neg = extract_filter(scan_line)
+                if r or c:
+                    action_has_only[idx] = (r, c, neg)
+                # Check next line for |only (but NOT if it's the step-level trailing one)
+                elif idx + 1 < len(lines) and lines[idx + 1].strip().startswith('|only'):
+                    # Only consider it line-level if it's NOT the trailing one or if there are multiple |only
+                    if step_level_race is None and step_level_class is None:
+                        # No step-level, so this is line-level
+                        r, c, neg = extract_filter(lines[idx + 1])
+                        if r or c:
+                            action_has_only[idx] = (r, c, neg)
+                        else:
+                            action_has_only[idx] = None
+                    else:
+                        # There's a step-level |only, so next-line |only for last action is step-level, not line-level
+                        if idx == max(action_indices):
+                            action_has_only[idx] = None  # Use step-level instead
+                        else:
+                            r, c, neg = extract_filter(lines[idx + 1])
+                            if r or c:
+                                action_has_only[idx] = (r, c, neg)
+                            else:
+                                action_has_only[idx] = None
+                else:
+                    action_has_only[idx] = None
+            
             for i, line in enumerate(lines):
                 line = line.strip()
                 if not line:
                     continue
                 
-                line_race_filter = None
-                line_class_filter = None
-                line_negate_filter = False
+                # Default to step-level filter if available, otherwise no filter
+                line_race_filter = step_level_race
+                line_class_filter = step_level_class
+                line_negate_filter = step_level_negate
                 
                 goto_match = PATTERN_GOTO.search(line)
                 if goto_match:
@@ -582,12 +657,21 @@ class ZygorParser:
                         current_map_id = ZONE_TO_MAPID.get(current_zone)
                     current_coords = (float(goto_match.group(2)), float(goto_match.group(3)))
                 
-                line_race_filter, line_class_filter, line_negate_filter = extract_filter(line)
-                
-                if not line_race_filter and not line_class_filter and i + 1 < len(lines):
+                # Check if this line has its own inline |only (overrides step-level)
+                r, c, neg = extract_filter(line)
+                if r or c:
+                    line_race_filter = r
+                    line_class_filter = c
+                    line_negate_filter = neg
+                elif i + 1 < len(lines):
+                    # Check if NEXT line is a standalone |only (applies to this action)
                     next_line = lines[i + 1].strip()
                     if next_line.startswith('|only'):
-                        line_race_filter, line_class_filter, line_negate_filter = extract_filter(next_line)
+                        r, c, neg = extract_filter(next_line)
+                        if r or c:
+                            line_race_filter = r
+                            line_class_filter = c
+                            line_negate_filter = neg
                 
                 # Parse click → InteractWith
                 click_match = PATTERN_CLICK.search(line)
@@ -813,13 +897,33 @@ class ZygorParser:
                     obj_index = int(quest_obj_match.group(2)) if quest_obj_match and quest_obj_match.group(2) else None
                     
                     # Look-ahead: if no |q on this line, search subsequent lines in same step block
+                    # ALSO inherit |only from the line with |q (they form a logical group)
+                    lookahead_race = None
+                    lookahead_class = None
+                    lookahead_negate = False
                     if not quest_id:
-                        for future_line in lines[i+1:]:
+                        for j, future_line in enumerate(lines[i+1:], start=i+1):
                             future_quest_match = PATTERN_QUEST_OBJ.search(future_line)
                             if future_quest_match:
                                 quest_id = int(future_quest_match.group(1))
                                 obj_index = int(future_quest_match.group(2)) if future_quest_match.group(2) else None
+                                # Check if this line or the next has |only - inherit it
+                                r, c, neg = extract_filter(future_line)
+                                if r or c:
+                                    lookahead_race, lookahead_class, lookahead_negate = r, c, neg
+                                elif j + 1 < len(lines):
+                                    next_future = lines[j + 1].strip()
+                                    if next_future.startswith('|only'):
+                                        r, c, neg = extract_filter(next_future)
+                                        if r or c:
+                                            lookahead_race, lookahead_class, lookahead_negate = r, c, neg
                                 break
+                    
+                    # Apply lookahead |only if we don't have a line-level one
+                    if not line_race_filter and not line_class_filter and (lookahead_race or lookahead_class):
+                        line_race_filter = lookahead_race
+                        line_class_filter = lookahead_class
+                        line_negate_filter = lookahead_negate
                     
                     if not quest_id:
                         quest_id = self.find_quest_for_mob(mob_id, set(active_quests.keys()))

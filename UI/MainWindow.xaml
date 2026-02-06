@@ -11,6 +11,7 @@
         Height="350"
         MinWidth="350"
         MinHeight="229"
+        WindowStartupLocation="Manual"
         Background="#FF595959"
         Closing="Window_Closing"
         Loaded="Window_Loaded">

@@ -13,9 +13,6 @@ namespace Styx.Patchables
         CGGameUI__Target = 5393392,             // 0x524DF0
         GetWorldState = 5541136,                // 0x548710
         
-        // Looting
-        LootFramePointer = 12560600,            // 0xBFA8D8
-        
         // Quest
         CGQuestInfo_C__GetAvailableQuestInfoFromIndex = 5809760, // 0x58A2E0
         CGQuestInfo_C__GetActiveQuestFromIndex = 5810000,        // 0x58A3D0

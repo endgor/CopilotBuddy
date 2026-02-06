@@ -27,9 +27,9 @@ namespace Styx.Logic
         {
             get
             {
-                Memory wow = ObjectManager.Wow;
-                if (wow == null) return false;
-                return wow.Read<uint>((uint)GlobalOffsets.LootFramePointer) != 0U;
+                // WotLK 3.3.5a: Use Lua to check if loot frame is open
+                string result = Lua.GetReturnVal<string>("if LootFrame and LootFrame:IsShown() then return '1' else return '0' end", 0);
+                return result == "1";
             }
         }
 

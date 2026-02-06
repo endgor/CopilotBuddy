@@ -718,10 +718,12 @@ namespace Styx.Logic.Profiles
 			foreach (XElement element in parent.Elements())
 			{
 				string tagName = element.Name.LocalName.ToLowerInvariant();
-				if (tagName != "blackspot")
+				// HB accepts both <Spot> and <Blackspot>
+				if (tagName != "blackspot" && tagName != "spot")
 					continue;
 
-				float x = 0, y = 0, z = 0, radius = 10, height = 10;
+				// HB default radius is 40, height is 10
+				float x = 0, y = 0, z = 0, radius = 40, height = 10;
 
 				foreach (XAttribute attr in element.Attributes())
 				{
@@ -738,6 +740,7 @@ namespace Styx.Logic.Profiles
 							float.TryParse(attr.Value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out z);
 							break;
 						case "radius":
+						case "rad":  // HB supports both "radius" and "rad"
 							float.TryParse(attr.Value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out radius);
 							break;
 						case "height":

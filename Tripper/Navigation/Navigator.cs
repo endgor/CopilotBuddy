@@ -1194,6 +1194,123 @@ namespace Tripper.Navigation
         }
 
         /// <summary>
+        /// Gets current polygon include flags.
+        /// </summary>
+        /// <returns>Current include flags.</returns>
+        public ushort GetIncludeFlags()
+        {
+            return NativeMethods.GetIncludeFlags();
+        }
+
+        /// <summary>
+        /// Gets current polygon exclude flags.
+        /// </summary>
+        /// <returns>Current exclude flags.</returns>
+        public ushort GetExcludeFlags()
+        {
+            return NativeMethods.GetExcludeFlags();
+        }
+
+        /// <summary>
+        /// Sets traversal cost for an area type.
+        /// Like HB WoD QueryFilter.SetAreaCost.
+        /// </summary>
+        /// <param name="areaId">Area type ID (0-63).</param>
+        /// <param name="cost">Traversal cost multiplier.</param>
+        public void SetAreaCost(uint areaId, float cost)
+        {
+            NativeMethods.SetAreaCost(areaId, cost);
+        }
+
+        /// <summary>
+        /// Sets traversal cost for an area type using AreaType enum.
+        /// Like HB WoD QueryFilter.SetAreaCost.
+        /// </summary>
+        /// <param name="areaType">Area type.</param>
+        /// <param name="cost">Traversal cost multiplier.</param>
+        public void SetAreaCost(AreaType areaType, float cost)
+        {
+            NativeMethods.SetAreaCost((uint)areaType, cost);
+        }
+
+        /// <summary>
+        /// Gets traversal cost for an area type.
+        /// Like HB WoD QueryFilter.GetAreaCost.
+        /// </summary>
+        /// <param name="areaId">Area type ID (0-63).</param>
+        /// <returns>Traversal cost multiplier.</returns>
+        public float GetAreaCost(uint areaId)
+        {
+            return NativeMethods.GetAreaCost(areaId);
+        }
+
+        /// <summary>
+        /// Gets traversal cost for an area type using AreaType enum.
+        /// </summary>
+        /// <param name="areaType">Area type.</param>
+        /// <returns>Traversal cost multiplier.</returns>
+        public float GetAreaCost(AreaType areaType)
+        {
+            return NativeMethods.GetAreaCost((uint)areaType);
+        }
+
+        #endregion
+
+        #region Polygon Area/Flags Manipulation
+
+        /// <summary>
+        /// Sets the area type for a polygon.
+        /// Like HB WoD NavMesh.SetPolyArea - used for blackspot marking.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">Polygon reference.</param>
+        /// <param name="area">Area type ID (0-63).</param>
+        /// <returns>Detour status (success if high bit set).</returns>
+        public uint SetPolyArea(uint mapId, PolygonReference polyRef, byte area)
+        {
+            return NativeMethods.SetPolyArea(mapId, polyRef.Id, area);
+        }
+
+        /// <summary>
+        /// Gets the area type for a polygon.
+        /// Like HB WoD NavMesh.GetPolyArea.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">Polygon reference.</param>
+        /// <param name="area">Output area type.</param>
+        /// <returns>Detour status (success if high bit set).</returns>
+        public uint GetPolyArea(uint mapId, PolygonReference polyRef, out byte area)
+        {
+            return NativeMethods.GetPolyArea(mapId, polyRef.Id, out area);
+        }
+
+        /// <summary>
+        /// Sets flags for a polygon.
+        /// Like HB WoD NavMesh.SetPolyFlags.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">Polygon reference.</param>
+        /// <param name="flags">Polygon flags.</param>
+        /// <returns>Detour status (success if high bit set).</returns>
+        public uint SetPolyFlags(uint mapId, PolygonReference polyRef, ushort flags)
+        {
+            return NativeMethods.SetPolyFlags(mapId, polyRef.Id, flags);
+        }
+
+        /// <summary>
+        /// Gets flags for a polygon.
+        /// Like HB WoD NavMesh.GetPolyFlags.
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="polyRef">Polygon reference.</param>
+        /// <param name="flags">Output polygon flags.</param>
+        /// <returns>Detour status (success if high bit set).</returns>
+        public uint GetPolyFlags(uint mapId, PolygonReference polyRef, out ushort flags)
+        {
+            return NativeMethods.GetPolyFlags(mapId, polyRef.Id, out flags);
+        }
+
+        /// <summary>
         /// Sets path randomization for more natural movement.
         /// </summary>
         /// <param name="enabled">Enable randomization.</param>

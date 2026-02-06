@@ -21,7 +21,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-746.49" Y="-4276.66" Z="43.77" />
-        <Hotspot X="-696.94" Y="-4355.8" Z="54.18" />
         <Hotspot X="-674.29" Y="-4300.25" Z="44.95" />
         <Hotspot X="-601.58" Y="-4075.62" Z="75.86" />
         <Hotspot X="-592.09" Y="-4074.48" Z="74.47" />
@@ -148,7 +147,7 @@
     </If>
     <TurnIn QuestName="Your Place In The World" QuestId="4641" TurnInName="Gornek" TurnInId="3143" />
     <PickUp QuestName="Cutting Teeth" QuestId="788" GiverName="Gornek" GiverId="3143" />
-    <Objective QuestName="Cutting Teeth" QuestId="788" Type="KillMob" MobId="3098" MobName="Mottled Boar" KillCount="10" />
+    <Objective QuestName="Cutting Teeth" QuestId="788" Type="KillMob" MobId="3098" MobName="Mottled Boar" KillCount="8" />
     <If Condition="Me.Level &lt; 2">
       <SetGrindArea>
         <GrindArea>

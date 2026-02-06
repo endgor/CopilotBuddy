@@ -670,6 +670,39 @@ namespace Styx.Logic
             return p.Object;
         }
 
+        #region Blackspot Support
+
+        /// <summary>
+        /// Checks if a point is within any blackspot.
+        /// HB 4.3.4 compatible - used by Quest Behaviors.
+        /// </summary>
+        /// <param name="blackspots">Collection of blackspots to check.</param>
+        /// <param name="point">The point to check.</param>
+        /// <returns>True if the point is within any blackspot.</returns>
+        public static bool IsTooNearBlackspot(IEnumerable<Blackspot> blackspots, WoWPoint point)
+        {
+            if (blackspots == null)
+                return false;
+
+            foreach (var spot in blackspots)
+            {
+                float dx = point.X - spot.Location.X;
+                float dy = point.Y - spot.Location.Y;
+                float dz = point.Z - spot.Location.Z;
+
+                // Check horizontal distance (within radius)
+                if (dx * dx + dy * dy <= spot.Radius * spot.Radius)
+                {
+                    // Check vertical distance (within height)
+                    if (Math.Abs(dz) <= spot.Height)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        #endregion
+
         public sealed class TargetPriority
         {
             public WoWObject Object;
