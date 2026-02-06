@@ -9,8 +9,8 @@
   <MinFreeBagSlots>2</MinFreeBagSlots>
 
   <Vendors>
-    <Vendor Name="Duokna" Entry="3158" Type="Ammo" X="-565,428" Y="-4214,2" Z="41,59047" />
-    <Vendor Name="Zlagk" Entry="3882" Type="Food" X="-560,125" Y="-4217,2" Z="41,590607" />
+    <Vendor Name="Duokna" Entry="3158" Type="Sell" X="-565.428" Y="-4214.2" Z="41.59047" />
+    <Vendor Name="Zlagk" Entry="3882" Type="Food" X="-560.125" Y="-4217.2" Z="41.590607" />
   </Vendors>
   <!-- blackspot-->
    <Blackspots>
