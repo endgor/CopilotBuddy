@@ -314,9 +314,13 @@ namespace Styx.Logic.Combat
 			if (target == null)
 				return Cast(spellName);
 			
-			// Target the unit and cast
 			StyxWoW.ResetAfk();
-			target.Target();
+			
+			// Ne PAS cibler si c'est un buff sur soi-même (évite de perdre la cible en combat)
+			if (!target.IsMe)
+			{
+				target.Target();
+			}
 			return CastSpell(spellName);
 		}
 
