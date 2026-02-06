@@ -1,7 +1,7 @@
-using Microsoft.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using Styx.Helpers;
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,11 +11,41 @@ using System.Xml.Linq;
 #nullable disable
 namespace Styx.Logic.Profiles.Quest
 {
+    /// <summary>
+    /// Compiles and evaluates C# condition expressions at runtime.
+    /// Uses Roslyn Scripting (replaces legacy CSharpCodeProvider which is not supported on .NET Core)
+    /// </summary>
     public class ConditionHelper
     {
         private static long _conditionCounter;
         private readonly string _conditionString;
         private readonly long _conditionId;
+        
+        // Script options with all required assemblies and imports (same as HB 4.3.4)
+        private static readonly ScriptOptions _scriptOptions;
+        
+        static ConditionHelper()
+        {
+            // Build script options once - same imports as HB 4.3.4 ConditionHelper
+            _scriptOptions = ScriptOptions.Default
+                .AddReferences(
+                    typeof(object).Assembly,                           // System.Runtime
+                    typeof(Enumerable).Assembly,                       // System.Linq
+                    typeof(Styx.StyxWoW).Assembly,                     // CopilotBuddy (this assembly)
+                    typeof(Styx.WoWInternals.ObjectManager).Assembly,
+                    typeof(Styx.Combat.CombatRoutine.WoWClass).Assembly
+                )
+                .AddImports(
+                    "System",
+                    "System.Linq",
+                    "Styx",
+                    "Styx.Helpers",
+                    "Styx.Logic.Combat",
+                    "Styx.WoWInternals",
+                    "Styx.WoWInternals.WoWObjects",
+                    "Styx.Combat.CombatRoutine"
+                );
+        }
 
         public ConditionHelper(string conditionString)
         {
@@ -23,81 +53,55 @@ namespace Styx.Logic.Profiles.Quest
             _conditionId = _conditionCounter++;
         }
 
-        private string GenerateCode()
-        {
-            return $@"using System;
-using System.Threading;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Linq.Expressions;
-using Styx;
-using Styx.Helpers;
-using Styx.Logic.Combat;
-using Styx.WoWInternals;
-using Styx.WoWInternals.WoWObjects;
-using Styx.Logic;
-using Styx.Logic.AreaManagement;
-using Styx.Logic.BehaviorTree;
-using Styx.Logic.Inventory.Frames.Gossip;
-using Styx.Logic.Inventory.Frames.LootFrame;
-using Styx.Logic.Pathing;
-using Styx.Logic.Profiles;
-using Styx.Logic.Questing;
-using Styx.Plugins;
-using Styx.Plugins.PluginClass;
-using Styx.WoWInternals.World;
-using Styx.Combat.CombatRoutine;
-
-namespace DynamicCondition{_conditionId}
-{{
-    public class DynamicCondition : Styx.Logic.Profiles.Quest.ProfileHelperFunctionsBase
-    {{
-        public bool EvaluateExpression()
-        {{
-            return {_conditionString};
-        }}
-    }}
-}}";
-        }
-
+        /// <summary>
+        /// Compile expression and return bound delegate using Roslyn
+        /// </summary>
         public bool CompileAndBindExpression(out string[] buildErrors, out Func<bool> boundExpression)
         {
-            CompilerResults compilerResults;
-            using (CSharpCodeProvider provider = new CSharpCodeProvider())
+            try
             {
-                CompilerParameters options = new CompilerParameters
-                {
-                    GenerateInMemory = true
-                };
+                // Create a globals object that provides Me property (like ProfileHelperFunctionsBase)
+                var script = CSharpScript.Create<bool>(
+                    _conditionString,
+                    _scriptOptions,
+                    globalsType: typeof(ConditionGlobals)
+                );
                 
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                // Compile the script
+                var compilation = script.Compile();
+                
+                if (compilation.Any())
+                {
+                    buildErrors = compilation.Select(d => d.GetMessage()).ToArray();
+                    boundExpression = null;
+                    return false;
+                }
+                
+                // Create the bound expression that evaluates with current game state
+                boundExpression = () =>
                 {
                     try
                     {
-                        if (!string.IsNullOrEmpty(assembly.Location))
-                            options.ReferencedAssemblies.Add(assembly.Location);
+                        var globals = new ConditionGlobals();
+                        var result = script.RunAsync(globals).GetAwaiter().GetResult();
+                        return result.ReturnValue;
                     }
-                    catch { }
-                }
+                    catch (Exception ex)
+                    {
+                        Logging.WriteDebug("Error evaluating condition '{0}': {1}", _conditionString, ex.Message);
+                        return false;
+                    }
+                };
                 
-                compilerResults = provider.CompileAssemblyFromSource(options, GenerateCode());
+                buildErrors = null;
+                return true;
             }
-
-            if (compilerResults.Errors.HasErrors)
+            catch (Exception ex)
             {
-                buildErrors = compilerResults.Errors.Cast<CompilerError>()
-                    .Select(e => e.ErrorText).ToArray();
+                buildErrors = new[] { ex.Message };
                 boundExpression = null;
                 return false;
             }
-
-            object instance = Activator.CreateInstance(
-                compilerResults.CompiledAssembly.GetType($"DynamicCondition{_conditionId}.DynamicCondition"));
-            boundExpression = (Func<bool>)Delegate.CreateDelegate(
-                typeof(Func<bool>), instance, "EvaluateExpression");
-            buildErrors = null;
-            return true;
         }
 
         public static Func<bool> ParseConditionString(string str)
@@ -198,5 +202,17 @@ namespace DynamicCondition{_conditionId}
                 }
             }
         }
+    }
+    
+    /// <summary>
+    /// Globals object for Roslyn script evaluation.
+    /// Provides Me property (like ProfileHelperFunctionsBase in HB)
+    /// </summary>
+    public class ConditionGlobals
+    {
+        /// <summary>
+        /// The local player - equivalent to StyxWoW.Me / ObjectManager.Me
+        /// </summary>
+        public Styx.WoWInternals.WoWObjects.LocalPlayer Me => Styx.WoWInternals.ObjectManager.Me;
     }
 }
