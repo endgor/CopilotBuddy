@@ -8,6 +8,11 @@
   <MinDurability>0.2</MinDurability>
   <MinFreeBagSlots>2</MinFreeBagSlots>
 
+  <Vendors>
+    <Vendor Name="Duokna" Entry="3158" Type="Ammo" X="-565,428" Y="-4214,2" Z="41,59047" />
+    <Vendor Name="Zlagk" Entry="3882" Type="Food" X="-560,125" Y="-4217,2" Z="41,590607" />
+  </Vendors>
+
   <!-- Quest Overrides -->
   <Quest Id="4402" Name="Galgar&apos;s Cactus Apple Surprise">
     <Objective Type="CollectItem" ItemId="11583" CollectCount="10">
@@ -135,6 +140,8 @@
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\\Horde\\Starter Guides (1-12)\\Durotar (1-12) [Orc &amp; Troll Starter]" LogColor="Green" />
+    <CustomBehavior File="RunMacro" Macro="/script SetCVar('AutoLootDefault', 1)" NumOfTimes="1" WaitTime="1000" />
+
     <PickUp QuestName="Your Place In The World" QuestId="4641" GiverName="Kaltunk" GiverId="10176" />
     <If Condition="(Me.Class == WoWClass.Warlock) &amp;&amp; (Me.Race == WoWRace.Orc)">
       <PickUp QuestName="Vile Familiars" QuestId="1485" GiverName="Ruzan" GiverId="5765" />

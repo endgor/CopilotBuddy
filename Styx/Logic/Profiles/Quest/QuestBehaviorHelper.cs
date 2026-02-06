@@ -75,6 +75,16 @@ public class QuestBehaviorHelper
             var netstandard = System.IO.Path.Combine(runtimePath, "netstandard.dll");
             if (File.Exists(netstandard) && referencePaths.Add(netstandard))
                 _defaultReferences.Add(MetadataReference.CreateFromFile(netstandard));
+            
+            // System.Linq.Expressions - Required for Expression<T> used in some Quest Behaviors
+            var linqExpressions = System.IO.Path.Combine(runtimePath, "System.Linq.Expressions.dll");
+            if (File.Exists(linqExpressions) && referencePaths.Add(linqExpressions))
+                _defaultReferences.Add(MetadataReference.CreateFromFile(linqExpressions));
+            
+            // System.ObjectModel - Required for ObservableCollection and other types
+            var objectModel = System.IO.Path.Combine(runtimePath, "System.ObjectModel.dll");
+            if (File.Exists(objectModel) && referencePaths.Add(objectModel))
+                _defaultReferences.Add(MetadataReference.CreateFromFile(objectModel));
         }
         
         // Add WPF assemblies from TRUSTED_PLATFORM_ASSEMBLIES (same runtime as CopilotBuddy)
