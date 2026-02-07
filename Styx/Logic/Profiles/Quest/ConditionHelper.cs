@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using Styx.Logic.Questing;
 
 #nullable disable
 namespace Styx.Logic.Profiles.Quest
@@ -499,7 +500,11 @@ namespace Styx.Logic.Profiles.Quest
         {
             var me = Styx.WoWInternals.ObjectManager.Me;
             if (me == null) return false;
-            // Check if quest is in completed quests list via QuestLog
+            // Check if quest is in log with completed objectives (State B)
+            // This matches HB 4.3.4's ProfileHelperFunctionsBase.IsQuestCompleted()
+            PlayerQuest questById = me.QuestLog?.GetQuestById(questId);
+            if (questById != null) return questById.IsCompleted;
+            // Fall back to completed quests list (State C - already turned in)
             var completedQuests = me.QuestLog?.GetCompletedQuests();
             return completedQuests?.Contains(questId) ?? false;
         }

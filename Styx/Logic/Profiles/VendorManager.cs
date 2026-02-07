@@ -141,8 +141,6 @@ namespace Styx.Logic.Profiles
                                 type.AsNpcFlag());
                             if (nearestNpc != null)
                             {
-                                Logging.WriteDebug("[VendorManager] Using Data.bin fallback: {0} Entry={1}", 
-                                    nearestNpc.Name, nearestNpc.Entry);
                                 return new Vendor(nearestNpc.Entry, nearestNpc.Name, type, nearestNpc.Location);
                             }
                         }
@@ -150,11 +148,6 @@ namespace Styx.Logic.Profiles
                         {
                             Logging.Write(ex.ToString());
                         }
-                    }
-                    else
-                    {
-                        Logging.WriteDebug("[VendorManager] No vendor found for type {0}. Profile has {1} vendors. FindVendorsAutomatically={2}", 
-                            type, AllVendors?.Count ?? 0, Styx.Helpers.CharacterSettings.Instance.FindVendorsAutomatically);
                     }
                     return null;
                 }
@@ -168,8 +161,6 @@ namespace Styx.Logic.Profiles
                         .Where(v => v.TrainClass == playerClass)
                         .OrderBy(v => location.Distance(v.Location))
                         .FirstOrDefault();
-                    if (vendor != null)
-                        Logging.WriteDebug("[VendorManager] Found trainer from profile: {0} Entry={1}", vendor.Name, vendor.Entry);
                     return vendor;
                 }
                 else
@@ -178,8 +169,6 @@ namespace Styx.Logic.Profiles
                         .Where(v => !Blacklist.Contains(v))
                         .OrderBy(v => location.Distance(v.Location))
                         .FirstOrDefault();
-                    if (vendor != null)
-                        Logging.WriteDebug("[VendorManager] Found vendor from profile: {0} Entry={1} Type={2}", vendor.Name, vendor.Entry, vendor.Type);
                     return vendor;
                 }
             }

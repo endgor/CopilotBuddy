@@ -515,6 +515,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 4 - Vile Familiar</Name>
+          <Factions>7</Factions>
           <TargetMinLevel>3</TargetMinLevel>
           <TargetMaxLevel>4</TargetMaxLevel>
           <Hotspots>
@@ -892,6 +893,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 12 - Fizzle Darkstorm</Name>
+          <Factions>7</Factions>
           <TargetMinLevel>12</TargetMinLevel>
           <TargetMaxLevel>12</TargetMaxLevel>
           <Hotspots>
