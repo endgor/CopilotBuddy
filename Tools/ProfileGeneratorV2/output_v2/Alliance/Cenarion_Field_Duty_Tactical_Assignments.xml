@@ -25,14 +25,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="8498" Name="Twilight Battle Orders">
-    <Objective Type="KillMob" MobId="15308" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-7895.31" Y="1891.94" Z="8.4475" />
-        <Hotspot X="-7007.2" Y="1155.17" Z="10.367" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Cenarion Field Duty Tactical Assignments" LogColor="Green" />
@@ -125,7 +117,6 @@
     <Objective QuestName="The Four Dukes" QuestId="8538" Type="KillMob" MobId="15220" KillCount="1" />
     <Objective QuestName="The Four Dukes" QuestId="8538" Type="KillMob" MobId="15208" KillCount="1" />
     <Objective QuestName="Hive'Ashi Scout Report" QuestId="8739" Type="CollectItem" ItemId="21161" CollectCount="1" />
-    <Objective QuestName="Twilight Battle Orders" QuestId="8498" Type="KillMob" MobId="15308" KillCount="1" />
     <Objective QuestName="Twilight Battle Orders" QuestId="8498" Type="CollectItem" ItemId="20803" CollectCount="1" />
     <TurnIn QuestName="Crimson Templar" QuestId="8537" TurnInName="Bor Wildmane" TurnInId="15306" />
     <TurnIn QuestName="Hoary Templar" QuestId="8535" TurnInName="Bor Wildmane" TurnInId="15306" />

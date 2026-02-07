@@ -12,26 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="4512" Name="A Little Slime Goes a Long Way">
-    <Objective Type="KillMob" MobId="7086" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4415.64" Y="-726.783" Z="265.013" />
-        <Hotspot X="4401.86" Y="-695.602" Z="259.402" />
-        <Hotspot X="4377.32" Y="-699.738" Z="263.19" />
-        <Hotspot X="4409.83" Y="-613.529" Z="264.483" />
-        <Hotspot X="4403.14" Y="-639.289" Z="264.318" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="7092" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5309.27" Y="-810.188" Z="338.433" />
-        <Hotspot X="5352.43" Y="-784.759" Z="334.135" />
-        <Hotspot X="4984.95" Y="-657.641" Z="292.457" />
-        <Hotspot X="4997.94" Y="-686.841" Z="294.595" />
-        <Hotspot X="5029.49" Y="-642.252" Z="290.953" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="4421" Name="The Corruption of the Jadefire">
     <Objective Type="KillMob" MobId="9454" KillCount="1">
       <Hotspots>
@@ -203,7 +183,6 @@
     </While>
     <Objective QuestName="A Little Slime Goes a Long Way" QuestId="4512" Type="CollectItem" ItemId="11914" CollectCount="6" />
     <Objective QuestName="A Little Slime Goes a Long Way" QuestId="4512" Type="CollectItem" ItemId="11948" CollectCount="6" />
-    <Objective QuestName="A Little Slime Goes a Long Way" QuestId="4512" Type="KillMob" MobId="7086" KillCount="1" />
     <While Condition="((HasQuest(4512)) &amp;&amp; (!IsQuestCompleted(4512)))">
       <CustomBehavior File="UseItemOn" QuestId="4512" MobId="0" ItemId="11914" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
@@ -213,7 +192,6 @@
     <Objective QuestName="The Corruption of the Jadefire" QuestId="4421" Type="KillMob" MobId="7109" KillCount="11" />
     <Objective QuestName="The Corruption of the Jadefire" QuestId="4421" Type="KillMob" MobId="7110" KillCount="9" />
     <Objective QuestName="The Corruption of the Jadefire" QuestId="4421" Type="KillMob" MobId="7106" KillCount="9" />
-    <Objective QuestName="A Little Slime Goes a Long Way" QuestId="4512" Type="KillMob" MobId="7092" KillCount="1" />
     <While Condition="((HasQuest(4512)) &amp;&amp; (!IsQuestCompleted(4512)))">
       <CustomBehavior File="UseItemOn" QuestId="4512" MobId="0" ItemId="11948" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />

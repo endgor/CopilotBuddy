@@ -11,19 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="672" Name="Raising Spirits">
-    <Objective Type="KillMob" MobId="2559" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1121.31" Y="-3333.73" Z="46.0919" />
-        <Hotspot X="-982.226" Y="-1718.53" Z="40.2659" />
-        <Hotspot X="-1016.76" Y="-1764.54" Z="47.8095" />
-        <Hotspot X="-1286.13" Y="-2883.84" Z="49.3905" />
-        <Hotspot X="-1312.48" Y="-2851.17" Z="52.8456" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Classic (12-58)\Arathi Highlands (30-30)" LogColor="Green" />
     <PickUp QuestName="Hammerfall" QuestId="655" GiverName="Gor'mul" GiverId="2792" />
@@ -31,7 +18,6 @@
     <If Condition="((!HasQuest(672)) &amp;&amp; (!IsQuestCompleted(672)))">
       <PickUp QuestName="Raising Spirits" QuestId="672" GiverName="Tor'gan" GiverId="2706" />
     </If>
-    <Objective QuestName="Raising Spirits" QuestId="672" Type="KillMob" MobId="2559" KillCount="1" />
     <Objective QuestName="Raising Spirits" QuestId="672" Type="CollectItem" ItemId="4512" CollectCount="10" />
     <TurnIn QuestName="Raising Spirits" QuestId="672" TurnInName="Tor'gan" TurnInId="2706" />
     <If Condition="((!HasQuest(674)) &amp;&amp; (!IsQuestCompleted(674)))">

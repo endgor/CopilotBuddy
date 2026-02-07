@@ -62,31 +62,31 @@
       </If>
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
-      <Objective QuestName="Genesis Shoulderpads" QuestId="8669" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Genesis Shoulderpads" QuestId="8669" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Hunter)">
-      <Objective QuestName="Striker's Pauldrons" QuestId="8659" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Striker's Pauldrons" QuestId="8659" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Mage)">
-      <Objective QuestName="Enigma Shoulderpads" QuestId="8625" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Enigma Shoulderpads" QuestId="8625" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Paladin)">
-      <Objective QuestName="Avenger's Pauldrons" QuestId="8630" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Avenger's Pauldrons" QuestId="8630" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Priest)">
-      <Objective QuestName="Mantle of the Oracle" QuestId="8594" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Mantle of the Oracle" QuestId="8594" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Rogue)">
-      <Objective QuestName="Deathdealer's Spaulders" QuestId="8641" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Deathdealer's Spaulders" QuestId="8641" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman)">
-      <Objective QuestName="Stormcaller's Pauldrons" QuestId="8602" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Stormcaller's Pauldrons" QuestId="8602" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="Doomcaller's Mantle" QuestId="8664" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Doomcaller's Mantle" QuestId="8664" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warrior)">
-      <Objective QuestName="Conqueror's Spaulders" QuestId="8544" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Conqueror's Spaulders" QuestId="8544" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
       <Objective QuestName="Genesis Shoulderpads" QuestId="8669" Type="CollectItem" ItemId="20881" CollectCount="2" />

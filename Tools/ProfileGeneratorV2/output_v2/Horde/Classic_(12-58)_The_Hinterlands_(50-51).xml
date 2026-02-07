@@ -43,13 +43,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="7816" Name="Gammerita, Mon!">
-    <Objective Type="KillMob" MobId="7977" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-27.8003" Y="-4670.38" Z="10.3255" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="7815" Name="Snapjaws, Mon!">
     <Objective Type="KillMob" MobId="2505" KillCount="15">
       <Hotspots>
@@ -86,7 +79,6 @@
       <PickUp QuestName="Gammerita, Mon!" QuestId="7816" GiverName="Katoom the Angler" GiverId="14740" />
     </If>
     <Objective QuestName="Whiskey Slim's Lost Grog" QuestId="580" Type="CollectItem" ItemId="3900" CollectCount="12" />
-    <Objective QuestName="Gammerita, Mon!" QuestId="7816" Type="KillMob" MobId="7977" KillCount="1" />
     <Objective QuestName="Gammerita, Mon!" QuestId="7816" Type="CollectItem" ItemId="19023" CollectCount="1" />
     <Objective QuestName="Lard Lost His Lunch" QuestId="7840" Type="CollectItem" ItemId="19034" CollectCount="1" />
     <TurnIn QuestName="Cortello's Riddle" QuestId="626" TurnInName="Object_2556" TurnInType="Object" TurnInId="2556" />

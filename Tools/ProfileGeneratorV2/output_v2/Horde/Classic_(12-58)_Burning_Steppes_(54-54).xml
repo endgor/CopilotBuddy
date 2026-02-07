@@ -11,26 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="3822" Name="Krom'Grul">
-    <Objective Type="KillMob" MobId="8977" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-7957.11" Y="-2600.06" Z="173.93" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="4061" Name="The Rise of the Machines">
-    <Objective Type="KillMob" MobId="7039" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-7764.63" Y="-2241.76" Z="133.567" />
-        <Hotspot X="-7821.13" Y="-2086.77" Z="133.466" />
-        <Hotspot X="-7790.35" Y="-2277.33" Z="136.814" />
-        <Hotspot X="-7820.84" Y="-2072.66" Z="133.466" />
-        <Hotspot X="-7739.3" Y="-2219.71" Z="133.581" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Classic (12-58)\Burning Steppes (54-54)" LogColor="Green" />
     <PickUp QuestName="The Rise of the Machines" QuestId="4061" GiverName="Hierophant Theodora Mulvadania" GiverId="9079" />
@@ -51,14 +31,10 @@
     <If Condition="((!HasQuest(3822)) &amp;&amp; (!IsQuestCompleted(3822)))">
       <PickUp QuestName="Krom'Grul" QuestId="3822" GiverName="Sha'ni Proudtusk" GiverId="9136" />
     </If>
-    <Objective QuestName="Krom'Grul" QuestId="3822" Type="KillMob" MobId="8977" KillCount="1" />
     <Objective QuestName="Krom'Grul" QuestId="3822" Type="CollectItem" ItemId="11058" CollectCount="1" />
-    <Objective QuestName="Krom'Grul" QuestId="3822" Type="KillMob" MobId="8977" KillCount="1" />
     <Objective QuestName="Krom'Grul" QuestId="3822" Type="CollectItem" ItemId="11058" CollectCount="1" />
-    <Objective QuestName="Krom'Grul" QuestId="3822" Type="KillMob" MobId="8977" KillCount="1" />
     <Objective QuestName="Krom'Grul" QuestId="3822" Type="CollectItem" ItemId="11058" CollectCount="1" />
     <Objective QuestName="Tablet of the Seven" QuestId="4296" Type="CollectItem" ItemId="11470" CollectCount="1" />
-    <Objective QuestName="The Rise of the Machines" QuestId="4061" Type="KillMob" MobId="7039" KillCount="1" />
     <Objective QuestName="The Rise of the Machines" QuestId="4061" Type="CollectItem" ItemId="11266" CollectCount="10" />
     <TurnIn QuestName="Broodling Essence" QuestId="4726" TurnInName="Tinkee Steamboil" TurnInId="10267" />
     <If Condition="((!HasQuest(4808)) &amp;&amp; (!IsQuestCompleted(4808)))">

@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="658" Name="Hints of a New Plague?">
-    <Objective Type="KillMob" MobId="2714" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1552.43" Y="-3029.31" Z="13.6448" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="651" Name="Stones of Binding">
     <Objective Type="CollectItem" ItemId="4484" CollectCount="1">
       <CollectFrom>
@@ -42,33 +35,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-855.91" Y="-1783.29" Z="39.61" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="691" Name="Worth Its Weight in Gold">
-    <Objective Type="KillMob" MobId="2557" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2032.18" Y="-3276.97" Z="55.7733" />
-        <Hotspot X="-2022.13" Y="-3292.49" Z="53.0674" />
-        <Hotspot X="-2065.27" Y="-3268.88" Z="50.428" />
-        <Hotspot X="-2095.68" Y="-3288.88" Z="51.7259" />
-        <Hotspot X="-2083.95" Y="-3270.32" Z="51.2645" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2555" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1854.99" Y="-3185.95" Z="51.416" />
-        <Hotspot X="-1864.62" Y="-3064.38" Z="57.9381" />
-        <Hotspot X="-1199.68" Y="-2040.94" Z="38.7946" />
-        <Hotspot X="-1978.56" Y="-3312.65" Z="57.2553" />
-        <Hotspot X="-2020.43" Y="-3316.22" Z="54.7064" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="693" Name="Wand over Fist">
-    <Objective Type="KillMob" MobId="2793" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2098.22" Y="-2837.68" Z="79.1394" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -128,7 +94,6 @@
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Arathi Highlands (39-41)" LogColor="Green" />
-    <Objective QuestName="Hints of a New Plague?" QuestId="658" Type="KillMob" MobId="2714" KillCount="1" />
     <Objective QuestName="Hints of a New Plague?" QuestId="658" Type="CollectItem" ItemId="4482" CollectCount="1" />
     <If Condition="((!HasQuest(691)) &amp;&amp; (!IsQuestCompleted(691)))">
       <PickUp QuestName="Worth Its Weight in Gold" QuestId="691" GiverName="Apprentice Kryten" GiverId="2788" />
@@ -152,9 +117,7 @@
     <If Condition="((!HasQuest(661)) &amp;&amp; (!IsQuestCompleted(661)))">
       <PickUp QuestName="Hints of a New Plague?" QuestId="661" GiverName="Quae" GiverId="2712" />
     </If>
-    <Objective QuestName="Worth Its Weight in Gold" QuestId="691" Type="KillMob" MobId="2557" KillCount="1" />
     <Objective QuestName="Worth Its Weight in Gold" QuestId="691" Type="CollectItem" ItemId="5040" CollectCount="1" />
-    <Objective QuestName="Worth Its Weight in Gold" QuestId="691" Type="KillMob" MobId="2555" KillCount="1" />
     <Objective QuestName="Worth Its Weight in Gold" QuestId="691" Type="CollectItem" ItemId="4522" CollectCount="4" />
     <Objective QuestName="Worth Its Weight in Gold" QuestId="691" Type="CollectItem" ItemId="4503" CollectCount="10" />
     <Objective QuestName="Stones of Binding" QuestId="651" Type="CollectItem" ItemId="4485" CollectCount="1" />
@@ -162,7 +125,6 @@
     <If Condition="((!HasQuest(693)) &amp;&amp; (!IsQuestCompleted(693)))">
       <PickUp QuestName="Wand over Fist" QuestId="693" GiverName="Skuerto" GiverId="2789" />
     </If>
-    <Objective QuestName="Wand over Fist" QuestId="693" Type="KillMob" MobId="2793" KillCount="1" />
     <Objective QuestName="Wand over Fist" QuestId="693" Type="CollectItem" ItemId="4525" CollectCount="1" />
     <TurnIn QuestName="Wand over Fist" QuestId="693" TurnInName="Skuerto" TurnInId="2789" />
     <Objective QuestName="Stones of Binding" QuestId="651" Type="CollectItem" ItemId="4483" CollectCount="1" />

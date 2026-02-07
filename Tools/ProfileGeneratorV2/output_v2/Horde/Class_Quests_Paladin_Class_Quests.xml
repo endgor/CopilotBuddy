@@ -44,7 +44,7 @@
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Class Quests\Paladin Class Quests" LogColor="Green" />
     <If Condition="Me.Level &lt; 12">
-      <GrindTo Level="12" />
+      <GrindTo Level="12" /> <!--  (grind Sangrias Stillblade) -->
     </If>
     <If Condition="(Me.Class == WoWClass.Paladin) &amp;&amp; (Me.Race == WoWRace.BloodElf)">
       <PickUp QuestName="The First Trial" QuestId="9678" GiverName="Knight-Lord Bloodvalor" GiverId="17717" />
@@ -92,6 +92,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 20 - Sangrias Stillblade</Name>
+          <Factions>14</Factions>
           <Hotspots>
             <Hotspot X="89.26" Y="35.20" Z="0.00" />
           </Hotspots>
@@ -115,7 +116,6 @@
       </If>
       <Objective QuestName="The Path of the Adept" QuestId="9692" Type="CollectItem" ItemId="24226" CollectCount="1" />
       <Objective QuestName="The Path of the Adept" QuestId="9692" Type="CollectItem" ItemId="24224" CollectCount="1" />
-      <Objective QuestName="The Path of the Adept" QuestId="9692" Type="KillMob" MobId="17830" KillCount="1" />
       <Objective QuestName="The Path of the Adept" QuestId="9692" Type="CollectItem" ItemId="24225" CollectCount="1" />
       <Objective QuestName="The Path of the Adept" QuestId="9692" Type="CollectItem" ItemId="6995" CollectCount="1" />
       <TurnIn QuestName="The Path of the Adept" QuestId="9692" TurnInName="Knight-Lord Bloodvalor" TurnInId="17717" />
@@ -128,6 +128,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 40 - Zelemar the Wrathful</Name>
+          <Factions>954</Factions>
           <Hotspots>
             <Hotspot X="79.60" Y="38.40" Z="0.00" />
           </Hotspots>
@@ -142,6 +143,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 50 - Zelemar the Wrathful</Name>
+          <Factions>954</Factions>
           <Hotspots>
             <Hotspot X="89.40" Y="35.40" Z="0.00" />
           </Hotspots>
@@ -167,13 +169,13 @@
     <If Condition="((!HasQuest(10593)) &amp;&amp; (!IsQuestCompleted(10593)))">
       <PickUp QuestName="Ancient Evil" QuestId="10593" GiverName="Lady Sylvanas Windrunner" GiverId="10181" />
     </If>
-    <Objective QuestName="Ancient Evil" QuestId="10593" Type="KillMob" MobId="8580" KillCount="1" />
     <Objective QuestName="Ancient Evil" QuestId="10593" Type="CollectItem" ItemId="22444" CollectCount="1" />
     <TurnIn QuestName="Ancient Evil" QuestId="10593" TurnInName="Mehlar Dawnblade" TurnInId="17099" />
     <If Condition="Me.Level &lt; 60">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 60 - Atal'alarion</Name>
+          <Factions>37</Factions>
           <Hotspots>
             <Hotspot X="83.20" Y="71.10" Z="0.00" />
           </Hotspots>

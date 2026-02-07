@@ -32,17 +32,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12167" Name="Kill the Cultists">
-    <Objective Type="KillMob" MobId="26319" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4068.13" Y="2344.62" Z="184.263" />
-        <Hotspot X="4124.93" Y="2309.41" Z="179.362" />
-        <Hotspot X="4109.97" Y="2325.69" Z="179.46" />
-        <Hotspot X="4168.57" Y="2223.09" Z="180.548" />
-        <Hotspot X="4168.5" Y="2199.21" Z="181.117" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12169" Name="The High Cultist">
     <Objective Type="KillMob" MobId="26655" KillCount="1">
       <Hotspots>
@@ -50,50 +39,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12004" Name="Prevent the Accord">
-    <Objective Type="KillMob" MobId="26496" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3372.72" Y="2594.67" Z="40.2775" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="26349" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3401.72" Y="2532.42" Z="59.4827" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12013" Name="End Arcanimus">
     <Objective Type="KillMob" MobId="26370" KillCount="1">
       <Hotspots>
         <Hotspot X="3344.87" Y="2504.08" Z="-6.5575" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12065" Name="The Focus on the Beach">
-    <Objective Type="KillMob" MobId="26762" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3149.37" Y="2151.22" Z="24.6377" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12083" Name="Atop the Woodlands">
-    <Objective Type="KillMob" MobId="26815" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2847.59" Y="1833.02" Z="139.577" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="11959" Name="Slay Loguhn">
-    <Objective Type="KillMob" MobId="26196" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3363.32" Y="1029.17" Z="141.758" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12016" Name="The Bait">
-    <Objective Type="KillMob" MobId="26521" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2586.94" Y="1273.6" Z="0.4632" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -146,17 +95,6 @@
         <Hotspot X="3993.83" Y="-790.01" Z="122.7" />
         <Hotspot X="3996.38" Y="-973.94" Z="105.25" />
         <Hotspot X="3999.57" Y="-894.07" Z="109.9" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12269" Name="Not In Our Mine">
-    <Objective Type="KillMob" MobId="27401" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3891.45" Y="-871.962" Z="110.086" />
-        <Hotspot X="3979.76" Y="-878.693" Z="118.767" />
-        <Hotspot X="3957.39" Y="-879.447" Z="120.634" />
-        <Hotspot X="4012.31" Y="-778.342" Z="119.408" />
-        <Hotspot X="3908.99" Y="-867.735" Z="108.25" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -304,17 +242,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12458" Name="Seeds of the Lashers">
-    <Objective Type="KillMob" MobId="27254" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2875.36" Y="-18.7967" Z="2.2492" />
-        <Hotspot X="2837.51" Y="-63.0193" Z="5.0887" />
-        <Hotspot X="2827.06" Y="103.963" Z="2.1148" />
-        <Hotspot X="2842.53" Y="184.96" Z="3.2082" />
-        <Hotspot X="2785.17" Y="-0.2032" Z="1.8797" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12454" Name="Cycle of Life">
     <Objective Type="KillMob" MobId="27244" KillCount="5">
       <Hotspots>
@@ -323,33 +250,6 @@
         <Hotspot X="2893.16" Y="-80.2691" Z="13.068" />
         <Hotspot X="2810.06" Y="9.8594" Z="8.5569" />
         <Hotspot X="2822.3" Y="25.5809" Z="28.661" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12045" Name="Shaved Ice">
-    <Objective Type="KillMob" MobId="26316" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4917.3" Y="924.07" Z="223.134" />
-        <Hotspot X="4907.87" Y="741.143" Z="163.124" />
-        <Hotspot X="4913.36" Y="748.856" Z="165.247" />
-        <Hotspot X="4860.15" Y="992.933" Z="210.192" />
-        <Hotspot X="4781.88" Y="634.511" Z="167.195" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12498" Name="On Ruby Wings">
-    <Objective Type="KillMob" MobId="28005" KillCount="30">
-      <Hotspots>
-        <Hotspot X="4252.85" Y="360.165" Z="16.6508" />
-        <Hotspot X="4226.24" Y="416.758" Z="16.8863" />
-        <Hotspot X="4269.47" Y="354.209" Z="15.5922" />
-        <Hotspot X="4300.24" Y="459.869" Z="-5.1929" />
-        <Hotspot X="4293.36" Y="366.722" Z="-5.976" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="28018" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4399.19" Y="569.694" Z="115.559" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -373,28 +273,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12046" Name="Soft Packaging">
-    <Objective Type="KillMob" MobId="26467" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4797.81" Y="742.215" Z="122.659" />
-        <Hotspot X="4769.16" Y="901.424" Z="125.859" />
-        <Hotspot X="4681.69" Y="838.257" Z="116.202" />
-        <Hotspot X="4714.57" Y="870.432" Z="132.424" />
-        <Hotspot X="4724.45" Y="653.226" Z="126.665" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12049" Name="Hard to Swallow">
-    <Objective Type="KillMob" MobId="26293" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4749.26" Y="147.259" Z="113.589" />
-        <Hotspot X="4827.65" Y="246.924" Z="153.181" />
-        <Hotspot X="4759.1" Y="226.93" Z="126.878" />
-        <Hotspot X="4781.97" Y="297.978" Z="138.296" />
-        <Hotspot X="4686.33" Y="338.142" Z="116.995" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12047" Name="Something That Doesn't Melt">
     <Objective Type="CollectItem" ItemId="36730" CollectCount="12">
       <CollectFrom>
@@ -408,17 +286,6 @@
         <Hotspot X="4481.18" Y="127.81" Z="88.99" />
         <Hotspot X="4481.18" Y="127.81" Z="88.99" />
         <Hotspot X="4499.45" Y="108.05" Z="89.83" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12076" Name="Messy Business">
-    <Objective Type="KillMob" MobId="26358" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4894.68" Y="245.349" Z="123.056" />
-        <Hotspot X="4808.71" Y="123.438" Z="80.5422" />
-        <Hotspot X="4801.3" Y="529.481" Z="120.288" />
-        <Hotspot X="4902.56" Y="348.502" Z="123.264" />
-        <Hotspot X="4937.42" Y="630.546" Z="140.097" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -492,14 +359,12 @@
     <If Condition="((!HasQuest(12167)) &amp;&amp; (!IsQuestCompleted(12167)))">
       <PickUp QuestName="Kill the Cultists" QuestId="12167" GiverName="Warden Jodi Moonsong" GiverId="26973" />
     </If>
-    <Objective QuestName="Kill the Cultists" QuestId="12167" Type="KillMob" MobId="26319" KillCount="1" />
     <Objective QuestName="Kill the Cultists" QuestId="12167" Type="CollectItem" ItemId="36958" CollectCount="1" />
     <While Condition="((HasQuest(12167)) &amp;&amp; (!IsQuestCompleted(12167)))">
       <CustomBehavior File="UseItemOn" QuestId="12167" MobId="0" ItemId="36958" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="The Favor of Zangus" QuestId="12168" GiverName="Warden Jodi Moonsong" GiverId="26973" />
-    <Objective QuestName="Kill the Cultists" QuestId="12167" Type="KillMob" MobId="26319" KillCount="1" />
     <Objective QuestName="Kill the Cultists" QuestId="12167" Type="CollectItem" ItemId="36957" CollectCount="5" />
     <TurnIn QuestName="Kill the Cultists" QuestId="12167" TurnInName="Warden Jodi Moonsong" TurnInId="26973" />
     <TurnIn QuestName="The Favor of Zangus" QuestId="12168" TurnInName="Warden Jodi Moonsong" TurnInId="26973" />
@@ -507,9 +372,7 @@
       <PickUp QuestName="The High Cultist" QuestId="12169" GiverName="Warden Jodi Moonsong" GiverId="26973" />
     </If>
     <Objective QuestName="The High Cultist" QuestId="12169" Type="KillMob" MobId="26655" KillCount="1" />
-    <Objective QuestName="Prevent the Accord" QuestId="12004" Type="KillMob" MobId="26496" KillCount="1" />
     <Objective QuestName="Prevent the Accord" QuestId="12004" Type="CollectItem" ItemId="35800" CollectCount="1" />
-    <Objective QuestName="Prevent the Accord" QuestId="12004" Type="KillMob" MobId="26349" KillCount="1" />
     <Objective QuestName="Prevent the Accord" QuestId="12004" Type="CollectItem" ItemId="35801" CollectCount="1" />
     <Objective QuestName="A Strange Device" QuestId="12055" Type="CollectItem" ItemId="36742" CollectCount="1" />
     <While Condition="((HasQuest(12169)) &amp;&amp; (!IsQuestCompleted(12169)))">
@@ -551,9 +414,7 @@
     <If Condition="((!HasQuest(12065)) &amp;&amp; (!IsQuestCompleted(12065)))">
       <PickUp QuestName="The Focus on the Beach" QuestId="12065" GiverName="Image of Archmage Modera" GiverId="26673" />
     </If>
-    <Objective QuestName="The Focus on the Beach" QuestId="12065" Type="KillMob" MobId="26762" KillCount="1" />
     <Objective QuestName="The Focus on the Beach" QuestId="12065" Type="CollectItem" ItemId="36751" CollectCount="1" />
-    <Objective QuestName="The Focus on the Beach" QuestId="12065" Type="KillMob" MobId="26762" KillCount="1" />
     <Objective QuestName="The Focus on the Beach" QuestId="12065" Type="CollectItem" ItemId="36756" CollectCount="1" />
     <While Condition="((HasQuest(12065)) &amp;&amp; (!IsQuestCompleted(12065)))">
       <CustomBehavior File="UseItemOn" QuestId="12065" MobId="26773" ItemId="36756" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -578,7 +439,6 @@
       <CustomBehavior File="UseItemOn" QuestId="12092" MobId="26321" ItemId="36786" NumOfTimes="100" Range="5" CollectionDistance="1000" X="2824.71" Y="1750.11" Z="151.782" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Atop the Woodlands" QuestId="12083" Type="KillMob" MobId="26815" KillCount="1" />
     <Objective QuestName="Atop the Woodlands" QuestId="12083" Type="CollectItem" ItemId="36779" CollectCount="1" />
     <While Condition="((HasQuest(12083)) &amp;&amp; (!IsQuestCompleted(12083)))">
       <CustomBehavior File="UseItemOn" QuestId="12083" MobId="26831" ItemId="36779" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -608,7 +468,6 @@
     <If Condition="((!HasQuest(11959)) &amp;&amp; (!IsQuestCompleted(11959)))">
       <PickUp QuestName="Slay Loguhn" QuestId="11959" GiverName="Elder Ko'nani" GiverId="26194" />
     </If>
-    <Objective QuestName="Slay Loguhn" QuestId="11959" Type="KillMob" MobId="26196" KillCount="1" />
     <Objective QuestName="Slay Loguhn" QuestId="11959" Type="CollectItem" ItemId="35688" CollectCount="1" />
     <While Condition="((HasQuest(11959)) &amp;&amp; (!IsQuestCompleted(11959)))">
       <CustomBehavior File="UseItemOn" QuestId="11959" MobId="26227" ItemId="35688" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -640,7 +499,6 @@
     <If Condition="((!HasQuest(12016)) &amp;&amp; (!IsQuestCompleted(12016)))">
       <PickUp QuestName="The Bait" QuestId="12016" GiverName="Tua'kea" GiverId="26245" />
     </If>
-    <Objective QuestName="The Bait" QuestId="12016" Type="KillMob" MobId="26521" KillCount="1" />
     <Objective QuestName="The Bait" QuestId="12016" Type="CollectItem" ItemId="35831" CollectCount="1" />
     <TurnIn QuestName="The Bait" QuestId="12016" TurnInName="Tua'kea" TurnInId="26245" />
     <If Condition="((!HasQuest(12017)) &amp;&amp; (!IsQuestCompleted(12017)))">
@@ -730,7 +588,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="The Bleeding Ore" QuestId="12272" Type="CollectItem" ItemId="37359" CollectCount="10" />
-    <Objective QuestName="Not In Our Mine" QuestId="12269" Type="KillMob" MobId="27401" KillCount="1" />
     <Objective QuestName="Not In Our Mine" QuestId="12269" Type="CollectItem" ItemId="37411" CollectCount="10" />
     <While Condition="((HasQuest(12277)) &amp;&amp; (!IsQuestCompleted(12277)))">
       <RunTo X="3899.86" Y="-883.613" Z="119.536" />
@@ -880,7 +737,6 @@
     <If Condition="((!HasQuest(12467)) &amp;&amp; (!IsQuestCompleted(12467)))">
       <PickUp QuestName="Chasing Icestorm: Thel'zan's Phylactery" QuestId="12467" GiverName="Legion Commander Tyralion" GiverId="27844" />
     </If>
-    <Objective QuestName="Chasing Icestorm: Thel'zan's Phylactery" QuestId="12467" Type="KillMob" MobId="26287" KillCount="1" />
     <Objective QuestName="Chasing Icestorm: Thel'zan's Phylactery" QuestId="12467" Type="CollectItem" ItemId="37920" CollectCount="1" />
     <PickUp QuestName="Pest Control" QuestId="12142" GiverName="Duane" GiverId="26978" />
     <TurnIn QuestName="Pest Control" QuestId="12142" TurnInName="Duane" TurnInId="26978" />
@@ -1030,7 +886,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Cycle of Life" QuestId="12454" GiverName="Nishera the Garden Keeper" GiverId="27255" />
-    <Objective QuestName="Seeds of the Lashers" QuestId="12458" Type="KillMob" MobId="27254" KillCount="1" />
     <Objective QuestName="Seeds of the Lashers" QuestId="12458" Type="CollectItem" ItemId="140458" CollectCount="3" />
     <Objective QuestName="Cycle of Life" QuestId="12454" Type="KillMob" MobId="27244" KillCount="5" />
     <TurnIn QuestName="Cycle of Life" QuestId="12454" TurnInName="Nishera the Garden Keeper" TurnInId="27255" />
@@ -1047,16 +902,12 @@
     <PickUp QuestName="Shaved Ice" QuestId="12045" GiverName="Zivlix" GiverId="26661" />
     <TurnIn QuestName="Return to Sender" QuestId="12469" TurnInName="Xink" TurnInId="26660" />
     <PickUp QuestName="Stocking Up" QuestId="12044" GiverName="Xink" GiverId="26660" />
-    <Objective QuestName="Shaved Ice" QuestId="12045" Type="KillMob" MobId="26316" KillCount="1" />
     <Objective QuestName="Shaved Ice" QuestId="12045" Type="CollectItem" ItemId="36728" CollectCount="4" />
     <While Condition="((HasQuest(12498)) &amp;&amp; (!IsQuestCompleted(12498)))">
       <RunTo X="4252.85" Y="360.165" Z="16.6508" />
       <CustomBehavior File="UseItemOn" QuestId="12498" MobId="28005" ItemId="38302" NumOfTimes="100" Range="5" CollectionDistance="1000" X="4252.85" Y="360.165" Z="16.6508" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="On Ruby Wings" QuestId="12498" Type="KillMob" MobId="28005" KillCount="30" />
-    <Objective QuestName="On Ruby Wings" QuestId="12498" Type="KillMob" MobId="28018" KillCount="1" />
-    <Objective QuestName="On Ruby Wings" QuestId="12498" Type="KillMob" MobId="28006" KillCount="1" />
     <Objective QuestName="On Ruby Wings" QuestId="12498" Type="CollectItem" ItemId="38305" CollectCount="1" />
     <Objective QuestName="Nozzlerust Defense" QuestId="12043" Type="KillMob" MobId="26493" KillCount="1" />
     <Objective QuestName="Stocking Up" QuestId="12044" Type="CollectItem" ItemId="36727" CollectCount="8" />
@@ -1067,7 +918,6 @@
       <PickUp QuestName="Soft Packaging" QuestId="12046" GiverName="Zivlix" GiverId="26661" />
     </If>
     <TurnIn QuestName="Nozzlerust Defense" QuestId="12043" TurnInName="Narf" TurnInId="26647" />
-    <Objective QuestName="Soft Packaging" QuestId="12046" Type="KillMob" MobId="26467" KillCount="1" />
     <Objective QuestName="Soft Packaging" QuestId="12046" Type="CollectItem" ItemId="36729" CollectCount="12" />
     <TurnIn QuestName="Soft Packaging" QuestId="12046" TurnInName="Zivlix" TurnInId="26661" />
     <If Condition="((!HasQuest(12047)) &amp;&amp; (!IsQuestCompleted(12047)))">
@@ -1076,7 +926,6 @@
     <If Condition="((!HasQuest(12049)) &amp;&amp; (!IsQuestCompleted(12049)))">
       <PickUp QuestName="Hard to Swallow" QuestId="12049" GiverName="Xink" GiverId="26660" />
     </If>
-    <Objective QuestName="Hard to Swallow" QuestId="12049" Type="KillMob" MobId="26293" KillCount="1" />
     <While Condition="((HasQuest(12049)) &amp;&amp; (!IsQuestCompleted(12049)))">
       <CustomBehavior File="UseItemOn" QuestId="12049" MobId="0" ItemId="36732" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
@@ -1110,7 +959,6 @@
       <PickUp QuestName="Messy Business" QuestId="12076" GiverName="Zort" GiverId="26659" />
     </If>
     <PickUp QuestName="Stomping Grounds" QuestId="12079" GiverName="Ko'char the Unbreakable" GiverId="26473" />
-    <Objective QuestName="Messy Business" QuestId="12076" Type="KillMob" MobId="26358" KillCount="1" />
     <While Condition="((HasQuest(12076)) &amp;&amp; (!IsQuestCompleted(12076)))">
       <CustomBehavior File="UseItemOn" QuestId="12076" MobId="0" ItemId="36775" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />

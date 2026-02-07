@@ -39,35 +39,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10342" Name="Securing the Shaleskin Shale">
-    <Objective Type="KillMob" MobId="20210" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3504.9" Y="3948.54" Z="143.57" />
-        <Hotspot X="3439.91" Y="3822.97" Z="144.143" />
-        <Hotspot X="3155.71" Y="3339.64" Z="108.073" />
-        <Hotspot X="3109.01" Y="3302.73" Z="110.494" />
-        <Hotspot X="3059.82" Y="3243.43" Z="115.968" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10224" Name="Essence for the Engines">
-    <Objective Type="KillMob" MobId="18864" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3294.05" Y="3429.16" Z="113.932" />
-        <Hotspot X="3323.25" Y="3410.65" Z="122.319" />
-        <Hotspot X="3313.64" Y="3518.36" Z="127.233" />
-        <Hotspot X="3295.06" Y="3552.15" Z="125.789" />
-        <Hotspot X="3284.37" Y="3507.81" Z="118.866" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10189" Name="Manaforge B'naar">
-    <Objective Type="KillMob" MobId="19635" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3024.03" Y="3964.66" Z="156.178" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10241" Name="Distraction at Manaforge B'naar">
     <Objective Type="KillMob" MobId="18855" KillCount="8">
       <Hotspots>
@@ -88,39 +59,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10265" Name="Consortium Crystal Collection">
-    <Objective Type="KillMob" MobId="20215" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2752.2" Y="3116.26" Z="155.687" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10199" Name="That Little Extra Kick">
-    <Objective Type="KillMob" MobId="18880" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3307.2" Y="4042.88" Z="154.878" />
-        <Hotspot X="3500.97" Y="4111.48" Z="119.743" />
-        <Hotspot X="3187.84" Y="3354.89" Z="103.685" />
-        <Hotspot X="3205.65" Y="3602.59" Z="129.265" />
-        <Hotspot X="3083.82" Y="3822.36" Z="142.924" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10221" Name="Dr. Boom!">
     <Objective Type="KillMob" MobId="20284" KillCount="1">
       <Hotspots>
         <Hotspot X="3242.53" Y="3531.44" Z="121.253" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10204" Name="Bloodgem Crystals">
-    <Objective Type="KillMob" MobId="18855" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3015.23" Y="4061.71" Z="150.126" />
-        <Hotspot X="3036.04" Y="4063.57" Z="151.003" />
-        <Hotspot X="3034.89" Y="4090.47" Z="150.654" />
-        <Hotspot X="3027.89" Y="4076.43" Z="150.305" />
-        <Hotspot X="3020.33" Y="4087.83" Z="150.18" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -169,46 +111,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10299" Name="Shutting Down Manaforge B'naar">
-    <Objective Type="KillMob" MobId="20416" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2828.02" Y="4154.67" Z="162.599" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10205" Name="Warp-Raider Nesaad">
     <Objective Type="KillMob" MobId="19641" KillCount="1">
       <Hotspots>
         <Hotspot X="2503.19" Y="3902.48" Z="128.967" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10197" Name="A Convincing Disguise">
-    <Objective Type="KillMob" MobId="20134" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2455.03" Y="2922.62" Z="129.048" />
-        <Hotspot X="2499.35" Y="2848.43" Z="137.735" />
-        <Hotspot X="2434.13" Y="2908.4" Z="130.624" />
-        <Hotspot X="2488.88" Y="2855.45" Z="137.485" />
-        <Hotspot X="2424.98" Y="2868.67" Z="131.451" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="20136" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2416.56" Y="2798.97" Z="134.576" />
-        <Hotspot X="2369.66" Y="2770.94" Z="134.576" />
-        <Hotspot X="2357.52" Y="2474.43" Z="142.11" />
-        <Hotspot X="2357.63" Y="2484.41" Z="141.485" />
-        <Hotspot X="2368.55" Y="2496.17" Z="141.336" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="18850" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2460.09" Y="2849.69" Z="132.915" />
-        <Hotspot X="2448.34" Y="2858.35" Z="132.224" />
-        <Hotspot X="2334.53" Y="2791.84" Z="133.168" />
-        <Hotspot X="2337.3" Y="2797.86" Z="133.168" />
-        <Hotspot X="2346.69" Y="2793.28" Z="133.168" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -232,57 +138,13 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10330" Name="Shutting Down Manaforge Coruu">
-    <Objective Type="KillMob" MobId="20397" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2426.77" Y="2750.39" Z="133.243" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10343" Name="The Unending Invasion">
-    <Objective Type="KillMob" MobId="19546" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2162.67" Y="2239.2" Z="74.9615" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="29461" CollectCount="1">
       <CollectFrom>
         <GameObject Name="Mana Bomb Fragment" Id="184433" />
       </CollectFrom>
       <Hotspots>
         <Hotspot X="2216.23" Y="2379.13" Z="103.6" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10305" Name="Abjurist Belmara">
-    <Objective Type="KillMob" MobId="19543" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2185.22" Y="2115.88" Z="72.4063" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10182" Name="Battle-Mage Dathric">
-    <Objective Type="KillMob" MobId="19545" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2218.05" Y="2155.52" Z="75.1664" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10331" Name="Indispensable Tools">
-    <Objective Type="KillMob" MobId="20409" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2291.14" Y="2062.76" Z="72.2262" />
-        <Hotspot X="2308.32" Y="2080.85" Z="76.3482" />
-        <Hotspot X="2294.57" Y="2137.83" Z="85.7296" />
-        <Hotspot X="2339.1" Y="2075.28" Z="79.3942" />
-        <Hotspot X="2355.84" Y="2087.59" Z="83.0192" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10307" Name="Cohlien Frostweaver">
-    <Objective Type="KillMob" MobId="19544" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2308.53" Y="2152.49" Z="89.9053" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -306,24 +168,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10312" Name="The Annals of Kirin'Var">
-    <Objective Type="KillMob" MobId="19543" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2185.22" Y="2115.88" Z="72.4063" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10332" Name="Master Smith Rhonsus">
     <Objective Type="KillMob" MobId="20410" KillCount="1">
       <Hotspots>
         <Hotspot X="2288.35" Y="2051.09" Z="69.9698" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10188" Name="The Sigil of Krasus">
-    <Objective Type="KillMob" MobId="19593" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2406.91" Y="2604.9" Z="134.775" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -343,24 +191,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10301" Name="Unlocking the Compendium">
-    <Objective Type="KillMob" MobId="19926" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2597.55" Y="2371.1" Z="109.488" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10233" Name="Torching Sunfury Hold">
-    <Objective Type="KillMob" MobId="20221" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2596.35" Y="2365.24" Z="109.516" />
-        <Hotspot X="2473.27" Y="2376.61" Z="137.25" />
-        <Hotspot X="2532.87" Y="2368.77" Z="128.592" />
-        <Hotspot X="2473.25" Y="2360.92" Z="137.25" />
-        <Hotspot X="2465.94" Y="2388.82" Z="137.691" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10222" Name="The Sunfury Garrison">
     <Objective Type="KillMob" MobId="19707" KillCount="10">
       <Hotspots>
@@ -376,24 +206,6 @@
     <Objective Type="KillMob" MobId="19705" KillCount="1">
       <Hotspots>
         <Hotspot X="2988.31" Y="2357.27" Z="155.24" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10209" Name="Summoner Kanthin's Prize">
-    <Objective Type="KillMob" MobId="19657" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3011.39" Y="2290.22" Z="160.905" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10924" Name="Bloody Imp-ossible!">
-    <Objective Type="KillMob" MobId="18884" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2918.67" Y="2581.06" Z="118.454" />
-        <Hotspot X="2935.45" Y="2503.76" Z="130.631" />
-        <Hotspot X="2960.46" Y="2547.99" Z="125.564" />
-        <Hotspot X="2893.02" Y="2083.36" Z="124.983" />
-        <Hotspot X="2869.05" Y="2107.1" Z="119.084" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -427,17 +239,6 @@
         <Hotspot X="3324.99" Y="2913.17" Z="140.71" />
         <Hotspot X="3328.01" Y="2921.08" Z="140.98" />
         <Hotspot X="3330.71" Y="2968.79" Z="142.78" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10433" Name="Keeping Up Appearances">
-    <Objective Type="KillMob" MobId="20671" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3327.44" Y="3010.56" Z="138.875" />
-        <Hotspot X="3331.74" Y="2966.98" Z="142.47" />
-        <Hotspot X="3357.85" Y="3034.45" Z="141.807" />
-        <Hotspot X="3342.1" Y="2993.86" Z="141.244" />
-        <Hotspot X="3368.98" Y="3029.74" Z="141.456" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -488,24 +289,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10235" Name="Declawing Doomclaw">
-    <Objective Type="KillMob" MobId="19738" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3330.86" Y="2657.39" Z="156.611" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10328" Name="Sunfury Briefings">
-    <Objective Type="KillMob" MobId="20139" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2979.37" Y="2281.19" Z="161.791" />
-        <Hotspot X="2959.12" Y="2275.65" Z="161.793" />
-        <Hotspot X="2991.45" Y="2312.61" Z="161.59" />
-        <Hotspot X="2997.41" Y="2305.0" Z="161.725" />
-        <Hotspot X="3102.14" Y="2182.2" Z="149.285" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10341" Name="Kick Them While They're Down">
     <Objective Type="KillMob" MobId="20139" KillCount="8">
       <Hotspots>
@@ -551,20 +334,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10322" Name="Shutting Down Manaforge Duro">
-    <Objective Type="KillMob" MobId="20435" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2910.09" Y="2138.74" Z="163.92" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10429" Name="When Nature Goes Too Far">
-    <Objective Type="KillMob" MobId="20775" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4400.11" Y="2999.19" Z="108.192" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10336" Name="The Minions of Culuthas">
     <Objective Type="KillMob" MobId="20141" KillCount="10">
       <Hotspots>
@@ -582,17 +351,6 @@
         <Hotspot X="4574.18" Y="2582.58" Z="196.804" />
         <Hotspot X="4736.1" Y="2460.52" Z="243.515" />
         <Hotspot X="4601.16" Y="2454.66" Z="198.087" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10855" Name="Fel Reavers, No Thanks!">
-    <Objective Type="KillMob" MobId="16949" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4339.71" Y="3461.2" Z="171.667" />
-        <Hotspot X="4378.52" Y="3502.68" Z="182.761" />
-        <Hotspot X="4405.65" Y="3508.54" Z="182.772" />
-        <Hotspot X="4405.6" Y="3485.7" Z="180.464" />
-        <Hotspot X="4465.4" Y="3480.64" Z="180.133" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -680,13 +438,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10422" Name="Captain Tyralius">
-    <Objective Type="KillMob" MobId="20770" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3921.87" Y="2451.12" Z="113.341" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10411" Name="Electro-Shock Goodness!">
     <Objective Type="KillMob" MobId="20778" KillCount="1">
       <Hotspots>
@@ -767,17 +518,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10385" Name="Potential for Brain Damage = High">
-    <Objective Type="KillMob" MobId="20619" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3939.78" Y="2420.69" Z="111.89" />
-        <Hotspot X="3931.31" Y="2344.1" Z="110.68" />
-        <Hotspot X="3906.34" Y="2327.14" Z="110.673" />
-        <Hotspot X="3835.32" Y="2405.59" Z="110.538" />
-        <Hotspot X="3983.1" Y="2387.07" Z="111.623" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10272" Name="A Promising Start">
     <Objective Type="CollectItem" ItemId="28971" CollectCount="15">
       <CollectFrom>
@@ -842,7 +582,6 @@
     <PickUp QuestName="Mark V is Alive!" QuestId="10191" GiverName="Maxx A. Million Mk. V" GiverId="19589" />
     <TurnIn QuestName="Mark V is Alive!" QuestId="10191" TurnInName="Bot-Specialist Alley" TurnInId="19578" />
     <Objective QuestName="You're Hired!" QuestId="10186" Type="CollectItem" ItemId="28364" CollectCount="10" />
-    <Objective QuestName="Securing the Shaleskin Shale" QuestId="10342" Type="KillMob" MobId="20210" KillCount="1" />
     <Objective QuestName="Securing the Shaleskin Shale" QuestId="10342" Type="CollectItem" ItemId="29464" CollectCount="5" />
     <TurnIn QuestName="Securing the Shaleskin Shale" QuestId="10342" TurnInName="Boots" TurnInId="19617" />
     <If Condition="((!HasQuest(10199)) &amp;&amp; (!IsQuestCompleted(10199)))">
@@ -859,13 +598,11 @@
     <If Condition="((!HasQuest(10224)) &amp;&amp; (!IsQuestCompleted(10224)))">
       <PickUp QuestName="Essence for the Engines" QuestId="10224" GiverName="Chief Engineer Trep" GiverId="19709" />
     </If>
-    <Objective QuestName="Essence for the Engines" QuestId="10224" Type="KillMob" MobId="18864" KillCount="1" />
     <Objective QuestName="Essence for the Engines" QuestId="10224" Type="CollectItem" ItemId="28527" CollectCount="7" />
     <TurnIn QuestName="Essence for the Engines" QuestId="10224" TurnInName="Chief Engineer Trep" TurnInId="19709" />
     <If Condition="((!HasQuest(10226)) &amp;&amp; (!IsQuestCompleted(10226)))">
       <PickUp QuestName="Elemental Power Extraction" QuestId="10226" GiverName="Chief Engineer Trep" GiverId="19709" />
     </If>
-    <Objective QuestName="Manaforge B'naar" QuestId="10189" Type="KillMob" MobId="19635" KillCount="1" />
     <Objective QuestName="Manaforge B'naar" QuestId="10189" Type="CollectItem" ItemId="28376" CollectCount="1" />
     <Objective QuestName="Distraction at Manaforge B'naar" QuestId="10241" Type="KillMob" MobId="18855" KillCount="8" />
     <Objective QuestName="Distraction at Manaforge B'naar" QuestId="10241" Type="KillMob" MobId="18853" KillCount="8" />
@@ -899,15 +636,12 @@
     <If Condition="((!HasQuest(10265)) &amp;&amp; (!IsQuestCompleted(10265)))">
       <PickUp QuestName="Consortium Crystal Collection" QuestId="10265" GiverName="Nether-Stalker Khay'ji" GiverId="19880" />
     </If>
-    <Objective QuestName="Consortium Crystal Collection" QuestId="10265" Type="KillMob" MobId="20215" KillCount="1" />
     <Objective QuestName="Consortium Crystal Collection" QuestId="10265" Type="CollectItem" ItemId="28829" CollectCount="1" />
     <While Condition="((HasQuest(10173)) &amp;&amp; (!IsQuestCompleted(10173)))">
       <CustomBehavior File="UseItemOn" QuestId="10173" MobId="0" ItemId="29207" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="The Archmage's Staff" QuestId="10173" Type="KillMob" MobId="19493" KillCount="1" />
     <Objective QuestName="The Archmage's Staff" QuestId="10173" Type="CollectItem" ItemId="28292" CollectCount="1" />
-    <Objective QuestName="That Little Extra Kick" QuestId="10199" Type="KillMob" MobId="18880" KillCount="1" />
     <Objective QuestName="That Little Extra Kick" QuestId="10199" Type="CollectItem" ItemId="28417" CollectCount="5" />
     <TurnIn QuestName="Invaluable Asset Zapping" QuestId="10203" TurnInName="Lead Sapper Blastfizzle" TurnInId="19634" />
     <If Condition="((!HasQuest(10221)) &amp;&amp; (!IsQuestCompleted(10221)))">
@@ -938,7 +672,6 @@
     <If Condition="((!HasQuest(10174)) &amp;&amp; (!IsQuestCompleted(10174)))">
       <PickUp QuestName="Curse of the Violet Tower" QuestId="10174" GiverName="Ravandwyr" GiverId="19217" />
     </If>
-    <Objective QuestName="Bloodgem Crystals" QuestId="10204" Type="KillMob" MobId="18855" KillCount="1" />
     <Objective QuestName="Bloodgem Crystals" QuestId="10204" Type="CollectItem" ItemId="28452" CollectCount="1" />
     <While Condition="((HasQuest(10204)) &amp;&amp; (!IsQuestCompleted(10204)))">
       <CustomBehavior File="UseItemOn" QuestId="10204" MobId="0" ItemId="28452" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -994,7 +727,6 @@
     <If Condition="((!HasQuest(10333)) &amp;&amp; (!IsQuestCompleted(10333)))">
       <PickUp QuestName="Help Mama Wheeler" QuestId="10333" GiverName="Papa Wheeler" GiverId="19645" />
     </If>
-    <Objective QuestName="Shutting Down Manaforge B'naar" QuestId="10299" Type="KillMob" MobId="20416" KillCount="1" />
     <Objective QuestName="Shutting Down Manaforge B'naar" QuestId="10299" Type="CollectItem" ItemId="29366" CollectCount="1" />
     <Objective QuestName="Shutting Down Manaforge B'naar" QuestId="10329" Type="CollectItem" ItemId="29366" CollectCount="1" />
     <Objective QuestName="Warp-Raider Nesaad" QuestId="10205" Type="KillMob" MobId="19641" KillCount="1" />
@@ -1021,11 +753,8 @@
     <If Condition="((!HasQuest(10197)) &amp;&amp; (!IsQuestCompleted(10197)))">
       <PickUp QuestName="A Convincing Disguise" QuestId="10197" GiverName="Caledis Brightdawn" GiverId="19840" />
     </If>
-    <Objective QuestName="A Convincing Disguise" QuestId="10197" Type="KillMob" MobId="20134" KillCount="1" />
     <Objective QuestName="A Convincing Disguise" QuestId="10197" Type="CollectItem" ItemId="28635" CollectCount="1" />
-    <Objective QuestName="A Convincing Disguise" QuestId="10197" Type="KillMob" MobId="20136" KillCount="1" />
     <Objective QuestName="A Convincing Disguise" QuestId="10197" Type="CollectItem" ItemId="28636" CollectCount="1" />
-    <Objective QuestName="A Convincing Disguise" QuestId="10197" Type="KillMob" MobId="18850" KillCount="1" />
     <Objective QuestName="A Convincing Disguise" QuestId="10197" Type="CollectItem" ItemId="28637" CollectCount="1" />
     <TurnIn QuestName="A Convincing Disguise" QuestId="10197" TurnInName="Caledis Brightdawn" TurnInId="19840" />
     <If Condition="((!HasQuest(10198)) &amp;&amp; (!IsQuestCompleted(10198)))">
@@ -1040,7 +769,6 @@
       <PickUp QuestName="Shutting Down Manaforge Coruu" QuestId="10330" GiverName="Caledis Brightdawn" GiverId="19840" />
     </If>
     <Objective QuestName="Attack on Manaforge Coruu" QuestId="10246" Type="KillMob" MobId="20134" KillCount="8" />
-    <Objective QuestName="Shutting Down Manaforge Coruu" QuestId="10330" Type="KillMob" MobId="20397" KillCount="1" />
     <Objective QuestName="Shutting Down Manaforge Coruu" QuestId="10330" Type="CollectItem" ItemId="29396" CollectCount="1" />
     <Objective QuestName="Shutting Down Manaforge Coruu" QuestId="10321" Type="CollectItem" ItemId="29396" CollectCount="1" />
     <Objective QuestName="Attack on Manaforge Coruu" QuestId="10246" Type="KillMob" MobId="20136" KillCount="5" />
@@ -1068,14 +796,12 @@
     <If Condition="((!HasQuest(10343)) &amp;&amp; (!IsQuestCompleted(10343)))">
       <PickUp QuestName="The Unending Invasion" QuestId="10343" GiverName="Lieutenant-Sorcerer Morran" GiverId="19489" />
     </If>
-    <Objective QuestName="The Unending Invasion" QuestId="10343" Type="KillMob" MobId="19546" KillCount="1" />
     <Objective QuestName="The Unending Invasion" QuestId="10343" Type="CollectItem" ItemId="29234" CollectCount="1" />
     <While Condition="((HasQuest(10343)) &amp;&amp; (!IsQuestCompleted(10343)))">
       <CustomBehavior File="UseItemOn" QuestId="10343" MobId="0" ItemId="29234" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Abjurist Belmara" QuestId="10305" GiverName="Lieutenant-Sorcerer Morran" GiverId="19489" />
-    <Objective QuestName="Abjurist Belmara" QuestId="10305" Type="KillMob" MobId="19543" KillCount="1" />
     <Objective QuestName="Abjurist Belmara" QuestId="10305" Type="CollectItem" ItemId="29233" CollectCount="1" />
     <While Condition="((HasQuest(10305)) &amp;&amp; (!IsQuestCompleted(10305)))">
       <RunTo X="2239.45" Y="2389.64" Z="112.748" />
@@ -1083,7 +809,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Battle-Mage Dathric" QuestId="10182" GiverName="Lieutenant-Sorcerer Morran" GiverId="19489" />
-    <Objective QuestName="Battle-Mage Dathric" QuestId="10182" Type="KillMob" MobId="19545" KillCount="1" />
     <Objective QuestName="Battle-Mage Dathric" QuestId="10182" Type="CollectItem" ItemId="29236" CollectCount="1" />
     <While Condition="((HasQuest(10182)) &amp;&amp; (!IsQuestCompleted(10182)))">
       <RunTo X="2228.32" Y="2312.22" Z="89.3019" />
@@ -1091,9 +816,7 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Cohlien Frostweaver" QuestId="10307" GiverName="Lieutenant-Sorcerer Morran" GiverId="19489" />
-    <Objective QuestName="Indispensable Tools" QuestId="10331" Type="KillMob" MobId="20409" KillCount="1" />
     <Objective QuestName="Indispensable Tools" QuestId="10331" Type="CollectItem" ItemId="29365" CollectCount="1" />
-    <Objective QuestName="Cohlien Frostweaver" QuestId="10307" Type="KillMob" MobId="19544" KillCount="1" />
     <Objective QuestName="Cohlien Frostweaver" QuestId="10307" Type="CollectItem" ItemId="29235" CollectCount="1" />
     <While Condition="((HasQuest(10307)) &amp;&amp; (!IsQuestCompleted(10307)))">
       <RunTo X="2202.37" Y="2412.08" Z="109.269" />
@@ -1141,6 +864,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 69 - Mageslayer</Name>
+          <Factions>16</Factions>
           <TargetMinLevel>68</TargetMinLevel>
           <TargetMaxLevel>69</TargetMaxLevel>
           <Hotspots>
@@ -1159,7 +883,6 @@
     <If Condition="((!HasQuest(10239)) &amp;&amp; (!IsQuestCompleted(10239)))">
       <PickUp QuestName="Potential Energy Source" QuestId="10239" GiverName="Lieutenant-Sorcerer Morran" GiverId="19489" />
     </If>
-    <Objective QuestName="The Annals of Kirin'Var" QuestId="10312" Type="KillMob" MobId="19543" KillCount="1" />
     <Objective QuestName="The Annals of Kirin'Var" QuestId="10312" Type="CollectItem" ItemId="29331" CollectCount="1" />
     <Objective QuestName="Master Smith Rhonsus" QuestId="10332" Type="KillMob" MobId="20410" KillCount="1" />
     <TurnIn QuestName="Master Smith Rhonsus" QuestId="10332" TurnInName="Apprentice Andrethan" TurnInId="20463" />
@@ -1178,7 +901,6 @@
     </If>
     <Objective QuestName="Capturing the Phylactery" QuestId="10319" Type="CollectItem" ItemId="29361" CollectCount="1" />
     <TurnIn QuestName="Capturing the Phylactery" QuestId="10319" TurnInName="Custodian Dieworth" TurnInId="19488" />
-    <Objective QuestName="The Sigil of Krasus" QuestId="10188" Type="KillMob" MobId="19593" KillCount="1" />
     <Objective QuestName="The Sigil of Krasus" QuestId="10188" Type="CollectItem" ItemId="28368" CollectCount="1" />
     <Objective QuestName="Potential Energy Source" QuestId="10239" Type="CollectItem" ItemId="28564" CollectCount="10" />
     <CustomBehavior File="UseItemOn" ItemId="28455" MobId="0" NumOfTimes="1" CollectionDistance="100" />
@@ -1221,16 +943,13 @@
       <CustomBehavior File="UseItemOn" QuestId="10240" MobId="19866" ItemId="28725" NumOfTimes="100" Range="5" CollectionDistance="1000" X="2283.87" Y="2181.22" Z="92.4891" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Unlocking the Compendium" QuestId="10301" Type="KillMob" MobId="19926" KillCount="1" />
     <Objective QuestName="Unlocking the Compendium" QuestId="10301" Type="CollectItem" ItemId="28475" CollectCount="1" />
-    <Objective QuestName="Torching Sunfury Hold" QuestId="10233" Type="KillMob" MobId="20221" KillCount="1" />
     <Objective QuestName="Torching Sunfury Hold" QuestId="10233" Type="CollectItem" ItemId="28550" CollectCount="1" />
     <While Condition="((HasQuest(10233)) &amp;&amp; (!IsQuestCompleted(10233)))">
       <RunTo X="2531.37" Y="2391.8" Z="131.745" />
       <CustomBehavior File="UseItemOn" QuestId="10233" MobId="19723" ItemId="28550" NumOfTimes="100" Range="5" CollectionDistance="1000" X="2531.37" Y="2391.8" Z="131.745" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Torching Sunfury Hold" QuestId="10233" Type="KillMob" MobId="20221" KillCount="1" />
     <Objective QuestName="Torching Sunfury Hold" QuestId="10233" Type="CollectItem" ItemId="28550" CollectCount="1" />
     <While Condition="((HasQuest(10233)) &amp;&amp; (!IsQuestCompleted(10233)))">
       <RunTo X="2531.37" Y="2391.8" Z="131.745" />
@@ -1254,7 +973,6 @@
     <TurnIn QuestName="Building a Perimeter" QuestId="10240" TurnInName="Lieutenant-Sorcerer Morran" TurnInId="19489" />
     <TurnIn QuestName="Torching Sunfury Hold" QuestId="10233" TurnInName="Lieutenant-Sorcerer Morran" TurnInId="19489" />
     <Objective QuestName="Down With Daellis" QuestId="10223" Type="KillMob" MobId="19705" KillCount="1" />
-    <Objective QuestName="Summoner Kanthin's Prize" QuestId="10209" Type="KillMob" MobId="19657" KillCount="1" />
     <Objective QuestName="Summoner Kanthin's Prize" QuestId="10209" Type="CollectItem" ItemId="28479" CollectCount="1" />
     <While Condition="((HasQuest(10223)) &amp;&amp; (!IsQuestCompleted(10223)))">
       <RunTo X="2988.31" Y="2357.27" Z="155.24" />
@@ -1270,7 +988,6 @@
       <CustomBehavior File="UseItemOn" QuestId="10924" MobId="0" ItemId="31815" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Bloody Imp-ossible!" QuestId="10924" Type="KillMob" MobId="18884" KillCount="1" />
     <Objective QuestName="Bloody Imp-ossible!" QuestId="10924" Type="CollectItem" ItemId="31813" CollectCount="8" />
     <TurnIn QuestName="Bloody Imp-ossible!" QuestId="10924" TurnInName="Sab'aoth" TurnInId="22479" />
     <TurnIn QuestName="Down With Daellis" QuestId="10223" TurnInName="Custodian Dieworth" TurnInId="19488" />
@@ -1305,7 +1022,6 @@
     <PickUp QuestName="Keeping Up Appearances" QuestId="10433" GiverName="Shauly Pore" GiverId="20921" />
     <Objective QuestName="Run a Diagnostic!" QuestId="10417" Type="CollectItem" ItemId="29741" CollectCount="1" />
     <Objective QuestName="New Opportunities" QuestId="10348" Type="CollectItem" ItemId="29474" CollectCount="15" />
-    <Objective QuestName="Keeping Up Appearances" QuestId="10433" Type="KillMob" MobId="20671" KillCount="1" />
     <Objective QuestName="Keeping Up Appearances" QuestId="10433" Type="CollectItem" ItemId="29801" CollectCount="10" />
     <TurnIn QuestName="Keeping Up Appearances" QuestId="10433" TurnInName="Shauly Pore" TurnInId="20921" />
     <If Condition="((!HasQuest(10434)) &amp;&amp; (!IsQuestCompleted(10434)))">
@@ -1328,17 +1044,14 @@
     <If Condition="((!HasQuest(10423)) &amp;&amp; (!IsQuestCompleted(10423)))">
       <PickUp QuestName="To the Stormspire" QuestId="10423" GiverName="Mehrdad" GiverId="20810" />
     </If>
-    <Objective QuestName="Declawing Doomclaw" QuestId="10235" Type="KillMob" MobId="19738" KillCount="1" />
     <Objective QuestName="Declawing Doomclaw" QuestId="10235" Type="CollectItem" ItemId="28563" CollectCount="1" />
     <TurnIn QuestName="Drijya Needs Your Help" QuestId="10311" TurnInName="Drijya" TurnInId="20281" />
-    <Objective QuestName="Sunfury Briefings" QuestId="10328" Type="KillMob" MobId="20139" KillCount="1" />
     <Objective QuestName="Sunfury Briefings" QuestId="10328" Type="CollectItem" ItemId="29546" CollectCount="1" />
     <Objective QuestName="Sunfury Briefings" QuestId="10328" Type="CollectItem" ItemId="29545" CollectCount="1" />
     <Objective QuestName="Kick Them While They're Down" QuestId="10341" Type="KillMob" MobId="20139" KillCount="8" />
     <Objective QuestName="Kick Them While They're Down" QuestId="10341" Type="KillMob" MobId="20207" KillCount="6" />
     <Objective QuestName="Kick Them While They're Down" QuestId="10341" Type="KillMob" MobId="20140" KillCount="4" />
     <Objective QuestName="Rightful Repossession" QuestId="10267" Type="CollectItem" ItemId="28913" CollectCount="10" />
-    <Objective QuestName="Shutting Down Manaforge Duro" QuestId="10322" Type="KillMob" MobId="20435" KillCount="1" />
     <Objective QuestName="Shutting Down Manaforge Duro" QuestId="10322" Type="CollectItem" ItemId="29397" CollectCount="1" />
     <Objective QuestName="Shutting Down Manaforge Duro" QuestId="10338" Type="CollectItem" ItemId="29397" CollectCount="1" />
     <TurnIn QuestName="Rightful Repossession" QuestId="10267" TurnInName="Gahruj" TurnInId="20066" />
@@ -1401,7 +1114,6 @@
     <If Condition="((!HasQuest(10429)) &amp;&amp; (!IsQuestCompleted(10429)))">
       <PickUp QuestName="When Nature Goes Too Far" QuestId="10429" GiverName="Aurine Moonblaze" GiverId="20871" />
     </If>
-    <Objective QuestName="When Nature Goes Too Far" QuestId="10429" Type="KillMob" MobId="20775" KillCount="1" />
     <Objective QuestName="When Nature Goes Too Far" QuestId="10429" Type="CollectItem" ItemId="29768" CollectCount="1" />
     <While Condition="((HasQuest(10424)) &amp;&amp; (!IsQuestCompleted(10424)))">
       <CustomBehavior File="UseItemOn" QuestId="10424" MobId="0" ItemId="29803" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -1425,7 +1137,6 @@
     </While>
     <Objective QuestName="The Minions of Culuthas" QuestId="10336" Type="KillMob" MobId="20141" KillCount="10" />
     <Objective QuestName="The Minions of Culuthas" QuestId="10336" Type="KillMob" MobId="20394" KillCount="5" />
-    <Objective QuestName="Fel Reavers, No Thanks!" QuestId="10855" Type="KillMob" MobId="16949" KillCount="1" />
     <Objective QuestName="Fel Reavers, No Thanks!" QuestId="10855" Type="CollectItem" ItemId="31653" CollectCount="5" />
     <TurnIn QuestName="Outside Assistance" QuestId="10431" TurnInName="Kaylaan" TurnInId="20780" />
     <If Condition="((!HasQuest(10380)) &amp;&amp; (!IsQuestCompleted(10380)))">
@@ -1508,7 +1219,6 @@
       <CustomBehavior File="UseItemOn" QuestId="10411" MobId="20806" ItemId="29737" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Captain Tyralius" QuestId="10422" Type="KillMob" MobId="20770" KillCount="1" />
     <Objective QuestName="Captain Tyralius" QuestId="10422" Type="CollectItem" ItemId="29742" CollectCount="1" />
     <Objective QuestName="Electro-Shock Goodness!" QuestId="10411" Type="KillMob" MobId="20778" KillCount="1" />
     <Objective QuestName="Electro-Shock Goodness!" QuestId="10411" Type="KillMob" MobId="20805" KillCount="30" />
@@ -1565,7 +1275,6 @@
       <CustomBehavior File="UseItemOn" QuestId="10385" MobId="0" ItemId="29482" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Potential for Brain Damage = High" QuestId="10385" Type="KillMob" MobId="20619" KillCount="1" />
     <Objective QuestName="Potential for Brain Damage = High" QuestId="10385" Type="CollectItem" ItemId="29459" CollectCount="15" />
     <TurnIn QuestName="Potential for Brain Damage = High" QuestId="10385" TurnInName="Image of Commander Ameer" TurnInId="20482" />
     <If Condition="((!HasQuest(10405)) &amp;&amp; (!IsQuestCompleted(10405)))">

@@ -32,17 +32,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="459" Name="The Woodland Protector">
-    <Objective Type="KillMob" MobId="1988" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10302.1" Y="687.717" Z="1332.3" />
-        <Hotspot X="10298.9" Y="967.463" Z="1336.62" />
-        <Hotspot X="10276.7" Y="954.903" Z="1339.5" />
-        <Hotspot X="10254.9" Y="978.265" Z="1342.44" />
-        <Hotspot X="10291.7" Y="956.861" Z="1335.65" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="457" Name="The Balance of Nature">
     <Objective Type="KillMob" MobId="2032" KillCount="7">
       <Hotspots>
@@ -63,17 +52,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="916" Name="Webwood Venom">
-    <Objective Type="KillMob" MobId="1986" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10901.5" Y="877.607" Z="1330.02" />
-        <Hotspot X="10948.4" Y="894.388" Z="1337.57" />
-        <Hotspot X="10946.9" Y="868.31" Z="1333.54" />
-        <Hotspot X="10934.6" Y="866.205" Z="1332.33" />
-        <Hotspot X="10906.0" Y="861.33" Z="1328.92" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="3521" Name="Iverron's Antidote">
     <Objective Type="CollectItem" ItemId="10641" CollectCount="4">
       <CollectFrom>
@@ -87,15 +65,6 @@
         <Hotspot X="10534.3" Y="863.33" Z="1308.24" />
         <Hotspot X="10535.9" Y="827.38" Z="1310.91" />
         <Hotspot X="10536.5" Y="922.48" Z="1311.03" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1986" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10901.5" Y="877.607" Z="1330.02" />
-        <Hotspot X="10948.4" Y="894.388" Z="1337.57" />
-        <Hotspot X="10946.9" Y="868.31" Z="1333.54" />
-        <Hotspot X="10934.6" Y="866.205" Z="1332.33" />
-        <Hotspot X="10906.0" Y="861.33" Z="1328.92" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -130,17 +99,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="918" Name="Timberling Seeds">
-    <Objective Type="KillMob" MobId="2022" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9382.47" Y="758.676" Z="1262.06" />
-        <Hotspot X="9411.32" Y="724.176" Z="1263.95" />
-        <Hotspot X="9455.64" Y="755.347" Z="1254.25" />
-        <Hotspot X="9380.54" Y="782.67" Z="1260.62" />
-        <Hotspot X="9477.83" Y="681.632" Z="1265.52" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="2438" Name="The Emerald Dreamcatcher">
     <Objective Type="CollectItem" ItemId="8048" CollectCount="1">
       <CollectFrom>
@@ -148,62 +106,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="9806.74" Y="351.42" Z="1308.46" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="488" Name="Zenn's Bidding">
-    <Objective Type="KillMob" MobId="1995" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9918.49" Y="1164.47" Z="1307.98" />
-        <Hotspot X="10084.5" Y="517.87" Z="1324.69" />
-        <Hotspot X="9713.66" Y="316.285" Z="1327.44" />
-        <Hotspot X="9816.36" Y="1091.89" Z="1300.36" />
-        <Hotspot X="9986.1" Y="545.511" Z="1311.73" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2042" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10092.1" Y="390.417" Z="1323.74" />
-        <Hotspot X="10094.4" Y="443.66" Z="1323.86" />
-        <Hotspot X="10016.9" Y="474.638" Z="1314.19" />
-        <Hotspot X="10051.5" Y="1282.34" Z="1316.41" />
-        <Hotspot X="9951.93" Y="313.512" Z="1318.31" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1998" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9656.88" Y="350.249" Z="1327.9" />
-        <Hotspot X="9725.78" Y="391.919" Z="1318.19" />
-        <Hotspot X="9783.13" Y="275.199" Z="1325.54" />
-        <Hotspot X="10246.1" Y="1479.45" Z="1332.79" />
-        <Hotspot X="9891.67" Y="275.0" Z="1324.68" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="4161" Name="Recipe of the Kaldorei">
-    <Objective Type="KillMob" MobId="1998" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9656.88" Y="350.249" Z="1327.9" />
-        <Hotspot X="9725.78" Y="391.919" Z="1318.19" />
-        <Hotspot X="9783.13" Y="275.199" Z="1325.54" />
-        <Hotspot X="10246.1" Y="1479.45" Z="1332.79" />
-        <Hotspot X="9891.67" Y="275.0" Z="1324.68" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="2459" Name="Ferocitas the Dream Eater">
-    <Objective Type="KillMob" MobId="7234" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10018.8" Y="282.413" Z="1323.02" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="7235" KillCount="7">
-      <Hotspots>
-        <Hotspot X="10056.3" Y="319.792" Z="1324.65" />
-        <Hotspot X="10060.4" Y="322.225" Z="1324.9" />
-        <Hotspot X="10036.2" Y="264.494" Z="1325.5" />
-        <Hotspot X="9953.66" Y="269.711" Z="1325.99" />
-        <Hotspot X="10025.3" Y="282.875" Z="1323.11" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -223,13 +125,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="932" Name="Twisted Hatred">
-    <Objective Type="KillMob" MobId="2038" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10107.1" Y="1206.24" Z="1311.55" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="487" Name="The Road to Darnassus">
     <Objective Type="KillMob" MobId="2152" KillCount="6">
       <Hotspots>
@@ -238,21 +133,6 @@
         <Hotspot X="10050.8" Y="1477.49" Z="1279.57" />
         <Hotspot X="9980.94" Y="1479.4" Z="1294.87" />
         <Hotspot X="10023.9" Y="1377.58" Z="1281.01" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="2518" Name="Tears of the Moon">
-    <Objective Type="KillMob" MobId="7319" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10979.6" Y="1366.13" Z="1328.87" />
-        <Hotspot X="10980.0" Y="1731.3" Z="1303.1" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1683" Name="Vorlus Vilehoof">
-    <Objective Type="KillMob" MobId="6128" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9672.7" Y="1408.81" Z="1402.76" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -312,7 +192,6 @@
     <If Condition="((!HasQuest(459)) &amp;&amp; (!IsQuestCompleted(459)))">
       <PickUp QuestName="The Woodland Protector" QuestId="459" GiverName="Tarindrella" GiverId="1992" />
     </If>
-    <Objective QuestName="The Woodland Protector" QuestId="459" Type="KillMob" MobId="1988" KillCount="1" />
     <Objective QuestName="The Woodland Protector" QuestId="459" Type="CollectItem" ItemId="3297" CollectCount="8" />
     <PickUp QuestName="Webwood Venom" QuestId="916" GiverName="Gilshalan Windwalker" GiverId="2082" />
     <Objective QuestName="The Balance of Nature" QuestId="457" Type="KillMob" MobId="2032" KillCount="7" />
@@ -321,7 +200,6 @@
     <If Condition="((!HasQuest(3519)) &amp;&amp; (!IsQuestCompleted(3519)))">
       <PickUp QuestName="A Friend in Need" QuestId="3519" GiverName="Iverron" GiverId="8584" />
     </If>
-    <Objective QuestName="Webwood Venom" QuestId="916" Type="KillMob" MobId="1986" KillCount="1" />
     <Objective QuestName="Webwood Venom" QuestId="916" Type="CollectItem" ItemId="5166" CollectCount="10" />
     <TurnIn QuestName="Webwood Venom" QuestId="916" TurnInName="Gilshalan Windwalker" TurnInId="2082" />
     <If Condition="((!HasQuest(917)) &amp;&amp; (!IsQuestCompleted(917)))">
@@ -336,7 +214,6 @@
     <Objective QuestName="Iverron's Antidote" QuestId="3521" Type="CollectItem" ItemId="10639" CollectCount="7" />
     <Objective QuestName="Iverron's Antidote" QuestId="3521" Type="CollectItem" ItemId="10641" CollectCount="4" />
     <Objective QuestName="Webwood Egg" QuestId="917" Type="CollectItem" ItemId="5167" CollectCount="1" />
-    <Objective QuestName="Iverron's Antidote" QuestId="3521" Type="KillMob" MobId="1986" KillCount="1" />
     <Objective QuestName="Iverron's Antidote" QuestId="3521" Type="CollectItem" ItemId="10640" CollectCount="1" />
     <TurnIn QuestName="Webwood Egg" QuestId="917" TurnInName="Gilshalan Windwalker" TurnInId="2082" />
     <If Condition="((!HasQuest(920)) &amp;&amp; (!IsQuestCompleted(920)))">
@@ -388,7 +265,6 @@
     </If>
     <PickUp QuestName="Timberling Sprouts" QuestId="919" GiverName="Denalan" GiverId="2080" />
     <Objective QuestName="Timberling Sprouts" QuestId="919" Type="CollectItem" ItemId="5169" CollectCount="12" />
-    <Objective QuestName="Timberling Seeds" QuestId="918" Type="KillMob" MobId="2022" KillCount="1" />
     <Objective QuestName="Timberling Seeds" QuestId="918" Type="CollectItem" ItemId="5168" CollectCount="8" />
     <TurnIn QuestName="Timberling Seeds" QuestId="918" TurnInName="Denalan" TurnInId="2080" />
     <If Condition="((!HasQuest(922)) &amp;&amp; (!IsQuestCompleted(922)))">
@@ -408,13 +284,9 @@
       <PickUp QuestName="Gnarlpine Corruption" QuestId="476" GiverName="Gaerolas Talvethren" GiverId="2107" />
     </If>
     <Objective QuestName="The Emerald Dreamcatcher" QuestId="2438" Type="CollectItem" ItemId="8048" CollectCount="1" />
-    <Objective QuestName="Zenn's Bidding" QuestId="488" Type="KillMob" MobId="1995" KillCount="1" />
     <Objective QuestName="Zenn's Bidding" QuestId="488" Type="CollectItem" ItemId="3411" CollectCount="3" />
-    <Objective QuestName="Zenn's Bidding" QuestId="488" Type="KillMob" MobId="2042" KillCount="1" />
     <Objective QuestName="Zenn's Bidding" QuestId="488" Type="CollectItem" ItemId="3409" CollectCount="3" />
-    <Objective QuestName="Zenn's Bidding" QuestId="488" Type="KillMob" MobId="1998" KillCount="1" />
     <Objective QuestName="Zenn's Bidding" QuestId="488" Type="CollectItem" ItemId="3412" CollectCount="3" />
-    <Objective QuestName="Recipe of the Kaldorei" QuestId="4161" Type="KillMob" MobId="1998" KillCount="1" />
     <Objective QuestName="Recipe of the Kaldorei" QuestId="4161" Type="CollectItem" ItemId="5465" CollectCount="7" />
     <TurnIn QuestName="Zenn's Bidding" QuestId="488" TurnInName="Zenn Foulhoof" TurnInId="2150" />
     <If Condition="((!HasQuest(489)) &amp;&amp; (!IsQuestCompleted(489)))">
@@ -433,7 +305,6 @@
       <PickUp QuestName="Recipe of the Kaldorei" QuestId="4161" GiverName="Zarrin" GiverId="6286" />
     </If>
     <TurnIn QuestName="Recipe of the Kaldorei" QuestId="4161" TurnInName="Zarrin" TurnInId="6286" />
-    <Objective QuestName="Ferocitas the Dream Eater" QuestId="2459" Type="KillMob" MobId="7234" KillCount="1" />
     <Objective QuestName="Ferocitas the Dream Eater" QuestId="2459" Type="CollectItem" ItemId="8049" CollectCount="1" />
     <While Condition="((HasQuest(2459)) &amp;&amp; (!IsQuestCompleted(2459)))">
       <RunTo X="10056.3" Y="319.792" Z="1324.65" />
@@ -441,10 +312,8 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="Ferocitas the Dream Eater" QuestId="2459" Type="CollectItem" ItemId="8050" CollectCount="1" />
-    <Objective QuestName="Ferocitas the Dream Eater" QuestId="2459" Type="KillMob" MobId="7235" KillCount="7" />
     <Objective QuestName="Seek Redemption!" QuestId="489" Type="CollectItem" ItemId="3418" CollectCount="1" />
     <TurnIn QuestName="Seek Redemption!" QuestId="489" TurnInName="Zenn Foulhoof" TurnInId="2150" />
-    <Objective QuestName="Twisted Hatred" QuestId="932" Type="KillMob" MobId="2038" KillCount="1" />
     <Objective QuestName="Twisted Hatred" QuestId="932" Type="CollectItem" ItemId="5221" CollectCount="1" />
     <TurnIn QuestName="Twisted Hatred" QuestId="932" TurnInName="Tallonkai Swiftroot" TurnInId="3567" />
     <TurnIn QuestName="Ferocitas the Dream Eater" QuestId="2459" TurnInName="Tallonkai Swiftroot" TurnInId="3567" />
@@ -553,7 +422,6 @@
       </If>
     </If>
     <Objective QuestName="Tumors" QuestId="923" Type="CollectItem" ItemId="5170" CollectCount="5" />
-    <Objective QuestName="Tears of the Moon" QuestId="2518" Type="KillMob" MobId="7319" KillCount="1" />
     <Objective QuestName="Tears of the Moon" QuestId="2518" Type="CollectItem" ItemId="8344" CollectCount="1" />
     <If Condition="(Me.Class == WoWClass.Rogue)">
       <Objective QuestName="Destiny Calls" QuestId="2242" Type="CollectItem" ItemId="7737" CollectCount="1" />
@@ -569,7 +437,6 @@
       <If Condition="((!HasQuest(1683)) &amp;&amp; (!IsQuestCompleted(1683)))">
         <PickUp QuestName="Vorlus Vilehoof" QuestId="1683" GiverName="Elanaria" GiverId="4088" />
       </If>
-      <Objective QuestName="Vorlus Vilehoof" QuestId="1683" Type="KillMob" MobId="6128" KillCount="1" />
       <Objective QuestName="Vorlus Vilehoof" QuestId="1683" Type="CollectItem" ItemId="6805" CollectCount="1" />
       <TurnIn QuestName="Vorlus Vilehoof" QuestId="1683" TurnInName="Elanaria" TurnInId="4088" />
     </If>

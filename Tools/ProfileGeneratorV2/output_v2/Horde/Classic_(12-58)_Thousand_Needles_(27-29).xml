@@ -47,13 +47,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="5147" Name="Wanted - Arnak Grimtotem">
-    <Objective Type="KillMob" MobId="10896" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4754.08" Y="-2108.98" Z="83.3409" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="4767" Name="Wind Rider">
     <Objective Type="CollectItem" ItemId="12356" CollectCount="10">
       <CollectFrom>
@@ -67,20 +60,6 @@
         <Hotspot X="-5046.78" Y="-899.41" Z="-3.27" />
         <Hotspot X="-5026.37" Y="-969.51" Z="-5.53" />
         <Hotspot X="-4979.82" Y="-922.37" Z="-5.07" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1131" Name="Steelsnap">
-    <Objective Type="KillMob" MobId="4548" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4547.17" Y="-1216.3" Z="-56.1795" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="4881" Name="Assassination Plot">
-    <Objective Type="KillMob" MobId="10617" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5128.15" Y="-2080.7" Z="-37.4284" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -108,13 +87,14 @@
     <If Condition="Me.Level &lt; 28">
       <SetGrindArea>
         <GrindArea>
-          <Name>Grind to Level 28</Name>
+          <Name>Grind to Level 28 - Arikara</Name>
+          <Factions>14</Factions>
           <Hotspots>
             <Hotspot X="33.59" Y="36.84" Z="0.00" />
           </Hotspots>
         </GrindArea>
       </SetGrindArea>
-      <GrindTo Level="28" />
+      <GrindTo Level="28" /> <!--  (grind Arikara) -->
     </If>
     <Objective QuestName="Sacred Fire" QuestId="5062" Type="CollectItem" ItemId="12732" CollectCount="10" />
     <TurnIn QuestName="Sacred Fire" QuestId="5062" TurnInName="Magatha Grimtotem" TurnInId="4046" />
@@ -123,19 +103,14 @@
     </If>
     <TurnIn QuestName="Grimtotem Spying" QuestId="5064" TurnInName="Cliffwatcher Longhorn" TurnInId="10537" />
     <CustomBehavior File="SetHearthstone" MobId="7731" AreaId="406" X="893.652" Y="927.947" Z="106.364" /> <!-- Set hearth: Freewind Post -->
-    <Objective QuestName="Arikara" QuestId="5088" Type="KillMob" MobId="10882" KillCount="1" />
     <Objective QuestName="Arikara" QuestId="5088" Type="CollectItem" ItemId="12925" CollectCount="1" />
-    <Objective QuestName="Wanted - Arnak Grimtotem" QuestId="5147" Type="KillMob" MobId="10896" KillCount="1" />
     <Objective QuestName="Wanted - Arnak Grimtotem" QuestId="5147" Type="CollectItem" ItemId="12884" CollectCount="1" />
     <PickUp QuestName="Free at Last" QuestId="4904" GiverName="Lakota Windsong" GiverId="10646" />
     <TurnIn QuestName="Arikara" QuestId="5088" TurnInName="Motega Firemane" TurnInId="10428" />
     <Objective QuestName="Wind Rider" QuestId="4767" Type="CollectItem" ItemId="12356" CollectCount="10" />
     <PickUp QuestName="Homeward Bound" QuestId="4770" GiverName="Pao'ka Swiftmountain" GiverId="10427" />
-    <Objective QuestName="Steelsnap" QuestId="1131" Type="KillMob" MobId="4548" KillCount="1" />
     <Objective QuestName="Steelsnap" QuestId="1131" Type="CollectItem" ItemId="5837" CollectCount="1" />
-    <Objective QuestName="Assassination Plot" QuestId="4881" Type="KillMob" MobId="10617" KillCount="1" />
     <Objective QuestName="Assassination Plot" QuestId="4881" Type="CollectItem" ItemId="12564" CollectCount="1" />
-    <Objective QuestName="Assassination Plot" QuestId="4881" Type="KillMob" MobId="10617" KillCount="1" />
     <Objective QuestName="Assassination Plot" QuestId="4881" Type="CollectItem" ItemId="12564" CollectCount="1" />
     <While Condition="((HasQuest(4770)) &amp;&amp; (!IsQuestCompleted(4770)))">
       <CustomBehavior File="UseItemOn" QuestId="4770" MobId="0" ItemId="12564" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -152,6 +127,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 29 - Galak Messenger</Name>
+          <Factions>131</Factions>
           <TargetMinLevel>26</TargetMinLevel>
           <TargetMaxLevel>26</TargetMaxLevel>
           <Hotspots>

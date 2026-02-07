@@ -22,13 +22,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="5059" Name="Locked Away">
-    <Objective Type="KillMob" MobId="10816" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1952.71" Y="-1641.09" Z="62.5544" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="4984" Name="The Wildlife Suffers Too">
     <Objective Type="KillMob" MobId="1817" KillCount="8">
       <Hotspots>
@@ -163,7 +156,6 @@
     <If Condition="((!HasQuest(5229)) &amp;&amp; (!IsQuestCompleted(5229)))">
       <PickUp QuestName="Target: Felstone Field" QuestId="5229" GiverName="Shadow Priestess Vandis" GiverId="11055" />
     </If>
-    <Objective QuestName="Target: Felstone Field" QuestId="5229" Type="KillMob" MobId="11075" KillCount="1" />
     <Objective QuestName="Target: Felstone Field" QuestId="5229" Type="CollectItem" ItemId="13194" CollectCount="1" />
     <TurnIn QuestName="Target: Felstone Field" QuestId="5229" TurnInName="Object_176361" TurnInType="Object" TurnInId="176361" />
     <If Condition="((!HasQuest(5230)) &amp;&amp; (!IsQuestCompleted(5230)))">
@@ -193,21 +185,18 @@
       <CustomBehavior File="UseItemOn" QuestId="5098" MobId="10902" ItemId="12815" NumOfTimes="100" Range="5" CollectionDistance="1000" X="1314.08" Y="-1305.33" Z="63.7871" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Target: Dalson's Tears" QuestId="5231" Type="KillMob" MobId="11077" KillCount="1" />
     <Objective QuestName="Target: Dalson's Tears" QuestId="5231" Type="CollectItem" ItemId="13195" CollectCount="1" />
     <TurnIn QuestName="Target: Dalson's Tears" QuestId="5231" TurnInName="Object_177289" TurnInType="Object" TurnInId="177289" />
     <If Condition="((!HasQuest(5232)) &amp;&amp; (!IsQuestCompleted(5232)))">
       <PickUp QuestName="Return to the Bulwark" QuestId="5232" GiverName="Shadow Priestess Vandis" GiverId="11055" />
     </If>
     <PickUp QuestName="Mrs. Dalson's Diary" QuestId="5058" GiverName="Shadow Priestess Vandis" GiverId="11055" />
-    <Objective QuestName="Locked Away" QuestId="5059" Type="KillMob" MobId="10816" KillCount="1" />
     <While Condition="((HasQuest(5059)) &amp;&amp; (!IsQuestCompleted(5059)))">
       <CustomBehavior File="UseItemOn" QuestId="5059" MobId="0" ItemId="12738" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="Locked Away" QuestId="5059" Type="CollectItem" ItemId="12738" CollectCount="1" />
     <PickUp QuestName="Locked Away" QuestId="5059" GiverName="Shadow Priestess Vandis" GiverId="11055" />
-    <Objective QuestName="Locked Away" QuestId="5059" Type="KillMob" MobId="10836" KillCount="1" />
     <Objective QuestName="Locked Away" QuestId="5059" Type="CollectItem" ItemId="12739" CollectCount="1" />
     <PickUp QuestName="Locked Away" QuestId="5060" GiverName="Shadow Priestess Vandis" GiverId="11055" />
     <TurnIn QuestName="Return to the Bulwark" QuestId="5232" TurnInName="Shadow Priestess Vandis" TurnInId="11055" />
@@ -216,7 +205,6 @@
     </If>
     <TurnIn QuestName="All Along the Watchtowers" QuestId="5098" TurnInName="High Executor Derrington" TurnInId="10837" />
     <PickUp QuestName="The Wildlife Suffers Too" QuestId="4984" GiverName="Mulgris Deepriver" GiverId="10739" />
-    <Objective QuestName="Target: Writhing Haunt" QuestId="5233" Type="KillMob" MobId="11076" KillCount="1" />
     <Objective QuestName="Target: Writhing Haunt" QuestId="5233" Type="CollectItem" ItemId="13197" CollectCount="1" />
     <TurnIn QuestName="Target: Writhing Haunt" QuestId="5233" TurnInName="Object_176393" TurnInType="Object" TurnInId="176393" />
     <If Condition="((!HasQuest(5234)) &amp;&amp; (!IsQuestCompleted(5234)))">
@@ -233,7 +221,6 @@
     </If>
     <Objective QuestName="The Wildlife Suffers Too" QuestId="4985" Type="KillMob" MobId="1816" KillCount="8" />
     <TurnIn QuestName="The Wildlife Suffers Too" QuestId="4985" TurnInName="Mulgris Deepriver" TurnInId="10739" />
-    <Objective QuestName="Target: Gahrron's Withering" QuestId="5235" Type="KillMob" MobId="11078" KillCount="1" />
     <Objective QuestName="Target: Gahrron's Withering" QuestId="5235" Type="CollectItem" ItemId="13196" CollectCount="1" />
     <TurnIn QuestName="Target: Gahrron's Withering" QuestId="5235" TurnInName="Object_176392" TurnInType="Object" TurnInId="176392" />
     <If Condition="((!HasQuest(5236)) &amp;&amp; (!IsQuestCompleted(5236)))">

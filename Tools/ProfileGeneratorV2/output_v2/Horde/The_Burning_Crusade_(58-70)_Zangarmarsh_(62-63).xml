@@ -12,39 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="9773" Name="No More Mushrooms!">
-    <Objective Type="KillMob" MobId="18138" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-350.774" Y="5585.06" Z="5.2149" />
-        <Hotspot X="-829.622" Y="5859.4" Z="11.7228" />
-        <Hotspot X="-734.194" Y="5851.73" Z="-1.7757" />
-        <Hotspot X="-717.857" Y="5844.48" Z="-1.6265" />
-        <Hotspot X="-667.121" Y="5850.16" Z="1.2208" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9774" Name="Thick Hydra Scales">
-    <Objective Type="KillMob" MobId="18213" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-293.237" Y="5563.26" Z="16.027" />
-        <Hotspot X="-252.419" Y="5609.71" Z="8.4008" />
-        <Hotspot X="-353.891" Y="5556.5" Z="13.6287" />
-        <Hotspot X="-422.59" Y="5557.76" Z="17.0846" />
-        <Hotspot X="-865.159" Y="5845.99" Z="17.0545" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9769" Name="There's No Explanation for Fashion">
-    <Objective Type="KillMob" MobId="18132" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1051.94" Y="5487.25" Z="22.123" />
-        <Hotspot X="-613.256" Y="5316.39" Z="22.3878" />
-        <Hotspot X="-487.962" Y="5320.6" Z="22.3472" />
-        <Hotspot X="-458.056" Y="5393.09" Z="21.3669" />
-        <Hotspot X="-519.0" Y="5410.08" Z="22.1691" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9895" Name="The Dying Balance">
     <Objective Type="KillMob" MobId="18281" KillCount="1">
       <Hotspots>
@@ -104,27 +71,7 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9772" Name="Jyoba's Report">
-    <Objective Type="KillMob" MobId="18124" KillCount="1">
-      <Hotspots>
-        <Hotspot X="446.623" Y="5231.33" Z="11.5678" />
-        <Hotspot X="449.046" Y="5283.9" Z="-0.5964" />
-        <Hotspot X="483.446" Y="5288.27" Z="-2.2416" />
-        <Hotspot X="435.946" Y="5331.29" Z="-1.0759" />
-        <Hotspot X="360.964" Y="5356.56" Z="20.0851" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9743" Name="Natural Enemies">
-    <Objective Type="KillMob" MobId="19402" KillCount="1">
-      <Hotspots>
-        <Hotspot X="482.536" Y="5181.14" Z="16.1105" />
-        <Hotspot X="453.72" Y="5255.63" Z="3.4073" />
-        <Hotspot X="346.09" Y="5285.75" Z="21.1194" />
-        <Hotspot X="420.568" Y="5315.05" Z="0.571" />
-        <Hotspot X="401.715" Y="5463.36" Z="22.2281" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="24290" CollectCount="10">
       <CollectFrom>
         <GameObject Name="Mature Spore Sac" Id="182069" />
@@ -194,29 +141,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9898" Name="Nothin' Says Lovin' Like a Big Stinger">
-    <Objective Type="KillMob" MobId="18283" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-77.9395" Y="6973.97" Z="17.7574" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9841" Name="Stinging the Stingers">
-    <Objective Type="KillMob" MobId="18285" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-59.965" Y="7825.6" Z="23.7213" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="18133" KillCount="8">
-      <Hotspots>
-        <Hotspot X="-444.971" Y="8319.95" Z="15.3407" />
-        <Hotspot X="-415.841" Y="8270.38" Z="22.4821" />
-        <Hotspot X="-419.904" Y="8212.65" Z="20.5768" />
-        <Hotspot X="1087.78" Y="7592.01" Z="22.0657" />
-        <Hotspot X="1083.16" Y="7856.98" Z="22.4357" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9739" Name="The Sporelings' Plight">
     <Objective Type="CollectItem" ItemId="24290" CollectCount="10">
       <CollectFrom>
@@ -249,13 +173,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9820" Name="WANTED: Boss Grog'ak">
-    <Objective Type="KillMob" MobId="18159" KillCount="1">
-      <Hotspots>
-        <Hotspot X="767.972" Y="7724.44" Z="22.0983" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9808" Name="Glowcap Mushrooms">
     <Objective Type="CollectItem" ItemId="24245" CollectCount="10">
       <CollectFrom>
@@ -283,24 +200,6 @@
     <Objective Type="KillMob" MobId="18286" KillCount="1">
       <Hotspots>
         <Hotspot X="546.99" Y="7351.98" Z="6.0346" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9842" Name="The Sharpest Blades">
-    <Objective Type="KillMob" MobId="18131" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-187.759" Y="7522.99" Z="23.9197" />
-        <Hotspot X="-52.2322" Y="7518.88" Z="22.1142" />
-        <Hotspot X="39.9471" Y="7621.99" Z="23.5797" />
-        <Hotspot X="-18.0336" Y="7684.94" Z="22.2066" />
-        <Hotspot X="-153.768" Y="7620.16" Z="22.3146" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10117" Name="Wanted: Chieftain Mummaki">
-    <Objective Type="KillMob" MobId="19174" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1038.9" Y="8279.63" Z="57.7364" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -378,13 +277,10 @@
         <CustomBehavior File="WaitTimer" WaitTime="3000" />
       </While>
     </If>
-    <Objective QuestName="No More Mushrooms!" QuestId="9773" Type="KillMob" MobId="18138" KillCount="1" />
     <Objective QuestName="No More Mushrooms!" QuestId="9773" Type="CollectItem" ItemId="24374" CollectCount="8" />
-    <Objective QuestName="Thick Hydra Scales" QuestId="9774" Type="KillMob" MobId="18213" KillCount="1" />
     <Objective QuestName="Thick Hydra Scales" QuestId="9774" Type="CollectItem" ItemId="24375" CollectCount="12" />
     <Objective QuestName="Plants of Zangarmarsh" QuestId="9802" Type="CollectItem" ItemId="24401" CollectCount="10" />
     <Objective QuestName="A Warm Welcome" QuestId="9728" Type="CollectItem" ItemId="24280" CollectCount="30" />
-    <Objective QuestName="There's No Explanation for Fashion" QuestId="9769" Type="KillMob" MobId="18132" KillCount="1" />
     <Objective QuestName="There's No Explanation for Fashion" QuestId="9769" Type="CollectItem" ItemId="24372" CollectCount="8" />
     <Objective QuestName="The Dying Balance" QuestId="9895" Type="KillMob" MobId="18281" KillCount="1" />
     <Objective QuestName="The Umbrafen Tribe" QuestId="9747" Type="KillMob" MobId="18080" KillCount="1" />
@@ -438,16 +334,13 @@
     <If Condition="((!HasQuest(9772)) &amp;&amp; (!IsQuestCompleted(9772)))">
       <PickUp QuestName="Jyoba's Report" QuestId="9772" GiverName="Scout Jyoba" GiverId="18035" />
     </If>
-    <Objective QuestName="Jyoba's Report" QuestId="9772" Type="KillMob" MobId="18124" KillCount="1" />
     <Objective QuestName="Jyoba's Report" QuestId="9772" Type="CollectItem" ItemId="24484" CollectCount="1" />
     <While Condition="((HasQuest(9772)) &amp;&amp; (!IsQuestCompleted(9772)))">
       <CustomBehavior File="UseItemOn" QuestId="9772" MobId="0" ItemId="24484" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Withered Basidium" QuestId="9828" GiverName="Scout Jyoba" GiverId="18035" />
-    <Objective QuestName="Jyoba's Report" QuestId="9772" Type="KillMob" MobId="18124" KillCount="1" />
     <Objective QuestName="Jyoba's Report" QuestId="9772" Type="CollectItem" ItemId="24373" CollectCount="1" />
-    <Objective QuestName="Natural Enemies" QuestId="9743" Type="KillMob" MobId="19402" KillCount="1" />
     <Objective QuestName="Natural Enemies" QuestId="9743" Type="CollectItem" ItemId="24291" CollectCount="6" />
     <While Condition="((HasQuest(9720)) &amp;&amp; (!IsQuestCompleted(9720)))">
       <RunTo X="-755.97" Y="5925.65" Z="19.0132" />
@@ -497,10 +390,8 @@
     <TurnIn QuestName="Report to Shadow Hunter Denjai" QuestId="9775" TurnInName="Shadow Hunter Denjai" TurnInId="18013" />
     <Objective QuestName="Burstcap Mushrooms, Mon!" QuestId="9814" Type="CollectItem" ItemId="24468" CollectCount="6" />
     <Objective QuestName="Angling to Beat the Competition" QuestId="9845" Type="KillMob" MobId="18214" KillCount="10" />
-    <Objective QuestName="Nothin' Says Lovin' Like a Big Stinger" QuestId="9898" Type="KillMob" MobId="18283" KillCount="1" />
     <Objective QuestName="Nothin' Says Lovin' Like a Big Stinger" QuestId="9898" Type="CollectItem" ItemId="25448" CollectCount="1" />
     <Objective QuestName="Spirits of the Feralfen" QuestId="9846" Type="CollectItem" ItemId="24497" CollectCount="10" />
-    <Objective QuestName="Stinging the Stingers" QuestId="9841" Type="KillMob" MobId="18285" KillCount="1" />
     <Objective QuestName="Stinging the Stingers" QuestId="9841" Type="CollectItem" ItemId="25459" CollectCount="1" />
     <While Condition="((HasQuest(9841)) &amp;&amp; (!IsQuestCompleted(9841)))">
       <RunTo X="-444.971" Y="8319.95" Z="15.3407" />
@@ -542,13 +433,13 @@
       <CustomBehavior File="UseItemOn" QuestId="9720" MobId="17998" ItemId="24355" NumOfTimes="100" Range="5" CollectionDistance="1000" X="-755.97" Y="5925.65" Z="19.0132" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="WANTED: Boss Grog'ak" QuestId="9820" Type="KillMob" MobId="18159" KillCount="1" />
     <Objective QuestName="WANTED: Boss Grog'ak" QuestId="9820" Type="CollectItem" ItemId="24472" CollectCount="1" />
     <Objective QuestName="Familiar Fungi" QuestId="9708" Type="CollectItem" ItemId="24238" CollectCount="15" />
     <If Condition="Me.Level &lt; 63">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 63 - Boss Grog'ak</Name>
+          <Factions>45</Factions>
           <Hotspots>
             <Hotspot X="767.97" Y="7724.44" Z="22.10" />
           </Hotspots>
@@ -590,7 +481,6 @@
     <Objective QuestName="Glowcap Mushrooms" QuestId="9808" Type="CollectItem" ItemId="24245" CollectCount="10" />
     <TurnIn QuestName="Glowcap Mushrooms" QuestId="9808" TurnInName="Msshi'fn" TurnInId="17924" />
     <Objective QuestName="Pursuing Terrorclaw" QuestId="9904" Type="KillMob" MobId="20477" KillCount="1" />
-    <Objective QuestName="Stinging the Stingers" QuestId="9841" Type="KillMob" MobId="18133" KillCount="8" />
     <Objective QuestName="Impending Attack" QuestId="9822" Type="CollectItem" ItemId="24471" CollectCount="1" />
     <Objective QuestName="The Biggest of Them All" QuestId="9903" Type="KillMob" MobId="18286" KillCount="1" />
     <TurnIn QuestName="The Biggest of Them All" QuestId="9903" TurnInName="Zurjaya" TurnInId="18018" />
@@ -611,12 +501,10 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="A Spirit Ally?" QuestId="9847" Type="KillMob" MobId="18185" KillCount="1" />
-    <Objective QuestName="The Sharpest Blades" QuestId="9842" Type="KillMob" MobId="18131" KillCount="1" />
     <Objective QuestName="The Sharpest Blades" QuestId="9842" Type="CollectItem" ItemId="24493" CollectCount="10" />
     <TurnIn QuestName="A Spirit Ally?" QuestId="9847" TurnInName="Seer Janidi" TurnInId="18017" />
     <TurnIn QuestName="The Sharpest Blades" QuestId="9842" TurnInName="Gambarinka" TurnInId="18015" />
     <CustomBehavior File="SetHearthstone" MobId="18245" AreaId="3521" X="228.163" Y="7933.88" Z="25.1611" /> <!-- Set hearth: Zabra'jin -->
-    <Objective QuestName="Wanted: Chieftain Mummaki" QuestId="10117" Type="KillMob" MobId="19174" KillCount="1" />
     <Objective QuestName="Wanted: Chieftain Mummaki" QuestId="10117" Type="CollectItem" ItemId="27943" CollectCount="1" />
     <While Condition="((HasQuest(9816)) &amp;&amp; (!IsQuestCompleted(9816)))">
       <RunTo X="1177.67" Y="8130.76" Z="19.6219" />

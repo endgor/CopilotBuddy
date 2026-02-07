@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="10485" Name="Warlord of the Bleeding Hollow">
-    <Objective Type="KillMob" MobId="16964" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1173.46" Y="1920.36" Z="81.603" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10909" Name="Fel Spirits">
     <Objective Type="KillMob" MobId="16878" KillCount="1">
       <Hotspots>
@@ -34,13 +27,6 @@
     <Objective Type="KillMob" MobId="19312" KillCount="1">
       <Hotspots>
         <Hotspot X="-456.882" Y="3061.48" Z="-52.9424" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10395" Name="The Dark Missive">
-    <Objective Type="KillMob" MobId="19298" KillCount="1">
-      <Hotspots>
-        <Hotspot X="569.779" Y="2797.71" Z="218.62" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -62,26 +48,8 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9490" Name="The Rock Flayer Matriarch">
-    <Objective Type="KillMob" MobId="17057" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-759.98" Y="3816.24" Z="20.0019" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10132" Name="Colossal Menace">
     <Objective Type="KillMob" MobId="19188" KillCount="5">
-      <Hotspots>
-        <Hotspot X="-114.469" Y="4818.41" Z="39.5818" />
-        <Hotspot X="-63.3096" Y="4868.44" Z="55.968" />
-        <Hotspot X="-32.0013" Y="4804.67" Z="46.9591" />
-        <Hotspot X="-11.9675" Y="4854.78" Z="56.1866" />
-        <Hotspot X="21.6032" Y="4830.08" Z="61.6036" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10134" Name="Crimson Crystal Clue">
-    <Objective Type="KillMob" MobId="19188" KillCount="1">
       <Hotspots>
         <Hotspot X="-114.469" Y="4818.41" Z="39.5818" />
         <Hotspot X="-63.3096" Y="4868.44" Z="55.968" />
@@ -95,7 +63,16 @@
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\The Burning Crusade (58-70)\Hellfire Peninsula Group Quests" LogColor="Green" />
     <If Condition="Me.Level &lt; 58">
-      <GrindTo Level="58" />
+      <SetGrindArea>
+        <GrindArea>
+          <Name>Grind to Level 58 - Warlord Morkh</Name>
+          <Factions>1663</Factions>
+          <Hotspots>
+            <Hotspot X="-1173.46" Y="1920.36" Z="81.60" />
+          </Hotspots>
+        </GrindArea>
+      </SetGrindArea>
+      <GrindTo Level="58" /> <!--  (grind Warlord Morkh) -->
     </If>
     <PickUp QuestName="Through the Dark Portal" QuestId="10119" GiverName="Watch Commander Relthorn Netherwane" GiverId="16841" />
     <TurnIn QuestName="Through the Dark Portal" QuestId="10119" TurnInName="Commander Duron" TurnInId="19229" />
@@ -129,7 +106,6 @@
     <If Condition="((!HasQuest(10485)) &amp;&amp; (!IsQuestCompleted(10485)))">
       <PickUp QuestName="Warlord of the Bleeding Hollow" QuestId="10485" GiverName="Corporal Ironridge" GiverId="21133" />
     </If>
-    <Objective QuestName="Warlord of the Bleeding Hollow" QuestId="10485" Type="KillMob" MobId="16964" KillCount="1" />
     <Objective QuestName="Warlord of the Bleeding Hollow" QuestId="10485" Type="CollectItem" ItemId="30158" CollectCount="1" />
     <TurnIn QuestName="Warlord of the Bleeding Hollow" QuestId="10485" TurnInName="Corporal Ironridge" TurnInId="21133" />
     <If Condition="((!HasQuest(10903)) &amp;&amp; (!IsQuestCompleted(10903)))">
@@ -164,7 +140,6 @@
     </If>
     <Objective QuestName="Drill the Drillmaster" QuestId="10937" Type="KillMob" MobId="19312" KillCount="1" />
     <TurnIn QuestName="Drill the Drillmaster" QuestId="10937" TurnInName="Force Commander Danath Trollbane" TurnInId="16819" />
-    <Objective QuestName="The Dark Missive" QuestId="10395" Type="KillMob" MobId="19298" KillCount="1" />
     <Objective QuestName="The Dark Missive" QuestId="10395" Type="CollectItem" ItemId="29588" CollectCount="1" />
     <CustomBehavior File="UseItemOn" ItemId="29588" MobId="0" NumOfTimes="1" CollectionDistance="100" />
     <PickUp QuestName="The Dark Missive" QuestId="10395" GiverName="Force Commander Danath Trollbane" GiverId="16819" />
@@ -183,6 +158,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 60 - Arazzius the Cruel</Name>
+          <Factions>90</Factions>
           <TargetMinLevel>63</TargetMinLevel>
           <TargetMaxLevel>63</TargetMaxLevel>
           <Hotspots>
@@ -193,13 +169,13 @@
       <GrindTo Level="60" /> <!--  (grind Arazzius the Cruel) -->
     </If>
     <PickUp QuestName="The Rock Flayer Matriarch" QuestId="9490" GiverName="Ikan" GiverId="16799" />
-    <Objective QuestName="The Rock Flayer Matriarch" QuestId="9490" Type="KillMob" MobId="17057" KillCount="1" />
     <Objective QuestName="The Rock Flayer Matriarch" QuestId="9490" Type="CollectItem" ItemId="23687" CollectCount="1" />
     <TurnIn QuestName="The Rock Flayer Matriarch" QuestId="9490" TurnInName="Ikan" TurnInId="16799" />
     <If Condition="Me.Level &lt; 61">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 61 - Blacktalon the Savage</Name>
+          <Factions>1873</Factions>
           <TargetMinLevel>63</TargetMinLevel>
           <TargetMaxLevel>63</TargetMaxLevel>
           <Hotspots>
@@ -211,7 +187,6 @@
     </If>
     <PickUp QuestName="Colossal Menace" QuestId="10132" GiverName="Tola'thion" GiverId="19293" />
     <Objective QuestName="Colossal Menace" QuestId="10132" Type="KillMob" MobId="19188" KillCount="5" />
-    <Objective QuestName="Crimson Crystal Clue" QuestId="10134" Type="KillMob" MobId="19188" KillCount="1" />
     <Objective QuestName="Crimson Crystal Clue" QuestId="10134" Type="CollectItem" ItemId="29476" CollectCount="1" />
     <While Condition="((HasQuest(10132)) &amp;&amp; (!IsQuestCompleted(10132)))">
       <RunTo X="-114.469" Y="4818.41" Z="39.5818" />

@@ -45,28 +45,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="605" Name="Singing Blue Shards">
-    <Objective Type="KillMob" MobId="689" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11550.0" Y="-885.743" Z="68.8292" />
-        <Hotspot X="-11938.4" Y="545.611" Z="31.9846" />
-        <Hotspot X="-11955.1" Y="480.523" Z="24.0685" />
-        <Hotspot X="-11921.0" Y="618.742" Z="23.4413" />
-        <Hotspot X="-11951.3" Y="475.156" Z="24.6139" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="575" Name="Supply and Demand">
-    <Objective Type="KillMob" MobId="1150" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11517.5" Y="-57.5501" Z="12.8883" />
-        <Hotspot X="-11752.4" Y="-396.244" Z="16.9198" />
-        <Hotspot X="-11548.3" Y="149.196" Z="13.3478" />
-        <Hotspot X="-11613.7" Y="14.4775" Z="14.6154" />
-        <Hotspot X="-11578.2" Y="48.9084" Z="16.1874" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="204" Name="Bad Medicine">
     <Objective Type="CollectItem" ItemId="2634" CollectCount="1">
       <CollectFrom>
@@ -74,15 +52,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-11574.4" Y="-593.41" Z="27.93" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="940" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11484.9" Y="-786.402" Z="51.3356" />
-        <Hotspot X="-11648.5" Y="-746.885" Z="32.666" />
-        <Hotspot X="-11651.7" Y="-666.166" Z="30.3258" />
-        <Hotspot X="-11636.0" Y="-660.454" Z="30.1503" />
-        <Hotspot X="-11639.1" Y="-661.675" Z="29.9003" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -98,28 +67,12 @@
     </Objective>
   </Quest>
   <Quest Id="1182" Name="Goblin Sponsorship">
-    <Objective Type="KillMob" MobId="4723" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11949.5" Y="-500.392" Z="30.7014" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="5852" CollectCount="1">
       <CollectFrom>
         <GameObject Name="Cozzle" Id="20691" />
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-12033.5" Y="-544.27" Z="14.47" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="213" Name="Hostile Takeover">
-    <Objective Type="KillMob" MobId="1096" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11863.2" Y="-638.984" Z="14.7718" />
-        <Hotspot X="-11910.8" Y="-584.254" Z="17.0121" />
-        <Hotspot X="-11867.1" Y="-635.283" Z="15.5122" />
-        <Hotspot X="-11916.7" Y="-616.969" Z="16.4366" />
-        <Hotspot X="-12003.1" Y="-707.455" Z="14.4309" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -181,7 +134,6 @@
     <Objective QuestName="Panther Mastery" QuestId="191" Type="KillMob" MobId="736" KillCount="10" />
     <Objective QuestName="Tiger Mastery" QuestId="186" Type="KillMob" MobId="682" KillCount="10" />
     <Objective QuestName="Raptor Mastery" QuestId="194" Type="KillMob" MobId="685" KillCount="10" />
-    <Objective QuestName="Singing Blue Shards" QuestId="605" Type="KillMob" MobId="689" KillCount="1" />
     <Objective QuestName="Singing Blue Shards" QuestId="605" Type="CollectItem" ItemId="3918" CollectCount="10" />
     <TurnIn QuestName="Raptor Mastery" QuestId="194" TurnInName="Hemet Nesingwary" TurnInId="715" />
     <If Condition="((!HasQuest(195)) &amp;&amp; (!IsQuestCompleted(195)))">
@@ -195,16 +147,12 @@
     <If Condition="((!HasQuest(192)) &amp;&amp; (!IsQuestCompleted(192)))">
       <PickUp QuestName="Panther Mastery" QuestId="192" GiverName="Sir S. J. Erlgadin" GiverId="718" />
     </If>
-    <Objective QuestName="Supply and Demand" QuestId="575" Type="KillMob" MobId="1150" KillCount="1" />
     <Objective QuestName="Supply and Demand" QuestId="575" Type="CollectItem" ItemId="4053" CollectCount="2" />
     <Objective QuestName="Bad Medicine" QuestId="204" Type="CollectItem" ItemId="2634" CollectCount="1" />
-    <Objective QuestName="Bad Medicine" QuestId="204" Type="KillMob" MobId="940" KillCount="1" />
     <Objective QuestName="Bad Medicine" QuestId="204" Type="CollectItem" ItemId="2633" CollectCount="7" />
     <Objective QuestName="The Second Rebellion" QuestId="203" Type="KillMob" MobId="937" KillCount="15" />
-    <Objective QuestName="Goblin Sponsorship" QuestId="1182" Type="KillMob" MobId="4723" KillCount="1" />
     <Objective QuestName="Goblin Sponsorship" QuestId="1182" Type="CollectItem" ItemId="5851" CollectCount="1" />
     <Objective QuestName="Goblin Sponsorship" QuestId="1182" Type="CollectItem" ItemId="5852" CollectCount="1" />
-    <Objective QuestName="Hostile Takeover" QuestId="213" Type="KillMob" MobId="1096" KillCount="1" />
     <Objective QuestName="Hostile Takeover" QuestId="213" Type="CollectItem" ItemId="4106" CollectCount="8" />
     <TurnIn QuestName="Singing Blue Shards" QuestId="605" TurnInName="Crank Fizzlebub" TurnInId="2498" />
     <TurnIn QuestName="Investigate the Camp" QuestId="201" TurnInName="Krazek" TurnInId="773" />

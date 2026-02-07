@@ -62,31 +62,31 @@
       </If>
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
-      <Objective QuestName="Genesis Trousers" QuestId="8668" Type="CollectItem" ItemId="20931" CollectCount="1" />
+      <Objective QuestName="Genesis Trousers" QuestId="8668" Type="CollectItem" ItemId="20931" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Hunter)">
-      <Objective QuestName="Striker's Leggings" QuestId="8658" Type="CollectItem" ItemId="20931" CollectCount="1" />
+      <Objective QuestName="Striker's Leggings" QuestId="8658" Type="CollectItem" ItemId="20931" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Mage)">
-      <Objective QuestName="Enigma Leggings" QuestId="8631" Type="CollectItem" ItemId="20927" CollectCount="1" />
+      <Objective QuestName="Enigma Leggings" QuestId="8631" Type="CollectItem" ItemId="20927" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Paladin)">
-      <Objective QuestName="Avenger's Legguards" QuestId="8629" Type="CollectItem" ItemId="20931" CollectCount="1" />
+      <Objective QuestName="Avenger's Legguards" QuestId="8629" Type="CollectItem" ItemId="20931" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Priest)">
-      <Objective QuestName="Trousers of the Oracle" QuestId="8593" Type="CollectItem" ItemId="20927" CollectCount="1" />
+      <Objective QuestName="Trousers of the Oracle" QuestId="8593" Type="CollectItem" ItemId="20927" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Rogue)">
-      <Objective QuestName="Deathdealer's Leggings" QuestId="8640" Type="CollectItem" ItemId="20927" CollectCount="1" />
+      <Objective QuestName="Deathdealer's Leggings" QuestId="8640" Type="CollectItem" ItemId="20927" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman)">
-      <Objective QuestName="Stormcaller's Leggings" QuestId="8624" Type="CollectItem" ItemId="20931" CollectCount="1" />
+      <Objective QuestName="Stormcaller's Leggings" QuestId="8624" Type="CollectItem" ItemId="20931" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="Doomcaller's Trousers" QuestId="8663" Type="CollectItem" ItemId="20931" CollectCount="1" />
+      <Objective QuestName="Doomcaller's Trousers" QuestId="8663" Type="CollectItem" ItemId="20931" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warrior)">
-      <Objective QuestName="Conqueror's Legguards" QuestId="8560" Type="CollectItem" ItemId="20927" CollectCount="1" />
+      <Objective QuestName="Conqueror's Legguards" QuestId="8560" Type="CollectItem" ItemId="20927" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
       <Objective QuestName="Genesis Trousers" QuestId="8668" Type="CollectItem" ItemId="20882" CollectCount="2" />

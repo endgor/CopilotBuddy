@@ -11,22 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="2623" Name="The Swamp Talker">
-    <Objective Type="KillMob" MobId="950" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10967.6" Y="-3658.81" Z="27.9808" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="4450" Name="Ledger from Tanaris">
-    <Objective Type="KillMob" MobId="9916" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10416.8" Y="-4396.86" Z="4.0564" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Classic (12-58)\Swamp of Sorrows (48-48)" LogColor="Green" />
     <PickUp QuestName="Fall From Grace" QuestId="2784" GiverName="Fallen Hero of the Horde" GiverId="7572" />
@@ -46,9 +30,7 @@
     <If Condition="((!HasQuest(2623)) &amp;&amp; (!IsQuestCompleted(2623)))">
       <PickUp QuestName="The Swamp Talker" QuestId="2623" GiverName="Bengor" GiverId="7643" />
     </If>
-    <Objective QuestName="The Swamp Talker" QuestId="2623" Type="KillMob" MobId="950" KillCount="1" />
     <Objective QuestName="The Swamp Talker" QuestId="2623" Type="CollectItem" ItemId="8463" CollectCount="1" />
-    <Objective QuestName="Ledger from Tanaris" QuestId="4450" Type="KillMob" MobId="9916" KillCount="1" />
     <Objective QuestName="Ledger from Tanaris" QuestId="4450" Type="CollectItem" ItemId="11723" CollectCount="1" />
     <TurnIn QuestName="The Swamp Talker" QuestId="2623" TurnInName="Fallen Hero of the Horde" TurnInId="7572" />
     <If Condition="((!HasQuest(2801)) &amp;&amp; (!IsQuestCompleted(2801)))">

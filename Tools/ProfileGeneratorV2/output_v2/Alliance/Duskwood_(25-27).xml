@@ -12,24 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="177" Name="Look To The Stars">
-    <Objective Type="KillMob" MobId="511" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11012.0" Y="-1350.91" Z="53.658" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="101" Name="The Totem of Infliction">
-    <Objective Type="KillMob" MobId="930" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10642.0" Y="20.2353" Z="39.3563" />
-        <Hotspot X="-10710.1" Y="19.4249" Z="35.8904" />
-        <Hotspot X="-10721.7" Y="-131.072" Z="34.6736" />
-        <Hotspot X="-10425.0" Y="-38.9584" Z="46.1307" />
-        <Hotspot X="-10764.2" Y="-115.579" Z="36.5147" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="56" Name="The Night Watch">
     <Objective Type="KillMob" MobId="203" KillCount="6">
       <Hotspots>
@@ -67,17 +49,6 @@
         <Hotspot X="-10207.0" Y="392.168" Z="43.4146" />
         <Hotspot X="-10265.9" Y="478.121" Z="38.2019" />
         <Hotspot X="-10207.0" Y="448.064" Z="35.8234" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="93" Name="Dusky Crab Cakes">
-    <Objective Type="KillMob" MobId="930" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10642.0" Y="20.2353" Z="39.3563" />
-        <Hotspot X="-10710.1" Y="19.4249" Z="35.8904" />
-        <Hotspot X="-10721.7" Y="-131.072" Z="34.6736" />
-        <Hotspot X="-10425.0" Y="-38.9584" Z="46.1307" />
-        <Hotspot X="-10764.2" Y="-115.579" Z="36.5147" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -166,7 +137,6 @@
     <If Condition="((!HasQuest(177)) &amp;&amp; (!IsQuestCompleted(177)))">
       <PickUp QuestName="Look To The Stars" QuestId="177" GiverName="Blind Mary" GiverId="302" />
     </If>
-    <Objective QuestName="Look To The Stars" QuestId="177" Type="KillMob" MobId="511" KillCount="1" />
     <Objective QuestName="Look To The Stars" QuestId="177" Type="CollectItem" ItemId="1946" CollectCount="1" />
     <Objective QuestName="The Totem of Infliction" QuestId="101" Type="CollectItem" ItemId="2378" CollectCount="10" />
     <Objective QuestName="The Night Watch" QuestId="56" Type="KillMob" MobId="203" KillCount="6" />
@@ -184,9 +154,7 @@
     <If Condition="((!HasQuest(148)) &amp;&amp; (!IsQuestCompleted(148)))">
       <PickUp QuestName="Supplies from Darkshire" QuestId="148" GiverName="Abercrombie" GiverId="289" />
     </If>
-    <Objective QuestName="The Totem of Infliction" QuestId="101" Type="KillMob" MobId="930" KillCount="1" />
     <Objective QuestName="The Totem of Infliction" QuestId="101" Type="CollectItem" ItemId="1130" CollectCount="5" />
-    <Objective QuestName="Dusky Crab Cakes" QuestId="93" Type="KillMob" MobId="930" KillCount="1" />
     <Objective QuestName="Dusky Crab Cakes" QuestId="93" Type="CollectItem" ItemId="2251" CollectCount="6" />
     <Objective QuestName="The Totem of Infliction" QuestId="101" Type="CollectItem" ItemId="1129" CollectCount="10" />
     <PickUp QuestName="The Weathered Grave" QuestId="225" GiverName="Abercrombie" GiverId="289" />

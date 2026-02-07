@@ -12,16 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="5087" Name="Winterfall Runners">
-    <Objective Type="KillMob" MobId="10916" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6912.84" Y="-1821.66" Z="570.909" />
-        <Hotspot X="6886.71" Y="-4085.93" Z="690.912" />
-        <Hotspot X="6896.69" Y="-4094.36" Z="691.715" />
-        <Hotspot X="6891.28" Y="-4089.79" Z="691.189" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="5121" Name="High Chief Winterfall">
     <Objective Type="KillMob" MobId="10738" KillCount="1">
       <Hotspots>
@@ -37,17 +27,6 @@
         <Hotspot X="5793.15" Y="-4955.75" Z="832.644" />
         <Hotspot X="5582.44" Y="-4890.33" Z="844.137" />
         <Hotspot X="7591.82" Y="-4807.01" Z="736.494" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="4809" Name="Chillwind Horns">
-    <Objective Type="KillMob" MobId="7448" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6034.82" Y="-5179.02" Z="866.623" />
-        <Hotspot X="6082.77" Y="-5156.01" Z="870.203" />
-        <Hotspot X="6012.81" Y="-5143.63" Z="848.952" />
-        <Hotspot X="7100.05" Y="-5158.99" Z="750.515" />
-        <Hotspot X="6303.35" Y="-4819.47" Z="755.203" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -69,7 +48,6 @@
     <If Condition="((!HasQuest(5087)) &amp;&amp; (!IsQuestCompleted(5087)))">
       <PickUp QuestName="Winterfall Runners" QuestId="5087" GiverName="Donova Snowden" GiverId="9298" />
     </If>
-    <Objective QuestName="Winterfall Runners" QuestId="5087" Type="KillMob" MobId="10916" KillCount="1" />
     <Objective QuestName="Winterfall Runners" QuestId="5087" Type="CollectItem" ItemId="12829" CollectCount="1" />
     <TurnIn QuestName="Winterfall Runners" QuestId="5087" TurnInName="Donova Snowden" TurnInId="9298" />
     <If Condition="((!HasQuest(5121)) &amp;&amp; (!IsQuestCompleted(5121)))">
@@ -90,7 +68,6 @@
       <PickUp QuestName="Wild Guardians" QuestId="4721" GiverName="Trull Failbane" GiverId="10306" />
     </If>
     <CustomBehavior File="SetHearthstone" MobId="11118" AreaId="618" X="6695.15" Y="-4673.04" Z="721.65" /> <!-- Set hearth: Everlook -->
-    <Objective QuestName="Chillwind Horns" QuestId="4809" Type="KillMob" MobId="7448" KillCount="1" />
     <Objective QuestName="Chillwind Horns" QuestId="4809" Type="CollectItem" ItemId="12444" CollectCount="8" />
     <Objective QuestName="Guarding Secrets" QuestId="4882" Type="CollectItem" ItemId="12558" CollectCount="1" />
     <While Condition="((HasQuest(4721)) &amp;&amp; (!IsQuestCompleted(4721)))">
@@ -116,6 +93,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 60 - Berserk Owlbeast</Name>
+          <Factions>16</Factions>
           <TargetMinLevel>58</TargetMinLevel>
           <TargetMaxLevel>59</TargetMaxLevel>
           <Hotspots>

@@ -28,26 +28,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9791" Name="Menacing Marshfangs">
-    <Objective Type="KillMob" MobId="18130" KillCount="10">
-      <Hotspots>
-        <Hotspot X="-985.899" Y="5148.56" Z="22.9501" />
-        <Hotspot X="-891.975" Y="5174.88" Z="21.0435" />
-        <Hotspot X="-881.937" Y="5114.7" Z="17.9327" />
-        <Hotspot X="-122.416" Y="5443.78" Z="22.6599" />
-        <Hotspot X="-541.222" Y="5513.8" Z="21.9002" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="18124" KillCount="1">
-      <Hotspots>
-        <Hotspot X="446.623" Y="5231.33" Z="11.5678" />
-        <Hotspot X="449.046" Y="5283.9" Z="-0.5964" />
-        <Hotspot X="483.446" Y="5288.27" Z="-2.2416" />
-        <Hotspot X="435.946" Y="5331.29" Z="-1.0759" />
-        <Hotspot X="360.964" Y="5356.56" Z="20.0851" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9901" Name="Unfinished Business">
     <Objective Type="KillMob" MobId="18280" KillCount="1">
       <Hotspots>
@@ -71,37 +51,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10355" Name="Withered Flesh">
-    <Objective Type="KillMob" MobId="20324" KillCount="1">
-      <Hotspots>
-        <Hotspot X="450.724" Y="5183.54" Z="22.5158" />
-        <Hotspot X="499.445" Y="5279.21" Z="-5.391" />
-        <Hotspot X="352.39" Y="5329.92" Z="22.0735" />
-        <Hotspot X="485.087" Y="5319.53" Z="-6.6094" />
-        <Hotspot X="387.079" Y="5426.63" Z="22.4905" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="19402" KillCount="1">
-      <Hotspots>
-        <Hotspot X="482.536" Y="5181.14" Z="16.1105" />
-        <Hotspot X="453.72" Y="5255.63" Z="3.4073" />
-        <Hotspot X="346.09" Y="5285.75" Z="21.1194" />
-        <Hotspot X="420.568" Y="5315.05" Z="0.571" />
-        <Hotspot X="401.715" Y="5463.36" Z="22.2281" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9743" Name="Natural Enemies">
-    <Objective Type="KillMob" MobId="19402" KillCount="1">
-      <Hotspots>
-        <Hotspot X="482.536" Y="5181.14" Z="16.1105" />
-        <Hotspot X="453.72" Y="5255.63" Z="3.4073" />
-        <Hotspot X="346.09" Y="5285.75" Z="21.1194" />
-        <Hotspot X="420.568" Y="5315.05" Z="0.571" />
-        <Hotspot X="401.715" Y="5463.36" Z="22.2281" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9783" Name="An Unnatural Drought">
     <Objective Type="KillMob" MobId="18124" KillCount="12">
       <Hotspots>
@@ -110,17 +59,6 @@
         <Hotspot X="483.446" Y="5288.27" Z="-2.2416" />
         <Hotspot X="435.946" Y="5331.29" Z="-1.0759" />
         <Hotspot X="360.964" Y="5356.56" Z="20.0851" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9780" Name="Umbrafen Eel Filets">
-    <Objective Type="KillMob" MobId="18138" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-350.774" Y="5585.06" Z="5.2149" />
-        <Hotspot X="-829.622" Y="5859.4" Z="11.7228" />
-        <Hotspot X="-734.194" Y="5851.73" Z="-1.7757" />
-        <Hotspot X="-717.857" Y="5844.48" Z="-1.6265" />
-        <Hotspot X="-667.121" Y="5850.16" Z="1.2208" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -203,17 +141,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9790" Name="Diaphanous Wings">
-    <Objective Type="KillMob" MobId="18132" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1051.94" Y="5487.25" Z="22.123" />
-        <Hotspot X="-613.256" Y="5316.39" Z="22.3878" />
-        <Hotspot X="-487.962" Y="5320.6" Z="22.3472" />
-        <Hotspot X="-458.056" Y="5393.09" Z="21.3669" />
-        <Hotspot X="-519.0" Y="5410.08" Z="22.1691" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9835" Name="Ango'rosh Encroachment">
     <Objective Type="KillMob" MobId="18118" KillCount="5">
       <Hotspots>
@@ -256,13 +183,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10116" Name="Wanted: Chieftain Mummaki">
-    <Objective Type="KillMob" MobId="19174" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1038.9" Y="8279.63" Z="57.7364" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10115" Name="Daggerfen Deviance">
     <Objective Type="KillMob" MobId="18116" KillCount="3">
       <Hotspots>
@@ -280,31 +200,6 @@
         <Hotspot X="1157.95" Y="8106.13" Z="20.4654" />
         <Hotspot X="1216.3" Y="8112.82" Z="17.6484" />
         <Hotspot X="1253.35" Y="8146.55" Z="19.1209" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9834" Name="Natural Armor">
-    <Objective Type="KillMob" MobId="18214" KillCount="1">
-      <Hotspots>
-        <Hotspot X="541.975" Y="6784.61" Z="-31.6263" />
-        <Hotspot X="514.357" Y="6816.59" Z="-31.439" />
-        <Hotspot X="584.933" Y="6819.26" Z="-27.2836" />
-        <Hotspot X="713.459" Y="6887.33" Z="-5.5362" />
-        <Hotspot X="679.289" Y="6851.66" Z="-15.8386" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9896" Name="Blacksting's Bane">
-    <Objective Type="KillMob" MobId="18283" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-77.9395" Y="6973.97" Z="17.7574" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9806" Name="Fertile Spores">
-    <Objective Type="KillMob" MobId="18285" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-59.965" Y="7825.6" Z="23.7213" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -374,17 +269,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9830" Name="Stinger Venom">
-    <Objective Type="KillMob" MobId="18133" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-444.971" Y="8319.95" Z="15.3407" />
-        <Hotspot X="-415.841" Y="8270.38" Z="22.4821" />
-        <Hotspot X="-419.904" Y="8212.65" Z="20.5768" />
-        <Hotspot X="1087.78" Y="7592.01" Z="22.0657" />
-        <Hotspot X="1083.16" Y="7856.98" Z="22.4357" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9808" Name="Glowcap Mushrooms">
     <Objective Type="CollectItem" ItemId="24245" CollectCount="10">
       <CollectFrom>
@@ -440,17 +324,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9801" Name="Gathering the Reagents">
-    <Objective Type="KillMob" MobId="18134" KillCount="1">
-      <Hotspots>
-        <Hotspot X="223.561" Y="6374.22" Z="17.4991" />
-        <Hotspot X="-843.694" Y="5124.9" Z="17.9327" />
-        <Hotspot X="-740.322" Y="5196.95" Z="17.8831" />
-        <Hotspot X="-577.968" Y="5352.12" Z="17.6846" />
-        <Hotspot X="-403.375" Y="5415.42" Z="17.8643" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\The Burning Crusade (58-70)\Zangarmarsh (62-63)" LogColor="Green" />
@@ -476,10 +349,8 @@
     <PickUp QuestName="Too Many Mouths to Feed" QuestId="9781" GiverName="Haalrun" GiverId="18005" />
     <PickUp QuestName="Menacing Marshfangs" QuestId="9791" GiverName="Noraani" GiverId="18006" />
     <Objective QuestName="Fulgor Spores" QuestId="9777" Type="CollectItem" ItemId="24383" CollectCount="6" />
-    <Objective QuestName="Menacing Marshfangs" QuestId="9791" Type="KillMob" MobId="18130" KillCount="10" />
     <Objective QuestName="Unfinished Business" QuestId="9901" Type="KillMob" MobId="18280" KillCount="1" />
     <Objective QuestName="The Dead Mire" QuestId="9782" Type="CollectItem" ItemId="24400" CollectCount="1" />
-    <Objective QuestName="Menacing Marshfangs" QuestId="9791" Type="KillMob" MobId="18124" KillCount="1" />
     <Objective QuestName="Menacing Marshfangs" QuestId="9791" Type="CollectItem" ItemId="24483" CollectCount="1" />
     <While Condition="((HasQuest(9791)) &amp;&amp; (!IsQuestCompleted(9791)))">
       <RunTo X="-985.899" Y="5148.56" Z="22.9501" />
@@ -504,11 +375,8 @@
     <If Condition="((!HasQuest(9780)) &amp;&amp; (!IsQuestCompleted(9780)))">
       <PickUp QuestName="Umbrafen Eel Filets" QuestId="9780" GiverName="Noraani" GiverId="18006" />
     </If>
-    <Objective QuestName="Withered Flesh" QuestId="10355" Type="KillMob" MobId="20324" KillCount="1" />
     <Objective QuestName="Withered Flesh" QuestId="10355" Type="CollectItem" ItemId="29480" CollectCount="5" />
-    <Objective QuestName="Withered Flesh" QuestId="10355" Type="KillMob" MobId="19402" KillCount="1" />
     <Objective QuestName="Withered Flesh" QuestId="10355" Type="CollectItem" ItemId="29481" CollectCount="5" />
-    <Objective QuestName="Natural Enemies" QuestId="9743" Type="KillMob" MobId="19402" KillCount="1" />
     <Objective QuestName="Natural Enemies" QuestId="9743" Type="CollectItem" ItemId="24291" CollectCount="6" />
     <Objective QuestName="An Unnatural Drought" QuestId="9783" Type="KillMob" MobId="18124" KillCount="12" />
     <TurnIn QuestName="An Unnatural Drought" QuestId="9783" TurnInName="Vindicator Idaar" TurnInId="18004" />
@@ -518,7 +386,6 @@
       <CustomBehavior File="UseItemOn" QuestId="9781" MobId="18213" ItemId="25539" NumOfTimes="100" Range="5" CollectionDistance="1000" X="-293.237" Y="5563.26" Z="16.027" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Umbrafen Eel Filets" QuestId="9780" Type="KillMob" MobId="18138" KillCount="1" />
     <Objective QuestName="Umbrafen Eel Filets" QuestId="9780" Type="CollectItem" ItemId="24374" CollectCount="8" />
     <Objective QuestName="Too Many Mouths to Feed" QuestId="9781" Type="KillMob" MobId="18213" KillCount="10" />
     <Objective QuestName="Plants of Zangarmarsh" QuestId="9802" Type="CollectItem" ItemId="24401" CollectCount="10" />
@@ -599,7 +466,6 @@
     <Objective QuestName="Ango'rosh Encroachment" QuestId="9835" Type="KillMob" MobId="18117" KillCount="10" />
     <Objective QuestName="Secrets of the Daggerfen" QuestId="9848" Type="CollectItem" ItemId="24500" CollectCount="1" />
     <Objective QuestName="Secrets of the Daggerfen" QuestId="9848" Type="CollectItem" ItemId="24499" CollectCount="1" />
-    <Objective QuestName="Wanted: Chieftain Mummaki" QuestId="10116" Type="KillMob" MobId="19174" KillCount="1" />
     <Objective QuestName="Wanted: Chieftain Mummaki" QuestId="10116" Type="CollectItem" ItemId="27943" CollectCount="1" />
     <Objective QuestName="Daggerfen Deviance" QuestId="10115" Type="KillMob" MobId="18116" KillCount="3" />
     <Objective QuestName="Daggerfen Deviance" QuestId="10115" Type="KillMob" MobId="18115" KillCount="15" />
@@ -619,7 +485,6 @@
     <PickUp QuestName="Stinger Venom" QuestId="9830" GiverName="Puluu" GiverId="18009" />
     <PickUp QuestName="Lines of Communication" QuestId="9833" GiverName="Puluu" GiverId="18009" />
     <PickUp QuestName="The Terror of Marshlight Lake" QuestId="9902" GiverName="Puluu" GiverId="18009" />
-    <Objective QuestName="Diaphanous Wings" QuestId="9790" Type="KillMob" MobId="18132" KillCount="1" />
     <Objective QuestName="Diaphanous Wings" QuestId="9790" Type="CollectItem" ItemId="24372" CollectCount="8" />
     <TurnIn QuestName="Saving the Sporeloks" QuestId="10096" TurnInName="Lauranna Thar'well" TurnInId="17909" />
     <TurnIn QuestName="A Damp, Dark Place" QuestId="9788" TurnInName="Ikeyen" TurnInId="17956" />
@@ -643,11 +508,8 @@
       <CustomBehavior File="UseItemOn" QuestId="9834" MobId="0" ItemId="25539" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Natural Armor" QuestId="9834" Type="KillMob" MobId="18214" KillCount="1" />
     <Objective QuestName="Natural Armor" QuestId="9834" Type="CollectItem" ItemId="24486" CollectCount="8" />
-    <Objective QuestName="Blacksting's Bane" QuestId="9896" Type="KillMob" MobId="18283" KillCount="1" />
     <Objective QuestName="Blacksting's Bane" QuestId="9896" Type="CollectItem" ItemId="25448" CollectCount="1" />
-    <Objective QuestName="Fertile Spores" QuestId="9806" Type="KillMob" MobId="18285" KillCount="1" />
     <Objective QuestName="Return to the Marsh" QuestId="9732" Type="CollectItem" ItemId="25459" CollectCount="1" />
     <CustomBehavior File="UseItemOn" ItemId="25459" MobId="0" NumOfTimes="1" CollectionDistance="100" />
     <PickUp QuestName="The Count of the Marshes" QuestId="9911" GiverName="Haalrun" GiverId="18005" />
@@ -673,6 +535,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 63 - Marshfang Slicer</Name>
+          <Factions>14</Factions>
           <TargetMinLevel>62</TargetMinLevel>
           <TargetMaxLevel>63</TargetMaxLevel>
           <Hotspots>
@@ -703,7 +566,6 @@
     </If>
     <TurnIn QuestName="Fertile Spores" QuestId="9806" TurnInName="Gshaff" TurnInId="17925" />
     <Objective QuestName="The Terror of Marshlight Lake" QuestId="9902" Type="KillMob" MobId="20477" KillCount="1" />
-    <Objective QuestName="Stinger Venom" QuestId="9830" Type="KillMob" MobId="18133" KillCount="1" />
     <Objective QuestName="Stinger Venom" QuestId="9830" Type="CollectItem" ItemId="24485" CollectCount="6" />
     <Objective QuestName="Familiar Fungi" QuestId="9708" Type="CollectItem" ItemId="24238" CollectCount="15" />
     <Objective QuestName="Glowcap Mushrooms" QuestId="9808" Type="CollectItem" ItemId="24245" CollectCount="10" />
@@ -737,7 +599,6 @@
       <PickUp QuestName="Gathering the Reagents" QuestId="9801" GiverName="Anchorite Ahuurn" GiverId="18003" />
     </If>
     <Objective QuestName="Gathering the Reagents" QuestId="9801" Type="CollectItem" ItemId="24426" CollectCount="4" />
-    <Objective QuestName="Gathering the Reagents" QuestId="9801" Type="KillMob" MobId="18134" KillCount="1" />
     <Objective QuestName="Gathering the Reagents" QuestId="9801" Type="CollectItem" ItemId="24427" CollectCount="4" />
     <TurnIn QuestName="Stealing Back the Mushrooms" QuestId="9709" TurnInName="Watcher Leesa'oh" TurnInId="17831" />
     <TurnIn QuestName="Gathering the Reagents" QuestId="9801" TurnInName="Anchorite Ahuurn" TurnInId="18003" />

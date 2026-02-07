@@ -11,53 +11,10 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="1519" Name="Call of Earth">
-    <Objective Type="KillMob" MobId="2953" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2939.67" Y="-1277.92" Z="72.3294" />
-        <Hotspot X="-2945.13" Y="-1005.0" Z="54.7598" />
-        <Hotspot X="-3006.67" Y="-1230.15" Z="66.1155" />
-        <Hotspot X="-3049.96" Y="-1233.98" Z="78.9175" />
-        <Hotspot X="-3110.42" Y="-1202.75" Z="85.4502" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1516" Name="Call of Earth">
-    <Objective Type="KillMob" MobId="3102" KillCount="2">
-      <Hotspots>
-        <Hotspot X="-155.104" Y="-4357.65" Z="66.8764" />
-        <Hotspot X="-142.261" Y="-4370.21" Z="66.9266" />
-        <Hotspot X="-114.123" Y="-4328.78" Z="66.0343" />
-        <Hotspot X="-29.4838" Y="-4265.14" Z="66.5683" />
-        <Hotspot X="-44.0381" Y="-4332.91" Z="68.5392" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1525" Name="Call of Fire">
-    <Objective Type="KillMob" MobId="3199" KillCount="1">
-      <Hotspots>
-        <Hotspot X="901.917" Y="-4705.98" Z="23.7635" />
-        <Hotspot X="877.988" Y="-4745.62" Z="30.4963" />
-        <Hotspot X="863.606" Y="-4733.89" Z="34.1155" />
-        <Hotspot X="927.625" Y="-4745.27" Z="20.7256" />
-        <Hotspot X="929.706" Y="-4719.18" Z="19.9841" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1526" Name="Call of Fire">
-    <Objective Type="KillMob" MobId="5893" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-246.258" Y="-4009.98" Z="187.293" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Class Quests\Shaman Class Quests" LogColor="Green" />
     <If Condition="(Me.Class == WoWClass.Shaman) &amp;&amp; (Me.Race == WoWRace.Tauren)">
       <PickUp QuestName="Call of Earth" QuestId="1519" GiverName="Seer Ravenfeather" GiverId="5888" />
-      <Objective QuestName="Call of Earth" QuestId="1519" Type="KillMob" MobId="2953" KillCount="1" />
       <Objective QuestName="Call of Earth" QuestId="1519" Type="CollectItem" ItemId="6634" CollectCount="2" />
       <TurnIn QuestName="Call of Earth" QuestId="1519" TurnInName="Seer Ravenfeather" TurnInId="5888" />
       <If Condition="((!HasQuest(1520)) &amp;&amp; (!IsQuestCompleted(1520)))">
@@ -75,7 +32,6 @@
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman) &amp;&amp; (Me.Race == WoWRace.Troll)">
       <PickUp QuestName="Call of Earth" QuestId="1516" GiverName="Canaga Earthcaller" GiverId="5887" />
-      <Objective QuestName="Call of Earth" QuestId="1516" Type="KillMob" MobId="3102" KillCount="2" />
       <Objective QuestName="Call of Earth" QuestId="1516" Type="CollectItem" ItemId="6640" CollectCount="2" />
       <TurnIn QuestName="Call of Earth" QuestId="1516" TurnInName="Canaga Earthcaller" TurnInId="5887" />
       <If Condition="((!HasQuest(1517)) &amp;&amp; (!IsQuestCompleted(1517)))">
@@ -110,7 +66,6 @@
         <PickUp QuestName="Call of Fire" QuestId="1525" GiverName="Telf Joolam" GiverId="5900" />
       </If>
       <Objective QuestName="Call of Fire" QuestId="1525" Type="CollectItem" ItemId="5026" CollectCount="1" />
-      <Objective QuestName="Call of Fire" QuestId="1525" Type="KillMob" MobId="3199" KillCount="1" />
       <Objective QuestName="Call of Fire" QuestId="1525" Type="CollectItem" ItemId="6652" CollectCount="1" />
     </If>
     <TurnIn QuestName="Call of Fire" QuestId="1525" TurnInName="Telf Joolam" TurnInId="5900" />
@@ -124,7 +79,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <If Condition="(Me.Class == WoWClass.Shaman)">
-      <Objective QuestName="Call of Fire" QuestId="1526" Type="KillMob" MobId="5893" KillCount="1" />
       <Objective QuestName="Call of Fire" QuestId="1526" Type="CollectItem" ItemId="6655" CollectCount="1" />
       <TurnIn QuestName="Call of Fire" QuestId="1526" TurnInName="Object_61934" TurnInType="Object" TurnInId="61934" />
       <If Condition="((!HasQuest(1527)) &amp;&amp; (!IsQuestCompleted(1527)))">

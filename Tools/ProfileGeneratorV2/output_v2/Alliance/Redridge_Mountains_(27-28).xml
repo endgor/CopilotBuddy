@@ -12,31 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="180" Name="Wanted: Lieutenant Fangore">
-    <Objective Type="KillMob" MobId="703" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9111.58" Y="-3311.35" Z="102.408" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="19" Name="Tharil'zun">
-    <Objective Type="KillMob" MobId="486" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9442.19" Y="-3074.29" Z="136.676" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="115" Name="Shadow Magic">
-    <Objective Type="KillMob" MobId="436" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9358.35" Y="-3084.53" Z="153.787" />
-        <Hotspot X="-9378.56" Y="-3076.05" Z="158.155" />
-        <Hotspot X="-9392.91" Y="-3015.43" Z="136.81" />
-        <Hotspot X="-9389.49" Y="-3024.51" Z="136.81" />
-        <Hotspot X="-9399.29" Y="-3006.63" Z="136.81" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="128" Name="Blackrock Bounty">
     <Objective Type="KillMob" MobId="435" KillCount="15">
       <Hotspots>
@@ -60,16 +35,13 @@
     </If>
     <PickUp QuestName="Solomon's Law" QuestId="91" GiverName="Bailiff Conacher" GiverId="900" />
     <PickUp QuestName="Wanted: Lieutenant Fangore" QuestId="180" GiverName="Bailiff Conacher" GiverId="900" />
-    <Objective QuestName="Wanted: Lieutenant Fangore" QuestId="180" Type="KillMob" MobId="703" KillCount="1" />
     <Objective QuestName="Wanted: Lieutenant Fangore" QuestId="180" Type="CollectItem" ItemId="3632" CollectCount="1" />
     <TurnIn QuestName="A Watchful Eye" QuestId="94" TurnInName="Object_31" TurnInType="Object" TurnInId="31" />
     <If Condition="((!HasQuest(248)) &amp;&amp; (!IsQuestCompleted(248)))">
       <PickUp QuestName="Looking Further" QuestId="248" GiverName="Bailiff Conacher" GiverId="900" />
     </If>
     <Objective QuestName="Solomon's Law" QuestId="91" Type="CollectItem" ItemId="1075" CollectCount="10" />
-    <Objective QuestName="Tharil'zun" QuestId="19" Type="KillMob" MobId="486" KillCount="1" />
     <Objective QuestName="Tharil'zun" QuestId="19" Type="CollectItem" ItemId="1260" CollectCount="1" />
-    <Objective QuestName="Shadow Magic" QuestId="115" Type="KillMob" MobId="436" KillCount="1" />
     <Objective QuestName="Shadow Magic" QuestId="115" Type="CollectItem" ItemId="1261" CollectCount="3" />
     <TurnIn QuestName="Looking Further" QuestId="248" TurnInName="Object_76" TurnInType="Object" TurnInId="76" />
     <Objective QuestName="Blackrock Bounty" QuestId="128" Type="KillMob" MobId="435" KillCount="15" />

@@ -11,37 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="8234" Name="Sealed Azure Bag">
-    <Objective Type="KillMob" MobId="6188" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4289.92" Y="-5729.49" Z="100.413" />
-        <Hotspot X="4605.99" Y="-5377.61" Z="120.417" />
-        <Hotspot X="4316.19" Y="-5689.79" Z="100.812" />
-        <Hotspot X="4414.95" Y="-5552.33" Z="111.731" />
-        <Hotspot X="4412.85" Y="-5486.59" Z="97.3817" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8235" Name="Encoded Fragments">
-    <Objective Type="KillMob" MobId="8766" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4477.79" Y="-6645.03" Z="98.316" />
-        <Hotspot X="4287.45" Y="-6855.17" Z="94.9983" />
-        <Hotspot X="4421.17" Y="-6783.83" Z="96.9316" />
-        <Hotspot X="3047.04" Y="-5110.84" Z="132.272" />
-        <Hotspot X="4911.64" Y="-7066.33" Z="95.8758" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8236" Name="The Azure Key">
-    <Objective Type="KillMob" MobId="5719" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-667.59" Y="103.111" Z="-90.8313" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Class Quests\Rogue Class Quests" LogColor="Green" />
     <If Condition="(Me.Class == WoWClass.Rogue)">
@@ -68,7 +37,6 @@
       <If Condition="((!HasQuest(8234)) &amp;&amp; (!IsQuestCompleted(8234)))">
         <PickUp QuestName="Sealed Azure Bag" QuestId="8234" GiverName="Lord Jorach Ravenholdt" GiverId="6768" />
       </If>
-      <Objective QuestName="Sealed Azure Bag" QuestId="8234" Type="KillMob" MobId="6188" KillCount="1" />
       <Objective QuestName="Sealed Azure Bag" QuestId="8234" Type="CollectItem" ItemId="19775" CollectCount="1" />
       <PickUp QuestName="Meeting with the Master" QuestId="3503" GiverName="Sanath Lim-yo" GiverId="8395" />
     </If>
@@ -78,7 +46,6 @@
         <PickUp QuestName="Encoded Fragments" QuestId="8235" GiverName="Archmage Xylem" GiverId="8379" />
       </If>
       <PickUp QuestName="Return Trip" QuestId="3421" GiverName="Nyrill" GiverId="8399" />
-      <Objective QuestName="Encoded Fragments" QuestId="8235" Type="KillMob" MobId="8766" KillCount="1" />
       <Objective QuestName="Encoded Fragments" QuestId="8235" Type="CollectItem" ItemId="20023" CollectCount="10" />
     </If>
     <TurnIn QuestName="Encoded Fragments" QuestId="8235" TurnInName="Archmage Xylem" TurnInId="8379" />
@@ -86,7 +53,6 @@
       <If Condition="((!HasQuest(8236)) &amp;&amp; (!IsQuestCompleted(8236)))">
         <PickUp QuestName="The Azure Key" QuestId="8236" GiverName="Archmage Xylem" GiverId="8379" />
       </If>
-      <Objective QuestName="The Azure Key" QuestId="8236" Type="KillMob" MobId="5719" KillCount="1" />
       <Objective QuestName="The Azure Key" QuestId="8236" Type="CollectItem" ItemId="20022" CollectCount="1" />
       <TurnIn QuestName="The Azure Key" QuestId="8236" TurnInName="Lord Jorach Ravenholdt" TurnInId="6768" />
     </If>

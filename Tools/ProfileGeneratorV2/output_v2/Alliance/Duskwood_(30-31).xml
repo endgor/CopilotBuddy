@@ -65,20 +65,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="181" Name="Look To The Stars">
-    <Objective Type="KillMob" MobId="300" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11224.8" Y="-160.547" Z="5.9639" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="98" Name="The Legend of Stalvan">
-    <Objective Type="KillMob" MobId="315" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10368.0" Y="-1254.99" Z="35.9218" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="335" Name="A Noble Brew">
     <Objective Type="CollectItem" ItemId="2779" CollectCount="1">
       <CollectFrom>
@@ -179,7 +165,6 @@
     </If>
     <Objective QuestName="The Missing Diplomat" QuestId="1244" Type="CollectItem" ItemId="5947" CollectCount="1" />
     <Objective QuestName="Ogre Thieves" QuestId="134" Type="CollectItem" ItemId="1349" CollectCount="1" />
-    <Objective QuestName="Look To The Stars" QuestId="181" Type="KillMob" MobId="300" KillCount="1" />
     <Objective QuestName="Look To The Stars" QuestId="181" Type="CollectItem" ItemId="1968" CollectCount="1" />
     <TurnIn QuestName="Ogre Thieves" QuestId="134" TurnInName="Abercrombie" TurnInId="289" />
     <If Condition="((!HasQuest(160)) &amp;&amp; (!IsQuestCompleted(160)))">
@@ -224,7 +209,6 @@
     <If Condition="((!HasQuest(1245)) &amp;&amp; (!IsQuestCompleted(1245)))">
       <PickUp QuestName="The Missing Diplomat" QuestId="1245" GiverName="Watcher Backus" GiverId="840" />
     </If>
-    <Objective QuestName="The Legend of Stalvan" QuestId="98" Type="KillMob" MobId="315" KillCount="1" />
     <Objective QuestName="The Legend of Stalvan" QuestId="98" Type="CollectItem" ItemId="3629" CollectCount="1" />
     <Objective QuestName="A Noble Brew" QuestId="335" Type="CollectItem" ItemId="2779" CollectCount="1" />
     <TurnIn QuestName="The Legend of Stalvan" QuestId="98" TurnInName="Madame Eva" TurnInId="265" />

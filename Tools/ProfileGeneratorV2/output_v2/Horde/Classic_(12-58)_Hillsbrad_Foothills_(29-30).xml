@@ -27,17 +27,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="501" Name="Elixir of Pain">
-    <Objective Type="KillMob" MobId="2385" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1049.88" Y="-968.222" Z="48.8569" />
-        <Hotspot X="-785.94" Y="-806.041" Z="17.2611" />
-        <Hotspot X="-686.351" Y="-884.803" Z="25.968" />
-        <Hotspot X="-1050.34" Y="-1184.69" Z="50.7841" />
-        <Hotspot X="-1026.26" Y="-889.802" Z="36.7849" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="567" Name="Dangerous!">
     <Objective Type="KillMob" MobId="2451" KillCount="1">
       <Hotspots>
@@ -110,7 +99,6 @@
     <CustomBehavior File="SetHearthstone" MobId="2388" AreaId="267" X="-5.9687" Y="-942.282" Z="57.1621" /> <!-- Set hearth: Tarren Mill -->
     <PickUp QuestName="Helcular's Revenge" QuestId="552" GiverName="Novice Thaivand" GiverId="2429" />
     <Objective QuestName="Elixir of Agony" QuestId="509" Type="CollectItem" ItemId="3502" CollectCount="6" />
-    <Objective QuestName="Elixir of Pain" QuestId="501" Type="KillMob" MobId="2385" KillCount="1" />
     <Objective QuestName="Elixir of Pain" QuestId="501" Type="CollectItem" ItemId="3496" CollectCount="10" />
     <TurnIn QuestName="Elixir of Pain" QuestId="501" TurnInName="Apothecary Lydon" TurnInId="2216" />
     <If Condition="((!HasQuest(502)) &amp;&amp; (!IsQuestCompleted(502)))">
@@ -126,6 +114,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 30 - Feral Mountain Lion</Name>
+          <Factions>14</Factions>
           <TargetMinLevel>27</TargetMinLevel>
           <TargetMaxLevel>28</TargetMaxLevel>
           <Hotspots>

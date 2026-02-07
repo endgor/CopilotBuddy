@@ -23,13 +23,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1918" Name="The Befouled Element">
-    <Objective Type="KillMob" MobId="12759" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1960.89" Y="-1106.05" Z="81.4683" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="25" Name="Stonetalon Standstill">
     <Objective Type="KillMob" MobId="3917" KillCount="12">
       <Hotspots>
@@ -38,31 +31,6 @@
         <Hotspot X="2000.87" Y="-1214.95" Z="60.3939" />
         <Hotspot X="1940.09" Y="-1171.98" Z="64.3597" />
         <Hotspot X="1999.55" Y="-1152.56" Z="80.6255" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="23" Name="Ursangous's Paw">
-    <Objective Type="KillMob" MobId="12678" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2030.69" Y="-726.054" Z="102.369" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1195" Name="The Sacred Flame">
-    <Objective Type="KillMob" MobId="4054" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2520.04" Y="-1648.77" Z="144.428" />
-        <Hotspot X="2517.11" Y="-1697.29" Z="146.717" />
-        <Hotspot X="2547.33" Y="-1780.42" Z="149.309" />
-        <Hotspot X="2556.58" Y="-1683.6" Z="153.098" />
-        <Hotspot X="2580.97" Y="-1716.76" Z="159.502" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="24" Name="Shadumbra's Head">
-    <Objective Type="KillMob" MobId="12677" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2518.44" Y="-1615.66" Z="144.605" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -102,32 +70,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="2478" Name="Mission: Possible But Not Probable">
-    <Objective Type="KillMob" MobId="7310" KillCount="2">
-      <Hotspots>
-        <Hotspot X="1223.83" Y="-2921.81" Z="93.2948" />
-        <Hotspot X="1227.4" Y="-2920.36" Z="93.2948" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="7308" KillCount="2">
-      <Hotspots>
-        <Hotspot X="1228.97" Y="-2915.53" Z="107.089" />
-        <Hotspot X="1234.63" Y="-2931.05" Z="107.019" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="7307" KillCount="2">
-      <Hotspots>
-        <Hotspot X="1219.03" Y="-2928.51" Z="120.677" />
-        <Hotspot X="1222.56" Y="-2914.28" Z="120.677" />
-        <Hotspot X="1238.85" Y="-2925.31" Z="120.677" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="7288" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1235.16" Y="-2925.27" Z="141.818" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Classic (12-58)\Ashenvale (25-26)" LogColor="Green" />
@@ -140,7 +82,6 @@
     <Objective QuestName="Ashenvale Outrunners" QuestId="6503" Type="KillMob" MobId="12856" KillCount="9" />
     <PickUp QuestName="Torek's Assault" QuestId="6544" GiverName="Torek" GiverId="12858" />
     <Objective QuestName="Torek's Assault" QuestId="6544" Type="KillMob" MobId="12860" KillCount="1" />
-    <Objective QuestName="The Befouled Element" QuestId="1918" Type="KillMob" MobId="12759" KillCount="1" />
     <Objective QuestName="The Befouled Element" QuestId="1918" Type="CollectItem" ItemId="16408" CollectCount="1" />
     <While Condition="((HasQuest(6544)) &amp;&amp; (!IsQuestCompleted(6544)))">
       <CustomBehavior File="UseItemOn" QuestId="6544" MobId="0" ItemId="16408" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -148,7 +89,6 @@
     </While>
     <PickUp QuestName="The Befouled Element" QuestId="1918" GiverName="Torek" GiverId="12858" />
     <Objective QuestName="Stonetalon Standstill" QuestId="25" Type="KillMob" MobId="3917" KillCount="12" />
-    <Objective QuestName="Ursangous's Paw" QuestId="23" Type="KillMob" MobId="12678" KillCount="1" />
     <Objective QuestName="Ursangous's Paw" QuestId="23" Type="CollectItem" ItemId="16303" CollectCount="1" />
     <While Condition="((HasQuest(1918)) &amp;&amp; (!IsQuestCompleted(1918)))">
       <CustomBehavior File="UseItemOn" QuestId="1918" MobId="0" ItemId="16303" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -181,9 +121,7 @@
       </SetGrindArea>
       <GrindTo Level="26" /> <!--  (grind Ursangous) -->
     </If>
-    <Objective QuestName="The Sacred Flame" QuestId="1195" Type="KillMob" MobId="4054" KillCount="1" />
     <Objective QuestName="The Sacred Flame" QuestId="1195" Type="CollectItem" ItemId="5867" CollectCount="1" />
-    <Objective QuestName="Shadumbra's Head" QuestId="24" Type="KillMob" MobId="12677" KillCount="1" />
     <Objective QuestName="Shadumbra's Head" QuestId="24" Type="CollectItem" ItemId="16304" CollectCount="1" />
     <While Condition="((HasQuest(6441)) &amp;&amp; (!IsQuestCompleted(6441)))">
       <CustomBehavior File="UseItemOn" QuestId="6441" MobId="0" ItemId="16304" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -226,10 +164,6 @@
         <PickUp QuestName="Mission: Possible But Not Probable" QuestId="2478" GiverName="Taskmaster Fizzule" GiverId="7233" />
       </If>
       <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="CollectItem" ItemId="8072" CollectCount="1" />
-      <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="KillMob" MobId="7310" KillCount="2" />
-      <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="KillMob" MobId="7308" KillCount="2" />
-      <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="KillMob" MobId="7307" KillCount="2" />
-      <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="KillMob" MobId="7288" KillCount="1" />
       <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="CollectItem" ItemId="8073" CollectCount="1" />
       <Objective QuestName="Mission: Possible But Not Probable" QuestId="2478" Type="CollectItem" ItemId="8074" CollectCount="1" />
     </If>

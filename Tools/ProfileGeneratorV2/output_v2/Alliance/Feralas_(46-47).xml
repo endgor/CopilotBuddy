@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="2870" Name="Against Lord Shalzaru">
-    <Objective Type="KillMob" MobId="8136" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5631.35" Y="3461.0" Z="2.605" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="2741" Name="The Super Egg-O-Matic">
     <Objective Type="CollectItem" ItemId="8564" CollectCount="1">
       <CollectFrom>
@@ -61,26 +54,6 @@
         <Hotspot X="-3586.44" Y="199.911" Z="136.561" />
         <Hotspot X="-4890.78" Y="1243.28" Z="77.4524" />
         <Hotspot X="-4913.71" Y="1175.46" Z="58.8896" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1452" Name="Rhapsody's Kalimdor Kocktail">
-    <Objective Type="KillMob" MobId="5268" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4189.08" Y="-784.331" Z="-40.3838" />
-        <Hotspot X="-4259.31" Y="98.7355" Z="56.2615" />
-        <Hotspot X="-4388.88" Y="-113.938" Z="58.3584" />
-        <Hotspot X="-4082.12" Y="-44.5403" Z="66.6647" />
-        <Hotspot X="-4046.63" Y="553.437" Z="88.2486" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="5260" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5350.38" Y="1151.18" Z="62.1598" />
-        <Hotspot X="-5331.63" Y="1151.2" Z="63.7456" />
-        <Hotspot X="-5151.74" Y="1514.26" Z="47.2643" />
-        <Hotspot X="-4746.96" Y="247.709" Z="35.2989" />
-        <Hotspot X="-5159.92" Y="1427.67" Z="47.2462" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -147,7 +120,6 @@
     <If Condition="((!HasQuest(2870)) &amp;&amp; (!IsQuestCompleted(2870)))">
       <PickUp QuestName="Against Lord Shalzaru" QuestId="2870" GiverName="Latronicus Moonspear" GiverId="7877" />
     </If>
-    <Objective QuestName="Against Lord Shalzaru" QuestId="2870" Type="KillMob" MobId="8136" KillCount="1" />
     <Objective QuestName="Against Lord Shalzaru" QuestId="2870" Type="CollectItem" ItemId="9248" CollectCount="1" />
     <Objective QuestName="Against Lord Shalzaru" QuestId="2870" Type="CollectItem" ItemId="8705" CollectCount="1" />
     <While Condition="((HasQuest(2870)) &amp;&amp; (!IsQuestCompleted(2870)))">
@@ -186,9 +158,7 @@
     <Objective QuestName="The High Wilderness" QuestId="2982" Type="KillMob" MobId="5236" KillCount="8" />
     <Objective QuestName="The High Wilderness" QuestId="2982" Type="KillMob" MobId="5240" KillCount="8" />
     <Objective QuestName="The High Wilderness" QuestId="2982" Type="KillMob" MobId="5232" KillCount="8" />
-    <Objective QuestName="Rhapsody's Kalimdor Kocktail" QuestId="1452" Type="KillMob" MobId="5268" KillCount="1" />
     <Objective QuestName="Rhapsody's Kalimdor Kocktail" QuestId="1452" Type="CollectItem" ItemId="6258" CollectCount="3" />
-    <Objective QuestName="Rhapsody's Kalimdor Kocktail" QuestId="1452" Type="KillMob" MobId="5260" KillCount="1" />
     <Objective QuestName="Rhapsody's Kalimdor Kocktail" QuestId="1452" Type="CollectItem" ItemId="6259" CollectCount="3" />
     <PickUp QuestName="Freedom for All Creatures" QuestId="2969" GiverName="Kindal Moonweaver" GiverId="7956" />
     <TurnIn QuestName="Freedom for All Creatures" QuestId="2969" TurnInName="Kindal Moonweaver" TurnInId="7956" />

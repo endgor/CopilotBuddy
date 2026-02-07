@@ -12,24 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="610" Name="&quot;Pretty Boy&quot; Duncan">
-    <Objective Type="KillMob" MobId="2545" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-14121.7" Y="473.517" Z="1.0327" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="606" Name="Scaring Shaky">
-    <Objective Type="KillMob" MobId="1557" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-13684.4" Y="150.006" Z="20.536" />
-        <Hotspot X="-13713.7" Y="178.499" Z="18.7668" />
-        <Hotspot X="-13953.2" Y="84.4285" Z="16.0215" />
-        <Hotspot X="-13914.3" Y="50.4349" Z="15.7874" />
-        <Hotspot X="-13953.3" Y="140.875" Z="13.7878" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="196" Name="Raptor Mastery">
     <Objective Type="KillMob" MobId="687" KillCount="10">
       <Hotspots>
@@ -38,16 +20,6 @@
         <Hotspot X="-13280.5" Y="682.581" Z="3.2884" />
         <Hotspot X="-13282.4" Y="753.035" Z="2.9505" />
         <Hotspot X="-13318.5" Y="521.245" Z="4.4735" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="628" Name="Excelsior">
-    <Objective Type="KillMob" MobId="2635" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-12116.7" Y="349.741" Z="2.262" />
-        <Hotspot X="-12252.8" Y="317.269" Z="1.727" />
-        <Hotspot X="-11986.6" Y="603.381" Z="1.376" />
-        <Hotspot X="-12552.5" Y="87.8267" Z="1.7589" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -80,7 +52,6 @@
     </If>
     <TurnIn QuestName="Sunken Treasure" QuestId="669" TurnInName="Fleet Master Seahorn" TurnInId="2487" />
     <PickUp QuestName="The Bloodsail Buccaneers" QuestId="595" GiverName="First Mate Crazz" GiverId="2490" />
-    <Objective QuestName="&quot;Pretty Boy&quot; Duncan" QuestId="610" Type="KillMob" MobId="2545" KillCount="1" />
     <Objective QuestName="&quot;Pretty Boy&quot; Duncan" QuestId="610" Type="CollectItem" ItemId="4027" CollectCount="1" />
     <TurnIn QuestName="The Bloodsail Buccaneers" QuestId="595" TurnInName="Object_2083" TurnInType="Object" TurnInId="2083" />
     <If Condition="((!HasQuest(597)) &amp;&amp; (!IsQuestCompleted(597)))">
@@ -95,7 +66,6 @@
       <PickUp QuestName="The Curse of the Tides" QuestId="611" GiverName="Catelyn the Blade" GiverId="2542" />
     </If>
     <TurnIn QuestName="The Bloodsail Buccaneers" QuestId="599" TurnInName="Fleet Master Seahorn" TurnInId="2487" />
-    <Objective QuestName="Scaring Shaky" QuestId="606" Type="KillMob" MobId="1557" KillCount="1" />
     <Objective QuestName="Scaring Shaky" QuestId="606" Type="CollectItem" ItemId="3919" CollectCount="5" />
     <Objective QuestName="Raptor Mastery" QuestId="196" Type="KillMob" MobId="687" KillCount="10" />
     <Objective QuestName="Venture Company Mining" QuestId="600" Type="CollectItem" ItemId="3917" CollectCount="10" />
@@ -109,9 +79,7 @@
     <If Condition="((!HasQuest(197)) &amp;&amp; (!IsQuestCompleted(197)))">
       <PickUp QuestName="Raptor Mastery" QuestId="197" GiverName="Hemet Nesingwary" GiverId="715" />
     </If>
-    <Objective QuestName="Excelsior" QuestId="628" Type="KillMob" MobId="2635" KillCount="1" />
     <Objective QuestName="Excelsior" QuestId="628" Type="CollectItem" ItemId="4105" CollectCount="1" />
-    <Objective QuestName="The Curse of the Tides" QuestId="611" Type="KillMob" MobId="2624" KillCount="1" />
     <Objective QuestName="The Curse of the Tides" QuestId="611" Type="CollectItem" ItemId="4034" CollectCount="1" />
     <TurnIn QuestName="Venture Company Mining" QuestId="600" TurnInName="Crank Fizzlebub" TurnInId="2498" />
     <PickUp QuestName="Tran'rek" QuestId="2864" GiverName="Krazek" GiverId="773" />

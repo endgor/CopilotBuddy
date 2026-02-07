@@ -23,17 +23,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1218" Name="Marsh Frog Legs">
-    <Objective Type="KillMob" MobId="23979" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2957.55" Y="-3828.82" Z="37.5224" />
-        <Hotspot X="-2986.96" Y="-4004.18" Z="37.4665" />
-        <Hotspot X="-3045.76" Y="-3996.14" Z="37.8974" />
-        <Hotspot X="-3071.41" Y="-3981.57" Z="39.0792" />
-        <Hotspot X="-3036.98" Y="-3922.27" Z="37.4266" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9437" Name="Twilight of the Dawn Runner">
     <Objective Type="CollectItem" ItemId="23657" CollectCount="1">
       <CollectFrom>
@@ -42,27 +31,6 @@
       <Hotspots>
         <Hotspot X="-2894.05" Y="-3421.95" Z="74.45" />
         <Hotspot X="-2882.41" Y="-3422.0" Z="74.45" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1203" Name="Jarl Needs a Blade">
-    <Objective Type="KillMob" MobId="23841" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2724.06" Y="-4008.5" Z="30.1463" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1205" Name="Deadmire">
-    <Objective Type="KillMob" MobId="4841" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3949.69" Y="-3471.04" Z="29.1544" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="11172" Name="The Zeppelin Crash">
-    <Objective Type="KillMob" MobId="23881" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3663.91" Y="-3453.97" Z="37.2993" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -116,7 +84,6 @@
     <PickUp QuestName="Marsh Frog Legs" QuestId="1218" GiverName="&quot;Swamp Eye&quot; Jarl" GiverId="4792" />
     <PickUp QuestName="What's Haunting Witch Hill?" QuestId="11180" GiverName="Mordant Grimsby" GiverId="23843" />
     <PickUp QuestName="The Lost Report" QuestId="1238" GiverName="Mordant Grimsby" GiverId="23843" />
-    <Objective QuestName="Marsh Frog Legs" QuestId="1218" Type="KillMob" MobId="23979" KillCount="1" />
     <Objective QuestName="Marsh Frog Legs" QuestId="1218" Type="CollectItem" ItemId="33202" CollectCount="10" />
     <TurnIn QuestName="Marsh Frog Legs" QuestId="1218" TurnInName="&quot;Swamp Eye&quot; Jarl" TurnInId="4792" />
     <If Condition="((!HasQuest(1206)) &amp;&amp; (!IsQuestCompleted(1206)))">
@@ -159,6 +126,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 39 - Zelfrax</Name>
+          <Factions>954</Factions>
           <Hotspots>
             <Hotspot X="42.26" Y="23.51" Z="0.00" />
           </Hotspots>
@@ -174,7 +142,6 @@
     <If Condition="((!HasQuest(1239)) &amp;&amp; (!IsQuestCompleted(1239)))">
       <PickUp QuestName="The Severed Head" QuestId="1239" GiverName="&quot;Swamp Eye&quot; Jarl" GiverId="4792" />
     </If>
-    <Objective QuestName="Jarl Needs a Blade" QuestId="1203" Type="KillMob" MobId="23841" KillCount="1" />
     <Objective QuestName="Jarl Needs a Blade" QuestId="1203" Type="CollectItem" ItemId="33110" CollectCount="1" />
     <Objective QuestName="Hungry!" QuestId="1177" Type="CollectItem" ItemId="5847" CollectCount="8" />
     <TurnIn QuestName="Jarl Needs a Blade" QuestId="1203" TurnInName="&quot;Swamp Eye&quot; Jarl" TurnInId="4792" />
@@ -191,10 +158,8 @@
     <PickUp QuestName="The Reagent Thief" QuestId="11173" GiverName="Apprentice Garion" GiverId="23601" />
     <PickUp QuestName="Direhorn Raiders" QuestId="11156" GiverName="Apprentice Morlann" GiverId="23600" />
     <PickUp QuestName="The Zeppelin Crash" QuestId="11172" GiverName="Apprentice Morlann" GiverId="23600" />
-    <Objective QuestName="Deadmire" QuestId="1205" Type="KillMob" MobId="4841" KillCount="1" />
     <Objective QuestName="Deadmire" QuestId="1205" Type="CollectItem" ItemId="5945" CollectCount="1" />
     <Objective QuestName="The Reagent Thief" QuestId="11173" Type="CollectItem" ItemId="33103" CollectCount="6" />
-    <Objective QuestName="The Zeppelin Crash" QuestId="11172" Type="KillMob" MobId="23881" KillCount="1" />
     <Objective QuestName="The Zeppelin Crash" QuestId="11172" Type="CollectItem" ItemId="33115" CollectCount="1" />
     <While Condition="((HasQuest(11172)) &amp;&amp; (!IsQuestCompleted(11172)))">
       <CustomBehavior File="UseItemOn" QuestId="11172" MobId="0" ItemId="33115" NumOfTimes="1" Range="5" CollectionDistance="1000" />

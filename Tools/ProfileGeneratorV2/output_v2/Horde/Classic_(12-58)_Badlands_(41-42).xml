@@ -28,39 +28,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="710" Name="Study of the Elements: Rock">
-    <Objective Type="KillMob" MobId="2735" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6648.3" Y="-2554.05" Z="249.412" />
-        <Hotspot X="-6681.4" Y="-2653.75" Z="241.959" />
-        <Hotspot X="-6643.63" Y="-2664.42" Z="253.84" />
-        <Hotspot X="-6684.62" Y="-2580.44" Z="241.778" />
-        <Hotspot X="-6613.6" Y="-2636.94" Z="265.85" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="711" Name="Study of the Elements: Rock">
-    <Objective Type="KillMob" MobId="92" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6488.99" Y="-2490.99" Z="324.462" />
-        <Hotspot X="-6423.73" Y="-2465.14" Z="327.172" />
-        <Hotspot X="-6443.94" Y="-2413.38" Z="303.51" />
-        <Hotspot X="-6450.99" Y="-2447.3" Z="313.419" />
-        <Hotspot X="-6474.88" Y="-2453.17" Z="306.818" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="712" Name="Study of the Elements: Rock">
-    <Objective Type="KillMob" MobId="2736" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-7389.7" Y="-2445.93" Z="311.469" />
-        <Hotspot X="-7283.98" Y="-2410.49" Z="272.681" />
-        <Hotspot X="-7317.67" Y="-2411.69" Z="280.345" />
-        <Hotspot X="-7385.82" Y="-2421.31" Z="303.94" />
-        <Hotspot X="-7349.08" Y="-2452.89" Z="303.762" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Classic (12-58)\Badlands (41-42)" LogColor="Green" />
@@ -100,13 +67,11 @@
       <PickUp QuestName="Badlands Reagent Run" QuestId="2258" GiverName="Jarkal Mossmeld" GiverId="6868" />
     </If>
     <Objective QuestName="Badlands Reagent Run" QuestId="2258" Type="CollectItem" ItemId="7848" CollectCount="5" />
-    <Objective QuestName="Study of the Elements: Rock" QuestId="710" Type="KillMob" MobId="2735" KillCount="1" />
     <Objective QuestName="Study of the Elements: Rock" QuestId="710" Type="CollectItem" ItemId="4626" CollectCount="10" />
     <TurnIn QuestName="Study of the Elements: Rock" QuestId="710" TurnInName="Lotwil Veriatus" TurnInId="2921" />
     <If Condition="((!HasQuest(711)) &amp;&amp; (!IsQuestCompleted(711)))">
       <PickUp QuestName="Study of the Elements: Rock" QuestId="711" GiverName="Lotwil Veriatus" GiverId="2921" />
     </If>
-    <Objective QuestName="Study of the Elements: Rock" QuestId="711" Type="KillMob" MobId="92" KillCount="1" />
     <Objective QuestName="Study of the Elements: Rock" QuestId="711" Type="CollectItem" ItemId="4627" CollectCount="3" />
     <TurnIn QuestName="Study of the Elements: Rock" QuestId="711" TurnInName="Lotwil Veriatus" TurnInId="2921" />
     <If Condition="((!HasQuest(712)) &amp;&amp; (!IsQuestCompleted(712)))">
@@ -120,6 +85,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 42 - Rock Elemental</Name>
+          <Factions>91</Factions>
           <TargetMinLevel>39</TargetMinLevel>
           <TargetMaxLevel>40</TargetMaxLevel>
           <Hotspots>
@@ -129,7 +95,6 @@
       </SetGrindArea>
       <GrindTo Level="42" /> <!--  (grind Rock Elemental) -->
     </If>
-    <Objective QuestName="Study of the Elements: Rock" QuestId="712" Type="KillMob" MobId="2736" KillCount="1" />
     <Objective QuestName="Study of the Elements: Rock" QuestId="712" Type="CollectItem" ItemId="4628" CollectCount="5" />
     <TurnIn QuestName="Study of the Elements: Rock" QuestId="712" TurnInName="Lotwil Veriatus" TurnInId="2921" />
     <If Condition="((!HasQuest(734)) &amp;&amp; (!IsQuestCompleted(734)))">
@@ -147,7 +112,6 @@
     <If Condition="((!HasQuest(778)) &amp;&amp; (!IsQuestCompleted(778)))">
       <PickUp QuestName="This Is Going to Be Hard" QuestId="778" GiverName="Lotwil Veriatus" GiverId="2921" />
     </If>
-    <Objective QuestName="This Is Going to Be Hard" QuestId="778" Type="KillMob" MobId="2919" KillCount="1" />
     <Objective QuestName="This Is Going to Be Hard" QuestId="778" Type="CollectItem" ItemId="4847" CollectCount="1" />
     <TurnIn QuestName="This Is Going to Be Hard" QuestId="778" TurnInName="Lotwil Veriatus" TurnInId="2921" />
     <TurnIn QuestName="Badlands Reagent Run" QuestId="2258" TurnInName="Jarkal Mossmeld" TurnInId="6868" />

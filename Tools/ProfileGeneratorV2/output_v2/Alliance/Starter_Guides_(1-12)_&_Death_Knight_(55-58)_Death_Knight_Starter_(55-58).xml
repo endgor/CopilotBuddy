@@ -85,11 +85,6 @@
     </Objective>
   </Quest>
   <Quest Id="12719" Name="Nowhere To Run And Nowhere To Hide">
-    <Objective Type="KillMob" MobId="28945" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1587.17" Y="-5700.16" Z="123.123" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="39362" CollectCount="1">
       <CollectFrom>
         <GameObject Name="New Avalon Registry" Id="190947" />
@@ -351,7 +346,6 @@
     <If Condition="((!HasQuest(12722)) &amp;&amp; (!IsQuestCompleted(12722)))">
       <PickUp QuestName="Lambs To The Slaughter" QuestId="12722" GiverName="Baron Rivendare" GiverId="28910" />
     </If>
-    <Objective QuestName="Nowhere To Run And Nowhere To Hide" QuestId="12719" Type="KillMob" MobId="28945" KillCount="1" />
     <Objective QuestName="Nowhere To Run And Nowhere To Hide" QuestId="12719" Type="CollectItem" ItemId="39362" CollectCount="1" />
     <TurnIn QuestName="Nowhere To Run And Nowhere To Hide" QuestId="12719" TurnInName="Prince Keleseth" TurnInId="28911" />
     <If Condition="((!HasQuest(12720)) &amp;&amp; (!IsQuestCompleted(12720)))">
@@ -386,7 +380,6 @@
     <If Condition="((!HasQuest(12727)) &amp;&amp; (!IsQuestCompleted(12727)))">
       <PickUp QuestName="Bloody Breakout" QuestId="12727" GiverName="Koltira Deathweaver" GiverId="28912" />
     </If>
-    <Objective QuestName="Bloody Breakout" QuestId="12727" Type="KillMob" MobId="29001" KillCount="1" />
     <Objective QuestName="Bloody Breakout" QuestId="12727" Type="CollectItem" ItemId="39510" CollectCount="1" />
     <Objective QuestName="The Path Of The Righteous Crusader" QuestId="12724" Type="CollectItem" ItemId="39504" CollectCount="1" />
     <TurnIn QuestName="The Path Of The Righteous Crusader" QuestId="12724" TurnInName="Orbaz Bloodbane" TurnInId="28914" />
@@ -522,7 +515,6 @@
       <CustomBehavior File="UseItemOn" QuestId="12754" MobId="0" ItemId="39645" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Ambush At The Overlook" QuestId="12754" Type="KillMob" MobId="29076" KillCount="1" />
     <Objective QuestName="Ambush At The Overlook" QuestId="12754" Type="CollectItem" ItemId="39646" CollectCount="1" />
     <Objective QuestName="Ambush At The Overlook" QuestId="12754" Type="CollectItem" ItemId="39647" CollectCount="1" />
     <TurnIn QuestName="Ambush At The Overlook" QuestId="12754" TurnInName="Orbaz Bloodbane" TurnInId="28914" />

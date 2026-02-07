@@ -72,7 +72,6 @@
       <CustomBehavior File="UseItemOn" QuestId="7003" MobId="0" ItemId="18904" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Zapped Giants" QuestId="7003" Type="KillMob" MobId="14638" KillCount="1" />
     <Objective QuestName="Zapped Giants" QuestId="7003" Type="CollectItem" ItemId="18956" CollectCount="15" />
     <Objective QuestName="Fuel for the Zapping" QuestId="7721" Type="CollectItem" ItemId="18958" CollectCount="10" />
     <TurnIn QuestName="Zapped Giants" QuestId="7003" TurnInName="Zorbin Fandazzle" TurnInId="14637" />
@@ -85,7 +84,6 @@
       <CustomBehavior File="UseItemOn" QuestId="3062" MobId="0" ItemId="9530" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Dark Heart" QuestId="3062" Type="KillMob" MobId="8075" KillCount="1" />
     <Objective QuestName="Dark Heart" QuestId="3062" Type="CollectItem" ItemId="9528" CollectCount="1" />
     <Objective QuestName="Vengeance on the Northspring" QuestId="3063" Type="KillMob" MobId="5362" KillCount="4" />
     <Objective QuestName="Vengeance on the Northspring" QuestId="3063" Type="KillMob" MobId="5363" KillCount="4" />

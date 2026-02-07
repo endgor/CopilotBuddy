@@ -12,17 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="10819" Name="Felsworn Gas Mask">
-    <Objective Type="KillMob" MobId="21300" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3113.37" Y="5087.61" Z="267.159" />
-        <Hotspot X="3210.25" Y="5097.48" Z="262.264" />
-        <Hotspot X="3212.71" Y="5103.22" Z="262.812" />
-        <Hotspot X="3379.71" Y="4999.32" Z="262.454" />
-        <Hotspot X="3385.91" Y="4998.86" Z="262.762" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10820" Name="Deceive thy Enemy">
     <Objective Type="KillMob" MobId="19961" KillCount="4">
       <Hotspots>
@@ -47,7 +36,7 @@
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\The Burning Crusade (58-70)\Blade's Edge Mountains Group Quests" LogColor="Green" />
     <If Condition="Me.Level &lt; 65">
-      <GrindTo Level="65" />
+      <GrindTo Level="65" /> <!--  (grind [DND]Bloodmaul Chatter Credit) -->
     </If>
     <If Condition="((!HasQuest(10718)) &amp;&amp; (!IsQuestCompleted(10718)))">
       <PickUp QuestName="The Spirits Have Voices" QuestId="10718" GiverName="Garm Wolfbrother" GiverId="21950" />
@@ -125,9 +114,7 @@
       <CustomBehavior File="UseItemOn" QuestId="10742" MobId="20555" ItemId="31146" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Showdown" QuestId="10742" Type="KillMob" MobId="20555" KillCount="1" />
     <TurnIn QuestName="Showdown" QuestId="10742" TurnInName="Rexxar" TurnInId="21984" />
-    <Objective QuestName="Felsworn Gas Mask" QuestId="10819" Type="KillMob" MobId="21300" KillCount="1" />
     <Objective QuestName="Showdown" QuestId="10742" Type="CollectItem" ItemId="31384" CollectCount="1" />
     <CustomBehavior File="UseItemOn" ItemId="31384" MobId="0" NumOfTimes="1" CollectionDistance="100" />
     <PickUp QuestName="Damaged Mask" QuestId="10810" GiverName="Rexxar" GiverId="21984" />
@@ -151,7 +138,6 @@
       <PickUp QuestName="You're Fired!" QuestId="10821" GiverName="Wildlord Antelarion" GiverId="22127" />
     </If>
     <Objective QuestName="You're Fired!" QuestId="10821" Type="CollectItem" ItemId="31536" CollectCount="5" />
-    <Objective QuestName="You're Fired!" QuestId="10821" Type="KillMob" MobId="19963" KillCount="1" />
     <TurnIn QuestName="You're Fired!" QuestId="10821" TurnInName="Wildlord Antelarion" TurnInId="22127" />
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\The Burning Crusade (58-70)\Blade's Edge Mountains Group Quests Complete" LogColor="Orange" />
   </QuestOrder>

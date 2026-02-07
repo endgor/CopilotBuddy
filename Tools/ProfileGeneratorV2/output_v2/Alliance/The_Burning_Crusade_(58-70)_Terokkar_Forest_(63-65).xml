@@ -12,41 +12,10 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="10037" Name="Rather Be Fishin'">
-    <Objective Type="KillMob" MobId="18750" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1451.33" Y="4773.68" Z="-24.5155" />
-        <Hotspot X="-1454.64" Y="4780.3" Z="-25.7975" />
-        <Hotspot X="-1359.24" Y="4881.7" Z="-24.3259" />
-        <Hotspot X="-1315.67" Y="4929.63" Z="-23.0532" />
-        <Hotspot X="-1333.83" Y="4957.37" Z="-26.3804" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9951" Name="It's Watching You!">
     <Objective Type="KillMob" MobId="18438" KillCount="1">
       <Hotspots>
         <Hotspot X="-1794.59" Y="4732.12" Z="66.8314" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9968" Name="Strange Energy">
-    <Objective Type="KillMob" MobId="18437" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1923.22" Y="4569.71" Z="6.9658" />
-        <Hotspot X="-1854.43" Y="4580.15" Z="10.0736" />
-        <Hotspot X="-1906.05" Y="4624.76" Z="2.1376" />
-        <Hotspot X="-1876.22" Y="4607.82" Z="10.512" />
-        <Hotspot X="-1914.5" Y="4715.12" Z="-7.0054" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="18468" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1262.65" Y="5424.11" Z="25.2134" />
-        <Hotspot X="-2281.74" Y="4368.03" Z="3.4896" />
-        <Hotspot X="-2194.41" Y="4809.34" Z="2.5628" />
-        <Hotspot X="-2220.64" Y="4810.8" Z="3.0027" />
-        <Hotspot X="-2214.48" Y="4699.37" Z="-0.281" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -263,13 +232,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10022" Name="The Elusive Ironjaw">
-    <Objective Type="KillMob" MobId="18670" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2257.22" Y="3547.44" Z="-21.6101" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9990" Name="Investigate Tuurem">
     <Objective Type="CollectItem" ItemId="25727" CollectCount="1">
       <CollectFrom>
@@ -322,13 +284,6 @@
         <Hotspot X="-2369.74" Y="3244.58" Z="-3.2923" />
         <Hotspot X="-2364.04" Y="3213.52" Z="-3.0831" />
         <Hotspot X="-2346.05" Y="3182.74" Z="-0.3597" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10446" Name="The Final Code">
-    <Objective Type="KillMob" MobId="18554" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2288.35" Y="3091.5" Z="152.817" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -502,7 +457,6 @@
       <PickUp QuestName="Firewing Signets" QuestId="10412" GiverName="Magistrix Fyalenn" GiverId="18531" />
     </If>
     <CustomBehavior File="SetHearthstone" MobId="19046" AreaId="3703" X="-1904.29" Y="5765.5" Z="131.296" /> <!-- Set hearth: Shattrath City -->
-    <Objective QuestName="Rather Be Fishin'" QuestId="10037" Type="KillMob" MobId="18750" KillCount="1" />
     <Objective QuestName="Rather Be Fishin'" QuestId="10037" Type="CollectItem" ItemId="25891" CollectCount="8" />
     <If Condition="((!HasQuest(9968)) &amp;&amp; (!IsQuestCompleted(9968)))">
       <PickUp QuestName="Strange Energy" QuestId="9968" GiverName="Earthbinder Tavgren" GiverId="18446" />
@@ -513,10 +467,8 @@
     <PickUp QuestName="It's Watching You!" QuestId="9951" GiverName="Warden Treelos" GiverId="18424" />
     <Objective QuestName="It's Watching You!" QuestId="9951" Type="KillMob" MobId="18438" KillCount="1" />
     <TurnIn QuestName="It's Watching You!" QuestId="9951" TurnInName="Warden Treelos" TurnInId="18424" />
-    <Objective QuestName="Strange Energy" QuestId="9968" Type="KillMob" MobId="18437" KillCount="1" />
     <Objective QuestName="Strange Energy" QuestId="9968" Type="CollectItem" ItemId="24279" CollectCount="4" />
     <TurnIn QuestName="Clues in the Thicket" QuestId="9971" TurnInName="Earthbinder Tavgren" TurnInId="18446" />
-    <Objective QuestName="Strange Energy" QuestId="9968" Type="KillMob" MobId="18468" KillCount="1" />
     <Objective QuestName="Strange Energy" QuestId="9968" Type="CollectItem" ItemId="25672" CollectCount="4" />
     <TurnIn QuestName="Strange Energy" QuestId="9968" TurnInName="Earthbinder Tavgren" TurnInId="18446" />
     <If Condition="((!HasQuest(9978)) &amp;&amp; (!IsQuestCompleted(9978)))">
@@ -608,6 +560,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 64 - Urdak</Name>
+          <Factions>1738</Factions>
           <TargetMinLevel>63</TargetMinLevel>
           <TargetMaxLevel>64</TargetMaxLevel>
           <Hotspots>
@@ -646,7 +599,6 @@
       <CustomBehavior File="UseItemOn" QuestId="10842" MobId="21636" ItemId="30527" NumOfTimes="100" Range="5" CollectionDistance="1000" X="-2981.75" Y="4378.62" Z="-49.227" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="The Vengeful Harbinger" QuestId="10842" Type="KillMob" MobId="21638" KillCount="1" />
     <TurnIn QuestName="The Vengeful Harbinger" QuestId="10842" TurnInName="Draenei Tomb Guardian" TurnInId="22278" />
     <Objective QuestName="The Tomb of Lights" QuestId="10840" Type="KillMob" MobId="21370" KillCount="10" />
     <Objective QuestName="The Tomb of Lights" QuestId="10840" Type="KillMob" MobId="21368" KillCount="10" />
@@ -683,7 +635,6 @@
     <Objective QuestName="Thinning the Ranks" QuestId="10007" Type="KillMob" MobId="16810" KillCount="6" />
     <TurnIn QuestName="The Firewing Liaison" QuestId="10002" TurnInName="Theloria Shadecloak" TurnInId="18565" />
     <TurnIn QuestName="Thinning the Ranks" QuestId="10007" TurnInName="Theloria Shadecloak" TurnInId="18565" />
-    <Objective QuestName="The Elusive Ironjaw" QuestId="10022" Type="KillMob" MobId="18670" KillCount="1" />
     <Objective QuestName="The Elusive Ironjaw" QuestId="10022" Type="CollectItem" ItemId="25837" CollectCount="1" />
     <Objective QuestName="Investigate Tuurem" QuestId="9990" Type="CollectItem" ItemId="25727" CollectCount="1" />
     <Objective QuestName="Vessels of Power" QuestId="10028" Type="CollectItem" ItemId="25841" CollectCount="8" />
@@ -710,7 +661,6 @@
     <If Condition="((!HasQuest(10446)) &amp;&amp; (!IsQuestCompleted(10446)))">
       <PickUp QuestName="The Final Code" QuestId="10446" GiverName="Lieutenant Meridian" GiverId="21006" />
     </If>
-    <Objective QuestName="The Final Code" QuestId="10446" Type="KillMob" MobId="18554" KillCount="1" />
     <Objective QuestName="The Final Code" QuestId="10446" Type="CollectItem" ItemId="29912" CollectCount="1" />
     <TurnIn QuestName="The Final Code" QuestId="10446" TurnInName="Jenai Starwhisper" TurnInId="18459" />
     <If Condition="((!HasQuest(10005)) &amp;&amp; (!IsQuestCompleted(10005)))">
@@ -775,6 +725,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 65 - Broken Skeleton</Name>
+          <Factions>21</Factions>
           <TargetMinLevel>64</TargetMinLevel>
           <TargetMaxLevel>65</TargetMaxLevel>
           <Hotspots>

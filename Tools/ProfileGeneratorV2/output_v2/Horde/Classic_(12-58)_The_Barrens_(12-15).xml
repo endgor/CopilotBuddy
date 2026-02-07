@@ -41,51 +41,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="845" Name="The Zhevra">
-    <Objective Type="KillMob" MobId="3242" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-741.331" Y="-2716.33" Z="92.7916" />
-        <Hotspot X="-948.884" Y="-2651.79" Z="91.9469" />
-        <Hotspot X="154.062" Y="-3549.67" Z="28.7943" />
-        <Hotspot X="-948.796" Y="-2914.72" Z="91.7917" />
-        <Hotspot X="94.0585" Y="-3703.99" Z="24.7733" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="872" Name="The Disruption Ends">
-    <Objective Type="KillMob" MobId="3269" KillCount="8">
-      <Hotspots>
-        <Hotspot X="-100.828" Y="-3147.59" Z="92.0383" />
-        <Hotspot X="-82.1573" Y="-3143.68" Z="91.7917" />
-        <Hotspot X="-102.801" Y="-3131.29" Z="92.1995" />
-        <Hotspot X="-106.771" Y="-3144.27" Z="92.0383" />
-        <Hotspot X="-49.2053" Y="-3185.31" Z="91.7917" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="3266" KillCount="8">
-      <Hotspots>
-        <Hotspot X="-115.615" Y="-3382.43" Z="92.3013" />
-        <Hotspot X="-159.558" Y="-3325.61" Z="92.9167" />
-        <Hotspot X="-185.814" Y="-3284.44" Z="91.7917" />
-        <Hotspot X="-90.9958" Y="-3160.28" Z="92.7917" />
-        <Hotspot X="-102.661" Y="-3173.46" Z="91.9133" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="3438" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-214.253" Y="-3307.53" Z="91.7917" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="895" Name="WANTED: Baron Longshore">
-    <Objective Type="KillMob" MobId="3467" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1571.79" Y="-3884.28" Z="16.2173" />
-        <Hotspot X="-1751.48" Y="-3720.43" Z="14.0041" />
-        <Hotspot X="-1723.34" Y="-3811.04" Z="11.8995" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="887" Name="Southsea Freebooters">
     <Objective Type="KillMob" MobId="3381" KillCount="12">
       <Hotspots>
@@ -103,17 +58,6 @@
         <Hotspot X="-1731.59" Y="-3715.31" Z="16.9736" />
         <Hotspot X="-1745.06" Y="-3755.27" Z="10.4459" />
         <Hotspot X="-1751.15" Y="-3732.45" Z="12.8897" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="6128" Name="Gathering the Cure">
-    <Objective Type="KillMob" MobId="3234" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1202.43" Y="-3623.93" Z="92.8904" />
-        <Hotspot X="-1408.7" Y="-2641.65" Z="92.0417" />
-        <Hotspot X="-1288.38" Y="-2590.38" Z="91.7916" />
-        <Hotspot X="-1143.19" Y="-1914.61" Z="91.7706" />
-        <Hotspot X="-1098.19" Y="-3068.57" Z="95.3867" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -135,17 +79,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="821" Name="Chen's Empty Keg">
-    <Objective Type="KillMob" MobId="3244" KillCount="1">
-      <Hotspots>
-        <Hotspot X="20.8883" Y="-2848.81" Z="91.7917" />
-        <Hotspot X="-29.8544" Y="-2994.61" Z="93.9193" />
-        <Hotspot X="-152.504" Y="-2719.85" Z="91.917" />
-        <Hotspot X="-608.303" Y="-2818.67" Z="91.9382" />
-        <Hotspot X="-656.102" Y="-2741.98" Z="94.2334" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="848" Name="Fungal Spores">
     <Objective Type="CollectItem" ItemId="5012" CollectCount="4">
       <CollectFrom>
@@ -159,24 +92,6 @@
         <Hotspot X="-1300.76" Y="-3066.81" Z="87.32" />
         <Hotspot X="-1219.84" Y="-2115.2" Z="92.54" />
         <Hotspot X="-1208.5" Y="-3000.19" Z="87.49" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="850" Name="Kolkar Leaders">
-    <Objective Type="KillMob" MobId="3394" KillCount="1">
-      <Hotspots>
-        <Hotspot X="23.4936" Y="-1714.62" Z="101.474" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="903" Name="Prowlers of the Barrens">
-    <Objective Type="KillMob" MobId="3425" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1157.84" Y="-3378.62" Z="91.7082" />
-        <Hotspot X="-1150.96" Y="-3411.59" Z="91.7916" />
-        <Hotspot X="-1144.96" Y="-3390.34" Z="91.7082" />
-        <Hotspot X="-1142.66" Y="-3314.15" Z="91.9167" />
-        <Hotspot X="-1042.86" Y="-3227.71" Z="91.7917" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -225,13 +140,14 @@
     <If Condition="Me.Level &lt; 13">
       <SetGrindArea>
         <GrindArea>
-          <Name>Grind to Level 13</Name>
+          <Name>Grind to Level 13 - Razormane Water Seeker</Name>
+          <Factions>109</Factions>
           <Hotspots>
-            <Hotspot X="53.39" Y="28.28" Z="0.00" />
+            <Hotspot X="-43.21" Y="-2813.28" Z="92.99" />
           </Hotspots>
         </GrindArea>
       </SetGrindArea>
-      <GrindTo Level="13" />
+      <GrindTo Level="13" /> <!--  (grind Razormane Water Seeker) -->
     </If>
     <Objective QuestName="Chen's Empty Keg" QuestId="819" Type="CollectItem" ItemId="4926" CollectCount="1" />
     <CustomBehavior File="UseItemOn" ItemId="4926" MobId="0" NumOfTimes="1" CollectionDistance="100" />
@@ -247,7 +163,6 @@
     <If Condition="((!HasQuest(872)) &amp;&amp; (!IsQuestCompleted(872)))">
       <PickUp QuestName="The Disruption Ends" QuestId="872" GiverName="Thork" GiverId="3429" />
     </If>
-    <Objective QuestName="The Zhevra" QuestId="845" Type="KillMob" MobId="3242" KillCount="1" />
     <Objective QuestName="The Zhevra" QuestId="845" Type="CollectItem" ItemId="5086" CollectCount="4" />
     <TurnIn QuestName="The Zhevra" QuestId="845" TurnInName="Sergra Darkthorn" TurnInId="3338" />
     <If Condition="((!HasQuest(903)) &amp;&amp; (!IsQuestCompleted(903)))">
@@ -255,9 +170,6 @@
     </If>
     <CustomBehavior File="SetHearthstone" MobId="5814" AreaId="33" X="-12434.4" Y="211.559" Z="2.4485" /> <!-- Set hearth: The Crossroads -->
     <Objective QuestName="Supplies for the Crossroads" QuestId="5041" Type="CollectItem" ItemId="12708" CollectCount="1" />
-    <Objective QuestName="The Disruption Ends" QuestId="872" Type="KillMob" MobId="3269" KillCount="8" />
-    <Objective QuestName="The Disruption Ends" QuestId="872" Type="KillMob" MobId="3266" KillCount="8" />
-    <Objective QuestName="The Disruption Ends" QuestId="872" Type="KillMob" MobId="3438" KillCount="1" />
     <Objective QuestName="The Disruption Ends" QuestId="872" Type="CollectItem" ItemId="5063" CollectCount="1" />
     <PickUp QuestName="Southsea Freebooters" QuestId="887" GiverName="Gazlowe" GiverId="3391" />
     <PickUp QuestName="Samophlange" QuestId="894" GiverName="Sputtervalve" GiverId="3442" />
@@ -272,7 +184,6 @@
     <If Condition="((!HasQuest(891)) &amp;&amp; (!IsQuestCompleted(891)))">
       <PickUp QuestName="The Guns of Northwatch" QuestId="891" GiverName="Captain Thalo'thas Brightsun" GiverId="3339" />
     </If>
-    <Objective QuestName="WANTED: Baron Longshore" QuestId="895" Type="KillMob" MobId="3467" KillCount="1" />
     <Objective QuestName="WANTED: Baron Longshore" QuestId="895" Type="CollectItem" ItemId="5084" CollectCount="1" />
     <Objective QuestName="Southsea Freebooters" QuestId="887" Type="KillMob" MobId="3381" KillCount="12" />
     <Objective QuestName="Southsea Freebooters" QuestId="887" Type="KillMob" MobId="3382" KillCount="6" />
@@ -312,7 +223,6 @@
         <PickUp QuestName="Gathering the Cure" QuestId="6128" GiverName="Tonga Runetotem" GiverId="3448" />
       </If>
     </If>
-    <Objective QuestName="Gathering the Cure" QuestId="6128" Type="KillMob" MobId="3234" KillCount="1" />
     <Objective QuestName="Gathering the Cure" QuestId="6128" Type="CollectItem" ItemId="15852" CollectCount="5" />
     <If Condition="(Me.Class == WoWClass.Druid)">
       <TurnIn QuestName="Gathering the Cure" QuestId="6128" TurnInName="Tonga Runetotem" TurnInId="3448" />
@@ -336,18 +246,17 @@
     <PickUp QuestName="Consumed by Hatred" QuestId="899" GiverName="Mankrik" GiverId="3432" />
     <PickUp QuestName="Lost in Battle" QuestId="4921" GiverName="Mankrik" GiverId="3432" />
     <Objective QuestName="Chen's Empty Keg" QuestId="821" Type="CollectItem" ItemId="4893" CollectCount="5" />
-    <Objective QuestName="Chen's Empty Keg" QuestId="821" Type="KillMob" MobId="3244" KillCount="1" />
     <Objective QuestName="Chen's Empty Keg" QuestId="821" Type="CollectItem" ItemId="4894" CollectCount="5" />
     <PickUp QuestName="Centaur Bracers" QuestId="855" GiverName="Regthar Deathgate" GiverId="3389" />
     <PickUp QuestName="Kolkar Leaders" QuestId="850" GiverName="Regthar Deathgate" GiverId="3389" />
     <Objective QuestName="Fungal Spores" QuestId="848" Type="CollectItem" ItemId="5012" CollectCount="4" />
-    <Objective QuestName="Kolkar Leaders" QuestId="850" Type="KillMob" MobId="3394" KillCount="1" />
     <Objective QuestName="Kolkar Leaders" QuestId="850" Type="CollectItem" ItemId="5022" CollectCount="1" />
     <Objective QuestName="Centaur Bracers" QuestId="855" Type="CollectItem" ItemId="5030" CollectCount="15" />
     <If Condition="Me.Level &lt; 15">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 15 - Barak Kodobane</Name>
+          <Factions>16</Factions>
           <TargetMinLevel>16</TargetMinLevel>
           <TargetMaxLevel>16</TargetMaxLevel>
           <Hotspots>
@@ -358,7 +267,6 @@
       <GrindTo Level="15" /> <!--  (grind Barak Kodobane) -->
     </If>
     <Objective QuestName="Harpy Raiders" QuestId="867" Type="CollectItem" ItemId="5064" CollectCount="8" />
-    <Objective QuestName="Prowlers of the Barrens" QuestId="903" Type="KillMob" MobId="3425" KillCount="1" />
     <Objective QuestName="Prowlers of the Barrens" QuestId="903" Type="CollectItem" ItemId="5096" CollectCount="7" />
     <TurnIn QuestName="Centaur Bracers" QuestId="855" TurnInName="Regthar Deathgate" TurnInId="3389" />
     <TurnIn QuestName="Kolkar Leaders" QuestId="850" TurnInName="Regthar Deathgate" TurnInId="3389" />

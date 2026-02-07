@@ -12,28 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1485" Name="Vile Familiars">
-    <Objective Type="KillMob" MobId="3101" KillCount="6">
-      <Hotspots>
-        <Hotspot X="-252.915" Y="-4381.57" Z="62.5709" />
-        <Hotspot X="-213.201" Y="-4382.11" Z="63.6607" />
-        <Hotspot X="-198.088" Y="-4333.76" Z="68.3462" />
-        <Hotspot X="-211.553" Y="-4351.95" Z="64.4947" />
-        <Hotspot X="-166.438" Y="-4320.16" Z="71.1002" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1470" Name="Piercing the Veil">
-    <Objective Type="KillMob" MobId="1890" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1898.19" Y="1467.73" Z="83.6047" />
-        <Hotspot X="1889.25" Y="1488.25" Z="88.0136" />
-        <Hotspot X="1877.55" Y="1480.87" Z="85.4797" />
-        <Hotspot X="2052.56" Y="1577.75" Z="73.5502" />
-        <Hotspot X="1939.61" Y="1542.91" Z="90.165" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1501" Name="Creature of the Void">
     <Objective Type="CollectItem" ItemId="6535" CollectCount="1">
       <CollectFrom>
@@ -62,57 +40,11 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="8421" Name="The Wrong Stuff">
-    <Objective Type="KillMob" MobId="7092" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5309.27" Y="-810.188" Z="338.433" />
-        <Hotspot X="5352.43" Y="-784.759" Z="334.135" />
-        <Hotspot X="4984.95" Y="-657.641" Z="292.457" />
-        <Hotspot X="4997.94" Y="-686.841" Z="294.595" />
-        <Hotspot X="5029.49" Y="-642.252" Z="290.953" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7602" Name="Flawless Fel Essence">
-    <Objective Type="KillMob" MobId="9862" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5375.1" Y="-441.792" Z="273.182" />
-        <Hotspot X="5373.73" Y="-525.695" Z="273.968" />
-        <Hotspot X="5359.28" Y="-433.128" Z="273.072" />
-        <Hotspot X="5182.75" Y="-577.787" Z="287.41" />
-        <Hotspot X="5000.33" Y="-447.795" Z="318.176" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="6011" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11711.7" Y="-3191.47" Z="7.2793" />
-        <Hotspot X="-11696.2" Y="-3118.67" Z="15.0745" />
-        <Hotspot X="-11774.7" Y="-3071.83" Z="7.7012" />
-        <Hotspot X="-11709.8" Y="-3244.42" Z="8.4369" />
-        <Hotspot X="-11800.8" Y="-3321.41" Z="4.0647" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7603" Name="Kroshius' Infernal Core">
-    <Objective Type="KillMob" MobId="14467" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5800.89" Y="-985.82" Z="409.78" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7624" Name="Ulathek the Traitor">
-    <Objective Type="KillMob" MobId="14523" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5277.13" Y="-701.938" Z="268.772" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Class Quests\Warlock Class Quests" LogColor="Green" />
     <If Condition="(Me.Class == WoWClass.Warlock) &amp;&amp; (Me.Race == WoWRace.Orc)">
       <PickUp QuestName="Vile Familiars" QuestId="1485" GiverName="Ruzan" GiverId="5765" />
-      <Objective QuestName="Vile Familiars" QuestId="1485" Type="KillMob" MobId="3101" KillCount="6" />
       <Objective QuestName="Vile Familiars" QuestId="1485" Type="CollectItem" ItemId="6487" CollectCount="6" />
       <TurnIn QuestName="Vile Familiars" QuestId="1485" TurnInName="Ruzan" TurnInId="5765" />
       <If Condition="((!HasQuest(1499)) &amp;&amp; (!IsQuestCompleted(1499)))">
@@ -122,7 +54,6 @@
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock) &amp;&amp; (Me.Race == WoWRace.Undead)">
       <PickUp QuestName="Piercing the Veil" QuestId="1470" GiverName="Venya Marthand" GiverId="5667" />
-      <Objective QuestName="Piercing the Veil" QuestId="1470" Type="KillMob" MobId="1890" KillCount="1" />
       <Objective QuestName="Piercing the Veil" QuestId="1470" Type="CollectItem" ItemId="6281" CollectCount="3" />
       <TurnIn QuestName="Piercing the Veil" QuestId="1470" TurnInName="Venya Marthand" TurnInId="5667" />
       <If Condition="((!HasQuest(1478)) &amp;&amp; (!IsQuestCompleted(1478)))">
@@ -257,17 +188,14 @@
     </If>
     <TurnIn QuestName="Hot and Itchy" QuestId="8420" TurnInName="Impsy" TurnInId="14470" />
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="The Wrong Stuff" QuestId="8421" Type="KillMob" MobId="7092" KillCount="1" />
       <Objective QuestName="The Wrong Stuff" QuestId="8421" Type="CollectItem" ItemId="20614" CollectCount="4" />
       <Objective QuestName="The Wrong Stuff" QuestId="8421" Type="CollectItem" ItemId="20613" CollectCount="10" />
       <TurnIn QuestName="The Wrong Stuff" QuestId="8421" TurnInName="Impsy" TurnInId="14470" />
       <If Condition="((!HasQuest(8422)) &amp;&amp; (!IsQuestCompleted(8422)))">
         <PickUp QuestName="Trolls of a Feather" QuestId="8422" GiverName="Impsy" GiverId="14470" />
       </If>
-      <Objective QuestName="Flawless Fel Essence" QuestId="7602" Type="KillMob" MobId="9862" KillCount="1" />
       <Objective QuestName="Flawless Fel Essence" QuestId="7602" Type="CollectItem" ItemId="18622" CollectCount="1" />
       <Objective QuestName="Flawless Fel Essence" QuestId="7602" Type="CollectItem" ItemId="18624" CollectCount="1" />
-      <Objective QuestName="Flawless Fel Essence" QuestId="7602" Type="KillMob" MobId="6011" KillCount="1" />
       <Objective QuestName="Flawless Fel Essence" QuestId="7602" Type="CollectItem" ItemId="18623" CollectCount="1" />
       <Objective QuestName="Trolls of a Feather" QuestId="8422" Type="CollectItem" ItemId="20606" CollectCount="2" />
       <Objective QuestName="Trolls of a Feather" QuestId="8422" Type="CollectItem" ItemId="20607" CollectCount="2" />
@@ -283,7 +211,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="Kroshius' Infernal Core" QuestId="7603" Type="KillMob" MobId="14467" KillCount="1" />
       <Objective QuestName="Kroshius' Infernal Core" QuestId="7603" Type="CollectItem" ItemId="18625" CollectCount="1" />
       <TurnIn QuestName="Kroshius' Infernal Core" QuestId="7603" TurnInName="Niby the Almighty" TurnInId="14469" />
       <Objective QuestName="Doomsday Candle" QuestId="7628" Type="CollectItem" ItemId="15416" CollectCount="3" />
@@ -334,7 +261,6 @@
       <If Condition="((!HasQuest(7624)) &amp;&amp; (!IsQuestCompleted(7624)))">
         <PickUp QuestName="Ulathek the Traitor" QuestId="7624" GiverName="Lord Banehollow" GiverId="9516" />
       </If>
-      <Objective QuestName="Ulathek the Traitor" QuestId="7624" Type="KillMob" MobId="14523" KillCount="1" />
       <Objective QuestName="Ulathek the Traitor" QuestId="7624" Type="CollectItem" ItemId="18719" CollectCount="1" />
       <While Condition="((HasQuest(7624)) &amp;&amp; (!IsQuestCompleted(7624)))">
         <CustomBehavior File="UseItemOn" QuestId="7624" MobId="0" ItemId="18802" NumOfTimes="1" Range="5" CollectionDistance="1000" />

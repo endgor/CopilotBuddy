@@ -22,13 +22,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="11150" Name="Raze Direhorn Post!">
-    <Objective Type="KillMob" MobId="23881" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3663.91" Y="-3453.97" Z="37.2993" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Dustwallow Marsh (44-45)" LogColor="Green" />
@@ -59,7 +52,6 @@
       <CustomBehavior File="UseItemOn" QuestId="11150" MobId="23751" ItemId="33072" NumOfTimes="100" Range="5" CollectionDistance="1000" X="-3640.92" Y="-3421.74" Z="37.4134" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Raze Direhorn Post!" QuestId="11150" Type="KillMob" MobId="23881" KillCount="1" />
     <Objective QuestName="Raze Direhorn Post!" QuestId="11150" Type="CollectItem" ItemId="33114" CollectCount="1" />
     <While Condition="((HasQuest(11150)) &amp;&amp; (!IsQuestCompleted(11150)))">
       <RunTo X="-3640.92" Y="-3421.74" Z="37.4134" />

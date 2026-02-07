@@ -42,20 +42,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="2781" Name="WANTED: Caliph Scorpidsting">
-    <Objective Type="KillMob" MobId="7847" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-7630.66" Y="-4480.84" Z="9.5255" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="2875" Name="WANTED: Andre Firebeard">
-    <Objective Type="KillMob" MobId="7883" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-8043.38" Y="-5281.05" Z="0.6618" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8366" Name="Southsea Shakedown">
     <Objective Type="KillMob" MobId="7855" KillCount="10">
       <Hotspots>
@@ -165,10 +151,8 @@
     <If Condition="((!HasQuest(2873)) &amp;&amp; (!IsQuestCompleted(2873)))">
       <PickUp QuestName="Stoley's Shipment" QuestId="2873" GiverName="Stoley" GiverId="7881" />
     </If>
-    <Objective QuestName="WANTED: Caliph Scorpidsting" QuestId="2781" Type="KillMob" MobId="7847" KillCount="1" />
     <Objective QuestName="WANTED: Caliph Scorpidsting" QuestId="2781" Type="CollectItem" ItemId="8723" CollectCount="1" />
     <Objective QuestName="Stoley's Shipment" QuestId="2873" Type="CollectItem" ItemId="9244" CollectCount="1" />
-    <Objective QuestName="WANTED: Andre Firebeard" QuestId="2875" Type="KillMob" MobId="7883" KillCount="1" />
     <Objective QuestName="WANTED: Andre Firebeard" QuestId="2875" Type="CollectItem" ItemId="9246" CollectCount="1" />
     <Objective QuestName="Pirate Hats Ahoy!" QuestId="8365" Type="CollectItem" ItemId="20519" CollectCount="20" />
     <Objective QuestName="Southsea Shakedown" QuestId="8366" Type="KillMob" MobId="7855" KillCount="10" />

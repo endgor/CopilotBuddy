@@ -62,31 +62,31 @@
       </If>
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
-      <Objective QuestName="Genesis Vest" QuestId="8666" Type="CollectItem" ItemId="20933" CollectCount="1" />
+      <Objective QuestName="Genesis Vest" QuestId="8666" Type="CollectItem" ItemId="20933" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Hunter)">
-      <Objective QuestName="Striker's Hauberk" QuestId="8656" Type="CollectItem" ItemId="20929" CollectCount="1" />
+      <Objective QuestName="Striker's Hauberk" QuestId="8656" Type="CollectItem" ItemId="20929" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Mage)">
-      <Objective QuestName="Enigma Robes" QuestId="8633" Type="CollectItem" ItemId="20933" CollectCount="1" />
+      <Objective QuestName="Enigma Robes" QuestId="8633" Type="CollectItem" ItemId="20933" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Paladin)">
-      <Objective QuestName="Avenger's Breastplate" QuestId="8627" Type="CollectItem" ItemId="20929" CollectCount="1" />
+      <Objective QuestName="Avenger's Breastplate" QuestId="8627" Type="CollectItem" ItemId="20929" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Priest)">
-      <Objective QuestName="Vestments of the Oracle" QuestId="8603" Type="CollectItem" ItemId="20933" CollectCount="1" />
+      <Objective QuestName="Vestments of the Oracle" QuestId="8603" Type="CollectItem" ItemId="20933" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Rogue)">
-      <Objective QuestName="Deathdealer's Vest" QuestId="8638" Type="CollectItem" ItemId="20929" CollectCount="1" />
+      <Objective QuestName="Deathdealer's Vest" QuestId="8638" Type="CollectItem" ItemId="20929" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman)">
-      <Objective QuestName="Stormcaller's Hauberk" QuestId="8622" Type="CollectItem" ItemId="20929" CollectCount="1" />
+      <Objective QuestName="Stormcaller's Hauberk" QuestId="8622" Type="CollectItem" ItemId="20929" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="Doomcaller's Robes" QuestId="8661" Type="CollectItem" ItemId="20933" CollectCount="1" />
+      <Objective QuestName="Doomcaller's Robes" QuestId="8661" Type="CollectItem" ItemId="20933" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warrior)">
-      <Objective QuestName="Conqueror's Breastplate" QuestId="8562" Type="CollectItem" ItemId="20929" CollectCount="1" />
+      <Objective QuestName="Conqueror's Breastplate" QuestId="8562" Type="CollectItem" ItemId="20929" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
       <Objective QuestName="Genesis Vest" QuestId="8666" Type="CollectItem" ItemId="20878" CollectCount="2" />

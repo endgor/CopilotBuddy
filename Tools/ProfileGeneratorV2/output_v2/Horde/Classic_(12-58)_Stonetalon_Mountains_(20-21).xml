@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="6284" Name="Arachnophobia">
-    <Objective Type="KillMob" MobId="11921" KillCount="1">
-      <Hotspots>
-        <Hotspot X="511.902" Y="708.578" Z="80.1161" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1069" Name="Deepmoss Spider Eggs">
     <Objective Type="CollectItem" ItemId="5570" CollectCount="15">
       <CollectFrom>
@@ -55,17 +48,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1093" Name="Super Reaper 6000">
-    <Objective Type="KillMob" MobId="3988" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1071.44" Y="-331.959" Z="-9.237" />
-        <Hotspot X="1311.41" Y="-308.578" Z="7.5441" />
-        <Hotspot X="1427.58" Y="1.4056" Z="24.9343" />
-        <Hotspot X="1434.64" Y="-28.5739" Z="27.0166" />
-        <Hotspot X="1435.22" Y="1.7321" Z="38.5955" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1062" Name="Goblin Invaders">
     <Objective Type="KillMob" MobId="3989" KillCount="15">
       <Hotspots>
@@ -86,20 +68,19 @@
     </If>
     <PickUp QuestName="Blood Feeders" QuestId="6461" GiverName="Xen'Zilla" GiverId="12816" />
     <PickUp QuestName="Arachnophobia" QuestId="6284" GiverName="Xen'Zilla" GiverId="12816" />
-    <Objective QuestName="Arachnophobia" QuestId="6284" Type="KillMob" MobId="11921" KillCount="1" />
     <Objective QuestName="Arachnophobia" QuestId="6284" Type="CollectItem" ItemId="16192" CollectCount="1" />
     <Objective QuestName="Deepmoss Spider Eggs" QuestId="1069" Type="CollectItem" ItemId="5570" CollectCount="15" />
     <Objective QuestName="Blood Feeders" QuestId="6461" Type="KillMob" MobId="4007" KillCount="7" />
     <Objective QuestName="Blood Feeders" QuestId="6461" Type="KillMob" MobId="4005" KillCount="10" />
     <TurnIn QuestName="Ziz Fizziks" QuestId="1483" TurnInName="Ziz Fizziks" TurnInId="4201" />
     <PickUp QuestName="Super Reaper 6000" QuestId="1093" GiverName="Ziz Fizziks" GiverId="4201" />
-    <Objective QuestName="Super Reaper 6000" QuestId="1093" Type="KillMob" MobId="3988" KillCount="1" />
     <Objective QuestName="Super Reaper 6000" QuestId="1093" Type="CollectItem" ItemId="5734" CollectCount="1" />
     <Objective QuestName="Goblin Invaders" QuestId="1062" Type="KillMob" MobId="3989" KillCount="15" />
     <If Condition="Me.Level &lt; 21">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 21 - Venture Co. Logger</Name>
+          <Factions>47</Factions>
           <TargetMinLevel>18</TargetMinLevel>
           <TargetMaxLevel>19</TargetMaxLevel>
           <Hotspots>

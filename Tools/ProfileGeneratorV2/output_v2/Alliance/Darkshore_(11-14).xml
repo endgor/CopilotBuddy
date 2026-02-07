@@ -22,17 +22,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="983" Name="Buzzbox 827">
-    <Objective Type="KillMob" MobId="2231" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6572.55" Y="490.47" Z="-4.3571" />
-        <Hotspot X="6099.47" Y="620.175" Z="-8.0773" />
-        <Hotspot X="6508.04" Y="528.085" Z="-5.6679" />
-        <Hotspot X="6559.33" Y="503.889" Z="-2.907" />
-        <Hotspot X="6746.3" Y="538.098" Z="-3.6113" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="4681" Name="Washed Ashore">
     <Objective Type="CollectItem" ItemId="12289" CollectCount="1">
       <CollectFrom>
@@ -40,17 +29,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="6311.27" Y="857.44" Z="-14.02" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="956" Name="Bashal'Aran">
-    <Objective Type="KillMob" MobId="2212" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6598.28" Y="-32.0527" Z="34.4785" />
-        <Hotspot X="6622.05" Y="-113.395" Z="33.254" />
-        <Hotspot X="6732.49" Y="-168.291" Z="32.1132" />
-        <Hotspot X="6714.17" Y="-198.985" Z="36.3805" />
-        <Hotspot X="6688.06" Y="-155.065" Z="31.9239" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -85,13 +63,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="963" Name="For Love Eternal">
-    <Objective Type="KillMob" MobId="3667" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5681.28" Y="203.113" Z="26.7769" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Darkshore (11-14)" LogColor="Green" />
@@ -103,7 +74,6 @@
     <PickUp QuestName="Plagued Lands" QuestId="2118" GiverName="Tharnariun Treetender" GiverId="3701" />
     <PickUp QuestName="How Big a Threat?" QuestId="984" GiverName="Terenthis" GiverId="3693" />
     <Objective QuestName="Washed Ashore" QuestId="3524" Type="CollectItem" ItemId="12242" CollectCount="1" />
-    <Objective QuestName="Buzzbox 827" QuestId="983" Type="KillMob" MobId="2231" KillCount="1" />
     <Objective QuestName="Buzzbox 827" QuestId="983" Type="CollectItem" ItemId="5385" CollectCount="6" />
     <While Condition="((HasQuest(2118)) &amp;&amp; (!IsQuestCompleted(2118)))">
       <CustomBehavior File="UseItemOn" QuestId="2118" MobId="11836" ItemId="7586" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -156,7 +126,6 @@
     <If Condition="((!HasQuest(956)) &amp;&amp; (!IsQuestCompleted(956)))">
       <PickUp QuestName="Bashal'Aran" QuestId="956" GiverName="Asterion" GiverId="3650" />
     </If>
-    <Objective QuestName="Bashal'Aran" QuestId="956" Type="KillMob" MobId="2212" KillCount="1" />
     <Objective QuestName="Bashal'Aran" QuestId="956" Type="CollectItem" ItemId="5338" CollectCount="1" />
     <TurnIn QuestName="Bashal'Aran" QuestId="956" TurnInName="Asterion" TurnInId="3650" />
     <If Condition="((!HasQuest(957)) &amp;&amp; (!IsQuestCompleted(957)))">
@@ -177,7 +146,6 @@
     </If>
     <PickUp QuestName="The Fall of Ameth'Aran" QuestId="953" GiverName="Sentinel Tysha Moonblade" GiverId="3639" />
     <Objective QuestName="Tools of the Highborne" QuestId="958" Type="CollectItem" ItemId="5360" CollectCount="7" />
-    <Objective QuestName="For Love Eternal" QuestId="963" Type="KillMob" MobId="3667" KillCount="1" />
     <Objective QuestName="For Love Eternal" QuestId="963" Type="CollectItem" ItemId="5382" CollectCount="1" />
     <TurnIn QuestName="The Fall of Ameth'Aran" QuestId="953" TurnInName="Sentinel Tysha Moonblade" TurnInId="3639" />
     <TurnIn QuestName="Bashal'Aran" QuestId="957" TurnInName="Asterion" TurnInId="3650" />

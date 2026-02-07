@@ -12,17 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="9280" Name="Replenishing the Healing Crystals">
-    <Objective Type="KillMob" MobId="16520" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4289.7" Y="-13295.4" Z="48.262" />
-        <Hotspot X="-4318.07" Y="-13349.1" Z="47.098" />
-        <Hotspot X="-4237.35" Y="-13345.7" Z="43.8194" />
-        <Hotspot X="-4291.31" Y="-13381.6" Z="47.0983" />
-        <Hotspot X="-4366.26" Y="-13342.8" Z="49.9554" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10302" Name="Volatile Mutations">
     <Objective Type="KillMob" MobId="16516" KillCount="8">
       <Hotspots>
@@ -31,17 +20,6 @@
         <Hotspot X="-4398.12" Y="-13444.7" Z="48.8726" />
         <Hotspot X="-4385.96" Y="-13450.8" Z="47.6226" />
         <Hotspot X="-4455.21" Y="-13557.3" Z="48.6" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9293" Name="What Must Be Done...">
-    <Objective Type="KillMob" MobId="16517" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4260.52" Y="-13531.3" Z="49.5508" />
-        <Hotspot X="-4222.59" Y="-13545.7" Z="47.9533" />
-        <Hotspot X="-4254.98" Y="-13489.7" Z="47.5988" />
-        <Hotspot X="-4226.98" Y="-13507.9" Z="46.7997" />
-        <Hotspot X="-4196.08" Y="-13512.4" Z="48.63" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -106,39 +84,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9455" Name="Strange Findings">
-    <Objective Type="KillMob" MobId="17202" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3595.32" Y="-12625.8" Z="20.2223" />
-        <Hotspot X="-4081.7" Y="-12206.6" Z="1.8898" />
-        <Hotspot X="-4194.83" Y="-11735.3" Z="8.6577" />
-        <Hotspot X="-4177.06" Y="-11687.1" Z="4.6674" />
-        <Hotspot X="-4143.44" Y="-11745.0" Z="5.0682" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9454" Name="The Great Moongraze Hunt">
-    <Objective Type="KillMob" MobId="17200" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4350.83" Y="-12560.6" Z="17.8548" />
-        <Hotspot X="-4418.33" Y="-12494.9" Z="5.4233" />
-        <Hotspot X="-4626.34" Y="-12029.9" Z="42.1236" />
-        <Hotspot X="-4650.45" Y="-11957.3" Z="39.5876" />
-        <Hotspot X="-4577.85" Y="-12086.1" Z="41.0203" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9463" Name="Medicinal Purpose">
-    <Objective Type="KillMob" MobId="17196" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4360.94" Y="-12808.6" Z="15.0649" />
-        <Hotspot X="-4324.13" Y="-12714.7" Z="20.3363" />
-        <Hotspot X="-4313.96" Y="-12577.6" Z="27.0259" />
-        <Hotspot X="-4376.36" Y="-12499.8" Z="12.2845" />
-        <Hotspot X="-4279.97" Y="-12377.5" Z="15.4853" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9506" Name="A Small Start">
     <Objective Type="CollectItem" ItemId="23739" CollectCount="1">
       <CollectFrom>
@@ -154,17 +99,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-4630.08" Y="-12925.3" Z="9.63" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9512" Name="Cookie's Jumbo Gumbo">
-    <Objective Type="KillMob" MobId="17216" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4252.9" Y="-11405.2" Z="1.3314" />
-        <Hotspot X="-4377.85" Y="-11447.5" Z="-0.0847" />
-        <Hotspot X="-4415.65" Y="-11419.2" Z="0.8938" />
-        <Hotspot X="-4440.98" Y="-11385.0" Z="-2.4721" />
-        <Hotspot X="-4481.05" Y="-11425.5" Z="1.7418" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -208,17 +142,6 @@
         <Hotspot X="-4401.24" Y="-12637.0" Z="19.28" />
         <Hotspot X="-4394.02" Y="-12483.8" Z="8.17" />
         <Hotspot X="-4390.54" Y="-12539.9" Z="7.1" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10324" Name="The Great Moongraze Hunt">
-    <Objective Type="KillMob" MobId="17201" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4147.0" Y="-11830.6" Z="6.1268" />
-        <Hotspot X="-4094.51" Y="-11633.0" Z="11.0934" />
-        <Hotspot X="-4140.62" Y="-11624.2" Z="7.5273" />
-        <Hotspot X="-3563.08" Y="-12732.0" Z="7.8581" />
-        <Hotspot X="-3515.51" Y="-12714.0" Z="14.2218" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -278,13 +201,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9537" Name="Show Gnomercy">
-    <Objective Type="KillMob" MobId="17243" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4691.14" Y="-12527.5" Z="2.6818" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9515" Name="Warlord Sriss'tiz">
     <Objective Type="KillMob" MobId="17298" KillCount="1">
       <Hotspots>
@@ -292,48 +208,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9560" Name="Beasts of the Apocalypse!">
-    <Objective Type="KillMob" MobId="17199" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3083.81" Y="-12680.9" Z="5.8076" />
-        <Hotspot X="-3091.63" Y="-12709.0" Z="6.0161" />
-        <Hotspot X="-3128.22" Y="-12662.3" Z="17.8892" />
-        <Hotspot X="-3270.63" Y="-12656.0" Z="26.7487" />
-        <Hotspot X="-3225.23" Y="-12642.2" Z="37.5313" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9582" Name="Strength of One">
     <Objective Type="KillMob" MobId="17556" KillCount="1">
       <Hotspots>
         <Hotspot X="-3063.94" Y="-12699.4" Z="3.2027" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9465" Name="Call of Fire">
-    <Objective Type="KillMob" MobId="17591" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4439.19" Y="-12662.9" Z="19.2655" />
-        <Hotspot X="-4436.11" Y="-12631.4" Z="16.887" />
-        <Hotspot X="-4468.51" Y="-12659.8" Z="18.1311" />
-        <Hotspot X="-4484.53" Y="-12320.6" Z="16.1904" />
-        <Hotspot X="-4467.87" Y="-12349.9" Z="16.4834" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="17189" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3203.73" Y="-12384.4" Z="20.0718" />
-        <Hotspot X="-3217.99" Y="-12421.1" Z="19.4682" />
-        <Hotspot X="-3150.54" Y="-12503.2" Z="-0.3757" />
-        <Hotspot X="-3094.6" Y="-12515.8" Z="1.4301" />
-        <Hotspot X="-3078.97" Y="-12499.2" Z="1.8012" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9616" Name="Bandits!">
-    <Objective Type="KillMob" MobId="17475" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3390.28" Y="-11925.0" Z="4.1367" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -350,13 +228,6 @@
         <Hotspot X="-3150.54" Y="-12503.2" Z="-0.3757" />
         <Hotspot X="-3094.6" Y="-12515.8" Z="1.4301" />
         <Hotspot X="-3078.97" Y="-12499.2" Z="1.8012" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9570" Name="The Kurken is Lurkin'">
-    <Objective Type="KillMob" MobId="17447" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3141.51" Y="-12533.5" Z="-2.3905" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -377,7 +248,6 @@
         <PickUp QuestName="Replenishing the Healing Crystals" QuestId="9369" GiverName="Proenitus" GiverId="16477" />
       </If>
     </If>
-    <Objective QuestName="Replenishing the Healing Crystals" QuestId="9280" Type="KillMob" MobId="16520" KillCount="1" />
     <Objective QuestName="Replenishing the Healing Crystals" QuestId="9280" Type="CollectItem" ItemId="22889" CollectCount="8" />
     <Objective QuestName="Replenishing the Healing Crystals" QuestId="9369" Type="CollectItem" ItemId="22899" CollectCount="8" />
     <TurnIn QuestName="Replenishing the Healing Crystals" QuestId="9280" TurnInName="Proenitus" TurnInId="16477" />
@@ -418,7 +288,6 @@
     <If Condition="((!HasQuest(9799)) &amp;&amp; (!IsQuestCompleted(9799)))">
       <PickUp QuestName="Botanical Legwork" QuestId="9799" GiverName="Apprentice Vishael" GiverId="20233" />
     </If>
-    <Objective QuestName="What Must Be Done..." QuestId="9293" Type="KillMob" MobId="16517" KillCount="1" />
     <Objective QuestName="What Must Be Done..." QuestId="9293" Type="CollectItem" ItemId="22934" CollectCount="10" />
     <Objective QuestName="Botanical Legwork" QuestId="9799" Type="CollectItem" ItemId="24416" CollectCount="3" />
     <TurnIn QuestName="Botanical Legwork" QuestId="9799" TurnInName="Apprentice Vishael" TurnInId="20233" />
@@ -487,13 +356,11 @@
       <CustomBehavior File="UseItemOn" QuestId="9452" MobId="0" ItemId="23654" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Red Snapper - Very Tasty!" QuestId="9452" Type="KillMob" MobId="17102" KillCount="1" />
     <Objective QuestName="Red Snapper - Very Tasty!" QuestId="9452" Type="CollectItem" ItemId="23614" CollectCount="10" />
     <TurnIn QuestName="Red Snapper - Very Tasty!" QuestId="9452" TurnInName="Diktynna" TurnInId="17101" />
     <If Condition="((!HasQuest(9453)) &amp;&amp; (!IsQuestCompleted(9453)))">
       <PickUp QuestName="Find Acteon!" QuestId="9453" GiverName="Diktynna" GiverId="17101" />
     </If>
-    <Objective QuestName="Strange Findings" QuestId="9455" Type="KillMob" MobId="17202" KillCount="1" />
     <Objective QuestName="Strange Findings" QuestId="9455" Type="CollectItem" ItemId="23678" CollectCount="1" />
     <While Condition="((HasQuest(9453)) &amp;&amp; (!IsQuestCompleted(9453)))">
       <CustomBehavior File="UseItemOn" QuestId="9453" MobId="0" ItemId="23678" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -518,15 +385,12 @@
     <If Condition="((!HasQuest(9456)) &amp;&amp; (!IsQuestCompleted(9456)))">
       <PickUp QuestName="Nightstalker Clean Up, Isle 2..." QuestId="9456" GiverName="Exarch Menelaous" GiverId="17116" />
     </If>
-    <Objective QuestName="The Great Moongraze Hunt" QuestId="9454" Type="KillMob" MobId="17200" KillCount="1" />
     <Objective QuestName="The Great Moongraze Hunt" QuestId="9454" Type="CollectItem" ItemId="23676" CollectCount="6" />
-    <Objective QuestName="Medicinal Purpose" QuestId="9463" Type="KillMob" MobId="17196" KillCount="1" />
     <Objective QuestName="Medicinal Purpose" QuestId="9463" Type="CollectItem" ItemId="23685" CollectCount="8" />
     <PickUp QuestName="A Small Start" QuestId="9506" GiverName="Admiral Odesyus" GiverId="17240" />
     <PickUp QuestName="Cookie's Jumbo Gumbo" QuestId="9512" GiverName="&quot;Cookie&quot; McWeaksauce" GiverId="17246" />
     <Objective QuestName="A Small Start" QuestId="9506" Type="CollectItem" ItemId="23739" CollectCount="1" />
     <Objective QuestName="A Small Start" QuestId="9506" Type="CollectItem" ItemId="23738" CollectCount="1" />
-    <Objective QuestName="Cookie's Jumbo Gumbo" QuestId="9512" Type="KillMob" MobId="17216" KillCount="1" />
     <Objective QuestName="Cookie's Jumbo Gumbo" QuestId="9512" Type="CollectItem" ItemId="23757" CollectCount="6" />
     <TurnIn QuestName="Cookie's Jumbo Gumbo" QuestId="9512" TurnInName="&quot;Cookie&quot; McWeaksauce" TurnInId="17246" />
     <TurnIn QuestName="A Small Start" QuestId="9506" TurnInName="Admiral Odesyus" TurnInId="17240" />
@@ -566,7 +430,6 @@
       <PickUp QuestName="Totem of Coo" QuestId="9539" GiverName="Cryptographer Aurren" GiverId="17232" />
     </If>
     <Objective QuestName="An Alternative Alternative" QuestId="9473" Type="CollectItem" ItemId="23692" CollectCount="5" />
-    <Objective QuestName="The Great Moongraze Hunt" QuestId="10324" Type="KillMob" MobId="17201" KillCount="1" />
     <Objective QuestName="The Great Moongraze Hunt" QuestId="10324" Type="CollectItem" ItemId="23677" CollectCount="6" />
     <Objective QuestName="Nightstalker Clean Up, Isle 2..." QuestId="9456" Type="KillMob" MobId="17202" KillCount="8" />
     <TurnIn QuestName="Totem of Coo" QuestId="9539" TurnInName="Cryptographer Aurren" TurnInId="17361" />
@@ -615,7 +478,6 @@
     <TurnIn QuestName="Precious and Fragile Things Need Special Handling" QuestId="9523" TurnInName="Archaeologist Adamant Ironheart" TurnInId="17242" />
     <TurnIn QuestName="Reclaiming the Ruins" QuestId="9513" TurnInName="Priestess Kyleen Il'dinare" TurnInId="17241" />
     <TurnIn QuestName="Rune Covered Tablet" QuestId="9514" TurnInName="Priestess Kyleen Il'dinare" TurnInId="17241" />
-    <Objective QuestName="Show Gnomercy" QuestId="9537" Type="KillMob" MobId="17243" KillCount="1" />
     <Objective QuestName="Show Gnomercy" QuestId="9537" Type="CollectItem" ItemId="23899" CollectCount="1" />
     <TurnIn QuestName="Show Gnomercy" QuestId="9537" TurnInName="Admiral Odesyus" TurnInId="17240" />
     <If Condition="((!HasQuest(9602)) &amp;&amp; (!IsQuestCompleted(9602)))">
@@ -693,7 +555,6 @@
       <PickUp QuestName="Murlocs... Why Here? Why Now?" QuestId="9562" GiverName="Gurf" GiverId="17441" />
     </If>
     <TurnIn QuestName="Stillpine Hold" QuestId="9559" TurnInName="High Chief Stillpine" TurnInId="17440" />
-    <Objective QuestName="Beasts of the Apocalypse!" QuestId="9560" Type="KillMob" MobId="17199" KillCount="1" />
     <Objective QuestName="Beasts of the Apocalypse!" QuestId="9560" Type="CollectItem" ItemId="23845" CollectCount="8" />
     <If Condition="(Me.Class == WoWClass.Warrior) &amp;&amp; (Me.Race == WoWRace.Draenei)">
       <Objective QuestName="Strength of One" QuestId="9582" Type="KillMob" MobId="17556" KillCount="1" />
@@ -704,7 +565,6 @@
         <PickUp QuestName="Call of Fire" QuestId="9465" GiverName="Temper" GiverId="17205" />
       </If>
     </If>
-    <Objective QuestName="Call of Fire" QuestId="9465" Type="KillMob" MobId="17591" KillCount="1" />
     <Objective QuestName="Call of Fire" QuestId="9465" Type="CollectItem" ItemId="23910" CollectCount="1" />
     <While Condition="((HasQuest(9465)) &amp;&amp; (!IsQuestCompleted(9465)))">
       <CustomBehavior File="UseItemOn" QuestId="9465" MobId="0" ItemId="23910" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -713,7 +573,6 @@
     <PickUp QuestName="Bandits!" QuestId="9616" GiverName="Temper" GiverId="17205" />
     <TurnIn QuestName="Beasts of the Apocalypse!" QuestId="9560" TurnInName="Moordo" TurnInId="17442" />
     <Objective QuestName="Murlocs... Why Here? Why Now?" QuestId="9562" Type="CollectItem" ItemId="23849" CollectCount="5" />
-    <Objective QuestName="Bandits!" QuestId="9616" Type="KillMob" MobId="17475" KillCount="1" />
     <Objective QuestName="Bandits!" QuestId="9616" Type="CollectItem" ItemId="23850" CollectCount="1" />
     <While Condition="((HasQuest(9616)) &amp;&amp; (!IsQuestCompleted(9616)))">
       <CustomBehavior File="UseItemOn" QuestId="9616" MobId="0" ItemId="23850" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -739,7 +598,6 @@
       <PickUp QuestName="Blood Crystals" QuestId="9566" GiverName="High Chief Stillpine" GiverId="17440" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman) &amp;&amp; (Me.Race == WoWRace.Draenei)">
-      <Objective QuestName="Call of Fire" QuestId="9465" Type="KillMob" MobId="17189" KillCount="1" />
       <Objective QuestName="Call of Fire" QuestId="9465" Type="CollectItem" ItemId="23733" CollectCount="1" />
     </If>
     <Objective QuestName="Chieftain Oomooroo" QuestId="9573" Type="KillMob" MobId="17189" KillCount="9" />
@@ -748,7 +606,6 @@
     <If Condition="((!HasQuest(9570)) &amp;&amp; (!IsQuestCompleted(9570)))">
       <PickUp QuestName="The Kurken is Lurkin'" QuestId="9570" GiverName="Kurz the Revelator" GiverId="17443" />
     </If>
-    <Objective QuestName="The Kurken is Lurkin'" QuestId="9570" Type="KillMob" MobId="17447" KillCount="1" />
     <Objective QuestName="The Kurken is Lurkin'" QuestId="9570" Type="CollectItem" ItemId="23860" CollectCount="1" />
     <TurnIn QuestName="The Kurken is Lurkin'" QuestId="9570" TurnInName="Kurz the Revelator" TurnInId="17443" />
     <If Condition="((!HasQuest(9571)) &amp;&amp; (!IsQuestCompleted(9571)))">
@@ -793,7 +650,6 @@
       <TurnIn QuestName="Behomat" QuestId="10350" TurnInName="Behomat" TurnInId="17120" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman) &amp;&amp; (Me.Race == WoWRace.Draenei)">
-      <Objective QuestName="Call of Fire" QuestId="9467" Type="KillMob" MobId="17206" KillCount="1" />
       <Objective QuestName="Call of Fire" QuestId="9467" Type="CollectItem" ItemId="23688" CollectCount="1" />
       <While Condition="((HasQuest(9467)) &amp;&amp; (!IsQuestCompleted(9467)))">
         <CustomBehavior File="UseItemOn" QuestId="9467" MobId="0" ItemId="24335" NumOfTimes="1" Range="5" CollectionDistance="1000" />

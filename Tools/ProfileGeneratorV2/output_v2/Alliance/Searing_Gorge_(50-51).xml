@@ -12,26 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="7728" Name="STOLEN: Smithing Tuyere and Lookout's Spyglass">
-    <Objective Type="KillMob" MobId="8566" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6954.58" Y="-1488.57" Z="237.984" />
-        <Hotspot X="-6872.32" Y="-1074.97" Z="240.078" />
-        <Hotspot X="-6925.87" Y="-1051.08" Z="240.125" />
-        <Hotspot X="-6931.85" Y="-1419.82" Z="256.156" />
-        <Hotspot X="-6995.07" Y="-1144.61" Z="257.58" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="5840" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6868.71" Y="-1281.88" Z="242.891" />
-        <Hotspot X="-6836.02" Y="-1228.32" Z="240.263" />
-        <Hotspot X="-6818.91" Y="-1215.62" Z="240.036" />
-        <Hotspot X="-6838.51" Y="-1163.79" Z="241.167" />
-        <Hotspot X="-6863.97" Y="-1174.06" Z="240.303" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="7724" Name="Fiery Menace!">
     <Objective Type="KillMob" MobId="5858" KillCount="20">
       <Hotspots>
@@ -62,13 +42,6 @@
         <Hotspot X="-6678.41" Y="-1438.05" Z="167.703" />
         <Hotspot X="-6534.55" Y="-1464.63" Z="147.686" />
         <Hotspot X="-6485.05" Y="-1446.41" Z="151.352" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7701" Name="WANTED: Overseer Maltorius">
-    <Objective Type="KillMob" MobId="14621" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6633.88" Y="-1232.66" Z="209.835" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -169,9 +142,7 @@
     <If Condition="((!HasQuest(3442)) &amp;&amp; (!IsQuestCompleted(3442)))">
       <PickUp QuestName="The Flawless Flame" QuestId="3442" GiverName="Kalaran Windblade" GiverId="8479" />
     </If>
-    <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="KillMob" MobId="8566" KillCount="1" />
     <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="CollectItem" ItemId="18960" CollectCount="1" />
-    <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="KillMob" MobId="5840" KillCount="1" />
     <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="CollectItem" ItemId="18959" CollectCount="1" />
     <While Condition="((HasQuest(4451)) &amp;&amp; (!IsQuestCompleted(4451)))">
       <CustomBehavior File="UseItemOn" QuestId="4451" MobId="0" ItemId="11818" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -192,7 +163,6 @@
     <Objective QuestName="Fiery Menace!" QuestId="7724" Type="KillMob" MobId="5858" KillCount="20" />
     <Objective QuestName="Curse These Fat Fingers" QuestId="7723" Type="KillMob" MobId="5854" KillCount="20" />
     <Objective QuestName="Incendosaurs? Whateverosaur is More Like It" QuestId="7727" Type="KillMob" MobId="9318" KillCount="20" />
-    <Objective QuestName="WANTED: Overseer Maltorius" QuestId="7701" Type="KillMob" MobId="14621" KillCount="1" />
     <Objective QuestName="WANTED: Overseer Maltorius" QuestId="7701" Type="CollectItem" ItemId="18946" CollectCount="1" />
     <Objective QuestName="What the Flux?" QuestId="7722" Type="CollectItem" ItemId="18922" CollectCount="1" />
     <Objective QuestName="Forging the Shaft" QuestId="3443" Type="CollectItem" ItemId="10551" CollectCount="8" />

@@ -72,28 +72,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12804" Name="A Steak Fit for a Hunter">
-    <Objective Type="KillMob" MobId="28129" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4868.62" Y="5069.2" Z="-89.0465" />
-        <Hotspot X="4794.29" Y="4919.98" Z="-72.9926" />
-        <Hotspot X="4736.44" Y="5214.46" Z="-48.4923" />
-        <Hotspot X="4766.3" Y="5046.18" Z="-60.9187" />
-        <Hotspot X="4740.71" Y="5141.51" Z="-58.3442" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12543" Name="An Offering for Soo-rahm">
-    <Objective Type="KillMob" MobId="28011" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5230.06" Y="4675.45" Z="-133.68" />
-        <Hotspot X="5257.75" Y="4743.93" Z="-132.369" />
-        <Hotspot X="5109.22" Y="4784.63" Z="-133.081" />
-        <Hotspot X="5191.56" Y="4668.22" Z="-134.58" />
-        <Hotspot X="5080.68" Y="4845.36" Z="-131.295" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12551" Name="Crocolisk Mastery: The Trial">
     <Objective Type="KillMob" MobId="28002" KillCount="15">
       <Hotspots>
@@ -121,27 +99,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12558" Name="Dreadsaber Mastery: Ready to Pounce">
-    <Objective Type="KillMob" MobId="28297" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6203.81" Y="5528.57" Z="-51.8231" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12556" Name="Rhino Mastery: The Kill">
-    <Objective Type="KillMob" MobId="28288" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6043.49" Y="4893.72" Z="-94.1984" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12654" Name="The Part-time Hunter">
-    <Objective Type="KillMob" MobId="28097" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5044.78" Y="4728.17" Z="-131.206" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12683" Name="Burning to Help">
     <Objective Type="KillMob" MobId="28003" KillCount="1">
       <Hotspots>
@@ -150,17 +107,6 @@
         <Hotspot X="5991.04" Y="4924.98" Z="-106.088" />
         <Hotspot X="6167.65" Y="5348.61" Z="-123.657" />
         <Hotspot X="6138.79" Y="5410.24" Z="-116.381" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12605" Name="Securing the Bait">
-    <Objective Type="KillMob" MobId="28408" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6489.78" Y="4915.25" Z="-57.4056" />
-        <Hotspot X="6491.69" Y="4801.32" Z="-59.1572" />
-        <Hotspot X="6674.06" Y="4830.89" Z="-11.7711" />
-        <Hotspot X="6627.54" Y="4846.34" Z="-31.0652" />
-        <Hotspot X="6589.13" Y="4854.44" Z="-44.081" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -195,17 +141,6 @@
         <Hotspot X="6405.9" Y="4283.05" Z="-46.73" />
         <Hotspot X="6427.52" Y="4361.32" Z="-49.42" />
         <Hotspot X="6438.85" Y="4466.86" Z="-57.68" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12681" Name="Reagent Agent">
-    <Objective Type="KillMob" MobId="28004" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6596.23" Y="4485.54" Z="-18.9589" />
-        <Hotspot X="6436.41" Y="4575.28" Z="-47.2625" />
-        <Hotspot X="6470.14" Y="4565.89" Z="-43.2414" />
-        <Hotspot X="6521.99" Y="4438.36" Z="-23.3188" />
-        <Hotspot X="6382.64" Y="4301.84" Z="-42.149" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -258,24 +193,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12691" Name="A Timeworn Coffer">
-    <Objective Type="KillMob" MobId="28069" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5706.99" Y="3306.82" Z="299.718" />
-        <Hotspot X="5738.87" Y="3156.67" Z="293.833" />
-        <Hotspot X="5697.74" Y="3426.8" Z="300.926" />
-        <Hotspot X="5717.04" Y="3428.26" Z="300.926" />
-        <Hotspot X="5728.47" Y="3438.19" Z="300.842" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12547" Name="The Activation Rune">
-    <Objective Type="KillMob" MobId="28601" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6028.08" Y="-1249.02" Z="-146.764" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12529" Name="The Ape Hunter's Slave">
     <Objective Type="KillMob" MobId="28098" KillCount="8">
       <Hotspots>
@@ -303,13 +220,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12534" Name="The Sapphire Queen">
-    <Objective Type="KillMob" MobId="28087" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4975.34" Y="4447.26" Z="-130.139" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12533" Name="The Wasp Hunter's Apprentice">
     <Objective Type="KillMob" MobId="28086" KillCount="6">
       <Hotspots>
@@ -327,16 +237,6 @@
         <Hotspot X="5036.99" Y="4230.29" Z="-47.2019" />
         <Hotspot X="4928.88" Y="4219.16" Z="-29.7915" />
         <Hotspot X="4972.88" Y="4227.24" Z="-37.8087" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12531" Name="The Underground Menace">
-    <Objective Type="KillMob" MobId="28083" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4801.76" Y="4364.83" Z="-56.6859" />
-        <Hotspot X="4828.27" Y="4759.1" Z="-75.66" />
-        <Hotspot X="4767.1" Y="4694.61" Z="-67.343" />
-        <Hotspot X="4859.41" Y="4397.72" Z="-62.169" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -497,12 +397,10 @@
     <If Condition="((!HasQuest(12543)) &amp;&amp; (!IsQuestCompleted(12543)))">
       <PickUp QuestName="An Offering for Soo-rahm" QuestId="12543" GiverName="Oracle Soo-rahm" GiverId="28191" />
     </If>
-    <Objective QuestName="A Steak Fit for a Hunter" QuestId="12804" Type="KillMob" MobId="28129" KillCount="1" />
     <Objective QuestName="A Steak Fit for a Hunter" QuestId="12804" Type="CollectItem" ItemId="40394" CollectCount="5" />
     <Objective QuestName="Some Make Lemonade, Some Make Liquor" QuestId="12634" Type="CollectItem" ItemId="38656" CollectCount="1" />
     <Objective QuestName="Some Make Lemonade, Some Make Liquor" QuestId="12634" Type="CollectItem" ItemId="38653" CollectCount="2" />
     <Objective QuestName="Some Make Lemonade, Some Make Liquor" QuestId="12634" Type="CollectItem" ItemId="38655" CollectCount="1" />
-    <Objective QuestName="An Offering for Soo-rahm" QuestId="12543" Type="KillMob" MobId="28011" KillCount="1" />
     <Objective QuestName="An Offering for Soo-rahm" QuestId="12543" Type="CollectItem" ItemId="38505" CollectCount="5" />
     <Objective QuestName="Crocolisk Mastery: The Trial" QuestId="12551" Type="KillMob" MobId="28002" KillCount="15" />
     <Objective QuestName="It Could Be Anywhere!" QuestId="12624" Type="CollectItem" ItemId="38642" CollectCount="1" />
@@ -574,17 +472,13 @@
     <If Condition="((!HasQuest(12569)) &amp;&amp; (!IsQuestCompleted(12569)))">
       <PickUp QuestName="Crocolisk Mastery: The Ambush" QuestId="12569" GiverName="Debaar" GiverId="28032" />
     </If>
-    <Objective QuestName="Dreadsaber Mastery: Ready to Pounce" QuestId="12558" Type="KillMob" MobId="28297" KillCount="1" />
     <Objective QuestName="Dreadsaber Mastery: Ready to Pounce" QuestId="12558" Type="CollectItem" ItemId="38523" CollectCount="1" />
-    <Objective QuestName="Rhino Mastery: The Kill" QuestId="12556" Type="KillMob" MobId="28288" KillCount="1" />
     <Objective QuestName="Rhino Mastery: The Kill" QuestId="12556" Type="CollectItem" ItemId="38522" CollectCount="1" />
     <While Condition="((HasQuest(12569)) &amp;&amp; (!IsQuestCompleted(12569)))">
       <CustomBehavior File="UseItemOn" QuestId="12569" MobId="0" ItemId="38564" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Crocolisk Mastery: The Ambush" QuestId="12569" Type="KillMob" MobId="28317" KillCount="1" />
     <Objective QuestName="Crocolisk Mastery: The Ambush" QuestId="12569" Type="CollectItem" ItemId="38559" CollectCount="1" />
-    <Objective QuestName="The Part-time Hunter" QuestId="12654" Type="KillMob" MobId="28097" KillCount="1" />
     <Objective QuestName="The Part-time Hunter" QuestId="12654" Type="CollectItem" ItemId="38703" CollectCount="1" />
     <PickUp QuestName="Playing Along" QuestId="12528" GiverName="Tracker Gekgek" GiverId="28095" />
     <TurnIn QuestName="The Part-time Hunter" QuestId="12654" TurnInName="Tamara Wobblesprocket" TurnInId="28568" />
@@ -611,7 +505,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="Burning to Help" QuestId="12683" Type="KillMob" MobId="28003" KillCount="5" />
-    <Objective QuestName="Securing the Bait" QuestId="12605" Type="KillMob" MobId="28408" KillCount="1" />
     <Objective QuestName="Securing the Bait" QuestId="12605" Type="CollectItem" ItemId="38600" CollectCount="6" />
     <Objective QuestName="Sharpening Your Talons" QuestId="12603" Type="KillMob" MobId="28378" KillCount="6" />
     <TurnIn QuestName="Sharpening Your Talons" QuestId="12603" TurnInName="Dorian Drakestalker" TurnInId="28376" />
@@ -637,7 +530,6 @@
     </If>
     <Objective QuestName="Post-partum Aggression" QuestId="12614" Type="KillMob" MobId="28467" KillCount="1" />
     <Objective QuestName="My Pet Roc" QuestId="12658" Type="CollectItem" ItemId="38705" CollectCount="7" />
-    <Objective QuestName="Reagent Agent" QuestId="12681" Type="KillMob" MobId="28004" KillCount="1" />
     <Objective QuestName="Reagent Agent" QuestId="12681" Type="CollectItem" ItemId="39161" CollectCount="5" />
     <TurnIn QuestName="Post-partum Aggression" QuestId="12614" TurnInName="Dorian Drakestalker" TurnInId="28376" />
     <TurnIn QuestName="Reagent Agent" QuestId="12681" TurnInName="Colvin Norrington" TurnInId="28771" />
@@ -703,7 +595,6 @@
       <PickUp QuestName="Powering the Waygate - The Maker's Overlook" QuestId="12613" GiverName="Avatar of Freya" GiverId="27801" />
     </If>
     <PickUp QuestName="A Timeworn Coffer" QuestId="12691" GiverName="Avatar of Freya" GiverId="27801" />
-    <Objective QuestName="A Timeworn Coffer" QuestId="12691" Type="KillMob" MobId="28069" KillCount="1" />
     <Objective QuestName="A Timeworn Coffer" QuestId="12691" Type="CollectItem" ItemId="39227" CollectCount="1" />
     <TurnIn QuestName="A Timeworn Coffer" QuestId="12691" TurnInName="Object_190768" TurnInType="Object" TurnInId="190768" />
     <TurnIn QuestName="Powering the Waygate - The Maker's Overlook" QuestId="12613" TurnInName="Avatar of Freya" TurnInId="27801" />
@@ -714,7 +605,6 @@
     <If Condition="((!HasQuest(12547)) &amp;&amp; (!IsQuestCompleted(12547)))">
       <PickUp QuestName="The Activation Rune" QuestId="12547" GiverName="The Etymidian" GiverId="28092" />
     </If>
-    <Objective QuestName="The Activation Rune" QuestId="12547" Type="KillMob" MobId="28601" KillCount="1" />
     <Objective QuestName="The Activation Rune" QuestId="12547" Type="CollectItem" ItemId="38708" CollectCount="1" />
     <TurnIn QuestName="The Activation Rune" QuestId="12547" TurnInName="The Etymidian" TurnInId="28092" />
     <If Condition="((!HasQuest(12797)) &amp;&amp; (!IsQuestCompleted(12797)))">
@@ -743,7 +633,6 @@
     <If Condition="((!HasQuest(12534)) &amp;&amp; (!IsQuestCompleted(12534)))">
       <PickUp QuestName="The Sapphire Queen" QuestId="12534" GiverName="Elder Harkek" GiverId="28138" />
     </If>
-    <Objective QuestName="The Sapphire Queen" QuestId="12534" Type="KillMob" MobId="28087" KillCount="1" />
     <Objective QuestName="The Sapphire Queen" QuestId="12534" Type="CollectItem" ItemId="38477" CollectCount="1" />
     <Objective QuestName="The Wasp Hunter's Apprentice" QuestId="12533" Type="KillMob" MobId="28086" KillCount="6" />
     <Objective QuestName="The Wasp Hunter's Apprentice" QuestId="12533" Type="KillMob" MobId="28085" KillCount="9" />
@@ -764,7 +653,6 @@
     <If Condition="((!HasQuest(12535)) &amp;&amp; (!IsQuestCompleted(12535)))">
       <PickUp QuestName="Mischief in the Making" QuestId="12535" GiverName="High-Shaman Rakjak" GiverId="28082" />
     </If>
-    <Objective QuestName="The Underground Menace" QuestId="12531" Type="KillMob" MobId="28083" KillCount="1" />
     <Objective QuestName="The Underground Menace" QuestId="12531" Type="CollectItem" ItemId="38473" CollectCount="1" />
     <Objective QuestName="Mischief in the Making" QuestId="12535" Type="CollectItem" ItemId="38504" CollectCount="8" />
     <TurnIn QuestName="The Underground Menace" QuestId="12531" TurnInName="High-Shaman Rakjak" TurnInId="28082" />
@@ -856,7 +744,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="The Lost Mistwhisper Treasure" QuestId="12575" Type="CollectItem" ItemId="38601" CollectCount="1" />
-    <Objective QuestName="The Lost Mistwhisper Treasure" QuestId="12575" Type="KillMob" MobId="28105" KillCount="1" />
     <Objective QuestName="Forced Hand" QuestId="12576" Type="KillMob" MobId="28080" KillCount="8" />
     <Objective QuestName="Forced Hand" QuestId="12576" Type="KillMob" MobId="28081" KillCount="6" />
     <TurnIn QuestName="The Lost Mistwhisper Treasure" QuestId="12575" TurnInName="Mistcaller Soo-gan" TurnInId="28114" />

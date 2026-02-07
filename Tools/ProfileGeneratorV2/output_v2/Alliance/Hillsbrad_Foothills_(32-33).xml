@@ -117,17 +117,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="555" Name="Soothing Turtle Bisque">
-    <Objective Type="KillMob" MobId="2408" KillCount="1">
-      <Hotspots>
-        <Hotspot X="332.292" Y="-1421.88" Z="35.0" />
-        <Hotspot X="285.907" Y="-1316.24" Z="35.1194" />
-        <Hotspot X="264.946" Y="-1277.44" Z="37.1807" />
-        <Hotspot X="229.941" Y="-1254.32" Z="32.1782" />
-        <Hotspot X="705.295" Y="34.7223" Z="33.9719" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Hillsbrad Foothills (32-33)" LogColor="Green" />
@@ -170,7 +159,6 @@
     <PickUp QuestName="Encrypted Letter" QuestId="511" GiverName="Micha Yance" GiverId="2381" />
     <Objective QuestName="Syndicate Assassins" QuestId="505" Type="KillMob" MobId="2241" KillCount="8" />
     <Objective QuestName="Syndicate Assassins" QuestId="505" Type="KillMob" MobId="2240" KillCount="12" />
-    <Objective QuestName="Soothing Turtle Bisque" QuestId="555" Type="KillMob" MobId="2408" KillCount="1" />
     <Objective QuestName="Soothing Turtle Bisque" QuestId="555" Type="CollectItem" ItemId="3712" CollectCount="10" />
     <TurnIn QuestName="Costly Menace" QuestId="564" TurnInName="Darren Malvew" TurnInId="2382" />
     <TurnIn QuestName="Encrypted Letter" QuestId="511" TurnInName="Loremaster Dibbs" TurnInId="2277" />

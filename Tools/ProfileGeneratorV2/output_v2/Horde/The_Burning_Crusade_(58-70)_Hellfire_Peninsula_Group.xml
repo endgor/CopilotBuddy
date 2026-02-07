@@ -12,24 +12,10 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="10834" Name="Grillok &quot;Darkeye&quot;">
-    <Objective Type="KillMob" MobId="19457" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-981.151" Y="2096.68" Z="22.692" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10136" Name="Cruel's Intentions">
     <Objective Type="KillMob" MobId="19191" KillCount="1">
       <Hotspots>
         <Hotspot X="394.614" Y="3276.6" Z="74.6257" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9466" Name="Wanted: Blacktalon the Savage">
-    <Objective Type="KillMob" MobId="17057" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-759.98" Y="3816.24" Z="20.0019" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -44,22 +30,20 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10134" Name="Crimson Crystal Clue">
-    <Objective Type="KillMob" MobId="19188" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-114.469" Y="4818.41" Z="39.5818" />
-        <Hotspot X="-63.3096" Y="4868.44" Z="55.968" />
-        <Hotspot X="-32.0013" Y="4804.67" Z="46.9591" />
-        <Hotspot X="-11.9675" Y="4854.78" Z="56.1866" />
-        <Hotspot X="21.6032" Y="4830.08" Z="61.6036" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\The Burning Crusade (58-70)\Hellfire Peninsula Group" LogColor="Green" />
     <If Condition="Me.Level &lt; 58">
-      <GrindTo Level="58" />
+      <SetGrindArea>
+        <GrindArea>
+          <Name>Grind to Level 58 - Eye of Grillok Quest Credit Bunny</Name>
+          <Factions>35</Factions>
+          <Hotspots>
+            <Hotspot X="-1336.04" Y="2353.65" Z="90.05" />
+          </Hotspots>
+        </GrindArea>
+      </SetGrindArea>
+      <GrindTo Level="58" /> <!--  (grind Eye of Grillok Quest Credit Bunny) -->
     </If>
     <PickUp QuestName="Through the Dark Portal" QuestId="9407" GiverName="Warlord Dar'toon" GiverId="19254" />
     <TurnIn QuestName="Through the Dark Portal" QuestId="9407" TurnInName="Lieutenant General Orion" TurnInId="19253" />
@@ -116,7 +100,6 @@
     <If Condition="((!HasQuest(10834)) &amp;&amp; (!IsQuestCompleted(10834)))">
       <PickUp QuestName="Grillok &quot;Darkeye&quot;" QuestId="10834" GiverName="Zezzak" GiverId="22231" />
     </If>
-    <Objective QuestName="Grillok &quot;Darkeye&quot;" QuestId="10834" Type="KillMob" MobId="19457" KillCount="1" />
     <Objective QuestName="Grillok &quot;Darkeye&quot;" QuestId="10834" Type="CollectItem" ItemId="31529" CollectCount="1" />
     <TurnIn QuestName="Grillok &quot;Darkeye&quot;" QuestId="10834" TurnInName="Zezzak" TurnInId="22231" />
     <If Condition="((!HasQuest(10136)) &amp;&amp; (!IsQuestCompleted(10136)))">
@@ -128,6 +111,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 60 - Arazzius the Cruel</Name>
+          <Factions>90</Factions>
           <TargetMinLevel>63</TargetMinLevel>
           <TargetMaxLevel>63</TargetMaxLevel>
           <Hotspots>
@@ -138,13 +122,13 @@
       <GrindTo Level="60" /> <!--  (grind Arazzius the Cruel) -->
     </If>
     <PickUp QuestName="Wanted: Blacktalon the Savage" QuestId="9466" GiverName="Nazgrel" GiverId="3230" />
-    <Objective QuestName="Wanted: Blacktalon the Savage" QuestId="9466" Type="KillMob" MobId="17057" KillCount="1" />
     <Objective QuestName="Wanted: Blacktalon the Savage" QuestId="9466" Type="CollectItem" ItemId="23687" CollectCount="1" />
     <TurnIn QuestName="Wanted: Blacktalon the Savage" QuestId="9466" TurnInName="Ranger Captain Venn'ren" TurnInId="16789" />
     <If Condition="Me.Level &lt; 61">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 61 - Blacktalon the Savage</Name>
+          <Factions>1873</Factions>
           <TargetMinLevel>63</TargetMinLevel>
           <TargetMaxLevel>63</TargetMaxLevel>
           <Hotspots>
@@ -156,7 +140,6 @@
     </If>
     <PickUp QuestName="Colossal Menace" QuestId="10132" GiverName="Tola'thion" GiverId="19293" />
     <Objective QuestName="Colossal Menace" QuestId="10132" Type="KillMob" MobId="19188" KillCount="5" />
-    <Objective QuestName="Crimson Crystal Clue" QuestId="10134" Type="KillMob" MobId="19188" KillCount="1" />
     <Objective QuestName="Crimson Crystal Clue" QuestId="10134" Type="CollectItem" ItemId="29476" CollectCount="1" />
     <While Condition="((HasQuest(10132)) &amp;&amp; (!IsQuestCompleted(10132)))">
       <RunTo X="-114.469" Y="4818.41" Z="39.5818" />

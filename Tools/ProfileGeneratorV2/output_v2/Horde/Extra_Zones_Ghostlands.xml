@@ -128,17 +128,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9171" Name="Culinary Crunch">
-    <Objective Type="KillMob" MobId="16350" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7851.42" Y="-6409.05" Z="15.8509" />
-        <Hotspot X="7817.92" Y="-6379.25" Z="19.2762" />
-        <Hotspot X="7781.0" Y="-6407.29" Z="13.9963" />
-        <Hotspot X="7787.7" Y="-6347.71" Z="18.1345" />
-        <Hotspot X="7708.11" Y="-6286.88" Z="25.0428" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9159" Name="Curbing the Plague">
     <Objective Type="KillMob" MobId="16351" KillCount="8">
       <Hotspots>
@@ -156,26 +145,6 @@
         <Hotspot X="7617.66" Y="-7759.49" Z="147.242" />
         <Hotspot X="7583.93" Y="-7583.94" Z="148.664" />
         <Hotspot X="7583.8" Y="-7782.79" Z="146.95" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9140" Name="Windrunner Village">
-    <Objective Type="KillMob" MobId="16323" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7319.12" Y="-5816.76" Z="36.5527" />
-        <Hotspot X="7326.64" Y="-5842.55" Z="36.5612" />
-        <Hotspot X="7305.51" Y="-5844.56" Z="15.9554" />
-        <Hotspot X="7317.54" Y="-5854.11" Z="36.5739" />
-        <Hotspot X="7320.78" Y="-5854.77" Z="23.892" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="16324" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7320.32" Y="-5811.63" Z="11.509" />
-        <Hotspot X="7344.59" Y="-5852.3" Z="14.6604" />
-        <Hotspot X="7276.38" Y="-5812.78" Z="12.1091" />
-        <Hotspot X="7190.4" Y="-5821.69" Z="15.417" />
-        <Hotspot X="7249.43" Y="-5850.77" Z="13.3048" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -246,44 +215,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9214" Name="Shadowpine Weaponry">
-    <Objective Type="KillMob" MobId="16344" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7486.74" Y="-7889.98" Z="159.137" />
-        <Hotspot X="7418.65" Y="-7843.83" Z="151.598" />
-        <Hotspot X="7415.13" Y="-7813.13" Z="144.484" />
-        <Hotspot X="7425.76" Y="-7790.58" Z="140.989" />
-        <Hotspot X="7360.37" Y="-7832.71" Z="148.134" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="16469" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7512.59" Y="-7820.54" Z="147.808" />
-        <Hotspot X="7488.8" Y="-7855.81" Z="153.738" />
-        <Hotspot X="7446.54" Y="-7885.54" Z="158.763" />
-        <Hotspot X="7418.14" Y="-7872.14" Z="156.705" />
-        <Hotspot X="7457.03" Y="-7896.58" Z="158.187" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="16345" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7146.12" Y="-7514.48" Z="48.2645" />
-        <Hotspot X="7118.95" Y="-7479.35" Z="47.788" />
-        <Hotspot X="6986.81" Y="-7540.0" Z="61.762" />
-        <Hotspot X="6830.69" Y="-7436.72" Z="46.8494" />
-        <Hotspot X="6948.99" Y="-7480.74" Z="48.083" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="16346" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7181.04" Y="-7539.66" Z="50.2565" />
-        <Hotspot X="6814.9" Y="-7311.27" Z="45.1887" />
-        <Hotspot X="6807.39" Y="-7385.57" Z="47.4029" />
-        <Hotspot X="6587.27" Y="-7279.25" Z="52.3371" />
-        <Hotspot X="6610.52" Y="-7349.64" Z="54.0591" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9276" Name="Attack on Zeb'Tela">
     <Objective Type="KillMob" MobId="16469" KillCount="8">
       <Hotspots>
@@ -321,17 +252,6 @@
         <Hotspot X="6807.39" Y="-7385.57" Z="47.4029" />
         <Hotspot X="6587.27" Y="-7279.25" Z="52.3371" />
         <Hotspot X="6610.52" Y="-7349.64" Z="54.0591" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9169" Name="Deactivate An'owyn">
-    <Objective Type="KillMob" MobId="16333" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6793.03" Y="-7184.43" Z="25.8965" />
-        <Hotspot X="6836.25" Y="-7141.67" Z="30.3422" />
-        <Hotspot X="6834.94" Y="-7216.47" Z="26.7579" />
-        <Hotspot X="6824.47" Y="-7226.56" Z="27.1161" />
-        <Hotspot X="6820.17" Y="-7249.49" Z="39.356" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -550,13 +470,10 @@
     <Objective QuestName="Into Occupied Territory" QuestId="9163" Type="CollectItem" ItemId="22590" CollectCount="1" />
     <Objective QuestName="Into Occupied Territory" QuestId="9163" Type="CollectItem" ItemId="22591" CollectCount="1" />
     <Objective QuestName="Into Occupied Territory" QuestId="9163" Type="CollectItem" ItemId="22592" CollectCount="1" />
-    <Objective QuestName="Culinary Crunch" QuestId="9171" Type="KillMob" MobId="16350" KillCount="1" />
     <Objective QuestName="Culinary Crunch" QuestId="9171" Type="CollectItem" ItemId="22644" CollectCount="5" />
     <Objective QuestName="Curbing the Plague" QuestId="9159" Type="KillMob" MobId="16351" KillCount="8" />
     <Objective QuestName="Curbing the Plague" QuestId="9159" Type="KillMob" MobId="16354" KillCount="10" />
-    <Objective QuestName="Windrunner Village" QuestId="9140" Type="KillMob" MobId="16323" KillCount="1" />
     <Objective QuestName="Windrunner Village" QuestId="9140" Type="CollectItem" ItemId="22566" CollectCount="6" />
-    <Objective QuestName="Windrunner Village" QuestId="9140" Type="KillMob" MobId="16324" KillCount="1" />
     <Objective QuestName="Windrunner Village" QuestId="9140" Type="CollectItem" ItemId="22567" CollectCount="4" />
     <Objective QuestName="Spinal Dust" QuestId="9218" Type="CollectItem" ItemId="22597" CollectCount="1" />
     <While Condition="((HasQuest(9218)) &amp;&amp; (!IsQuestCompleted(9218)))">
@@ -591,9 +508,7 @@
     <PickUp QuestName="Escape from the Catacombs" QuestId="9212" GiverName="Ranger Lilatha" GiverId="16295" />
     <TurnIn QuestName="Curbing the Plague" QuestId="9159" TurnInName="Farstrider Sedina" TurnInId="16202" />
     <TurnIn QuestName="Escape from the Catacombs" QuestId="9212" TurnInName="Captain Helios" TurnInId="16220" />
-    <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="KillMob" MobId="16344" KillCount="1" />
     <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="CollectItem" ItemId="23165" CollectCount="3" />
-    <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="KillMob" MobId="16469" KillCount="1" />
     <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="CollectItem" ItemId="23167" CollectCount="3" />
     <Objective QuestName="Attack on Zeb'Tela" QuestId="9276" Type="KillMob" MobId="16469" KillCount="8" />
     <Objective QuestName="Attack on Zeb'Tela" QuestId="9276" Type="KillMob" MobId="16344" KillCount="8" />
@@ -606,13 +521,10 @@
     <If Condition="((!HasQuest(9169)) &amp;&amp; (!IsQuestCompleted(9169)))">
       <PickUp QuestName="Deactivate An'owyn" QuestId="9169" GiverName="Magister Sylastor" GiverId="16237" />
     </If>
-    <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="KillMob" MobId="16345" KillCount="1" />
     <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="CollectItem" ItemId="22677" CollectCount="3" />
-    <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="KillMob" MobId="16346" KillCount="1" />
     <Objective QuestName="Shadowpine Weaponry" QuestId="9214" Type="CollectItem" ItemId="23166" CollectCount="3" />
     <Objective QuestName="Assault on Zeb'Nowa" QuestId="9277" Type="KillMob" MobId="16345" KillCount="10" />
     <Objective QuestName="Assault on Zeb'Nowa" QuestId="9277" Type="KillMob" MobId="16346" KillCount="10" />
-    <Objective QuestName="Deactivate An'owyn" QuestId="9169" Type="KillMob" MobId="16333" KillCount="1" />
     <Objective QuestName="Deactivate An'owyn" QuestId="9169" Type="CollectItem" ItemId="23191" CollectCount="1" />
     <TurnIn QuestName="Assault on Zeb'Nowa" QuestId="9277" TurnInName="Farstrider Solanna" TurnInId="16463" />
     <TurnIn QuestName="Shadowpine Weaponry" QuestId="9214" TurnInName="Captain Helios" TurnInId="16220" />

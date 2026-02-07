@@ -11,15 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="29685" Name="Hard to Kill">
-    <Objective Type="KillMob" MobId="24664" KillCount="1">
-      <Hotspots>
-        <Hotspot X="148.549" Y="186.981" Z="-16.6441" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\The Burning Crusade (58-70)\Isle of Quel'danas" LogColor="Green" />
     <PickUp QuestName="Crisis at the Sunwell" QuestId="11481" GiverName="Adyen the Lightwarden" GiverId="18537" />
@@ -47,7 +38,6 @@
     </If>
     <TurnIn QuestName="The Scryer's Scryer" QuestId="11490" TurnInName="Kalecgos" TurnInId="24848" />
     <PickUp QuestName="Hard to Kill" QuestId="29685" GiverName="Kalecgos" GiverId="24848" />
-    <Objective QuestName="Hard to Kill" QuestId="29685" Type="KillMob" MobId="24664" KillCount="1" />
     <Objective QuestName="Hard to Kill" QuestId="29685" Type="CollectItem" ItemId="34157" CollectCount="1" />
     <TurnIn QuestName="Hard to Kill" QuestId="29685" TurnInName="Exarch Larethor" TurnInId="55007" />
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\The Burning Crusade (58-70)\Isle of Quel'danas Complete" LogColor="Orange" />

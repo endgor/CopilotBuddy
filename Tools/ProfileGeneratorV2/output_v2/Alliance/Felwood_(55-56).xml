@@ -11,19 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="5086" Name="Toxic Horrors">
-    <Objective Type="KillMob" MobId="7132" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6115.07" Y="-1181.11" Z="372.293" />
-        <Hotspot X="6248.27" Y="-1202.01" Z="371.053" />
-        <Hotspot X="6188.19" Y="-1170.89" Z="370.52" />
-        <Hotspot X="6200.25" Y="-1137.86" Z="366.636" />
-        <Hotspot X="6220.18" Y="-1123.06" Z="370.549" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Felwood (55-56)" LogColor="Green" />
     <TurnIn QuestName="Cleansed Water Returns to Felwood" QuestId="5159" TurnInName="Greta Mosshoof" TurnInId="10922" />
@@ -42,7 +29,6 @@
     </While>
     <PickUp QuestName="A Strange Red Key" QuestId="5202" GiverName="Eridan Bluewind" GiverId="9116" />
     <TurnIn QuestName="A Strange Red Key" QuestId="5202" TurnInName="Captured Arko'narin" TurnInId="11016" />
-    <Objective QuestName="Toxic Horrors" QuestId="5086" Type="KillMob" MobId="7132" KillCount="1" />
     <Objective QuestName="Toxic Horrors" QuestId="5086" Type="CollectItem" ItemId="12822" CollectCount="3" />
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Felwood (55-56) Complete" LogColor="Orange" />
     <CustomBehavior File="LoadProfile" ProfileName="Winterspring_(56-56)" />

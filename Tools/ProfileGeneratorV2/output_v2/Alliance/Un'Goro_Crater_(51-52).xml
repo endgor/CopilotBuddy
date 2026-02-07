@@ -56,7 +56,6 @@
     <If Condition="((!HasQuest(4291)) &amp;&amp; (!IsQuestCompleted(4291)))">
       <PickUp QuestName="The Scent of Lar'korwi" QuestId="4291" GiverName="Torwa Pathfinder" GiverId="9619" />
     </If>
-    <Objective QuestName="The Scent of Lar'korwi" QuestId="4291" Type="KillMob" MobId="9683" KillCount="1" />
     <Objective QuestName="The Scent of Lar'korwi" QuestId="4291" Type="CollectItem" ItemId="11509" CollectCount="2" />
     <TurnIn QuestName="The Scent of Lar'korwi" QuestId="4291" TurnInName="Torwa Pathfinder" TurnInId="9619" />
     <If Condition="((!HasQuest(4292)) &amp;&amp; (!IsQuestCompleted(4292)))">

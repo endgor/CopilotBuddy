@@ -22,17 +22,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="11192" Name="Thresher Oil">
-    <Objective Type="KillMob" MobId="4388" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3987.47" Y="-4678.53" Z="-22.1836" />
-        <Hotspot X="-4040.24" Y="-4691.14" Z="-47.8143" />
-        <Hotspot X="-3950.77" Y="-4758.02" Z="-26.3252" />
-        <Hotspot X="-3975.41" Y="-4736.51" Z="-27.564" />
-        <Hotspot X="-3999.43" Y="-4727.57" Z="-27.4787" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="11134" Name="The End of the Deserters">
     <Objective Type="KillMob" MobId="23941" KillCount="1">
       <Hotspots>
@@ -66,24 +55,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="11173" Name="The Reagent Thief">
-    <Objective Type="KillMob" MobId="5089" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3934.05" Y="-2869.68" Z="51.2515" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="11184" Name="WANTED: Goreclaw the Ravenous">
     <Objective Type="KillMob" MobId="23873" KillCount="1">
       <Hotspots>
         <Hotspot X="-4331.29" Y="-2664.14" Z="33.379" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="11137" Name="Defias in Dustwallow?">
-    <Objective Type="KillMob" MobId="23679" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2991.45" Y="-4382.34" Z="10.4377" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -97,39 +72,10 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1218" Name="Marsh Frog Legs">
-    <Objective Type="KillMob" MobId="23979" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2957.55" Y="-3828.82" Z="37.5224" />
-        <Hotspot X="-2986.96" Y="-4004.18" Z="37.4665" />
-        <Hotspot X="-3045.76" Y="-3996.14" Z="37.8974" />
-        <Hotspot X="-3071.41" Y="-3981.57" Z="39.0792" />
-        <Hotspot X="-3036.98" Y="-3922.27" Z="37.4266" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1324" Name="The Missing Diplomat">
     <Objective Type="KillMob" MobId="4966" KillCount="1">
       <Hotspots>
         <Hotspot X="-2895.49" Y="-3350.66" Z="31.2543" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="11144" Name="Confirming the Suspicion">
-    <Objective Type="KillMob" MobId="23714" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2460.21" Y="-3116.33" Z="34.9337" />
-        <Hotspot X="-2515.08" Y="-3190.14" Z="33.0079" />
-        <Hotspot X="-2437.69" Y="-3201.37" Z="33.1775" />
-        <Hotspot X="-2468.22" Y="-3190.52" Z="34.2757" />
-        <Hotspot X="-2403.04" Y="-3128.26" Z="36.8455" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1203" Name="Jarl Needs a Blade">
-    <Objective Type="KillMob" MobId="23841" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2724.06" Y="-4008.5" Z="30.1463" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -169,7 +115,6 @@
         <CustomBehavior File="WaitTimer" WaitTime="3000" />
       </While>
     </If>
-    <Objective QuestName="Thresher Oil" QuestId="11192" Type="KillMob" MobId="4388" KillCount="1" />
     <Objective QuestName="Thresher Oil" QuestId="11192" Type="CollectItem" ItemId="33126" CollectCount="4" />
     <Objective QuestName="The End of the Deserters" QuestId="11134" Type="KillMob" MobId="23941" KillCount="1" />
     <TurnIn QuestName="Thresher Oil" QuestId="11192" TurnInName="Babs Fizzletorque" TurnInId="23892" />
@@ -212,7 +157,6 @@
     </If>
     <TurnIn QuestName="Tabetha's Farm" QuestId="11212" TurnInName="Tabetha" TurnInId="6546" />
     <PickUp QuestName="The Reagent Thief" QuestId="11173" GiverName="Apprentice Garion" GiverId="23601" />
-    <Objective QuestName="The Reagent Thief" QuestId="11173" Type="KillMob" MobId="5089" KillCount="1" />
     <TurnIn QuestName="The Deserters" QuestId="1286" TurnInName="Apprentice Garion" TurnInId="5089" />
     <If Condition="((!HasQuest(1287)) &amp;&amp; (!IsQuestCompleted(1287)))">
       <PickUp QuestName="The Deserters" QuestId="1287" GiverName="Apprentice Garion" GiverId="23601" />
@@ -251,7 +195,6 @@
     <If Condition="((!HasQuest(11137)) &amp;&amp; (!IsQuestCompleted(11137)))">
       <PickUp QuestName="Defias in Dustwallow?" QuestId="11137" GiverName="Captain Wymor" GiverId="5086" />
     </If>
-    <Objective QuestName="Defias in Dustwallow?" QuestId="11137" Type="KillMob" MobId="23679" KillCount="1" />
     <Objective QuestName="Defias in Dustwallow?" QuestId="11137" Type="CollectItem" ItemId="33037" CollectCount="1" />
     <TurnIn QuestName="Defias in Dustwallow?" QuestId="11137" TurnInName="Captain Wymor" TurnInId="5086" />
     <If Condition="((!HasQuest(11138)) &amp;&amp; (!IsQuestCompleted(11138)))">
@@ -281,7 +224,6 @@
       <CustomBehavior File="UseItemOn" QuestId="11140" MobId="0" ItemId="33044" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Recover the Cargo!" QuestId="11140" Type="KillMob" MobId="23701" KillCount="1" />
     <Objective QuestName="Recover the Cargo!" QuestId="11140" Type="CollectItem" ItemId="33041" CollectCount="6" />
     <TurnIn QuestName="Recover the Cargo!" QuestId="11140" TurnInName="Renn McGill" TurnInId="23569" />
     <If Condition="((!HasQuest(11141)) &amp;&amp; (!IsQuestCompleted(11141)))">
@@ -291,7 +233,6 @@
     <TurnIn QuestName="The Hermit of Swamplight Manor" QuestId="11177" TurnInName="&quot;Swamp Eye&quot; Jarl" TurnInId="4792" />
     <PickUp QuestName="Marsh Frog Legs" QuestId="1218" GiverName="&quot;Swamp Eye&quot; Jarl" GiverId="4792" />
     <PickUp QuestName="What's Haunting Witch Hill?" QuestId="11180" GiverName="Mordant Grimsby" GiverId="23843" />
-    <Objective QuestName="Marsh Frog Legs" QuestId="1218" Type="KillMob" MobId="23979" KillCount="1" />
     <Objective QuestName="Marsh Frog Legs" QuestId="1218" Type="CollectItem" ItemId="33202" CollectCount="10" />
     <TurnIn QuestName="Marsh Frog Legs" QuestId="1218" TurnInName="&quot;Swamp Eye&quot; Jarl" TurnInId="4792" />
     <If Condition="((!HasQuest(1206)) &amp;&amp; (!IsQuestCompleted(1206)))">
@@ -355,7 +296,6 @@
     </While>
     <Objective QuestName="Prisoners of the Grimtotems" QuestId="11145" Type="CollectItem" ItemId="33061" CollectCount="1" />
     <Objective QuestName="Arms of the Grimtotems" QuestId="11148" Type="CollectItem" ItemId="33071" CollectCount="7" />
-    <Objective QuestName="Confirming the Suspicion" QuestId="11144" Type="KillMob" MobId="23714" KillCount="1" />
     <Objective QuestName="Confirming the Suspicion" QuestId="11144" Type="CollectItem" ItemId="33050" CollectCount="4" />
     <While Condition="((HasQuest(11144)) &amp;&amp; (!IsQuestCompleted(11144)))">
       <CustomBehavior File="UseItemOn" QuestId="11144" MobId="0" ItemId="33050" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -377,7 +317,6 @@
     <If Condition="((!HasQuest(1203)) &amp;&amp; (!IsQuestCompleted(1203)))">
       <PickUp QuestName="Jarl Needs a Blade" QuestId="1203" GiverName="&quot;Swamp Eye&quot; Jarl" GiverId="4792" />
     </If>
-    <Objective QuestName="Jarl Needs a Blade" QuestId="1203" Type="KillMob" MobId="23841" KillCount="1" />
     <Objective QuestName="Jarl Needs a Blade" QuestId="1203" Type="CollectItem" ItemId="33110" CollectCount="1" />
     <TurnIn QuestName="Jarl Needs a Blade" QuestId="1203" TurnInName="&quot;Swamp Eye&quot; Jarl" TurnInId="4792" />
     <TurnIn QuestName="Jaina Must Know" QuestId="11141" TurnInName="Lady Jaina Proudmoore" TurnInId="4968" />

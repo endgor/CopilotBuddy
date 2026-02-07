@@ -23,28 +23,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9465" Name="Call of Fire">
-    <Objective Type="KillMob" MobId="17189" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3203.73" Y="-12384.4" Z="20.0718" />
-        <Hotspot X="-3217.99" Y="-12421.1" Z="19.4682" />
-        <Hotspot X="-3150.54" Y="-12503.2" Z="-0.3757" />
-        <Hotspot X="-3094.6" Y="-12515.8" Z="1.4301" />
-        <Hotspot X="-3078.97" Y="-12499.2" Z="1.8012" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9503" Name="Call of Water">
-    <Objective Type="KillMob" MobId="17358" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1611.48" Y="-11144.8" Z="77.7214" />
-        <Hotspot X="-1611.26" Y="-11119.5" Z="68.5231" />
-        <Hotspot X="-1589.34" Y="-11148.0" Z="78.4939" />
-        <Hotspot X="-1559.64" Y="-11146.9" Z="57.6976" />
-        <Hotspot X="-1639.41" Y="-11089.8" Z="69.9551" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8410" Name="Elemental Mastery">
     <Objective Type="KillMob" MobId="2762" KillCount="1">
       <Hotspots>
@@ -87,7 +65,16 @@
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Class Quests\Shaman Class Quests" LogColor="Green" />
     <If Condition="Me.Level &lt; 4">
-      <GrindTo Level="4" />
+      <SetGrindArea>
+        <GrindArea>
+          <Name>Grind to Level 4 - Restless Spirit of Earth</Name>
+          <Factions>1681</Factions>
+          <Hotspots>
+            <Hotspot X="-3813.38" Y="-13392.90" Z="79.83" />
+          </Hotspots>
+        </GrindArea>
+      </SetGrindArea>
+      <GrindTo Level="4" /> <!--  (grind Restless Spirit of Earth) -->
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman) &amp;&amp; (Me.Race == WoWRace.Draenei)">
       <PickUp QuestName="Call of Earth" QuestId="9449" GiverName="Firmanvaar" GiverId="17089" />
@@ -108,6 +95,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 10 - Restless Spirit of Earth</Name>
+          <Factions>1681</Factions>
           <TargetMinLevel>4</TargetMinLevel>
           <TargetMaxLevel>4</TargetMaxLevel>
           <Hotspots>
@@ -127,7 +115,6 @@
       <If Condition="((!HasQuest(9465)) &amp;&amp; (!IsQuestCompleted(9465)))">
         <PickUp QuestName="Call of Fire" QuestId="9465" GiverName="Temper" GiverId="17205" />
       </If>
-      <Objective QuestName="Call of Fire" QuestId="9465" Type="KillMob" MobId="17189" KillCount="1" />
       <Objective QuestName="Call of Fire" QuestId="9465" Type="CollectItem" ItemId="23733" CollectCount="1" />
       <TurnIn QuestName="Call of Fire" QuestId="9465" TurnInName="Temper" TurnInId="17205" />
       <If Condition="((!HasQuest(9467)) &amp;&amp; (!IsQuestCompleted(9467)))">
@@ -139,7 +126,6 @@
       </While>
       <Objective QuestName="Call of Fire" QuestId="9467" Type="CollectItem" ItemId="23682" CollectCount="1" />
       <Objective QuestName="Call of Fire" QuestId="9467" Type="CollectItem" ItemId="24335" CollectCount="1" />
-      <Objective QuestName="Call of Fire" QuestId="9467" Type="KillMob" MobId="17206" KillCount="1" />
       <Objective QuestName="Call of Fire" QuestId="9467" Type="CollectItem" ItemId="23688" CollectCount="1" />
       <While Condition="((HasQuest(9467)) &amp;&amp; (!IsQuestCompleted(9467)))">
         <CustomBehavior File="UseItemOn" QuestId="9467" MobId="0" ItemId="24335" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -165,6 +151,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 20 - Hauteur</Name>
+          <Factions>14</Factions>
           <Hotspots>
             <Hotspot X="31.00" Y="29.91" Z="0.00" />
           </Hotspots>
@@ -185,7 +172,6 @@
       <If Condition="((!HasQuest(9503)) &amp;&amp; (!IsQuestCompleted(9503)))">
         <PickUp QuestName="Call of Water" QuestId="9503" GiverName="Aqueous" GiverId="17275" />
       </If>
-      <Objective QuestName="Call of Water" QuestId="9503" Type="KillMob" MobId="17358" KillCount="1" />
       <Objective QuestName="Call of Water" QuestId="9503" Type="CollectItem" ItemId="23744" CollectCount="6" />
     </If>
     <TurnIn QuestName="Call of Water" QuestId="9503" TurnInName="Aqueous" TurnInId="17275" />
@@ -202,7 +188,6 @@
       <If Condition="((!HasQuest(9508)) &amp;&amp; (!IsQuestCompleted(9508)))">
         <PickUp QuestName="Call of Water" QuestId="9508" GiverName="Aqueous" GiverId="17275" />
       </If>
-      <Objective QuestName="Call of Water" QuestId="9508" Type="KillMob" MobId="17359" KillCount="1" />
       <Objective QuestName="Call of Water" QuestId="9508" Type="CollectItem" ItemId="23997" CollectCount="1" />
     </If>
     <TurnIn QuestName="Call of Water" QuestId="9508" TurnInName="Aqueous" TurnInId="17275" />
@@ -216,6 +201,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 30 - Tel'athion the Impure</Name>
+          <Factions>1657</Factions>
           <Hotspots>
             <Hotspot X="31.00" Y="29.91" Z="0.00" />
           </Hotspots>
@@ -241,6 +227,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 50 - Tel'athion the Impure</Name>
+          <Factions>1657</Factions>
           <Hotspots>
             <Hotspot X="31.00" Y="29.91" Z="0.00" />
           </Hotspots>

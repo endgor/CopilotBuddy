@@ -12,28 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="544" Name="Prison Break In">
-    <Objective Type="KillMob" MobId="2411" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-73.2279" Y="218.838" Z="53.4005" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2412" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-112.737" Y="213.864" Z="55.4265" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2413" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-104.762" Y="225.969" Z="55.1642" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2414" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-52.7808" Y="285.753" Z="66.0425" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1183" Name="Goblin Sponsorship">
     <Objective Type="CollectItem" ItemId="5852" CollectCount="1">
       <CollectFrom>
@@ -56,15 +34,10 @@
       <CustomBehavior File="UseItemOn" QuestId="1136" MobId="0" ItemId="5810" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Frostmaw" QuestId="1136" Type="KillMob" MobId="4504" KillCount="1" />
     <Objective QuestName="Frostmaw" QuestId="1136" Type="CollectItem" ItemId="5811" CollectCount="1" />
-    <Objective QuestName="Prison Break In" QuestId="544" Type="KillMob" MobId="2411" KillCount="1" />
     <Objective QuestName="Prison Break In" QuestId="544" Type="CollectItem" ItemId="3689" CollectCount="1" />
-    <Objective QuestName="Prison Break In" QuestId="544" Type="KillMob" MobId="2412" KillCount="1" />
     <Objective QuestName="Prison Break In" QuestId="544" Type="CollectItem" ItemId="3690" CollectCount="1" />
-    <Objective QuestName="Prison Break In" QuestId="544" Type="KillMob" MobId="2413" KillCount="1" />
     <Objective QuestName="Prison Break In" QuestId="544" Type="CollectItem" ItemId="3691" CollectCount="1" />
-    <Objective QuestName="Prison Break In" QuestId="544" Type="KillMob" MobId="2414" KillCount="1" />
     <Objective QuestName="Prison Break In" QuestId="544" Type="CollectItem" ItemId="3688" CollectCount="1" />
     <Objective QuestName="Stone Tokens" QuestId="556" Type="CollectItem" ItemId="3714" CollectCount="10" />
     <TurnIn QuestName="Helcular's Revenge" QuestId="553" TurnInName="Object_1767" TurnInType="Object" TurnInId="1767" />

@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1054" Name="Culling the Threat">
-    <Objective Type="KillMob" MobId="3987" KillCount="1">
-      <Hotspots>
-        <Hotspot X="3337.85" Y="-476.5" Z="154.489" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1034" Name="The Ruins of Stardust">
     <Objective Type="CollectItem" ItemId="5494" CollectCount="5">
       <CollectFrom>
@@ -35,13 +28,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="973" Name="The Tower of Althalaxx">
-    <Objective Type="KillMob" MobId="3664" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2340.17" Y="242.212" Z="154.548" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1007" Name="The Ancient Statuette">
     <Objective Type="CollectItem" ItemId="5424" CollectCount="1">
       <CollectFrom>
@@ -49,13 +35,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="3879.52" Y="880.97" Z="0.69" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1009" Name="Ruuzel">
-    <Objective Type="KillMob" MobId="3943" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4157.59" Y="1272.73" Z="3.2277" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -87,7 +66,6 @@
       <PickUp QuestName="Elune's Tear" QuestId="1033" GiverName="Pelturas Whitemoon" GiverId="3894" />
     </If>
     <Objective QuestName="Elune's Tear" QuestId="1033" Type="CollectItem" ItemId="5493" CollectCount="1" />
-    <Objective QuestName="Culling the Threat" QuestId="1054" Type="KillMob" MobId="3987" KillCount="1" />
     <Objective QuestName="Culling the Threat" QuestId="1054" Type="CollectItem" ItemId="5544" CollectCount="1" />
     <TurnIn QuestName="Culling the Threat" QuestId="1054" TurnInName="Raene Wolfrunner" TurnInId="3691" />
     <CustomBehavior File="SetHearthstone" MobId="6738" AreaId="331" X="2781.16" Y="-432.997" Z="116.665" /> <!-- Set hearth: Astranaar -->
@@ -103,7 +81,6 @@
       <Objective QuestName="Call of Water" QuestId="9504" Type="CollectItem" ItemId="23750" CollectCount="1" />
     </If>
     <Objective QuestName="The Ruins of Stardust" QuestId="1034" Type="CollectItem" ItemId="5494" CollectCount="5" />
-    <Objective QuestName="The Tower of Althalaxx" QuestId="973" Type="KillMob" MobId="3664" KillCount="1" />
     <Objective QuestName="The Tower of Althalaxx" QuestId="973" Type="CollectItem" ItemId="5533" CollectCount="1" />
     <TurnIn QuestName="The Tower of Althalaxx" QuestId="973" TurnInName="Delgren the Purifier" TurnInId="3663" />
     <TurnIn QuestName="Raene's Cleansing" QuestId="991" TurnInName="Delgren the Purifier" TurnInId="3891" />
@@ -117,7 +94,6 @@
     <If Condition="((!HasQuest(1009)) &amp;&amp; (!IsQuestCompleted(1009)))">
       <PickUp QuestName="Ruuzel" QuestId="1009" GiverName="Talen" GiverId="3846" />
     </If>
-    <Objective QuestName="Ruuzel" QuestId="1009" Type="KillMob" MobId="3943" KillCount="1" />
     <Objective QuestName="Ruuzel" QuestId="1009" Type="CollectItem" ItemId="5445" CollectCount="1" />
     <TurnIn QuestName="Ruuzel" QuestId="1009" TurnInName="Talen" TurnInId="3846" />
     <Objective QuestName="The Zoram Strand" QuestId="1008" Type="CollectItem" ItemId="5490" CollectCount="20" />
@@ -139,7 +115,6 @@
       <If Condition="((!HasQuest(9508)) &amp;&amp; (!IsQuestCompleted(9508)))">
         <PickUp QuestName="Call of Water" QuestId="9508" GiverName="Aqueous" GiverId="17275" />
       </If>
-      <Objective QuestName="Call of Water" QuestId="9508" Type="KillMob" MobId="17359" KillCount="1" />
       <Objective QuestName="Call of Water" QuestId="9508" Type="CollectItem" ItemId="23997" CollectCount="1" />
     </If>
     <TurnIn QuestName="Call of Water" QuestId="9508" TurnInName="Aqueous" TurnInId="17275" />

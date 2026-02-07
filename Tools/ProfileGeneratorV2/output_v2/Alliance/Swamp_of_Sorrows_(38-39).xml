@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1392" Name="Noboru the Cudgel">
-    <Objective Type="KillMob" MobId="5477" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10214.7" Y="-3303.35" Z="23.1034" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1396" Name="Encroaching Wildlife">
     <Objective Type="KillMob" MobId="1084" KillCount="8">
       <Hotspots>
@@ -64,35 +57,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1714" Name="Essence of the Exile">
-    <Objective Type="KillMob" MobId="2761" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-806.399" Y="-3314.1" Z="79.3342" />
-        <Hotspot X="-848.462" Y="-3207.26" Z="82.2388" />
-        <Hotspot X="-850.903" Y="-3262.96" Z="78.2393" />
-        <Hotspot X="-835.016" Y="-3270.11" Z="79.1955" />
-        <Hotspot X="-849.749" Y="-3281.32" Z="77.8205" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2762" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1413.11" Y="-2684.88" Z="51.4271" />
-        <Hotspot X="-1352.93" Y="-2780.61" Z="52.8388" />
-        <Hotspot X="-1278.76" Y="-2744.07" Z="52.9249" />
-        <Hotspot X="-1329.93" Y="-2706.24" Z="60.0018" />
-        <Hotspot X="-1353.3" Y="-2680.84" Z="69.1467" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2760" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-865.859" Y="-1744.28" Z="45.5624" />
-        <Hotspot X="-898.133" Y="-1766.28" Z="45.0305" />
-        <Hotspot X="-919.272" Y="-1751.73" Z="47.802" />
-        <Hotspot X="-868.848" Y="-1795.75" Z="41.221" />
-        <Hotspot X="-848.952" Y="-1789.83" Z="40.3907" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Swamp of Sorrows (38-39)" LogColor="Green" />
@@ -102,7 +66,6 @@
     <If Condition="((!HasQuest(1396)) &amp;&amp; (!IsQuestCompleted(1396)))">
       <PickUp QuestName="Encroaching Wildlife" QuestId="1396" GiverName="Watcher Biggs" GiverId="5476" />
     </If>
-    <Objective QuestName="Noboru the Cudgel" QuestId="1392" Type="KillMob" MobId="5477" KillCount="1" />
     <Objective QuestName="Noboru the Cudgel" QuestId="1392" Type="CollectItem" ItemId="6196" CollectCount="1" />
     <While Condition="((HasQuest(1396)) &amp;&amp; (!IsQuestCompleted(1396)))">
       <RunTo X="-10216.3" Y="-2921.17" Z="17.7429" />
@@ -148,11 +111,8 @@
       <Objective QuestName="Essence of the Exile" QuestId="1714" Type="CollectItem" ItemId="4479" CollectCount="8" />
       <Objective QuestName="Essence of the Exile" QuestId="1714" Type="CollectItem" ItemId="4481" CollectCount="8" />
       <Objective QuestName="The Summoning" QuestId="1713" Type="CollectItem" ItemId="6052" CollectCount="2" />
-      <Objective QuestName="Essence of the Exile" QuestId="1714" Type="KillMob" MobId="2761" KillCount="1" />
       <Objective QuestName="Essence of the Exile" QuestId="1714" Type="CollectItem" ItemId="4481" CollectCount="8" />
-      <Objective QuestName="Essence of the Exile" QuestId="1714" Type="KillMob" MobId="2762" KillCount="1" />
       <Objective QuestName="Essence of the Exile" QuestId="1714" Type="CollectItem" ItemId="4480" CollectCount="8" />
-      <Objective QuestName="Essence of the Exile" QuestId="1714" Type="KillMob" MobId="2760" KillCount="1" />
       <Objective QuestName="Essence of the Exile" QuestId="1714" Type="CollectItem" ItemId="4479" CollectCount="8" />
     </If>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Swamp of Sorrows (38-39) Complete" LogColor="Orange" />

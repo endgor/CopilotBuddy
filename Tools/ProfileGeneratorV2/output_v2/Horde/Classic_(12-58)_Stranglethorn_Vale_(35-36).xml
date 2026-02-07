@@ -12,28 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="605" Name="Singing Blue Shards">
-    <Objective Type="KillMob" MobId="689" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11550.0" Y="-885.743" Z="68.8292" />
-        <Hotspot X="-11938.4" Y="545.611" Z="31.9846" />
-        <Hotspot X="-11955.1" Y="480.523" Z="24.0685" />
-        <Hotspot X="-11921.0" Y="618.742" Z="23.4413" />
-        <Hotspot X="-11951.3" Y="475.156" Z="24.6139" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9436" Name="Bloodscalp Insight">
-    <Objective Type="KillMob" MobId="697" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-12004.6" Y="338.394" Z="1.9176" />
-        <Hotspot X="-11995.5" Y="337.262" Z="1.7988" />
-        <Hotspot X="-11882.3" Y="277.931" Z="12.3391" />
-        <Hotspot X="-11938.3" Y="270.393" Z="13.6539" />
-        <Hotspot X="-12050.5" Y="286.567" Z="4.3814" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="187" Name="Tiger Mastery">
     <Objective Type="KillMob" MobId="1085" KillCount="10">
       <Hotspots>
@@ -77,67 +55,13 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="582" Name="Headhunting">
-    <Objective Type="KillMob" MobId="671" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11554.8" Y="633.098" Z="62.5965" />
-        <Hotspot X="-11618.6" Y="664.541" Z="54.8951" />
-        <Hotspot X="-11612.2" Y="675.246" Z="54.6317" />
-        <Hotspot X="-11631.4" Y="709.754" Z="41.3573" />
-        <Hotspot X="-11527.9" Y="718.947" Z="59.9292" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="188" Name="Tiger Mastery">
-    <Objective Type="KillMob" MobId="729" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11908.5" Y="165.374" Z="41.4222" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1182" Name="Goblin Sponsorship">
-    <Objective Type="KillMob" MobId="4723" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11949.5" Y="-500.392" Z="30.7014" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="5852" CollectCount="1">
       <CollectFrom>
         <GameObject Name="Cozzle" Id="20691" />
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-12033.5" Y="-544.27" Z="14.47" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="213" Name="Hostile Takeover">
-    <Objective Type="KillMob" MobId="1096" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11863.2" Y="-638.984" Z="14.7718" />
-        <Hotspot X="-11910.8" Y="-584.254" Z="17.0121" />
-        <Hotspot X="-11867.1" Y="-635.283" Z="15.5122" />
-        <Hotspot X="-11916.7" Y="-616.969" Z="16.4366" />
-        <Hotspot X="-12003.1" Y="-707.455" Z="14.4309" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="570" Name="Mok'thardin's Enchantment">
-    <Objective Type="KillMob" MobId="772" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-12914.2" Y="-280.606" Z="6.3018" />
-        <Hotspot X="-12517.5" Y="-352.893" Z="16.4823" />
-        <Hotspot X="-12650.2" Y="-114.033" Z="16.8294" />
-        <Hotspot X="-12687.1" Y="-243.015" Z="38.3067" />
-        <Hotspot X="-12307.8" Y="-679.962" Z="15.5986" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="684" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-12979.5" Y="-304.001" Z="13.7637" />
-        <Hotspot X="-12643.6" Y="-225.073" Z="39.1751" />
-        <Hotspot X="-12312.9" Y="-748.511" Z="13.3077" />
-        <Hotspot X="-12347.8" Y="-710.986" Z="17.0866" />
-        <Hotspot X="-12776.8" Y="-113.877" Z="4.3492" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -194,9 +118,7 @@
     <PickUp QuestName="Hunt for Yenniku" QuestId="581" GiverName="Nimboya" GiverId="2497" />
     <PickUp QuestName="Bloody Bone Necklaces" QuestId="596" GiverName="Kin'weelay" GiverId="2519" />
     <PickUp QuestName="The Vile Reef" QuestId="629" GiverName="Kin'weelay" GiverId="2519" />
-    <Objective QuestName="Singing Blue Shards" QuestId="605" Type="KillMob" MobId="689" KillCount="1" />
     <Objective QuestName="Singing Blue Shards" QuestId="605" Type="CollectItem" ItemId="3918" CollectCount="10" />
-    <Objective QuestName="Bloodscalp Insight" QuestId="9436" Type="KillMob" MobId="697" KillCount="1" />
     <Objective QuestName="Bloodscalp Insight" QuestId="9436" Type="CollectItem" ItemId="23679" CollectCount="1" />
     <Objective QuestName="Hunt for Yenniku" QuestId="581" Type="CollectItem" ItemId="3901" CollectCount="9" />
     <Objective QuestName="Bloodscalp Ears" QuestId="189" Type="CollectItem" ItemId="1519" CollectCount="15" />
@@ -222,9 +144,7 @@
       <CustomBehavior File="UseItemOn" QuestId="9457" MobId="0" ItemId="23680" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="An Unusual Patron" QuestId="9457" Type="KillMob" MobId="17207" KillCount="1" />
     <Objective QuestName="An Unusual Patron" QuestId="9457" Type="CollectItem" ItemId="23681" CollectCount="1" />
-    <Objective QuestName="Headhunting" QuestId="582" Type="KillMob" MobId="671" KillCount="1" />
     <Objective QuestName="Headhunting" QuestId="582" Type="CollectItem" ItemId="1532" CollectCount="20" />
     <If Condition="((!HasQuest(192)) &amp;&amp; (!IsQuestCompleted(192)))">
       <PickUp QuestName="Panther Mastery" QuestId="192" GiverName="Sir S. J. Erlgadin" GiverId="718" />
@@ -259,17 +179,12 @@
     </If>
     <TurnIn QuestName="Chapter IV" QuestId="342" TurnInName="Barnil Stonepot" TurnInId="716" />
     <TurnIn QuestName="The Green Hills of Stranglethorn" QuestId="338" TurnInName="Barnil Stonepot" TurnInId="716" />
-    <Objective QuestName="Tiger Mastery" QuestId="188" Type="KillMob" MobId="729" KillCount="1" />
     <Objective QuestName="Tiger Mastery" QuestId="188" Type="CollectItem" ItemId="3879" CollectCount="1" />
     <TurnIn QuestName="Tiger Mastery" QuestId="188" TurnInName="Ajeck Rouack" TurnInId="717" />
-    <Objective QuestName="Goblin Sponsorship" QuestId="1182" Type="KillMob" MobId="4723" KillCount="1" />
     <Objective QuestName="Goblin Sponsorship" QuestId="1182" Type="CollectItem" ItemId="5851" CollectCount="1" />
     <Objective QuestName="Goblin Sponsorship" QuestId="1182" Type="CollectItem" ItemId="5852" CollectCount="1" />
-    <Objective QuestName="Hostile Takeover" QuestId="213" Type="KillMob" MobId="1096" KillCount="1" />
     <Objective QuestName="Hostile Takeover" QuestId="213" Type="CollectItem" ItemId="4106" CollectCount="8" />
-    <Objective QuestName="Mok'thardin's Enchantment" QuestId="570" Type="KillMob" MobId="772" KillCount="1" />
     <Objective QuestName="Mok'thardin's Enchantment" QuestId="570" Type="CollectItem" ItemId="3839" CollectCount="1" />
-    <Objective QuestName="Mok'thardin's Enchantment" QuestId="570" Type="KillMob" MobId="684" KillCount="1" />
     <Objective QuestName="Mok'thardin's Enchantment" QuestId="570" Type="CollectItem" ItemId="3838" CollectCount="8" />
     <Objective QuestName="Panther Mastery" QuestId="192" Type="KillMob" MobId="684" KillCount="10" />
     <Objective QuestName="The Defense of Grom'gol" QuestId="569" Type="KillMob" MobId="1142" KillCount="10" />

@@ -65,6 +65,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 16 - Grimtotem Brute</Name>
+          <Factions>16</Factions>
           <TargetMinLevel>15</TargetMinLevel>
           <TargetMaxLevel>16</TargetMaxLevel>
           <Hotspots>

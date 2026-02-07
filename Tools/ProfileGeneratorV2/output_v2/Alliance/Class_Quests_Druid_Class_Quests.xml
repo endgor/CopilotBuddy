@@ -188,7 +188,6 @@
       <If Condition="((!HasQuest(9053)) &amp;&amp; (!IsQuestCompleted(9053)))">
         <PickUp QuestName="A Better Ingredient" QuestId="9053" GiverName="Torwa Pathfinder" GiverId="9619" />
       </If>
-      <Objective QuestName="A Better Ingredient" QuestId="9053" Type="KillMob" MobId="8580" KillCount="1" />
       <Objective QuestName="A Better Ingredient" QuestId="9053" Type="CollectItem" ItemId="22444" CollectCount="1" />
       <TurnIn QuestName="A Better Ingredient" QuestId="9053" TurnInName="Torwa Pathfinder" TurnInId="9619" />
     </If>

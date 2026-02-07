@@ -52,17 +52,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="5544" Name="Carrion Grubbage">
-    <Objective Type="KillMob" MobId="8603" KillCount="1">
-      <Hotspots>
-        <Hotspot X="2216.17" Y="-4769.83" Z="91.253" />
-        <Hotspot X="2400.51" Y="-4541.34" Z="74.4222" />
-        <Hotspot X="1479.58" Y="-3152.78" Z="108.927" />
-        <Hotspot X="1865.83" Y="-2826.49" Z="85.219" />
-        <Hotspot X="1782.71" Y="-4300.01" Z="78.3849" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="6042" Name="Un-Life's Little Annoyances">
     <Objective Type="KillMob" MobId="8601" KillCount="20">
       <Hotspots>
@@ -96,13 +85,6 @@
         <Hotspot X="2900.32" Y="-3685.61" Z="116.88" />
         <Hotspot X="2917.48" Y="-3844.04" Z="119.69" />
         <Hotspot X="2921.3" Y="-3961.48" Z="106.72" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="6021" Name="Zaeldarr the Outcast">
-    <Objective Type="KillMob" MobId="12250" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1609.43" Y="-3248.63" Z="68.053" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -153,7 +135,6 @@
     </If>
     <Objective QuestName="Blood Tinged Skies" QuestId="5543" Type="KillMob" MobId="8600" KillCount="30" />
     <Objective QuestName="Demon Dogs" QuestId="5542" Type="KillMob" MobId="8596" KillCount="20" />
-    <Objective QuestName="Carrion Grubbage" QuestId="5544" Type="KillMob" MobId="8603" KillCount="1" />
     <Objective QuestName="Carrion Grubbage" QuestId="5544" Type="CollectItem" ItemId="13853" CollectCount="15" />
     <Objective QuestName="Demon Dogs" QuestId="5542" Type="KillMob" MobId="8597" KillCount="5" />
     <PickUp QuestName="Zaeldarr the Outcast" QuestId="6021" GiverName="Caretaker Alen" GiverId="11038" />
@@ -197,9 +178,7 @@
     </If>
     <TurnIn QuestName="To Kill With Purpose" QuestId="6022" TurnInName="Nathanos Blightcaller" TurnInId="11878" />
     <TurnIn QuestName="Un-Life's Little Annoyances" QuestId="6042" TurnInName="Nathanos Blightcaller" TurnInId="11878" />
-    <Objective QuestName="Zaeldarr the Outcast" QuestId="6021" Type="KillMob" MobId="12250" KillCount="1" />
     <Objective QuestName="Zaeldarr the Outcast" QuestId="6021" Type="CollectItem" ItemId="15785" CollectCount="1" />
-    <Objective QuestName="Of Forgotten Memories" QuestId="5781" Type="KillMob" MobId="11886" KillCount="1" />
     <Objective QuestName="Of Forgotten Memories" QuestId="5781" Type="CollectItem" ItemId="14613" CollectCount="1" />
     <TurnIn QuestName="Of Forgotten Memories" QuestId="5781" TurnInName="Tirion Fordring" TurnInId="1855" />
     <If Condition="((!HasQuest(5845)) &amp;&amp; (!IsQuestCompleted(5845)))">
@@ -237,6 +216,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 58 - Mercutio Filthgorger</Name>
+          <Factions>16</Factions>
           <Hotspots>
             <Hotspot X="60.85" Y="48.81" Z="0.00" />
           </Hotspots>

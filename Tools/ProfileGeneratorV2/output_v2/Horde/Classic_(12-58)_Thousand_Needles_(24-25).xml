@@ -57,6 +57,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 25 - Galak Wrangler</Name>
+          <Factions>131</Factions>
           <TargetMinLevel>25</TargetMinLevel>
           <TargetMaxLevel>26</TargetMaxLevel>
           <Hotspots>

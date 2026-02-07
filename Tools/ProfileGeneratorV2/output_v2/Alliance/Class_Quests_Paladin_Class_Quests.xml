@@ -12,28 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1787" Name="The Tome of Divinity">
-    <Objective Type="KillMob" MobId="474" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9348.8" Y="524.347" Z="53.4461" />
-        <Hotspot X="-9378.74" Y="532.762" Z="57.3211" />
-        <Hotspot X="-9389.63" Y="529.377" Z="61.5711" />
-        <Hotspot X="-9321.24" Y="552.049" Z="76.9558" />
-        <Hotspot X="-9352.18" Y="503.765" Z="50.433" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1784" Name="The Tome of Divinity">
-    <Objective Type="KillMob" MobId="6123" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5877.57" Y="-1988.23" Z="401.366" />
-        <Hotspot X="-5921.7" Y="-1979.57" Z="405.96" />
-        <Hotspot X="-5924.28" Y="-2009.03" Z="409.357" />
-        <Hotspot X="-5908.14" Y="-2040.67" Z="406.734" />
-        <Hotspot X="-5889.97" Y="-2007.89" Z="405.741" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="7642" Name="Collection of Goods">
     <Objective Type="CollectItem" ItemId="13180" CollectCount="5">
       <CollectFrom>
@@ -47,13 +25,6 @@
         <Hotspot X="3666.63" Y="-3182.46" Z="126.25" />
         <Hotspot X="3738.43" Y="-3477.54" Z="131.39" />
         <Hotspot X="3877.03" Y="-3663.46" Z="143.9" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7646" Name="The Divination Scryer">
-    <Objective Type="KillMob" MobId="11489" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3.87" Y="483.3" Z="-23.12" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -100,7 +71,6 @@
       <If Condition="((!HasQuest(1787)) &amp;&amp; (!IsQuestCompleted(1787)))">
         <PickUp QuestName="The Tome of Divinity" QuestId="1787" GiverName="Henze Faulk" GiverId="6172" />
       </If>
-      <Objective QuestName="The Tome of Divinity" QuestId="1787" Type="KillMob" MobId="474" KillCount="1" />
       <Objective QuestName="The Tome of Divinity" QuestId="1787" Type="CollectItem" ItemId="6846" CollectCount="1" />
       <TurnIn QuestName="The Tome of Divinity" QuestId="1787" TurnInName="Gazin Tenorm" TurnInId="6173" />
       <If Condition="((!HasQuest(1788)) &amp;&amp; (!IsQuestCompleted(1788)))">
@@ -154,7 +124,6 @@
       <If Condition="((!HasQuest(1784)) &amp;&amp; (!IsQuestCompleted(1784)))">
         <PickUp QuestName="The Tome of Divinity" QuestId="1784" GiverName="Narm Faulk" GiverId="6177" />
       </If>
-      <Objective QuestName="The Tome of Divinity" QuestId="1784" Type="KillMob" MobId="6123" KillCount="1" />
       <Objective QuestName="The Tome of Divinity" QuestId="1784" Type="CollectItem" ItemId="6847" CollectCount="1" />
     </If>
     <TurnIn QuestName="The Tome of Divinity" QuestId="1784" TurnInName="Muiredon Battleforge" TurnInId="6178" />
@@ -278,7 +247,6 @@
       <PickUp QuestName="Manna-Enriched Horse Feed" QuestId="7645" GiverName="Merideth Carlson" GiverId="2357" />
       <TurnIn QuestName="Manna-Enriched Horse Feed" QuestId="7645" TurnInName="Merideth Carlson" TurnInId="2357" />
       <Objective QuestName="Ancient Equine Spirit" QuestId="7643" Type="CollectItem" ItemId="18775" CollectCount="1" />
-      <Objective QuestName="The Divination Scryer" QuestId="7646" Type="KillMob" MobId="11489" KillCount="1" />
       <TurnIn QuestName="Ancient Equine Spirit" QuestId="7643" TurnInName="Ancient Equine Spirit" TurnInId="14566" />
       <If Condition="((!HasQuest(7644)) &amp;&amp; (!IsQuestCompleted(7644)))">
         <PickUp QuestName="Blessed Arcanite Barding" QuestId="7644" GiverName="Ancient Equine Spirit" GiverId="14566" />
@@ -303,7 +271,6 @@
         <CustomBehavior File="UseItemOn" QuestId="7647" MobId="0" ItemId="18746" NumOfTimes="1" Range="5" CollectionDistance="1000" />
         <CustomBehavior File="WaitTimer" WaitTime="3000" />
       </While>
-      <Objective QuestName="Judgment and Redemption" QuestId="7647" Type="KillMob" MobId="14516" KillCount="1" />
       <Objective QuestName="Judgment and Redemption" QuestId="7647" Type="CollectItem" ItemId="18749" CollectCount="1" />
       <While Condition="((HasQuest(7647)) &amp;&amp; (!IsQuestCompleted(7647)))">
         <CustomBehavior File="UseItemOn" QuestId="7647" MobId="0" ItemId="18749" NumOfTimes="1" Range="5" CollectionDistance="1000" />

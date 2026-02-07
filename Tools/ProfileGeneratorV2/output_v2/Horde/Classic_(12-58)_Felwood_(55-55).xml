@@ -41,17 +41,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="4293" Name="A Sample of Slime...">
-    <Objective Type="KillMob" MobId="7086" KillCount="1">
-      <Hotspots>
-        <Hotspot X="4415.64" Y="-726.783" Z="265.013" />
-        <Hotspot X="4401.86" Y="-695.602" Z="259.402" />
-        <Hotspot X="4377.32" Y="-699.738" Z="263.19" />
-        <Hotspot X="4409.83" Y="-613.529" Z="264.483" />
-        <Hotspot X="4403.14" Y="-639.289" Z="264.318" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="5155" Name="Forces of Jaedenar">
     <Objective Type="KillMob" MobId="7125" KillCount="4">
       <Hotspots>
@@ -177,7 +166,6 @@
     </If>
     <PickUp QuestName="Verifying the Corruption" QuestId="5156" GiverName="Taronn Redfeather" GiverId="10921" />
     <PickUp QuestName="Cleansing Felwood" QuestId="4102" GiverName="Maybess Riverbreeze" GiverId="9529" />
-    <Objective QuestName="A Sample of Slime..." QuestId="4293" Type="KillMob" MobId="7086" KillCount="1" />
     <Objective QuestName="A Sample of Slime..." QuestId="4293" Type="CollectItem" ItemId="12230" CollectCount="30" />
     <Objective QuestName="Forces of Jaedenar" QuestId="5155" Type="KillMob" MobId="7125" KillCount="4" />
     <Objective QuestName="Forces of Jaedenar" QuestId="5155" Type="KillMob" MobId="7113" KillCount="4" />

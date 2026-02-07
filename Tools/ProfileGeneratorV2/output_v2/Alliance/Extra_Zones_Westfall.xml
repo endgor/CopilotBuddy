@@ -32,17 +32,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="38" Name="Westfall Stew">
-    <Objective Type="KillMob" MobId="114" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10516.3" Y="1686.63" Z="40.373" />
-        <Hotspot X="-10678.8" Y="1652.12" Z="42.4109" />
-        <Hotspot X="-9896.86" Y="1270.81" Z="41.9403" />
-        <Hotspot X="-10550.5" Y="1651.41" Z="41.5258" />
-        <Hotspot X="-9926.43" Y="1263.58" Z="42.1853" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="151" Name="Poor Old Blanchy">
     <Objective Type="CollectItem" ItemId="1528" CollectCount="8">
       <CollectFrom>
@@ -56,17 +45,6 @@
         <Hotspot X="-11029.1" Y="1419.98" Z="43.66" />
         <Hotspot X="-11014.9" Y="1661.04" Z="42.44" />
         <Hotspot X="-10997.9" Y="1882.23" Z="41.38" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="103" Name="Keeper of the Flame">
-    <Objective Type="KillMob" MobId="114" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10516.3" Y="1686.63" Z="40.373" />
-        <Hotspot X="-10678.8" Y="1652.12" Z="42.4109" />
-        <Hotspot X="-9896.86" Y="1270.81" Z="41.9403" />
-        <Hotspot X="-10550.5" Y="1651.41" Z="41.5258" />
-        <Hotspot X="-9926.43" Y="1263.58" Z="42.1853" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -130,13 +108,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="142" Name="The Defias Brotherhood">
-    <Objective Type="KillMob" MobId="550" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11025.1" Y="1459.74" Z="43.0861" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="104" Name="The Coastal Menace">
     <Objective Type="KillMob" MobId="391" KillCount="1">
       <Hotspots>
@@ -194,9 +165,7 @@
     <Objective QuestName="Poor Old Blanchy" QuestId="151" Type="CollectItem" ItemId="1528" CollectCount="8" />
     <TurnIn QuestName="The Forgotten Heirloom" QuestId="64" TurnInName="Farmer Furlbrow" TurnInId="237" />
     <TurnIn QuestName="Poor Old Blanchy" QuestId="151" TurnInName="Verna Furlbrow" TurnInId="238" />
-    <Objective QuestName="Westfall Stew" QuestId="38" Type="KillMob" MobId="114" KillCount="1" />
     <Objective QuestName="Westfall Stew" QuestId="38" Type="CollectItem" ItemId="732" CollectCount="3" />
-    <Objective QuestName="Keeper of the Flame" QuestId="103" Type="KillMob" MobId="114" KillCount="1" />
     <Objective QuestName="Keeper of the Flame" QuestId="103" Type="CollectItem" ItemId="814" CollectCount="5" />
     <Objective QuestName="The Killing Fields" QuestId="9" Type="KillMob" MobId="114" KillCount="20" />
     <TurnIn QuestName="The Killing Fields" QuestId="9" TurnInName="Farmer Saldean" TurnInId="233" />
@@ -231,7 +200,6 @@
     <If Condition="((!HasQuest(142)) &amp;&amp; (!IsQuestCompleted(142)))">
       <PickUp QuestName="The Defias Brotherhood" QuestId="142" GiverName="Gryan Stoutmantle" GiverId="234" />
     </If>
-    <Objective QuestName="The Defias Brotherhood" QuestId="142" Type="KillMob" MobId="550" KillCount="1" />
     <Objective QuestName="The Defias Brotherhood" QuestId="142" Type="CollectItem" ItemId="1381" CollectCount="1" />
     <TurnIn QuestName="The Defias Brotherhood" QuestId="142" TurnInName="Gryan Stoutmantle" TurnInId="234" />
     <If Condition="((!HasQuest(155)) &amp;&amp; (!IsQuestCompleted(155)))">

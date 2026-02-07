@@ -12,16 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="5087" Name="Winterfall Runners">
-    <Objective Type="KillMob" MobId="10916" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6912.84" Y="-1821.66" Z="570.909" />
-        <Hotspot X="6886.71" Y="-4085.93" Z="690.912" />
-        <Hotspot X="6896.69" Y="-4094.36" Z="691.715" />
-        <Hotspot X="6891.28" Y="-4089.79" Z="691.189" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="5245" Name="Troubled Spirits of Kel'Theril">
     <Objective Type="CollectItem" ItemId="12897" CollectCount="1">
       <CollectFrom>
@@ -63,7 +53,6 @@
     <If Condition="((!HasQuest(5087)) &amp;&amp; (!IsQuestCompleted(5087)))">
       <PickUp QuestName="Winterfall Runners" QuestId="5087" GiverName="Donova Snowden" GiverId="9298" />
     </If>
-    <Objective QuestName="Winterfall Runners" QuestId="5087" Type="KillMob" MobId="10916" KillCount="1" />
     <Objective QuestName="Winterfall Runners" QuestId="5087" Type="CollectItem" ItemId="12829" CollectCount="1" />
     <TurnIn QuestName="Starfall" QuestId="5250" TurnInName="Wynd Nightchaser" TurnInId="11079" />
     <PickUp QuestName="The Ruins of Kel'Theril" QuestId="5244" GiverName="Wynd Nightchaser" GiverId="11079" />

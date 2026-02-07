@@ -12,49 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1678" Name="Vejrek">
-    <Objective Type="KillMob" MobId="6113" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5780.0" Y="431.391" Z="426.595" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1683" Name="Vorlus Vilehoof">
-    <Objective Type="KillMob" MobId="6128" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9672.7" Y="1408.81" Z="1402.76" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1712" Name="Cyclonian">
-    <Objective Type="KillMob" MobId="2760" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-865.859" Y="-1744.28" Z="45.5624" />
-        <Hotspot X="-898.133" Y="-1766.28" Z="45.0305" />
-        <Hotspot X="-919.272" Y="-1751.73" Z="47.802" />
-        <Hotspot X="-868.848" Y="-1795.75" Z="41.221" />
-        <Hotspot X="-848.952" Y="-1789.83" Z="40.3907" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2762" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1413.11" Y="-2684.88" Z="51.4271" />
-        <Hotspot X="-1352.93" Y="-2780.61" Z="52.8388" />
-        <Hotspot X="-1278.76" Y="-2744.07" Z="52.9249" />
-        <Hotspot X="-1329.93" Y="-2706.24" Z="60.0018" />
-        <Hotspot X="-1353.3" Y="-2680.84" Z="69.1467" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2761" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-806.399" Y="-3314.1" Z="79.3342" />
-        <Hotspot X="-848.462" Y="-3207.26" Z="82.2388" />
-        <Hotspot X="-850.903" Y="-3262.96" Z="78.2393" />
-        <Hotspot X="-835.016" Y="-3270.11" Z="79.1955" />
-        <Hotspot X="-849.749" Y="-3281.32" Z="77.8205" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8423" Name="Warrior Kinship">
     <Objective Type="KillMob" MobId="5993" KillCount="7">
       <Hotspots>
@@ -124,7 +81,6 @@
       <If Condition="((!HasQuest(1678)) &amp;&amp; (!IsQuestCompleted(1678)))">
         <PickUp QuestName="Vejrek" QuestId="1678" GiverName="Muren Stormpike" GiverId="6114" />
       </If>
-      <Objective QuestName="Vejrek" QuestId="1678" Type="KillMob" MobId="6113" KillCount="1" />
       <Objective QuestName="Vejrek" QuestId="1678" Type="CollectItem" ItemId="6799" CollectCount="1" />
       <TurnIn QuestName="Vejrek" QuestId="1678" TurnInName="Muren Stormpike" TurnInId="6114" />
     </If>
@@ -136,7 +92,6 @@
       <If Condition="((!HasQuest(1683)) &amp;&amp; (!IsQuestCompleted(1683)))">
         <PickUp QuestName="Vorlus Vilehoof" QuestId="1683" GiverName="Elanaria" GiverId="4088" />
       </If>
-      <Objective QuestName="Vorlus Vilehoof" QuestId="1683" Type="KillMob" MobId="6128" KillCount="1" />
       <Objective QuestName="Vorlus Vilehoof" QuestId="1683" Type="CollectItem" ItemId="6805" CollectCount="1" />
       <TurnIn QuestName="Vorlus Vilehoof" QuestId="1683" TurnInName="Elanaria" TurnInId="4088" />
     </If>
@@ -157,11 +112,8 @@
       <If Condition="((!HasQuest(1712)) &amp;&amp; (!IsQuestCompleted(1712)))">
         <PickUp QuestName="Cyclonian" QuestId="1712" GiverName="Bath'rah the Windwatcher" GiverId="6176" />
       </If>
-      <Objective QuestName="Cyclonian" QuestId="1712" Type="KillMob" MobId="2760" KillCount="1" />
       <Objective QuestName="Cyclonian" QuestId="1712" Type="CollectItem" ItemId="4479" CollectCount="8" />
-      <Objective QuestName="Cyclonian" QuestId="1712" Type="KillMob" MobId="2762" KillCount="1" />
       <Objective QuestName="Cyclonian" QuestId="1712" Type="CollectItem" ItemId="4480" CollectCount="8" />
-      <Objective QuestName="Cyclonian" QuestId="1712" Type="KillMob" MobId="2761" KillCount="1" />
       <Objective QuestName="Cyclonian" QuestId="1712" Type="CollectItem" ItemId="4481" CollectCount="8" />
       <Objective QuestName="Cyclonian" QuestId="1712" Type="CollectItem" ItemId="3901" CollectCount="30" />
       <If Condition="((!HasQuest(1714)) &amp;&amp; (!IsQuestCompleted(1714)))">
@@ -172,7 +124,6 @@
       <If Condition="((!HasQuest(1713)) &amp;&amp; (!IsQuestCompleted(1713)))">
         <PickUp QuestName="The Summoning" QuestId="1713" GiverName="Bath'rah the Windwatcher" GiverId="6176" />
       </If>
-      <Objective QuestName="The Summoning" QuestId="1713" Type="KillMob" MobId="6239" KillCount="1" />
       <Objective QuestName="The Summoning" QuestId="1713" Type="CollectItem" ItemId="6894" CollectCount="1" />
       <TurnIn QuestName="The Summoning" QuestId="1713" TurnInName="Bath'rah the Windwatcher" TurnInId="6176" />
       <If Condition="((!HasQuest(1792)) &amp;&amp; (!IsQuestCompleted(1792)))">

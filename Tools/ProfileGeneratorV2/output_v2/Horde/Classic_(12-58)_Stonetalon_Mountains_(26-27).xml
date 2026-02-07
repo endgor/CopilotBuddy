@@ -50,13 +50,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="6283" Name="Bloodfury Bloodline">
-    <Objective Type="KillMob" MobId="12579" KillCount="1">
-      <Hotspots>
-        <Hotspot X="900.679" Y="1743.99" Z="-11.4967" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Classic (12-58)\Stonetalon Mountains (26-27)" LogColor="Green" />
@@ -69,6 +62,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 27 - Bloodfury Roguefeather</Name>
+          <Factions>514</Factions>
           <TargetMinLevel>25</TargetMinLevel>
           <TargetMaxLevel>26</TargetMaxLevel>
           <Hotspots>
@@ -84,7 +78,6 @@
       <PickUp QuestName="Bloodfury Bloodline" QuestId="6283" GiverName="Maggran Earthbinder" GiverId="11860" />
     </If>
     <TurnIn QuestName="New Life" QuestId="6381" TurnInName="Tammra Windfield" TurnInId="11864" />
-    <Objective QuestName="Bloodfury Bloodline" QuestId="6283" Type="KillMob" MobId="12579" KillCount="1" />
     <Objective QuestName="Bloodfury Bloodline" QuestId="6283" Type="CollectItem" ItemId="16190" CollectCount="1" />
     <TurnIn QuestName="Bloodfury Bloodline" QuestId="6283" TurnInName="Maggran Earthbinder" TurnInId="11860" />
     <TurnIn QuestName="The Sacred Flame" QuestId="1195" TurnInName="Zangen Stonehoof" TurnInId="4721" />

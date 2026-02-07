@@ -44,26 +44,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12831" Name="Only Partly Forgotten">
-    <Objective Type="KillMob" MobId="29461" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6856.67" Y="-1576.58" Z="353.391" />
-        <Hotspot X="6820.01" Y="-1599.17" Z="352.365" />
-        <Hotspot X="6814.0" Y="-1511.77" Z="357.45" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12830" Name="Ore Repossession">
-    <Objective Type="KillMob" MobId="29413" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6533.12" Y="-1075.28" Z="432.917" />
-        <Hotspot X="6570.9" Y="-1050.44" Z="432.848" />
-        <Hotspot X="6594.65" Y="-1049.05" Z="430.103" />
-        <Hotspot X="6596.23" Y="-1008.78" Z="429.445" />
-        <Hotspot X="6580.09" Y="-997.177" Z="434.919" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12821" Name="Cell Block Tango">
     <Objective Type="CollectItem" ItemId="40731" CollectCount="1">
       <CollectFrom>
@@ -120,13 +100,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12910" Name="Sniffing Out the Perpetrator">
-    <Objective Type="KillMob" MobId="29695" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7313.96" Y="-1611.88" Z="944.595" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="13055" Name="Cave Medicine">
     <Objective Type="CollectItem" ItemId="42926" CollectCount="8">
       <CollectFrom>
@@ -141,27 +114,11 @@
         <Hotspot X="8040.88" Y="-1584.19" Z="902.84" />
       </Hotspots>
     </Objective>
-    <Objective Type="KillMob" MobId="30148" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7990.3" Y="-1559.1" Z="904.997" />
-        <Hotspot X="7996.98" Y="-1608.36" Z="908.772" />
-        <Hotspot X="7957.04" Y="-1610.1" Z="908.131" />
-        <Hotspot X="7920.24" Y="-1625.21" Z="910.852" />
-        <Hotspot X="7636.73" Y="-1516.25" Z="972.399" />
-      </Hotspots>
-    </Objective>
   </Quest>
   <Quest Id="13056" Name="There's Always Time for Revenge">
     <Objective Type="KillMob" MobId="30167" KillCount="1">
       <Hotspots>
         <Hotspot X="7990.45" Y="-1642.17" Z="909.905" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12841" Name="The Crone's Bargain">
-    <Objective Type="KillMob" MobId="29518" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6868.52" Y="-1294.7" Z="819.349" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -187,17 +144,6 @@
         <Hotspot X="7066.64" Y="-1824.94" Z="821.732" />
         <Hotspot X="7095.77" Y="-1796.03" Z="823.103" />
         <Hotspot X="7037.76" Y="-1821.12" Z="823.113" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12900" Name="Making a Harness">
-    <Objective Type="KillMob" MobId="29875" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6756.08" Y="-1503.3" Z="781.329" />
-        <Hotspot X="6731.65" Y="-1409.39" Z="738.971" />
-        <Hotspot X="6696.46" Y="-1374.95" Z="698.687" />
-        <Hotspot X="6687.54" Y="-1470.43" Z="700.404" />
-        <Hotspot X="6679.82" Y="-1591.49" Z="652.47" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -227,17 +173,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12925" Name="Aberrations">
-    <Objective Type="KillMob" MobId="29569" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7320.8" Y="199.441" Z="785.156" />
-        <Hotspot X="7221.08" Y="-8.4437" Z="773.653" />
-        <Hotspot X="7299.66" Y="-134.323" Z="772.399" />
-        <Hotspot X="7290.74" Y="-113.937" Z="770.164" />
-        <Hotspot X="7280.21" Y="-131.25" Z="771.409" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12942" Name="Off With Their Black Wings">
     <Objective Type="KillMob" MobId="29570" KillCount="12">
       <Hotspots>
@@ -246,39 +181,6 @@
         <Hotspot X="7377.79" Y="-40.1186" Z="785.906" />
         <Hotspot X="7367.86" Y="178.811" Z="785.839" />
         <Hotspot X="7358.03" Y="22.1333" Z="791.313" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12917" Name="Speaking with the Wind's Voice">
-    <Objective Type="KillMob" MobId="29624" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8284.33" Y="121.444" Z="833.234" />
-        <Hotspot X="8423.05" Y="147.503" Z="799.352" />
-        <Hotspot X="7964.53" Y="-496.716" Z="911.421" />
-        <Hotspot X="7936.48" Y="-515.35" Z="913.553" />
-        <Hotspot X="7932.32" Y="-415.053" Z="891.827" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12882" Name="Ancient Relics">
-    <Objective Type="KillMob" MobId="29624" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8284.33" Y="121.444" Z="833.234" />
-        <Hotspot X="8423.05" Y="147.503" Z="799.352" />
-        <Hotspot X="7964.53" Y="-496.716" Z="911.421" />
-        <Hotspot X="7936.48" Y="-515.35" Z="913.553" />
-        <Hotspot X="7932.32" Y="-415.053" Z="891.827" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12926" Name="Pieces of the Puzzle">
-    <Objective Type="KillMob" MobId="29724" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8329.27" Y="-1060.86" Z="924.924" />
-        <Hotspot X="8319.95" Y="-950.624" Z="923.957" />
-        <Hotspot X="8140.12" Y="-1125.28" Z="925.848" />
-        <Hotspot X="8328.57" Y="-1125.45" Z="924.026" />
-        <Hotspot X="8319.7" Y="-1163.29" Z="925.14" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -322,28 +224,6 @@
         <Hotspot X="7745.19" Y="-32.75" Z="868.12" />
         <Hotspot X="7760.81" Y="4.83" Z="865.46" />
         <Hotspot X="7760.88" Y="-69.61" Z="875.73" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12978" Name="Facing the Storm">
-    <Objective Type="KillMob" MobId="29380" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8292.77" Y="-246.245" Z="925.667" />
-        <Hotspot X="7951.31" Y="-378.571" Z="887.771" />
-        <Hotspot X="8020.56" Y="-462.746" Z="945.596" />
-        <Hotspot X="8203.2" Y="-201.535" Z="871.047" />
-        <Hotspot X="7891.82" Y="29.8049" Z="1012.99" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12979" Name="Armor of Darkness">
-    <Objective Type="KillMob" MobId="29380" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8292.77" Y="-246.245" Z="925.667" />
-        <Hotspot X="7951.31" Y="-378.571" Z="887.771" />
-        <Hotspot X="8020.56" Y="-462.746" Z="945.596" />
-        <Hotspot X="8203.2" Y="-201.535" Z="871.047" />
-        <Hotspot X="7891.82" Y="29.8049" Z="1012.99" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -405,38 +285,6 @@
         <Hotspot X="7230.95" Y="-3504.92" Z="835.97" />
       </Hotspots>
     </Objective>
-    <Objective Type="KillMob" MobId="29375" KillCount="5">
-      <Hotspots>
-        <Hotspot X="7286.45" Y="-3148.94" Z="837.57" />
-        <Hotspot X="7266.46" Y="-3098.71" Z="837.577" />
-        <Hotspot X="7383.89" Y="-3080.81" Z="837.534" />
-        <Hotspot X="7523.4" Y="-3139.71" Z="837.561" />
-        <Hotspot X="7233.65" Y="-3437.45" Z="838.956" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="29503" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7174.86" Y="-3647.9" Z="828.423" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12922" Name="The Refiner's Fire">
-    <Objective Type="KillMob" MobId="29504" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7319.73" Y="-3256.89" Z="843.941" />
-        <Hotspot X="7318.66" Y="-3108.58" Z="837.577" />
-        <Hotspot X="7257.36" Y="-3650.48" Z="823.727" />
-        <Hotspot X="7250.41" Y="-3082.81" Z="837.577" />
-        <Hotspot X="7247.22" Y="-3147.93" Z="837.577" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13274" Name="The Core's Keeper">
-    <Objective Type="KillMob" MobId="31798" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7727.12" Y="-2168.25" Z="786.45" />
-      </Hotspots>
-    </Objective>
   </Quest>
   <Quest Id="12967" Name="Battling the Elements">
     <Objective Type="KillMob" MobId="29504" KillCount="10">
@@ -446,17 +294,6 @@
         <Hotspot X="7257.36" Y="-3650.48" Z="823.727" />
         <Hotspot X="7250.41" Y="-3082.81" Z="837.577" />
         <Hotspot X="7247.22" Y="-3147.93" Z="837.577" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13049" Name="The Hero's Arms">
-    <Objective Type="KillMob" MobId="30184" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8344.59" Y="-2891.0" Z="1081.13" />
-        <Hotspot X="8320.48" Y="-2809.02" Z="1046.73" />
-        <Hotspot X="8284.15" Y="-2746.65" Z="1038.82" />
-        <Hotspot X="8328.51" Y="-2725.51" Z="1041.37" />
-        <Hotspot X="8281.31" Y="-2806.57" Z="1056.49" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -522,13 +359,11 @@
     <If Condition="((!HasQuest(12831)) &amp;&amp; (!IsQuestCompleted(12831)))">
       <PickUp QuestName="Only Partly Forgotten" QuestId="12831" GiverName="Injured Goblin Miner" GiverId="29434" />
     </If>
-    <Objective QuestName="Only Partly Forgotten" QuestId="12831" Type="KillMob" MobId="29461" KillCount="1" />
     <Objective QuestName="Only Partly Forgotten" QuestId="12831" Type="CollectItem" ItemId="40944" CollectCount="1" />
     <TurnIn QuestName="Only Partly Forgotten" QuestId="12831" TurnInName="Injured Goblin Miner" TurnInId="29434" />
     <If Condition="((!HasQuest(12832)) &amp;&amp; (!IsQuestCompleted(12832)))">
       <PickUp QuestName="Bitter Departure" QuestId="12832" GiverName="Injured Goblin Miner" GiverId="29434" />
     </If>
-    <Objective QuestName="Ore Repossession" QuestId="12830" Type="KillMob" MobId="29413" KillCount="1" />
     <Objective QuestName="Ore Repossession" QuestId="12830" Type="CollectItem" ItemId="40744" CollectCount="5" />
     <TurnIn QuestName="Moving In" QuestId="12829" TurnInName="Tore Rumblewrench" TurnInId="29430" />
     <TurnIn QuestName="Ore Repossession" QuestId="12830" TurnInName="Tore Rumblewrench" TurnInId="29430" />
@@ -608,7 +443,6 @@
     <If Condition="((!HasQuest(12910)) &amp;&amp; (!IsQuestCompleted(12910)))">
       <PickUp QuestName="Sniffing Out the Perpetrator" QuestId="12910" GiverName="Khaliisi" GiverId="29855" />
     </If>
-    <Objective QuestName="Sniffing Out the Perpetrator" QuestId="12910" Type="KillMob" MobId="29695" KillCount="1" />
     <Objective QuestName="Sniffing Out the Perpetrator" QuestId="12910" Type="CollectItem" ItemId="40971" CollectCount="1" />
     <While Condition="((HasQuest(12910)) &amp;&amp; (!IsQuestCompleted(12910)))">
       <CustomBehavior File="UseItemOn" QuestId="12910" MobId="29677" ItemId="40971" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -623,7 +457,6 @@
       <PickUp QuestName="Cave Medicine" QuestId="13055" GiverName="Tracker Val'zij" GiverId="30469" />
     </If>
     <Objective QuestName="Cave Medicine" QuestId="13055" Type="CollectItem" ItemId="42926" CollectCount="8" />
-    <Objective QuestName="Cave Medicine" QuestId="13055" Type="KillMob" MobId="30148" KillCount="1" />
     <Objective QuestName="Cave Medicine" QuestId="13055" Type="CollectItem" ItemId="42927" CollectCount="1" />
     <TurnIn QuestName="Cave Medicine" QuestId="13055" TurnInName="Tracker Val'zij" TurnInId="30469" />
     <If Condition="((!HasQuest(13056)) &amp;&amp; (!IsQuestCompleted(13056)))">
@@ -636,7 +469,6 @@
     <If Condition="((!HasQuest(12841)) &amp;&amp; (!IsQuestCompleted(12841)))">
       <PickUp QuestName="The Crone's Bargain" QuestId="12841" GiverName="Lok'lira the Crone" GiverId="29481" />
     </If>
-    <Objective QuestName="The Crone's Bargain" QuestId="12841" Type="KillMob" MobId="29518" KillCount="1" />
     <Objective QuestName="The Crone's Bargain" QuestId="12841" Type="CollectItem" ItemId="40690" CollectCount="1" />
     <TurnIn QuestName="The Crone's Bargain" QuestId="12841" TurnInName="Lok'lira the Crone" TurnInId="29481" />
     <If Condition="((!HasQuest(12905)) &amp;&amp; (!IsQuestCompleted(12905)))">
@@ -697,7 +529,6 @@
     <If Condition="((!HasQuest(12900)) &amp;&amp; (!IsQuestCompleted(12900)))">
       <PickUp QuestName="Making a Harness" QuestId="12900" GiverName="Astrid Bjornrittar" GiverId="29839" />
     </If>
-    <Objective QuestName="Making a Harness" QuestId="12900" Type="KillMob" MobId="29875" KillCount="1" />
     <Objective QuestName="Making a Harness" QuestId="12900" Type="CollectItem" ItemId="41424" CollectCount="3" />
     <TurnIn QuestName="Making a Harness" QuestId="12900" TurnInName="Astrid Bjornrittar" TurnInId="29839" />
     <If Condition="((!HasQuest(12983)) &amp;&amp; (!IsQuestCompleted(12983)))">
@@ -764,7 +595,6 @@
     <If Condition="((!HasQuest(12953)) &amp;&amp; (!IsQuestCompleted(12953)))">
       <PickUp QuestName="Valkyrion Must Burn" QuestId="12953" GiverName="Thorim" GiverId="29445" />
     </If>
-    <Objective QuestName="Aberrations" QuestId="12925" Type="KillMob" MobId="29569" KillCount="1" />
     <Objective QuestName="Aberrations" QuestId="12925" Type="CollectItem" ItemId="41612" CollectCount="6" />
     <While Condition="((HasQuest(12925)) &amp;&amp; (!IsQuestCompleted(12925)))">
       <CustomBehavior File="UseItemOn" QuestId="12925" MobId="0" ItemId="41612" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -784,9 +614,7 @@
       <PickUp QuestName="Speaking with the Wind's Voice" QuestId="12917" GiverName="Moteha Windborn" GiverId="29937" />
     </If>
     <TurnIn QuestName="Emergency Measures" QuestId="13000" TurnInName="Blood Guard Lorga" TurnInId="30247" />
-    <Objective QuestName="Speaking with the Wind's Voice" QuestId="12917" Type="KillMob" MobId="29624" KillCount="1" />
     <Objective QuestName="Speaking with the Wind's Voice" QuestId="12917" Type="CollectItem" ItemId="41514" CollectCount="5" />
-    <Objective QuestName="Ancient Relics" QuestId="12882" Type="KillMob" MobId="29624" KillCount="1" />
     <Objective QuestName="Ancient Relics" QuestId="12882" Type="CollectItem" ItemId="42780" CollectCount="10" />
     <TurnIn QuestName="Ancient Relics" QuestId="12882" TurnInName="Olut Alegut" TurnInId="30472" />
     <TurnIn QuestName="Speaking with the Wind's Voice" QuestId="12917" TurnInName="Moteha Windborn" TurnInId="29937" />
@@ -799,7 +627,6 @@
     <If Condition="((!HasQuest(12926)) &amp;&amp; (!IsQuestCompleted(12926)))">
       <PickUp QuestName="Pieces of the Puzzle" QuestId="12926" GiverName="Boktar Bloodfury" GiverId="29651" />
     </If>
-    <Objective QuestName="Pieces of the Puzzle" QuestId="12926" Type="KillMob" MobId="29724" KillCount="1" />
     <Objective QuestName="Pieces of the Puzzle" QuestId="12926" Type="CollectItem" ItemId="41130" CollectCount="6" />
     <While Condition="((HasQuest(12926)) &amp;&amp; (!IsQuestCompleted(12926)))">
       <CustomBehavior File="UseItemOn" QuestId="12926" MobId="0" ItemId="41130" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -836,7 +663,6 @@
       <CustomBehavior File="UseItemOn" QuestId="12928" MobId="0" ItemId="44704" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Norgannon's Shell" QuestId="12928" Type="KillMob" MobId="29775" KillCount="1" />
     <Objective QuestName="Norgannon's Shell" QuestId="12928" Type="CollectItem" ItemId="41258" CollectCount="1" />
     <While Condition="((HasQuest(12928)) &amp;&amp; (!IsQuestCompleted(12928)))">
       <CustomBehavior File="UseItemOn" QuestId="12928" MobId="0" ItemId="40971" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -889,7 +715,6 @@
     <If Condition="((!HasQuest(12978)) &amp;&amp; (!IsQuestCompleted(12978)))">
       <PickUp QuestName="Facing the Storm" QuestId="12978" GiverName="Bruor Ironbane" GiverId="30152" />
     </If>
-    <Objective QuestName="Facing the Storm" QuestId="12978" Type="KillMob" MobId="29380" KillCount="1" />
     <Objective QuestName="Facing the Storm" QuestId="12978" Type="CollectItem" ItemId="42203" CollectCount="1" />
     <While Condition="((HasQuest(12978)) &amp;&amp; (!IsQuestCompleted(12978)))">
       <RunTo X="7831.03" Y="24.9519" Z="1009.16" />
@@ -897,7 +722,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Armor of Darkness" QuestId="12979" GiverName="Bruor Ironbane" GiverId="30152" />
-    <Objective QuestName="Armor of Darkness" QuestId="12979" Type="KillMob" MobId="29380" KillCount="1" />
     <Objective QuestName="Armor of Darkness" QuestId="12979" Type="CollectItem" ItemId="42204" CollectCount="4" />
     <TurnIn QuestName="The Gifts of Loken" QuestId="12965" TurnInName="Bouldercrag the Rockshaper" TurnInId="29801" />
     <TurnIn QuestName="Facing the Storm" QuestId="12978" TurnInName="Bruor Ironbane" TurnInId="30152" />
@@ -972,11 +796,9 @@
       <CustomBehavior File="UseItemOn" QuestId="12915" MobId="29503" ItemId="41505" NumOfTimes="100" Range="5" CollectionDistance="1000" X="7174.86" Y="-3647.9" Z="828.423" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Mending Fences" QuestId="12915" Type="KillMob" MobId="29375" KillCount="5" />
     <Objective QuestName="The Refiner's Fire" QuestId="12922" Type="CollectItem" ItemId="41556" CollectCount="1" />
     <CustomBehavior File="UseItemOn" ItemId="41556" MobId="0" NumOfTimes="1" CollectionDistance="100" />
     <PickUp QuestName="The Refiner's Fire" QuestId="12922" GiverName="Iva the Vengeful" GiverId="29997" />
-    <Objective QuestName="The Refiner's Fire" QuestId="12922" Type="KillMob" MobId="29504" KillCount="1" />
     <Objective QuestName="The Refiner's Fire" QuestId="12922" Type="CollectItem" ItemId="41558" CollectCount="10" />
     <Objective QuestName="Mending Fences" QuestId="12915" Type="CollectItem" ItemId="41506" CollectCount="1" />
     <While Condition="((HasQuest(12915)) &amp;&amp; (!IsQuestCompleted(12915)))">
@@ -984,7 +806,6 @@
       <CustomBehavior File="UseItemOn" QuestId="12915" MobId="29503" ItemId="41505" NumOfTimes="100" Range="5" CollectionDistance="1000" X="7174.86" Y="-3647.9" Z="828.423" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Mending Fences" QuestId="12915" Type="KillMob" MobId="29503" KillCount="1" />
     <TurnIn QuestName="The Refiner's Fire" QuestId="12922" TurnInName="Object_192060" TurnInType="Object" TurnInId="192060" />
     <If Condition="((!HasQuest(12956)) &amp;&amp; (!IsQuestCompleted(12956)))">
       <PickUp QuestName="A Spark of Hope" QuestId="12956" GiverName="Iva the Vengeful" GiverId="29997" />
@@ -999,7 +820,6 @@
     <If Condition="((!HasQuest(13274)) &amp;&amp; (!IsQuestCompleted(13274)))">
       <PickUp QuestName="The Core's Keeper" QuestId="13274" GiverName="Brann Bronzebeard" GiverId="29579" />
     </If>
-    <Objective QuestName="The Core's Keeper" QuestId="13274" Type="KillMob" MobId="31798" KillCount="1" />
     <Objective QuestName="The Core's Keeper" QuestId="13274" Type="CollectItem" ItemId="44047" CollectCount="1" />
     <While Condition="((HasQuest(13274)) &amp;&amp; (!IsQuestCompleted(13274)))">
       <CustomBehavior File="UseItemOn" QuestId="13274" MobId="0" ItemId="40971" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -1042,9 +862,7 @@
     <TurnIn QuestName="Distortions in Time" QuestId="13038" TurnInName="Xarantaur" TurnInId="30381" />
     <PickUp QuestName="Where Time Went Wrong" QuestId="13048" GiverName="Xarantaur" GiverId="30381" />
     <PickUp QuestName="The Hero's Arms" QuestId="13049" GiverName="Xarantaur" GiverId="30381" />
-    <Objective QuestName="The Hero's Arms" QuestId="13049" Type="KillMob" MobId="30184" KillCount="1" />
     <Objective QuestName="The Hero's Arms" QuestId="13049" Type="CollectItem" ItemId="42782" CollectCount="1" />
-    <Objective QuestName="The Hero's Arms" QuestId="13049" Type="KillMob" MobId="30184" KillCount="1" />
     <Objective QuestName="The Hero's Arms" QuestId="13049" Type="CollectItem" ItemId="42783" CollectCount="1" />
     <TurnIn QuestName="Where Time Went Wrong" QuestId="13048" TurnInName="Xarantaur" TurnInId="30381" />
     <TurnIn QuestName="The Hero's Arms" QuestId="13049" TurnInName="Xarantaur" TurnInId="30381" />

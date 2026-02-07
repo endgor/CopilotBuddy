@@ -12,17 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1712" Name="Cyclonian">
-    <Objective Type="KillMob" MobId="940" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11484.9" Y="-786.402" Z="51.3356" />
-        <Hotspot X="-11648.5" Y="-746.885" Z="32.666" />
-        <Hotspot X="-11651.7" Y="-666.166" Z="30.3258" />
-        <Hotspot X="-11636.0" Y="-660.454" Z="30.1503" />
-        <Hotspot X="-11639.1" Y="-661.675" Z="29.9003" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="574" Name="Special Forces">
     <Objective Type="KillMob" MobId="941" KillCount="6">
       <Hotspots>
@@ -54,17 +43,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="577" Name="Some Assembly Required">
-    <Objective Type="KillMob" MobId="1152" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11821.5" Y="-416.118" Z="11.6578" />
-        <Hotspot X="-11845.6" Y="-455.045" Z="12.5643" />
-        <Hotspot X="-11877.8" Y="-488.848" Z="13.1664" />
-        <Hotspot X="-12436.0" Y="-244.614" Z="15.9766" />
-        <Hotspot X="-12390.4" Y="-296.731" Z="7.5021" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="195" Name="Raptor Mastery">
     <Objective Type="KillMob" MobId="686" KillCount="10">
       <Hotspots>
@@ -84,13 +62,6 @@
         <Hotspot X="-12025.4" Y="209.851" Z="15.047" />
         <Hotspot X="-11978.1" Y="120.834" Z="11.4165" />
         <Hotspot X="-11976.5" Y="173.143" Z="15.6137" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="188" Name="Tiger Mastery">
-    <Objective Type="KillMob" MobId="729" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-11908.5" Y="165.374" Z="41.4222" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -128,17 +99,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="601" Name="Water Elementals">
-    <Objective Type="KillMob" MobId="691" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-12138.8" Y="944.342" Z="3.3254" />
-        <Hotspot X="-12117.8" Y="981.056" Z="6.5678" />
-        <Hotspot X="-12087.9" Y="948.292" Z="5.6026" />
-        <Hotspot X="-12086.5" Y="925.098" Z="4.775" />
-        <Hotspot X="-12110.3" Y="879.462" Z="7.078" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Stranglethorn Vale (37-38)" LogColor="Green" />
@@ -165,7 +125,6 @@
       <PickUp QuestName="The Hidden Key" QuestId="328" GiverName="Lieutenant Doren" GiverId="469" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warrior)">
-      <Objective QuestName="Cyclonian" QuestId="1712" Type="KillMob" MobId="940" KillCount="1" />
       <Objective QuestName="Cyclonian" QuestId="1712" Type="CollectItem" ItemId="3357" CollectCount="8" />
     </If>
     <TurnIn QuestName="The Hidden Key" QuestId="328" TurnInName="Object_288" TurnInType="Object" TurnInId="288" />
@@ -176,7 +135,6 @@
     <Objective QuestName="Special Forces" QuestId="574" Type="KillMob" MobId="941" KillCount="6" />
     <Objective QuestName="Special Forces" QuestId="574" Type="KillMob" MobId="938" KillCount="10" />
     <Objective QuestName="Panther Mastery" QuestId="192" Type="KillMob" MobId="684" KillCount="10" />
-    <Objective QuestName="Some Assembly Required" QuestId="577" Type="KillMob" MobId="1152" KillCount="1" />
     <Objective QuestName="Some Assembly Required" QuestId="577" Type="CollectItem" ItemId="4104" CollectCount="5" />
     <Objective QuestName="Raptor Mastery" QuestId="195" Type="KillMob" MobId="686" KillCount="10" />
     <Objective QuestName="Tiger Mastery" QuestId="187" Type="KillMob" MobId="1085" KillCount="10" />
@@ -189,11 +147,9 @@
       <PickUp QuestName="Tiger Mastery" QuestId="188" GiverName="Ajeck Rouack" GiverId="717" />
     </If>
     <TurnIn QuestName="Panther Mastery" QuestId="192" TurnInName="Sir S. J. Erlgadin" TurnInId="718" />
-    <Objective QuestName="Tiger Mastery" QuestId="188" Type="KillMob" MobId="729" KillCount="1" />
     <Objective QuestName="Tiger Mastery" QuestId="188" Type="CollectItem" ItemId="3879" CollectCount="1" />
     <Objective QuestName="Kurzen's Mystery" QuestId="207" Type="CollectItem" ItemId="2005" CollectCount="1" />
     <Objective QuestName="Kurzen's Mystery" QuestId="207" Type="CollectItem" ItemId="2006" CollectCount="1" />
-    <Objective QuestName="Water Elementals" QuestId="601" Type="KillMob" MobId="691" KillCount="1" />
     <Objective QuestName="Water Elementals" QuestId="601" Type="CollectItem" ItemId="3923" CollectCount="6" />
     <Objective QuestName="Kurzen's Mystery" QuestId="207" Type="CollectItem" ItemId="2008" CollectCount="1" />
     <Objective QuestName="Kurzen's Mystery" QuestId="207" Type="CollectItem" ItemId="2007" CollectCount="1" />

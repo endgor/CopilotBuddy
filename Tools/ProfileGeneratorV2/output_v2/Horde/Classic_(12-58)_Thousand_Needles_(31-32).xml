@@ -81,6 +81,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 32 - Saltstone Basilisk</Name>
+          <Factions>49</Factions>
           <TargetMinLevel>30</TargetMinLevel>
           <TargetMaxLevel>31</TargetMaxLevel>
           <Hotspots>

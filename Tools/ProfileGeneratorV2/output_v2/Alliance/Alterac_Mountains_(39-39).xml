@@ -12,22 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="537" Name="Dark Council">
-    <Objective Type="KillMob" MobId="2320" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1232.85" Y="-314.9" Z="44.1864" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2318" KillCount="4">
-      <Hotspots>
-        <Hotspot X="742.466" Y="-962.231" Z="166.228" />
-        <Hotspot X="684.328" Y="-998.427" Z="170.36" />
-        <Hotspot X="644.461" Y="-931.561" Z="166.408" />
-        <Hotspot X="678.995" Y="-903.938" Z="157.779" />
-        <Hotspot X="637.477" Y="-824.794" Z="159.937" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="551" Name="The Ensorcelled Parchment">
     <Objective Type="CollectItem" ItemId="3706" CollectCount="1">
       <CollectFrom>
@@ -54,7 +38,6 @@
     <If Condition="((!HasQuest(603)) &amp;&amp; (!IsQuestCompleted(603)))">
       <PickUp QuestName="Ansirem's Key" QuestId="603" GiverName="Archmage Ansirem Runeweaver" GiverId="2543" />
     </If>
-    <Objective QuestName="Dark Council" QuestId="537" Type="KillMob" MobId="2320" KillCount="1" />
     <Objective QuestName="Dark Council" QuestId="537" Type="CollectItem" ItemId="3672" CollectCount="1" />
     <Objective QuestName="The Ensorcelled Parchment" QuestId="551" Type="CollectItem" ItemId="3706" CollectCount="1" />
     <While Condition="((HasQuest(603)) &amp;&amp; (!IsQuestCompleted(603)))">
@@ -62,7 +45,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="The Ensorcelled Parchment" QuestId="551" GiverName="Archmage Ansirem Runeweaver" GiverId="2543" />
-    <Objective QuestName="Dark Council" QuestId="537" Type="KillMob" MobId="2318" KillCount="4" />
     <Objective QuestName="Noble Deaths" QuestId="512" Type="CollectItem" ItemId="3505" CollectCount="7" />
     <Objective QuestName="Crushridge Bounty" QuestId="500" Type="CollectItem" ItemId="2843" CollectCount="9" />
     <If Condition="(Me.Class == WoWClass.Warrior)">
@@ -75,7 +57,6 @@
       <If Condition="((!HasQuest(1713)) &amp;&amp; (!IsQuestCompleted(1713)))">
         <PickUp QuestName="The Summoning" QuestId="1713" GiverName="Bath'rah the Windwatcher" GiverId="6176" />
       </If>
-      <Objective QuestName="The Summoning" QuestId="1713" Type="KillMob" MobId="6239" KillCount="1" />
       <Objective QuestName="The Summoning" QuestId="1713" Type="CollectItem" ItemId="6894" CollectCount="1" />
       <TurnIn QuestName="The Summoning" QuestId="1713" TurnInName="Bath'rah the Windwatcher" TurnInId="6176" />
       <If Condition="((!HasQuest(1792)) &amp;&amp; (!IsQuestCompleted(1792)))">

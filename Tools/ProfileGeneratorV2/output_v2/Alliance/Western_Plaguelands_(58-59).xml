@@ -134,7 +134,6 @@
     <If Condition="((!HasQuest(4986)) &amp;&amp; (!IsQuestCompleted(4986)))">
       <PickUp QuestName="Glyphed Oaken Branch" QuestId="4986" GiverName="Mulgris Deepriver" GiverId="10739" />
     </If>
-    <Objective QuestName="Target: Gahrron's Withering" QuestId="5225" Type="KillMob" MobId="11078" KillCount="1" />
     <Objective QuestName="Target: Gahrron's Withering" QuestId="5225" Type="CollectItem" ItemId="13196" CollectCount="1" />
     <TurnIn QuestName="Target: Gahrron's Withering" QuestId="5225" TurnInName="Object_176392" TurnInType="Object" TurnInId="176392" />
     <If Condition="((!HasQuest(5226)) &amp;&amp; (!IsQuestCompleted(5226)))">

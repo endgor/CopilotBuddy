@@ -70,17 +70,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="4809" Name="Chillwind Horns">
-    <Objective Type="KillMob" MobId="7448" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6034.82" Y="-5179.02" Z="866.623" />
-        <Hotspot X="6082.77" Y="-5156.01" Z="870.203" />
-        <Hotspot X="6012.81" Y="-5143.63" Z="848.952" />
-        <Hotspot X="7100.05" Y="-5158.99" Z="750.515" />
-        <Hotspot X="6303.35" Y="-4819.47" Z="755.203" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="4521" Name="Wild Guardians">
     <Objective Type="KillMob" MobId="7451" KillCount="15">
       <Hotspots>
@@ -133,7 +122,6 @@
     <Objective QuestName="Winterfall Activity" QuestId="8464" Type="KillMob" MobId="7439" KillCount="8" />
     <Objective QuestName="Threat of the Winterfall" QuestId="5082" Type="KillMob" MobId="7440" KillCount="8" />
     <Objective QuestName="Winterfall Activity" QuestId="8464" Type="KillMob" MobId="7440" KillCount="8" />
-    <Objective QuestName="Chillwind Horns" QuestId="4809" Type="KillMob" MobId="7448" KillCount="1" />
     <Objective QuestName="Chillwind Horns" QuestId="4809" Type="CollectItem" ItemId="12444" CollectCount="8" />
     <TurnIn QuestName="Are We There, Yeti?" QuestId="977" TurnInName="Umi Rumplesnicker" TurnInId="10305" />
     <TurnIn QuestName="Chillwind Horns" QuestId="4809" TurnInName="Felnok Steelspring" TurnInId="10468" />

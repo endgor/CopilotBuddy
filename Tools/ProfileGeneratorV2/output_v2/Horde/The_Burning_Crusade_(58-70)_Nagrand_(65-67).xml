@@ -12,37 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="9857" Name="Talbuk Mastery">
-    <Objective Type="KillMob" MobId="17158" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1759.75" Y="6370.54" Z="40.3975" />
-        <Hotspot X="-1591.18" Y="6270.28" Z="61.6115" />
-        <Hotspot X="-1474.52" Y="6404.28" Z="28.8356" />
-        <Hotspot X="-1614.38" Y="6447.17" Z="26.3975" />
-        <Hotspot X="-1652.48" Y="6581.86" Z="5.8786" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="17130" KillCount="30">
-      <Hotspots>
-        <Hotspot X="-1379.51" Y="6271.72" Z="50.393" />
-        <Hotspot X="-1354.34" Y="6271.49" Z="51.2049" />
-        <Hotspot X="-2131.51" Y="6197.62" Z="83.0864" />
-        <Hotspot X="-1753.06" Y="6384.03" Z="40.832" />
-        <Hotspot X="-1746.51" Y="6283.38" Z="54.611" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9914" Name="A Head Full of Ivory">
-    <Objective Type="KillMob" MobId="18334" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1610.52" Y="6606.12" Z="16.7995" />
-        <Hotspot X="-1862.53" Y="6457.51" Z="26.4735" />
-        <Hotspot X="-2152.55" Y="6291.09" Z="55.4016" />
-        <Hotspot X="-2592.44" Y="6410.76" Z="27.3649" />
-        <Hotspot X="-2700.05" Y="7707.09" Z="-22.9957" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9789" Name="Clefthoof Mastery">
     <Objective Type="KillMob" MobId="18205" KillCount="30">
       <Hotspots>
@@ -73,26 +42,6 @@
         <Hotspot X="-1588.29" Y="6332.51" Z="32.4972" />
         <Hotspot X="-1556.58" Y="6255.0" Z="70.038" />
         <Hotspot X="-1522.02" Y="6339.84" Z="62.8465" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9821" Name="Eating Damnation">
-    <Objective Type="KillMob" MobId="18062" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2894.57" Y="6692.24" Z="19.1615" />
-        <Hotspot X="-2483.04" Y="7477.92" Z="-7.7037" />
-        <Hotspot X="-2848.0" Y="7617.72" Z="1.372" />
-        <Hotspot X="-2982.98" Y="7228.68" Z="22.8879" />
-        <Hotspot X="-2838.6" Y="7719.7" Z="6.2515" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="18238" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2108.21" Y="8505.88" Z="23.5648" />
-        <Hotspot X="-2108.68" Y="8507.86" Z="23.4079" />
-        <Hotspot X="-2109.18" Y="8509.76" Z="23.3588" />
-        <Hotspot X="-972.495" Y="8210.52" Z="17.338" />
-        <Hotspot X="-972.427" Y="8200.72" Z="16.5906" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -156,17 +105,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10109" Name="I Must Have Them!">
-    <Objective Type="KillMob" MobId="17158" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1759.75" Y="6370.54" Z="40.3975" />
-        <Hotspot X="-1591.18" Y="6270.28" Z="61.6115" />
-        <Hotspot X="-1474.52" Y="6404.28" Z="28.8356" />
-        <Hotspot X="-1614.38" Y="6447.17" Z="26.3975" />
-        <Hotspot X="-1652.48" Y="6581.86" Z="5.8786" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9889" Name="Don't Kill the Fat One">
     <Objective Type="KillMob" MobId="18260" KillCount="10">
       <Hotspots>
@@ -200,17 +138,6 @@
         <Hotspot X="-2490.53" Y="6256.0" Z="31.1707" />
         <Hotspot X="-2465.63" Y="6283.85" Z="31.8993" />
         <Hotspot X="-2533.95" Y="6274.88" Z="16.8373" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9815" Name="Muck Diving">
-    <Objective Type="KillMob" MobId="17154" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1703.29" Y="7960.44" Z="-106.078" />
-        <Hotspot X="-1667.41" Y="8077.63" Z="-103.329" />
-        <Hotspot X="-1605.88" Y="8105.39" Z="-102.992" />
-        <Hotspot X="-1601.07" Y="8085.68" Z="-104.087" />
-        <Hotspot X="-1586.35" Y="8090.55" Z="-103.337" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -267,13 +194,6 @@
         <Hotspot X="-643.093" Y="8792.74" Z="202.253" />
         <Hotspot X="-639.086" Y="8797.5" Z="202.376" />
         <Hotspot X="-754.95" Y="8810.77" Z="183.505" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9867" Name="Murkblood Leaders...">
-    <Objective Type="KillMob" MobId="18204" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1518.47" Y="8591.76" Z="7.3431" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -420,7 +340,6 @@
     <PickUp QuestName="Windroc Mastery" QuestId="9854" GiverName="Shado 'Fitz' Farstrider" GiverId="18200" />
     <PickUp QuestName="Clefthoof Mastery" QuestId="9789" GiverName="Hemet Nesingwary" GiverId="18180" />
     <PickUp QuestName="Talbuk Mastery" QuestId="9857" GiverName="Harold Lane" GiverId="18218" />
-    <Objective QuestName="Talbuk Mastery" QuestId="9857" Type="KillMob" MobId="17158" KillCount="1" />
     <Objective QuestName="Talbuk Mastery" QuestId="9857" Type="CollectItem" ItemId="24504" CollectCount="1" />
     <While Condition="((HasQuest(9857)) &amp;&amp; (!IsQuestCompleted(9857)))">
       <RunTo X="-1379.51" Y="6271.72" Z="50.393" />
@@ -428,9 +347,7 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="The Howling Wind" QuestId="9861" GiverName="Harold Lane" GiverId="18218" />
-    <Objective QuestName="A Head Full of Ivory" QuestId="9914" Type="KillMob" MobId="18334" KillCount="1" />
     <Objective QuestName="A Head Full of Ivory" QuestId="9914" Type="CollectItem" ItemId="25463" CollectCount="3" />
-    <Objective QuestName="Talbuk Mastery" QuestId="9857" Type="KillMob" MobId="17130" KillCount="30" />
     <Objective QuestName="Clefthoof Mastery" QuestId="9789" Type="KillMob" MobId="18205" KillCount="30" />
     <Objective QuestName="Windroc Mastery" QuestId="9854" Type="KillMob" MobId="17128" KillCount="30" />
     <TurnIn QuestName="Windroc Mastery" QuestId="9854" TurnInName="Shado 'Fitz' Farstrider" TurnInId="18200" />
@@ -477,12 +394,10 @@
     <If Condition="((!HasQuest(9821)) &amp;&amp; (!IsQuestCompleted(9821)))">
       <PickUp QuestName="Eating Damnation" QuestId="9821" GiverName="Gordawg" GiverId="18099" />
     </If>
-    <Objective QuestName="Eating Damnation" QuestId="9821" Type="KillMob" MobId="18062" KillCount="1" />
     <Objective QuestName="Eating Damnation" QuestId="9821" Type="CollectItem" ItemId="24473" CollectCount="15" />
     <Objective QuestName="A Rare Bean" QuestId="9800" Type="CollectItem" ItemId="24419" CollectCount="15" />
     <Objective QuestName="Talbuk Mastery" QuestId="9858" Type="KillMob" MobId="17131" KillCount="30" />
     <Objective QuestName="Clefthoof Mastery" QuestId="9850" Type="KillMob" MobId="17132" KillCount="30" />
-    <Objective QuestName="Eating Damnation" QuestId="9821" Type="KillMob" MobId="18238" KillCount="1" />
     <Objective QuestName="Eating Damnation" QuestId="9821" Type="CollectItem" ItemId="24558" CollectCount="1" />
     <While Condition="((HasQuest(9821)) &amp;&amp; (!IsQuestCompleted(9821)))">
       <CustomBehavior File="UseItemOn" QuestId="9821" MobId="0" ItemId="24558" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -506,7 +421,6 @@
     <CustomBehavior File="SetHearthstone" MobId="18907" AreaId="3521" X="-174.478" Y="5529.21" Z="29.4909" /> <!-- Set hearth: Garadar -->
     <Objective QuestName="Windroc Mastery" QuestId="9855" Type="KillMob" MobId="18220" KillCount="30" />
     <PickUp QuestName="I Must Have Them!" QuestId="10109" GiverName="Wazat" GiverId="19035" />
-    <Objective QuestName="I Must Have Them!" QuestId="10109" Type="KillMob" MobId="17158" KillCount="1" />
     <Objective QuestName="I Must Have Them!" QuestId="10109" Type="CollectItem" ItemId="27807" CollectCount="3" />
     <TurnIn QuestName="Talbuk Mastery" QuestId="9858" TurnInName="Harold Lane" TurnInId="18218" />
     <TurnIn QuestName="Clefthoof Mastery" QuestId="9850" TurnInName="Hemet Nesingwary" TurnInId="18180" />
@@ -589,7 +503,6 @@
     <If Condition="((!HasQuest(9810)) &amp;&amp; (!IsQuestCompleted(9810)))">
       <PickUp QuestName="The Spirit Polluted" QuestId="9810" GiverName="Elementalist Lo'ap" GiverId="18073" />
     </If>
-    <Objective QuestName="Muck Diving" QuestId="9815" Type="KillMob" MobId="17154" KillCount="1" />
     <Objective QuestName="Muck Diving" QuestId="9815" Type="CollectItem" ItemId="24469" CollectCount="5" />
     <Objective QuestName="Bleeding Hollow Supply Crates" QuestId="9916" Type="CollectItem" ItemId="25460" CollectCount="20" />
     <Objective QuestName="An Audacious Advance" QuestId="9907" Type="KillMob" MobId="17136" KillCount="25" />
@@ -617,6 +530,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 66 - Warmaul Warlock</Name>
+          <Factions>1693</Factions>
           <TargetMinLevel>66</TargetMinLevel>
           <TargetMaxLevel>67</TargetMaxLevel>
           <Hotspots>
@@ -628,7 +542,6 @@
     </If>
     <TurnIn QuestName="War on the Warmaul" QuestId="9945" TurnInName="Elder Yorley" TurnInId="18414" />
     <TurnIn QuestName="Finding the Survivors" QuestId="9948" TurnInName="Elder Ungriz" TurnInId="18415" />
-    <Objective QuestName="Murkblood Leaders..." QuestId="9867" Type="KillMob" MobId="18204" KillCount="1" />
     <Objective QuestName="Murkblood Leaders..." QuestId="9867" Type="CollectItem" ItemId="24543" CollectCount="1" />
     <Objective QuestName="Vile Idolatry" QuestId="9863" Type="CollectItem" ItemId="24542" CollectCount="20" />
     <Objective QuestName="Murkblood Corrupters" QuestId="9862" Type="KillMob" MobId="18202" KillCount="8" />

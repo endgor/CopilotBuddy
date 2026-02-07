@@ -38,34 +38,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1164" Name="To Steal From Thieves">
-    <Objective Type="KillMob" MobId="4480" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-999.388" Y="-2896.35" Z="63.7213" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="4481" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1048.93" Y="-2815.72" Z="42.2394" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="4479" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1062.09" Y="-2902.44" Z="42.1514" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="701" Name="Guile of the Raptor">
-    <Objective Type="KillMob" MobId="2561" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1666.14" Y="-2672.47" Z="41.776" />
-        <Hotspot X="-1823.33" Y="-2668.38" Z="55.1846" />
-        <Hotspot X="-1684.6" Y="-2811.87" Z="39.6426" />
-        <Hotspot X="-1683.36" Y="-2749.53" Z="47.2354" />
-        <Hotspot X="-1768.61" Y="-2748.84" Z="48.8114" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="676" Name="The Hammer May Fall">
     <Objective Type="KillMob" MobId="2564" KillCount="10">
       <Hotspots>
@@ -107,14 +79,10 @@
       <PickUp QuestName="Stones of Binding" QuestId="651" GiverName="Tor'gan" GiverId="2706" />
     </If>
     <Objective QuestName="Stones of Binding" QuestId="651" Type="CollectItem" ItemId="4484" CollectCount="1" />
-    <Objective QuestName="To Steal From Thieves" QuestId="1164" Type="KillMob" MobId="4480" KillCount="1" />
     <Objective QuestName="To Steal From Thieves" QuestId="1164" Type="CollectItem" ItemId="5830" CollectCount="1" />
-    <Objective QuestName="To Steal From Thieves" QuestId="1164" Type="KillMob" MobId="4481" KillCount="1" />
     <Objective QuestName="To Steal From Thieves" QuestId="1164" Type="CollectItem" ItemId="5832" CollectCount="1" />
-    <Objective QuestName="To Steal From Thieves" QuestId="1164" Type="KillMob" MobId="4479" KillCount="1" />
     <Objective QuestName="To Steal From Thieves" QuestId="1164" Type="CollectItem" ItemId="58312" CollectCount="1" />
     <Objective QuestName="Stones of Binding" QuestId="651" Type="CollectItem" ItemId="4485" CollectCount="1" />
-    <Objective QuestName="Guile of the Raptor" QuestId="701" Type="KillMob" MobId="2561" KillCount="1" />
     <Objective QuestName="Guile of the Raptor" QuestId="701" Type="CollectItem" ItemId="4513" CollectCount="12" />
     <Objective QuestName="The Hammer May Fall" QuestId="676" Type="KillMob" MobId="2564" KillCount="10" />
     <Objective QuestName="The Hammer May Fall" QuestId="676" Type="KillMob" MobId="2562" KillCount="8" />

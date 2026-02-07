@@ -62,31 +62,31 @@
       </If>
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
-      <Objective QuestName="Genesis Boots" QuestId="8665" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Genesis Boots" QuestId="8665" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Hunter)">
-      <Objective QuestName="Striker's Footguards" QuestId="8626" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Striker's Footguards" QuestId="8626" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Mage)">
-      <Objective QuestName="Enigma Boots" QuestId="8634" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Enigma Boots" QuestId="8634" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Paladin)">
-      <Objective QuestName="Avenger's Greaves" QuestId="8655" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Avenger's Greaves" QuestId="8655" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Priest)">
-      <Objective QuestName="Footwraps of the Oracle" QuestId="8596" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Footwraps of the Oracle" QuestId="8596" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Rogue)">
-      <Objective QuestName="Deathdealer's Boots" QuestId="8637" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Deathdealer's Boots" QuestId="8637" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman)">
-      <Objective QuestName="Stormcaller's Footguards" QuestId="8621" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Stormcaller's Footguards" QuestId="8621" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="Doomcaller's Footwraps" QuestId="8660" Type="CollectItem" ItemId="20932" CollectCount="1" />
+      <Objective QuestName="Doomcaller's Footwraps" QuestId="8660" Type="CollectItem" ItemId="20932" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warrior)">
-      <Objective QuestName="Conqueror's Greaves" QuestId="8559" Type="CollectItem" ItemId="20928" CollectCount="1" />
+      <Objective QuestName="Conqueror's Greaves" QuestId="8559" Type="CollectItem" ItemId="20928" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
       <Objective QuestName="Genesis Boots" QuestId="8665" Type="CollectItem" ItemId="20878" CollectCount="2" />

@@ -19,19 +19,19 @@
     <If Condition="Me.Level &lt; 50">
       <SetGrindArea>
         <GrindArea>
-          <Name>Grind to Level 50</Name>
+          <Name>Grind to Level 50 - Shadow of Doom</Name>
+          <Factions>2145</Factions>
           <Hotspots>
             <Hotspot X="81.09" Y="60.91" Z="0.00" />
           </Hotspots>
         </GrindArea>
       </SetGrindArea>
-      <GrindTo Level="50" />
+      <GrindTo Level="50" /> <!--  (grind Shadow of Doom) -->
     </If>
     <PickUp QuestName="Light's Hope Chapel" QuestId="9154" GiverName="Argent Recruiter" GiverId="16241" />
     <!-- Quest 9154 may auto-complete (no turn-in found) -->
     <PickUp QuestName="Under the Shadow" QuestId="9153" GiverName="Commander Thomas Helleran" GiverId="16361" />
     <PickUp QuestName="Shadows of Doom" QuestId="9085" GiverName="Commander Thomas Helleran" GiverId="16361" />
-    <Objective QuestName="Shadows of Doom" QuestId="9085" Type="KillMob" MobId="16143" KillCount="1" />
     <Objective QuestName="Under the Shadow" QuestId="9153" Type="CollectItem" ItemId="22484" CollectCount="10" />
     <Objective QuestName="Shadows of Doom" QuestId="9085" Type="CollectItem" ItemId="22974" CollectCount="1" />
     <Objective QuestName="Shadows of Doom" QuestId="9085" Type="CollectItem" ItemId="22973" CollectCount="1" />
@@ -78,6 +78,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 70 - Shadow of Doom</Name>
+          <Factions>2145</Factions>
           <Hotspots>
             <Hotspot X="75.16" Y="54.39" Z="0.00" />
           </Hotspots>

@@ -62,31 +62,31 @@
       </If>
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
-      <Objective QuestName="Genesis Helm" QuestId="8667" Type="CollectItem" ItemId="20930" CollectCount="1" />
+      <Objective QuestName="Genesis Helm" QuestId="8667" Type="CollectItem" ItemId="20930" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Hunter)">
-      <Objective QuestName="Striker's Diadem" QuestId="8657" Type="CollectItem" ItemId="20930" CollectCount="1" />
+      <Objective QuestName="Striker's Diadem" QuestId="8657" Type="CollectItem" ItemId="20930" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Mage)">
-      <Objective QuestName="Enigma Circlet" QuestId="8632" Type="CollectItem" ItemId="20926" CollectCount="1" />
+      <Objective QuestName="Enigma Circlet" QuestId="8632" Type="CollectItem" ItemId="20926" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Paladin)">
-      <Objective QuestName="Avenger's Crown" QuestId="8628" Type="CollectItem" ItemId="20930" CollectCount="1" />
+      <Objective QuestName="Avenger's Crown" QuestId="8628" Type="CollectItem" ItemId="20930" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Priest)">
-      <Objective QuestName="Tiara of the Oracle" QuestId="8592" Type="CollectItem" ItemId="20926" CollectCount="1" />
+      <Objective QuestName="Tiara of the Oracle" QuestId="8592" Type="CollectItem" ItemId="20926" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Rogue)">
-      <Objective QuestName="Deathdealer's Helm" QuestId="8639" Type="CollectItem" ItemId="20930" CollectCount="1" />
+      <Objective QuestName="Deathdealer's Helm" QuestId="8639" Type="CollectItem" ItemId="20930" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Shaman)">
-      <Objective QuestName="Stormcaller's Diadem" QuestId="8623" Type="CollectItem" ItemId="20930" CollectCount="1" />
+      <Objective QuestName="Stormcaller's Diadem" QuestId="8623" Type="CollectItem" ItemId="20930" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock)">
-      <Objective QuestName="Doomcaller's Circlet" QuestId="8662" Type="CollectItem" ItemId="20926" CollectCount="1" />
+      <Objective QuestName="Doomcaller's Circlet" QuestId="8662" Type="CollectItem" ItemId="20926" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Warrior)">
-      <Objective QuestName="Conqueror's Crown" QuestId="8561" Type="CollectItem" ItemId="20926" CollectCount="1" />
+      <Objective QuestName="Conqueror's Crown" QuestId="8561" Type="CollectItem" ItemId="20926" CollectCount="2" />
     </If>
     <If Condition="(Me.Class == WoWClass.Druid)">
       <Objective QuestName="Genesis Helm" QuestId="8667" Type="CollectItem" ItemId="20879" CollectCount="2" />

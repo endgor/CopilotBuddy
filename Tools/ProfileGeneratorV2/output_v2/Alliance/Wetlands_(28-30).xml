@@ -12,42 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="289" Name="The Cursed Crew">
-    <Objective Type="KillMob" MobId="1159" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2979.71" Y="-959.726" Z="-7.1871" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1158" KillCount="5">
-      <Hotspots>
-        <Hotspot X="-2973.79" Y="-966.492" Z="6.949" />
-        <Hotspot X="-2946.88" Y="-973.204" Z="1.7767" />
-        <Hotspot X="-2948.4" Y="-990.206" Z="-0.4326" />
-        <Hotspot X="-3000.9" Y="-948.685" Z="-0.9009" />
-        <Hotspot X="-2812.34" Y="-991.279" Z="-13.1359" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1157" KillCount="13">
-      <Hotspots>
-        <Hotspot X="-2982.4" Y="-969.608" Z="10.7521" />
-        <Hotspot X="-2969.59" Y="-952.345" Z="3.9103" />
-        <Hotspot X="-2956.03" Y="-972.967" Z="4.3857" />
-        <Hotspot X="-2954.42" Y="-964.05" Z="2.5474" />
-        <Hotspot X="-2994.7" Y="-934.442" Z="-1.2116" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="471" Name="Apprentice's Duties">
-    <Objective Type="KillMob" MobId="2089" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2681.48" Y="-1506.69" Z="7.6715" />
-        <Hotspot X="-2814.2" Y="-1240.65" Z="6.2125" />
-        <Hotspot X="-2769.88" Y="-1469.99" Z="7.0347" />
-        <Hotspot X="-2953.41" Y="-1020.38" Z="10.0086" />
-        <Hotspot X="-2796.87" Y="-1112.82" Z="1.564" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="294" Name="Ormer's Revenge">
     <Objective Type="KillMob" MobId="1020" KillCount="10">
       <Hotspots>
@@ -123,13 +87,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="296" Name="Ormer's Revenge">
-    <Objective Type="KillMob" MobId="1353" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3567.61" Y="-1765.01" Z="80.6865" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="275" Name="Blisters on The Land">
     <Objective Type="KillMob" MobId="1040" KillCount="8">
       <Hotspots>
@@ -148,31 +105,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-4223.8" Y="-3068.66" Z="8.37" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="324" Name="The Lost Ingots">
-    <Objective Type="KillMob" MobId="1418" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-4088.19" Y="-810.431" Z="2.0492" />
-        <Hotspot X="-4049.84" Y="-746.692" Z="-13.3935" />
-        <Hotspot X="-3978.62" Y="-880.35" Z="7.4146" />
-        <Hotspot X="-4114.43" Y="-748.462" Z="-12.7518" />
-        <Hotspot X="-4018.35" Y="-783.367" Z="-14.4094" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="290" Name="Lifting the Curse">
-    <Objective Type="KillMob" MobId="1160" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2798.54" Y="-1028.4" Z="7.5142" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="474" Name="Defeat Nek'rosh">
-    <Objective Type="KillMob" MobId="2091" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3654.34" Y="-2600.74" Z="52.0236" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -245,11 +177,7 @@
     <If Condition="((!HasQuest(286)) &amp;&amp; (!IsQuestCompleted(286)))">
       <PickUp QuestName="Return the Statuette" QuestId="286" GiverName="Tarrel Rockweaver" GiverId="2096" />
     </If>
-    <Objective QuestName="The Cursed Crew" QuestId="289" Type="KillMob" MobId="1159" KillCount="1" />
     <Objective QuestName="The Cursed Crew" QuestId="289" Type="CollectItem" ItemId="3619" CollectCount="1" />
-    <Objective QuestName="The Cursed Crew" QuestId="289" Type="KillMob" MobId="1158" KillCount="5" />
-    <Objective QuestName="The Cursed Crew" QuestId="289" Type="KillMob" MobId="1157" KillCount="13" />
-    <Objective QuestName="Apprentice's Duties" QuestId="471" Type="KillMob" MobId="2089" KillCount="1" />
     <Objective QuestName="Apprentice's Duties" QuestId="471" Type="CollectItem" ItemId="3348" CollectCount="6" />
     <Objective QuestName="Fire Taboo" QuestId="277" Type="CollectItem" ItemId="2611" CollectCount="9" />
     <PickUp QuestName="Ormer's Revenge" QuestId="294" GiverName="Ormer Ironbraid" GiverId="1078" />
@@ -278,7 +206,6 @@
       <PickUp QuestName="Ormer's Revenge" QuestId="296" GiverName="Ormer Ironbraid" GiverId="1078" />
     </If>
     <TurnIn QuestName="Uncovering the Past" QuestId="299" TurnInName="Prospector Whelgar" TurnInId="1077" />
-    <Objective QuestName="Ormer's Revenge" QuestId="296" Type="KillMob" MobId="1353" KillCount="1" />
     <Objective QuestName="Ormer's Revenge" QuestId="296" Type="CollectItem" ItemId="3638" CollectCount="1" />
     <TurnIn QuestName="Ormer's Revenge" QuestId="296" TurnInName="Ormer Ironbraid" TurnInId="1078" />
     <Objective QuestName="The Absent Minded Prospector" QuestId="943" Type="CollectItem" ItemId="5233" CollectCount="1" />
@@ -308,14 +235,12 @@
     <If Condition="((!HasQuest(324)) &amp;&amp; (!IsQuestCompleted(324)))">
       <PickUp QuestName="The Lost Ingots" QuestId="324" GiverName="Edwina Monzor" GiverId="1462" />
     </If>
-    <Objective QuestName="The Lost Ingots" QuestId="324" Type="KillMob" MobId="1418" KillCount="1" />
     <Objective QuestName="The Lost Ingots" QuestId="324" Type="CollectItem" ItemId="2702" CollectCount="5" />
     <TurnIn QuestName="The Lost Ingots" QuestId="324" TurnInName="Glorin Steelbrow" TurnInId="1217" />
     <If Condition="((!HasQuest(322)) &amp;&amp; (!IsQuestCompleted(322)))">
       <PickUp QuestName="Blessed Arm" QuestId="322" GiverName="Glorin Steelbrow" GiverId="1217" />
     </If>
     <TurnIn QuestName="In Search of The Excavation Team" QuestId="306" TurnInName="Tarrel Rockweaver" TurnInId="2096" />
-    <Objective QuestName="Lifting the Curse" QuestId="290" Type="KillMob" MobId="1160" KillCount="1" />
     <Objective QuestName="Lifting the Curse" QuestId="290" Type="CollectItem" ItemId="2629" CollectCount="1" />
     <TurnIn QuestName="Lifting the Curse" QuestId="290" TurnInName="Object_112948" TurnInType="Object" TurnInId="112948" />
     <If Condition="((!HasQuest(292)) &amp;&amp; (!IsQuestCompleted(292)))">
@@ -325,7 +250,6 @@
     <If Condition="((!HasQuest(474)) &amp;&amp; (!IsQuestCompleted(474)))">
       <PickUp QuestName="Defeat Nek'rosh" QuestId="474" GiverName="Tarrel Rockweaver" GiverId="2096" />
     </If>
-    <Objective QuestName="Defeat Nek'rosh" QuestId="474" Type="KillMob" MobId="2091" KillCount="1" />
     <Objective QuestName="Defeat Nek'rosh" QuestId="474" Type="CollectItem" ItemId="3625" CollectCount="1" />
     <TurnIn QuestName="Fall of Dun Modr" QuestId="472" TurnInName="Longbraid the Grim" TurnInId="1071" />
     <PickUp QuestName="The Thandol Span" QuestId="631" GiverName="Rhag Garmason" GiverId="1075" />

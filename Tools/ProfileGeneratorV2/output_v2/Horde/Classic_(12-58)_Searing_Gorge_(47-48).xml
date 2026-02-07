@@ -32,35 +32,6 @@
         <Hotspot X="-7025.07" Y="-1784.32" Z="265.74" />
       </Hotspots>
     </Objective>
-    <Objective Type="KillMob" MobId="5856" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6860.15" Y="-1700.02" Z="250.563" />
-        <Hotspot X="-6855.49" Y="-1740.54" Z="251.591" />
-        <Hotspot X="-6906.36" Y="-1724.62" Z="242.33" />
-        <Hotspot X="-7219.53" Y="-1764.73" Z="244.519" />
-        <Hotspot X="-6826.77" Y="-1784.11" Z="257.509" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7728" Name="STOLEN: Smithing Tuyere and Lookout's Spyglass">
-    <Objective Type="KillMob" MobId="8566" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6954.58" Y="-1488.57" Z="237.984" />
-        <Hotspot X="-6872.32" Y="-1074.97" Z="240.078" />
-        <Hotspot X="-6925.87" Y="-1051.08" Z="240.125" />
-        <Hotspot X="-6931.85" Y="-1419.82" Z="256.156" />
-        <Hotspot X="-6995.07" Y="-1144.61" Z="257.58" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="5840" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6868.71" Y="-1281.88" Z="242.891" />
-        <Hotspot X="-6836.02" Y="-1228.32" Z="240.263" />
-        <Hotspot X="-6818.91" Y="-1215.62" Z="240.036" />
-        <Hotspot X="-6838.51" Y="-1163.79" Z="241.167" />
-        <Hotspot X="-6863.97" Y="-1174.06" Z="240.303" />
-      </Hotspots>
-    </Objective>
   </Quest>
   <Quest Id="7724" Name="Fiery Menace!">
     <Objective Type="KillMob" MobId="5858" KillCount="20">
@@ -81,13 +52,6 @@
         <Hotspot X="-6981.74" Y="-1477.09" Z="241.75" />
         <Hotspot X="-7022.67" Y="-1152.27" Z="242.906" />
         <Hotspot X="-6675.88" Y="-1458.57" Z="243.511" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="7701" Name="WANTED: Overseer Maltorius">
-    <Objective Type="KillMob" MobId="14621" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6633.88" Y="-1232.66" Z="209.835" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -142,7 +106,6 @@
       <PickUp QuestName="Ledger from Tanaris" QuestId="4450" />
     </If>
     <Objective QuestName="Ledger from Tanaris" QuestId="4450" Type="CollectItem" ItemId="11727" CollectCount="1" />
-    <Objective QuestName="Ledger from Tanaris" QuestId="4450" Type="KillMob" MobId="5856" KillCount="1" />
     <Objective QuestName="Ledger from Tanaris" QuestId="4450" Type="CollectItem" ItemId="11725" CollectCount="20" />
     <PickUp QuestName="Divine Retribution" QuestId="3441" GiverName="Kalaran Windblade" GiverId="8479" />
     <TurnIn QuestName="Divine Retribution" QuestId="3441" TurnInName="Kalaran Windblade" TurnInId="8479" />
@@ -156,9 +119,7 @@
     <PickUp QuestName="Fiery Menace!" QuestId="7724" GiverName="Hansel Heavyhands" GiverId="14627" />
     <PickUp QuestName="Incendosaurs? Whateverosaur is More Like It" QuestId="7727" GiverName="Hansel Heavyhands" GiverId="14627" />
     <PickUp QuestName="What the Flux?" QuestId="7722" GiverName="Master Smith Burninate" GiverId="14624" />
-    <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="KillMob" MobId="8566" KillCount="1" />
     <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="CollectItem" ItemId="18960" CollectCount="1" />
-    <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="KillMob" MobId="5840" KillCount="1" />
     <Objective QuestName="STOLEN: Smithing Tuyere and Lookout's Spyglass" QuestId="7728" Type="CollectItem" ItemId="18959" CollectCount="1" />
     <While Condition="((HasQuest(4451)) &amp;&amp; (!IsQuestCompleted(4451)))">
       <CustomBehavior File="UseItemOn" QuestId="4451" MobId="0" ItemId="11818" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -178,7 +139,6 @@
     </If>
     <Objective QuestName="Fiery Menace!" QuestId="7724" Type="KillMob" MobId="5858" KillCount="20" />
     <Objective QuestName="Curse These Fat Fingers" QuestId="7723" Type="KillMob" MobId="5854" KillCount="20" />
-    <Objective QuestName="WANTED: Overseer Maltorius" QuestId="7701" Type="KillMob" MobId="14621" KillCount="1" />
     <Objective QuestName="WANTED: Overseer Maltorius" QuestId="7701" Type="CollectItem" ItemId="18946" CollectCount="1" />
     <Objective QuestName="What the Flux?" QuestId="7722" Type="CollectItem" ItemId="18922" CollectCount="1" />
     <Objective QuestName="Forging the Shaft" QuestId="3443" Type="CollectItem" ItemId="10551" CollectCount="8" />

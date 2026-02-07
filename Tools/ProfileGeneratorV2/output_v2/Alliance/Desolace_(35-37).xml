@@ -28,31 +28,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1459" Name="Reagents for Reclaimers Inc.">
-    <Objective Type="KillMob" MobId="4700" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-2035.22" Y="1673.3" Z="61.1354" />
-        <Hotspot X="-2036.02" Y="1680.08" Z="61.6485" />
-        <Hotspot X="-2007.95" Y="1682.55" Z="61.5208" />
-        <Hotspot X="-1678.05" Y="1636.42" Z="61.4482" />
-        <Hotspot X="-752.193" Y="2013.92" Z="90.3763" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="5741" Name="Sceptre of Light">
-    <Objective Type="KillMob" MobId="13019" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-451.788" Y="1753.09" Z="153.571" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1439" Name="Search for Tyranis">
-    <Objective Type="KillMob" MobId="5643" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-419.61" Y="1850.15" Z="128.492" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1370" Name="Stealing Supplies">
     <Objective Type="CollectItem" ItemId="6069" CollectCount="6">
       <CollectFrom>
@@ -108,7 +83,6 @@
     </While>
     <TurnIn QuestName="Kodo Roundup" QuestId="5561" TurnInName="Smeed Scrabblescrew" TurnInId="11596" />
     <Objective QuestName="Bone Collector" QuestId="5501" Type="CollectItem" ItemId="13703" CollectCount="10" />
-    <Objective QuestName="Reagents for Reclaimers Inc." QuestId="1459" Type="KillMob" MobId="4700" KillCount="1" />
     <Objective QuestName="Reagents for Reclaimers Inc." QuestId="1459" Type="CollectItem" ItemId="6249" CollectCount="3" />
     <Objective QuestName="Centaur Bounty" QuestId="1387" Type="CollectItem" ItemId="6067" CollectCount="15" />
     <Objective QuestName="Reagents for Reclaimers Inc." QuestId="1459" Type="CollectItem" ItemId="6248" CollectCount="10" />
@@ -128,13 +102,11 @@
     </If>
     <Objective QuestName="Raid on the Kolkar" QuestId="1384" Type="CollectItem" ItemId="6079" CollectCount="10" />
     <TurnIn QuestName="Bone Collector" QuestId="5501" TurnInName="Bibbly F'utzbuckle" TurnInId="11438" />
-    <Objective QuestName="Sceptre of Light" QuestId="5741" Type="KillMob" MobId="13019" KillCount="1" />
     <Objective QuestName="Sceptre of Light" QuestId="5741" Type="CollectItem" ItemId="15750" CollectCount="1" />
     <TurnIn QuestName="Vahlarriel's Search" QuestId="1438" TurnInName="Dalinda Malem" TurnInId="5644" />
     <If Condition="((!HasQuest(1439)) &amp;&amp; (!IsQuestCompleted(1439)))">
       <PickUp QuestName="Search for Tyranis" QuestId="1439" GiverName="Dalinda Malem" GiverId="5644" />
     </If>
-    <Objective QuestName="Search for Tyranis" QuestId="1439" Type="KillMob" MobId="5643" KillCount="1" />
     <Objective QuestName="Search for Tyranis" QuestId="1439" Type="CollectItem" ItemId="6767" CollectCount="1" />
     <TurnIn QuestName="Search for Tyranis" QuestId="1439" TurnInName="Dalinda Malem" TurnInId="5644" />
     <If Condition="((!HasQuest(1440)) &amp;&amp; (!IsQuestCompleted(1440)))">
@@ -145,7 +117,6 @@
       <PickUp QuestName="Book of the Ancients" QuestId="6027" GiverName="Azore Aldamort" GiverId="11863" />
     </If>
     <Objective QuestName="Claim Rackmore's Treasure!" QuestId="6161" Type="CollectItem" ItemId="15881" CollectCount="1" />
-    <Objective QuestName="Book of the Ancients" QuestId="6027" Type="KillMob" MobId="12369" KillCount="1" />
     <Objective QuestName="Book of the Ancients" QuestId="6027" Type="CollectItem" ItemId="15803" CollectCount="1" />
     <TurnIn QuestName="Claim Rackmore's Treasure!" QuestId="6161" TurnInName="Object_177786" TurnInType="Object" TurnInId="177786" />
     <Objective QuestName="The Karnitol Shipwreck" QuestId="1456" Type="CollectItem" ItemId="6245" CollectCount="1" />

@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="34" Name="An Unwelcome Guest">
-    <Objective Type="KillMob" MobId="345" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9286.79" Y="-1926.36" Z="72.0246" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="2282" Name="Alther's Mill">
     <Objective Type="CollectItem" ItemId="7871" CollectCount="1">
       <CollectFrom>
@@ -39,7 +32,6 @@
     <PickUp QuestName="Selling Fish" QuestId="127" GiverName="Dockmaster Baren" GiverId="381" />
     <PickUp QuestName="Murloc Poachers" QuestId="150" GiverName="Dockmaster Baren" GiverId="381" />
     <PickUp QuestName="An Unwelcome Guest" QuestId="34" GiverName="Martie Jainrose" GiverId="342" />
-    <Objective QuestName="An Unwelcome Guest" QuestId="34" Type="KillMob" MobId="345" KillCount="1" />
     <Objective QuestName="An Unwelcome Guest" QuestId="34" Type="CollectItem" ItemId="3631" CollectCount="1" />
     <TurnIn QuestName="An Unwelcome Guest" QuestId="34" TurnInName="Martie Jainrose" TurnInId="342" />
     <If Condition="(Me.Class == WoWClass.Rogue)">

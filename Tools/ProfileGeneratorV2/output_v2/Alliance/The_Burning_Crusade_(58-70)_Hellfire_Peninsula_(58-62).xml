@@ -71,13 +71,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10485" Name="Warlord of the Bleeding Hollow">
-    <Objective Type="KillMob" MobId="16964" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1173.46" Y="1920.36" Z="81.603" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10394" Name="Disruption - Forge Camp: Mageddon">
     <Objective Type="KillMob" MobId="20798" KillCount="1">
       <Hotspots>
@@ -105,23 +98,7 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10397" Name="Invasion Point: Annihilator">
-    <Objective Type="KillMob" MobId="19298" KillCount="1">
-      <Hotspots>
-        <Hotspot X="569.779" Y="2797.71" Z="218.62" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10236" Name="Outland Sucks!">
-    <Objective Type="KillMob" MobId="16844" KillCount="1">
-      <Hotspots>
-        <Hotspot X="16.4503" Y="2020.34" Z="76.1969" />
-        <Hotspot X="180.635" Y="2497.2" Z="63.8712" />
-        <Hotspot X="722.567" Y="2824.89" Z="25.464" />
-        <Hotspot X="138.567" Y="2924.36" Z="29.6028" />
-        <Hotspot X="332.555" Y="3134.76" Z="31.7012" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="28554" CollectCount="6">
       <CollectFrom>
         <GameObject Name="Shredder Parts" Id="183934" />
@@ -134,17 +111,6 @@
         <Hotspot X="26.95" Y="3130.27" Z="-0.86" />
         <Hotspot X="44.88" Y="3077.43" Z="-1.22" />
         <Hotspot X="74.26" Y="3039.5" Z="-0.62" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10629" Name="Shizz Work">
-    <Objective Type="KillMob" MobId="16863" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-950.297" Y="2719.15" Z="17.8437" />
-        <Hotspot X="683.463" Y="2873.79" Z="23.0223" />
-        <Hotspot X="709.234" Y="2841.81" Z="25.9784" />
-        <Hotspot X="596.758" Y="2920.44" Z="23.4737" />
-        <Hotspot X="467.015" Y="2920.18" Z="39.2654" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -205,28 +171,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9349" Name="Ravager Egg Roundup">
-    <Objective Type="KillMob" MobId="16933" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1453.84" Y="3424.35" Z="35.058" />
-        <Hotspot X="-1418.44" Y="3434.43" Z="44.1255" />
-        <Hotspot X="-1515.95" Y="3494.06" Z="32.36" />
-        <Hotspot X="-1535.96" Y="3504.62" Z="29.3734" />
-        <Hotspot X="-1590.18" Y="3594.26" Z="30.0657" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9361" Name="Helboar, the Other White Meat">
-    <Objective Type="KillMob" MobId="16863" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-950.297" Y="2719.15" Z="17.8437" />
-        <Hotspot X="683.463" Y="2873.79" Z="23.0223" />
-        <Hotspot X="709.234" Y="2841.81" Z="25.9784" />
-        <Hotspot X="596.758" Y="2920.44" Z="23.4737" />
-        <Hotspot X="467.015" Y="2920.18" Z="39.2654" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10058" Name="An Old Gift">
     <Objective Type="CollectItem" ItemId="25938" CollectCount="1">
       <CollectFrom>
@@ -263,17 +207,6 @@
         <Hotspot X="-1125.51" Y="2545.6" Z="48.3261" />
         <Hotspot X="-1109.07" Y="2559.96" Z="43.7398" />
         <Hotspot X="-1102.61" Y="2576.19" Z="38.9385" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9356" Name="Smooth as Butter">
-    <Objective Type="KillMob" MobId="16972" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-795.034" Y="2360.13" Z="11.8832" />
-        <Hotspot X="-747.785" Y="2324.21" Z="14.8003" />
-        <Hotspot X="-719.431" Y="2254.59" Z="13.8248" />
-        <Hotspot X="-705.395" Y="2159.56" Z="26.8556" />
-        <Hotspot X="-706.207" Y="2205.78" Z="20.2957" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -356,17 +289,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="9372" Name="Demonic Contamination">
-    <Objective Type="KillMob" MobId="16880" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1157.23" Y="3306.24" Z="91.1317" />
-        <Hotspot X="-1150.94" Y="3321.63" Z="98.0706" />
-        <Hotspot X="-1115.77" Y="3324.81" Z="92.778" />
-        <Hotspot X="-1214.84" Y="3313.23" Z="96.3906" />
-        <Hotspot X="-1208.17" Y="3340.53" Z="111.796" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9399" Name="Cruel Taskmasters">
     <Objective Type="KillMob" MobId="17058" KillCount="4">
       <Hotspots>
@@ -375,13 +297,6 @@
         <Hotspot X="-449.242" Y="4749.97" Z="20.5357" />
         <Hotspot X="-561.194" Y="4788.94" Z="34.3391" />
         <Hotspot X="-615.867" Y="4740.1" Z="41.675" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9420" Name="The Finest Down">
-    <Objective Type="KillMob" MobId="17084" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1144.66" Y="4221.21" Z="53.5334" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -422,17 +337,6 @@
         <Hotspot X="-622.217" Y="3609.65" Z="30.6201" />
         <Hotspot X="-531.161" Y="3640.4" Z="29.2444" />
         <Hotspot X="-557.927" Y="3619.62" Z="29.549" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9383" Name="An Ambitious Plan">
-    <Objective Type="KillMob" MobId="16975" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-1384.92" Y="2951.7" Z="-16.5211" />
-        <Hotspot X="-1324.94" Y="3007.67" Z="8.8273" />
-        <Hotspot X="-1421.55" Y="2933.73" Z="-32.7751" />
-        <Hotspot X="-1443.79" Y="3144.86" Z="3.9008" />
-        <Hotspot X="-1404.87" Y="3135.76" Z="17.739" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -505,6 +409,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 59 - Infernal Warbringer</Name>
+          <Factions>90</Factions>
           <TargetMinLevel>58</TargetMinLevel>
           <TargetMaxLevel>59</TargetMaxLevel>
           <Hotspots>
@@ -550,7 +455,6 @@
       <PickUp QuestName="Warlord of the Bleeding Hollow" QuestId="10485" GiverName="Corporal Ironridge" GiverId="21133" />
     </If>
     <TurnIn QuestName="Zeth'Gor Must Burn!" QuestId="10895" TurnInName="Wing Commander Dabir'ee" TurnInId="19409" />
-    <Objective QuestName="Warlord of the Bleeding Hollow" QuestId="10485" Type="KillMob" MobId="16964" KillCount="1" />
     <Objective QuestName="Warlord of the Bleeding Hollow" QuestId="10485" Type="CollectItem" ItemId="30158" CollectCount="1" />
     <TurnIn QuestName="Warlord of the Bleeding Hollow" QuestId="10485" TurnInName="Corporal Ironridge" TurnInId="21133" />
     <If Condition="((!HasQuest(10903)) &amp;&amp; (!IsQuestCompleted(10903)))">
@@ -619,10 +523,7 @@
     <If Condition="((!HasQuest(10397)) &amp;&amp; (!IsQuestCompleted(10397)))">
       <PickUp QuestName="Invasion Point: Annihilator" QuestId="10397" GiverName="Field Marshal Brock" GiverId="20793" />
     </If>
-    <Objective QuestName="Invasion Point: Annihilator" QuestId="10397" Type="KillMob" MobId="19298" KillCount="1" />
-    <Objective QuestName="Invasion Point: Annihilator" QuestId="10397" Type="KillMob" MobId="19298" KillCount="1" />
     <Objective QuestName="Invasion Point: Annihilator" QuestId="10397" Type="CollectItem" ItemId="29795" CollectCount="1" />
-    <Objective QuestName="Invasion Point: Annihilator" QuestId="10397" Type="KillMob" MobId="19298" KillCount="1" />
     <Objective QuestName="Invasion Point: Annihilator" QuestId="10397" Type="CollectItem" ItemId="29588" CollectCount="1" />
     <While Condition="((HasQuest(10397)) &amp;&amp; (!IsQuestCompleted(10397)))">
       <RunTo X="569.779" Y="2797.71" Z="218.62" />
@@ -632,7 +533,6 @@
     <PickUp QuestName="The Dark Missive" QuestId="10395" GiverName="Field Marshal Brock" GiverId="20793" />
     <TurnIn QuestName="Invasion Point: Annihilator" QuestId="10397" TurnInName="Field Marshal Brock" TurnInId="20793" />
     <PickUp QuestName="Outland Sucks!" QuestId="10236" GiverName="Foreman Razelcraz" GiverId="16915" />
-    <Objective QuestName="Outland Sucks!" QuestId="10236" Type="KillMob" MobId="16844" KillCount="1" />
     <Objective QuestName="Outland Sucks!" QuestId="10236" Type="CollectItem" ItemId="23338" CollectCount="1" />
     <While Condition="((HasQuest(10236)) &amp;&amp; (!IsQuestCompleted(10236)))">
       <CustomBehavior File="UseItemOn" QuestId="10236" MobId="0" ItemId="23338" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -652,7 +552,6 @@
       <CustomBehavior File="UseItemOn" QuestId="10629" MobId="0" ItemId="30803" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Shizz Work" QuestId="10629" Type="KillMob" MobId="16863" KillCount="1" />
     <Objective QuestName="Shizz Work" QuestId="10629" Type="CollectItem" ItemId="30794" CollectCount="1" />
     <TurnIn QuestName="Shizz Work" QuestId="10629" TurnInName="Foreman Razelcraz" TurnInId="16915" />
     <If Condition="((!HasQuest(10630)) &amp;&amp; (!IsQuestCompleted(10630)))">
@@ -664,6 +563,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 60 - Urga'zz</Name>
+          <Factions>90</Factions>
           <Hotspots>
             <Hotspot X="394.06" Y="2730.63" Z="52.14" />
           </Hotspots>
@@ -717,13 +617,11 @@
     <Objective QuestName="Fel Spirits" QuestId="10909" Type="KillMob" MobId="22454" KillCount="1" />
     <PickUp QuestName="In Case of Emergency..." QuestId="10161" GiverName="&quot;Screaming&quot; Screed Luckheed" GiverId="19367" />
     <PickUp QuestName="Ravager Egg Roundup" QuestId="9349" GiverName="Legassi" GiverId="19344" />
-    <Objective QuestName="Ravager Egg Roundup" QuestId="9349" Type="KillMob" MobId="16933" KillCount="1" />
     <Objective QuestName="Ravager Egg Roundup" QuestId="9349" Type="CollectItem" ItemId="23217" CollectCount="12" />
     <TurnIn QuestName="Ravager Egg Roundup" QuestId="9349" TurnInName="Legassi" TurnInId="19344" />
     <If Condition="((!HasQuest(9361)) &amp;&amp; (!IsQuestCompleted(9361)))">
       <PickUp QuestName="Helboar, the Other White Meat" QuestId="9361" GiverName="Legassi" GiverId="19344" />
     </If>
-    <Objective QuestName="Helboar, the Other White Meat" QuestId="9361" Type="KillMob" MobId="16863" KillCount="1" />
     <Objective QuestName="Helboar, the Other White Meat" QuestId="9361" Type="CollectItem" ItemId="23270" CollectCount="1" />
     <While Condition="((HasQuest(9361)) &amp;&amp; (!IsQuestCompleted(9361)))">
       <CustomBehavior File="UseItemOn" QuestId="9361" MobId="0" ItemId="23268" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -738,7 +636,6 @@
     <Objective QuestName="Unyielding Souls" QuestId="10050" Type="KillMob" MobId="16906" KillCount="5" />
     <Objective QuestName="Unyielding Souls" QuestId="10050" Type="KillMob" MobId="16905" KillCount="10" />
     <Objective QuestName="Unyielding Souls" QuestId="10050" Type="KillMob" MobId="16904" KillCount="12" />
-    <Objective QuestName="Smooth as Butter" QuestId="9356" Type="KillMob" MobId="16972" KillCount="1" />
     <Objective QuestName="Smooth as Butter" QuestId="9356" Type="CollectItem" ItemId="23239" CollectCount="12" />
     <Objective QuestName="In Case of Emergency..." QuestId="10161" Type="CollectItem" ItemId="28116" CollectCount="30" />
     <TurnIn QuestName="Smooth as Butter" QuestId="9356" TurnInName="Legassi" TurnInId="19344" />
@@ -771,6 +668,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 61 - Lieutenant Commander Thalvos</Name>
+          <Factions>1664</Factions>
           <TargetMinLevel>61</TargetMinLevel>
           <TargetMaxLevel>61</TargetMaxLevel>
           <Hotspots>
@@ -827,7 +725,6 @@
     <Objective QuestName="Keep Thornfang Hill Clear!" QuestId="10159" Type="KillMob" MobId="19349" KillCount="8" />
     <Objective QuestName="Keep Thornfang Hill Clear!" QuestId="10159" Type="KillMob" MobId="19350" KillCount="8" />
     <TurnIn QuestName="Keep Thornfang Hill Clear!" QuestId="10159" TurnInName="Mahuram Stouthoof" TurnInId="16888" />
-    <Objective QuestName="Demonic Contamination" QuestId="9372" Type="KillMob" MobId="16880" KillCount="1" />
     <Objective QuestName="Demonic Contamination" QuestId="9372" Type="CollectItem" ItemId="23336" CollectCount="6" />
     <TurnIn QuestName="Demonic Contamination" QuestId="9372" TurnInName="Thiah Redmane" TurnInId="16991" />
     <If Condition="((!HasQuest(10255)) &amp;&amp; (!IsQuestCompleted(10255)))">
@@ -871,7 +768,6 @@
       <PickUp QuestName="The Finest Down" QuestId="9420" GiverName="Mirren Longbeard" GiverId="16851" />
     </If>
     <TurnIn QuestName="Rampaging Ravagers" QuestId="9385" TurnInName="Gremni Longbeard" TurnInId="16850" />
-    <Objective QuestName="The Finest Down" QuestId="9420" Type="KillMob" MobId="17084" KillCount="1" />
     <Objective QuestName="The Finest Down" QuestId="9420" Type="CollectItem" ItemId="23580" CollectCount="1" />
     <While Condition="((HasQuest(9420)) &amp;&amp; (!IsQuestCompleted(9420)))">
       <CustomBehavior File="UseItemOn" QuestId="9420" MobId="0" ItemId="23580" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -899,7 +795,6 @@
     </While>
     <TurnIn QuestName="The Seer's Relic" QuestId="9545" TurnInName="Amaan the Wise" TurnInId="16796" />
     <TurnIn QuestName="The Heart of Darkness" QuestId="10399" TurnInName="Warp-Scryer Kryv" TurnInId="16839" />
-    <Objective QuestName="An Ambitious Plan" QuestId="9383" Type="KillMob" MobId="16975" KillCount="1" />
     <While Condition="((HasQuest(9383)) &amp;&amp; (!IsQuestCompleted(9383)))">
       <CustomBehavior File="UseItemOn" QuestId="9383" MobId="0" ItemId="23417" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
@@ -912,6 +807,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 62 - Uncontrolled Voidwalker</Name>
+          <Factions>954</Factions>
           <TargetMinLevel>60</TargetMinLevel>
           <TargetMaxLevel>61</TargetMaxLevel>
           <Hotspots>

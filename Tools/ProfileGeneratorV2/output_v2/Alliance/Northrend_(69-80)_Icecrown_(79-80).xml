@@ -111,35 +111,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12891" Name="I Have an Idea, But First...">
-    <Objective Type="KillMob" MobId="29717" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8482.0" Y="2594.25" Z="653.308" />
-        <Hotspot X="8487.49" Y="2597.66" Z="652.453" />
-        <Hotspot X="8481.43" Y="2626.01" Z="652.453" />
-        <Hotspot X="8477.41" Y="2632.19" Z="653.252" />
-        <Hotspot X="8364.14" Y="2701.92" Z="656.568" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="29719" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8441.07" Y="2731.16" Z="760.057" />
-        <Hotspot X="8407.3" Y="2792.75" Z="717.842" />
-        <Hotspot X="8249.3" Y="2792.87" Z="641.876" />
-        <Hotspot X="8249.88" Y="2766.01" Z="642.024" />
-        <Hotspot X="8353.3" Y="2769.46" Z="656.19" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="29720" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8249.41" Y="2794.36" Z="642.251" />
-        <Hotspot X="8238.0" Y="2798.22" Z="638.909" />
-        <Hotspot X="8505.87" Y="2684.41" Z="654.01" />
-        <Hotspot X="8493.93" Y="2656.29" Z="653.637" />
-        <Hotspot X="8312.52" Y="2676.2" Z="689.168" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12893" Name="Free Your Mind">
     <Objective Type="KillMob" MobId="29769" KillCount="1">
       <Hotspots>
@@ -194,20 +165,6 @@
     <Objective Type="KillMob" MobId="29919" KillCount="1">
       <Hotspots>
         <Hotspot X="8426.61" Y="2927.59" Z="606.259" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="12949" Name="Get the Key">
-    <Objective Type="KillMob" MobId="29915" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8456.6" Y="3113.97" Z="588.186" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13059" Name="Revenge for the Vargul">
-    <Objective Type="KillMob" MobId="30475" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7830.01" Y="3387.26" Z="652.493" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -271,17 +228,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="12814" Name="You'll Need a Gryphon">
-    <Objective Type="KillMob" MobId="29333" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7765.85" Y="4929.97" Z="37.7589" />
-        <Hotspot X="7765.85" Y="4929.97" Z="37.7589" />
-        <Hotspot X="7561.77" Y="4951.31" Z="77.7052" />
-        <Hotspot X="7561.77" Y="4951.31" Z="77.7052" />
-        <Hotspot X="7506.36" Y="4933.26" Z="95.3046" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="12815" Name="No Fly Zone">
     <Objective Type="KillMob" MobId="29333" KillCount="10">
       <Hotspots>
@@ -290,46 +236,6 @@
         <Hotspot X="7561.77" Y="4951.31" Z="77.7052" />
         <Hotspot X="7561.77" Y="4951.31" Z="77.7052" />
         <Hotspot X="7506.36" Y="4933.26" Z="95.3046" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13119" Name="Destroying the Altars">
-    <Objective Type="KillMob" MobId="30746" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6468.32" Y="3077.83" Z="657.593" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13221" Name="I'm Not Dead Yet!">
-    <Objective Type="KillMob" MobId="30597" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6734.82" Y="3532.48" Z="669.524" />
-        <Hotspot X="6823.13" Y="3522.13" Z="690.969" />
-        <Hotspot X="6942.93" Y="3503.98" Z="705.551" />
-        <Hotspot X="6768.32" Y="3506.63" Z="671.25" />
-        <Hotspot X="6421.79" Y="3204.96" Z="642.981" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13136" Name="Jagged Shards">
-    <Objective Type="KillMob" MobId="30597" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6734.82" Y="3532.48" Z="669.524" />
-        <Hotspot X="6823.13" Y="3522.13" Z="690.969" />
-        <Hotspot X="6942.93" Y="3503.98" Z="705.551" />
-        <Hotspot X="6768.32" Y="3506.63" Z="671.25" />
-        <Hotspot X="6421.79" Y="3204.96" Z="642.981" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13140" Name="The Runesmiths of Malykriss">
-    <Objective Type="KillMob" MobId="30921" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6467.82" Y="1811.16" Z="527.525" />
-        <Hotspot X="6369.65" Y="1665.45" Z="555.737" />
-        <Hotspot X="6311.05" Y="1824.67" Z="510.092" />
-        <Hotspot X="6328.69" Y="1820.64" Z="509.913" />
-        <Hotspot X="6370.5" Y="1729.51" Z="525.191" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -450,17 +356,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="13288" Name="That's Abominable!">
-    <Objective Type="KillMob" MobId="31140" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6505.79" Y="1194.95" Z="280.871" />
-        <Hotspot X="6524.93" Y="973.703" Z="282.29" />
-        <Hotspot X="6560.52" Y="973.02" Z="287.702" />
-        <Hotspot X="6601.92" Y="1069.71" Z="278.422" />
-        <Hotspot X="6878.55" Y="950.307" Z="329.91" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="13387" Name="Securing the Perimeter">
     <Objective Type="KillMob" MobId="31413" KillCount="10">
       <Hotspots>
@@ -469,17 +364,6 @@
         <Hotspot X="5863.57" Y="1984.0" Z="507.648" />
         <Hotspot X="5778.56" Y="1957.5" Z="503.857" />
         <Hotspot X="5732.14" Y="1937.82" Z="506.014" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13391" Name="Time to Hide">
-    <Objective Type="KillMob" MobId="31691" KillCount="1">
-      <Hotspots>
-        <Hotspot X="5667.77" Y="2018.43" Z="-345.937" />
-        <Hotspot X="5713.25" Y="2076.13" Z="-341.919" />
-        <Hotspot X="5725.96" Y="2006.45" Z="-343.079" />
-        <Hotspot X="5772.71" Y="2020.46" Z="-343.664" />
-        <Hotspot X="5786.72" Y="1980.29" Z="-344.127" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -517,17 +401,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="13212" Name="He's Gone to Pieces">
-    <Objective Type="KillMob" MobId="30696" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6638.81" Y="3160.73" Z="660.606" />
-        <Hotspot X="6686.41" Y="3147.76" Z="656.345" />
-        <Hotspot X="6526.67" Y="3303.94" Z="665.175" />
-        <Hotspot X="6548.21" Y="3310.02" Z="665.817" />
-        <Hotspot X="6532.15" Y="3256.88" Z="666.63" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="13220" Name="Putting Olakin Back Together Again">
     <Objective Type="CollectItem" ItemId="43567" CollectCount="1">
       <CollectFrom>
@@ -553,17 +426,6 @@
         <Hotspot X="6507.37" Y="1668.65" Z="632.067" />
         <Hotspot X="6546.2" Y="1834.68" Z="629.551" />
         <Hotspot X="6554.25" Y="1799.26" Z="629.551" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13393" Name="Field Repairs">
-    <Objective Type="KillMob" MobId="31847" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7075.86" Y="1134.2" Z="308.819" />
-        <Hotspot X="7089.04" Y="1382.01" Z="310.322" />
-        <Hotspot X="7167.74" Y="1445.53" Z="322.707" />
-        <Hotspot X="7243.53" Y="1475.78" Z="327.29" />
-        <Hotspot X="7155.68" Y="1224.79" Z="302.703" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -629,50 +491,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="13318" Name="Drag and Drop">
-    <Objective Type="KillMob" MobId="32238" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7515.78" Y="1958.73" Z="502.32" />
-        <Hotspot X="7475.99" Y="2051.15" Z="499.812" />
-        <Hotspot X="7523.09" Y="2007.4" Z="500.395" />
-        <Hotspot X="7484.46" Y="2028.21" Z="499.812" />
-        <Hotspot X="7511.14" Y="1993.83" Z="500.395" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13323" Name="Drag and Drop">
-    <Objective Type="KillMob" MobId="32238" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7515.78" Y="1958.73" Z="502.32" />
-        <Hotspot X="7475.99" Y="2051.15" Z="499.812" />
-        <Hotspot X="7523.09" Y="2007.4" Z="500.395" />
-        <Hotspot X="7484.46" Y="2028.21" Z="499.812" />
-        <Hotspot X="7511.14" Y="1993.83" Z="500.395" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13342" Name="Not a Bug">
-    <Objective Type="KillMob" MobId="32260" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8220.07" Y="2000.1" Z="550.614" />
-        <Hotspot X="8145.81" Y="1948.6" Z="515.151" />
-        <Hotspot X="8226.57" Y="1873.99" Z="514.892" />
-        <Hotspot X="8210.24" Y="1936.65" Z="514.831" />
-        <Hotspot X="8152.26" Y="2019.4" Z="550.63" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13345" Name="Need More Info">
-    <Objective Type="KillMob" MobId="32297" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8199.44" Y="2123.24" Z="499.837" />
-        <Hotspot X="8204.41" Y="2125.31" Z="499.837" />
-        <Hotspot X="8174.97" Y="2127.87" Z="499.92" />
-        <Hotspot X="8155.77" Y="2251.67" Z="499.82" />
-        <Hotspot X="8139.65" Y="2274.98" Z="499.82" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="13397" Name="Sindragosa's Fall">
     <Objective Type="KillMob" MobId="31731" KillCount="5">
       <Hotspots>
@@ -699,39 +517,6 @@
         <Hotspot X="7566.89" Y="776.791" Z="480.621" />
         <Hotspot X="7887.87" Y="1181.27" Z="447.301" />
         <Hotspot X="7823.66" Y="1207.24" Z="440.261" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13398" Name="Where Dragons Fell">
-    <Objective Type="KillMob" MobId="31718" KillCount="1">
-      <Hotspots>
-        <Hotspot X="7741.09" Y="909.896" Z="461.475" />
-        <Hotspot X="7767.11" Y="1010.92" Z="444.043" />
-        <Hotspot X="7653.26" Y="917.081" Z="481.776" />
-        <Hotspot X="7698.46" Y="855.157" Z="475.637" />
-        <Hotspot X="7671.24" Y="888.665" Z="482.114" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13344" Name="Not a Bug">
-    <Objective Type="KillMob" MobId="32260" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8220.07" Y="2000.1" Z="550.614" />
-        <Hotspot X="8145.81" Y="1948.6" Z="515.151" />
-        <Hotspot X="8226.57" Y="1873.99" Z="514.892" />
-        <Hotspot X="8210.24" Y="1936.65" Z="514.831" />
-        <Hotspot X="8152.26" Y="2019.4" Z="550.63" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="13403" Name="Tirion's Gambit">
-    <Objective Type="KillMob" MobId="32507" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6242.46" Y="2471.94" Z="496.875" />
-        <Hotspot X="6284.77" Y="2489.81" Z="496.29" />
-        <Hotspot X="6132.24" Y="2604.86" Z="570.333" />
-        <Hotspot X="6140.98" Y="2612.51" Z="570.333" />
-        <Hotspot X="6131.48" Y="2616.41" Z="570.333" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -887,11 +672,8 @@
     <If Condition="((!HasQuest(12891)) &amp;&amp; (!IsQuestCompleted(12891)))">
       <PickUp QuestName="I Have an Idea, But First..." QuestId="12891" GiverName="Baron Sliver" GiverId="29804" />
     </If>
-    <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="KillMob" MobId="29717" KillCount="1" />
     <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="CollectItem" ItemId="41359" CollectCount="1" />
-    <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="KillMob" MobId="29719" KillCount="1" />
     <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="CollectItem" ItemId="41361" CollectCount="1" />
-    <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="KillMob" MobId="29720" KillCount="1" />
     <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="CollectItem" ItemId="41362" CollectCount="1" />
     <Objective QuestName="I Have an Idea, But First..." QuestId="12891" Type="CollectItem" ItemId="41363" CollectCount="5" />
     <TurnIn QuestName="I Have and Idea, But First..." QuestId="12891" TurnInName="Baron Sliver" TurnInId="29804" />
@@ -1002,7 +784,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="Shadow Vault Decree" QuestId="12943" Type="KillMob" MobId="29919" KillCount="1" />
-    <Objective QuestName="Get the Key" QuestId="12949" Type="KillMob" MobId="29915" KillCount="1" />
     <Objective QuestName="Get the Key" QuestId="12949" Type="CollectItem" ItemId="41843" CollectCount="1" />
     <TurnIn QuestName="Get the Key" QuestId="12949" TurnInName="Vaelen the Flayed" TurnInId="30056" />
     <If Condition="((!HasQuest(12951)) &amp;&amp; (!IsQuestCompleted(12951)))">
@@ -1043,7 +824,6 @@
       <CustomBehavior File="UseItemOn" QuestId="13059" MobId="32821" ItemId="42928" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Revenge for the Vargul" QuestId="13059" Type="KillMob" MobId="30475" KillCount="1" />
     <Objective QuestName="Deep in the Bowels of the Underhalls" QuestId="13042" Type="KillMob" MobId="30409" KillCount="1" />
     <Objective QuestName="Deep in the Bowels of the Underhalls" QuestId="13042" Type="KillMob" MobId="30409" KillCount="1" />
     <Objective QuestName="Revenge for the Vargul" QuestId="13059" Type="CollectItem" ItemId="42772" CollectCount="1" />
@@ -1126,7 +906,6 @@
     <TurnIn QuestName="Intelligence Gathering" QuestId="12838" TurnInName="Aurochs Grimbane" TurnInId="29456" />
     <Objective QuestName="In Strict Confidence" QuestId="12840" Type="KillMob" MobId="29490" KillCount="1" />
     <Objective QuestName="In Strict Confidence" QuestId="12840" Type="KillMob" MobId="29489" KillCount="1" />
-    <Objective QuestName="You'll Need a Gryphon" QuestId="12814" Type="KillMob" MobId="29333" KillCount="1" />
     <Objective QuestName="You'll Need a Gryphon" QuestId="12814" Type="CollectItem" ItemId="40970" CollectCount="1" />
     <While Condition="((HasQuest(12814)) &amp;&amp; (!IsQuestCompleted(12814)))">
       <CustomBehavior File="UseItemOn" QuestId="12814" MobId="29406" ItemId="40970" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -1150,7 +929,6 @@
     <If Condition="((!HasQuest(13120)) &amp;&amp; (!IsQuestCompleted(13120)))">
       <PickUp QuestName="Death's Gaze" QuestId="13120" GiverName="Darkrider Arly" GiverId="30631" />
     </If>
-    <Objective QuestName="Destroying the Altars" QuestId="13119" Type="KillMob" MobId="30746" KillCount="1" />
     <Objective QuestName="Destroying the Altars" QuestId="13119" Type="CollectItem" ItemId="43159" CollectCount="1" />
     <While Condition="((HasQuest(13119)) &amp;&amp; (!IsQuestCompleted(13119)))">
       <RunTo X="6470.42" Y="3139.73" Z="659.273" />
@@ -1180,7 +958,6 @@
     <If Condition="((!HasQuest(13221)) &amp;&amp; (!IsQuestCompleted(13221)))">
       <PickUp QuestName="I'm Not Dead Yet!" QuestId="13221" GiverName="Father Kamaros" GiverId="31279" />
     </If>
-    <Objective QuestName="I'm Not Dead Yet!" QuestId="13221" Type="KillMob" MobId="30597" KillCount="1" />
     <Objective QuestName="I'm Not Dead Yet!" QuestId="13221" Type="CollectItem" ItemId="43242" CollectCount="1" />
     <While Condition="((HasQuest(13221)) &amp;&amp; (!IsQuestCompleted(13221)))">
       <CustomBehavior File="UseItemOn" QuestId="13221" MobId="0" ItemId="43242" NumOfTimes="1" Range="5" CollectionDistance="1000" />
@@ -1189,7 +966,6 @@
     <If Condition="((!HasQuest(13136)) &amp;&amp; (!IsQuestCompleted(13136)))">
       <PickUp QuestName="Jagged Shards" QuestId="13136" GiverName="Father Kamaros" GiverId="31279" />
     </If>
-    <Objective QuestName="Jagged Shards" QuestId="13136" Type="KillMob" MobId="30597" KillCount="1" />
     <Objective QuestName="Jagged Shards" QuestId="13136" Type="CollectItem" ItemId="43242" CollectCount="10" />
     <TurnIn QuestName="Spill Their Blood" QuestId="13134" TurnInName="Darkrider Arly" TurnInId="30631" />
     <TurnIn QuestName="Jagged Shards" QuestId="13136" TurnInName="Crusader Olakin Sainrith" TurnInId="30708" />
@@ -1204,7 +980,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="I'm Smelting... Smelting!" QuestId="13138" Type="CollectItem" ItemId="43288" CollectCount="1" />
-    <Objective QuestName="The Runesmiths of Malykriss" QuestId="13140" Type="KillMob" MobId="30921" KillCount="1" />
     <Objective QuestName="The Runesmiths of Malykriss" QuestId="13140" Type="CollectItem" ItemId="43291" CollectCount="5" />
     <Objective QuestName="Borrowed Technology" QuestId="13291" Type="CollectItem" ItemId="43609" CollectCount="3" />
     <Objective QuestName="Borrowed Technology" QuestId="13291" Type="CollectItem" ItemId="43616" CollectCount="3" />
@@ -1252,7 +1027,6 @@
       <CustomBehavior File="UseItemOn" QuestId="13292" MobId="31364" ItemId="44048" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="That's Abominable!" QuestId="13288" Type="KillMob" MobId="31140" KillCount="1" />
     <Objective QuestName="That's Abominable!" QuestId="13288" Type="CollectItem" ItemId="43966" CollectCount="1" />
     <While Condition="((HasQuest(13288)) &amp;&amp; (!IsQuestCompleted(13288)))">
       <CustomBehavior File="UseItemOn" QuestId="13288" MobId="31743" ItemId="43968" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -1279,7 +1053,6 @@
     <If Condition="((!HasQuest(13391)) &amp;&amp; (!IsQuestCompleted(13391)))">
       <PickUp QuestName="Time to Hide" QuestId="13391" GiverName="Matthias Lehner" GiverId="31237" />
     </If>
-    <Objective QuestName="Time to Hide" QuestId="13391" Type="KillMob" MobId="31691" KillCount="1" />
     <Objective QuestName="Time to Hide" QuestId="13391" Type="CollectItem" ItemId="44001" CollectCount="3" />
     <TurnIn QuestName="Time to Hide" QuestId="13391" TurnInName="Matthias Lehner" TurnInId="31237" />
     <If Condition="((!HasQuest(13392)) &amp;&amp; (!IsQuestCompleted(13392)))">
@@ -1369,13 +1142,9 @@
     <If Condition="((!HasQuest(13212)) &amp;&amp; (!IsQuestCompleted(13212)))">
       <PickUp QuestName="He's Gone to Pieces" QuestId="13212" GiverName="Darkrider Arly" GiverId="30631" />
     </If>
-    <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="KillMob" MobId="30696" KillCount="1" />
     <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="CollectItem" ItemId="43526" CollectCount="1" />
-    <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="KillMob" MobId="30696" KillCount="1" />
     <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="CollectItem" ItemId="43527" CollectCount="1" />
-    <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="KillMob" MobId="30696" KillCount="1" />
     <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="CollectItem" ItemId="43528" CollectCount="1" />
-    <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="KillMob" MobId="30696" KillCount="1" />
     <Objective QuestName="He's Gone to Pieces" QuestId="13212" Type="CollectItem" ItemId="43529" CollectCount="1" />
     <TurnIn QuestName="He's Gone to Pieces" QuestId="13212" TurnInName="Darkrider Arly" TurnInId="30631" />
     <If Condition="((!HasQuest(13220)) &amp;&amp; (!IsQuestCompleted(13220)))">
@@ -1420,7 +1189,6 @@
     <TurnIn QuestName="Generosity Abounds" QuestId="13146" TurnInName="Vereth the Cunning" TurnInId="30944" />
     <TurnIn QuestName="Matchmaker" QuestId="13147" TurnInName="Vereth the Cunning" TurnInId="30944" />
     <TurnIn QuestName="Stunning View" QuestId="13160" TurnInName="Vereth the Cunning" TurnInId="30944" />
-    <Objective QuestName="Field Repairs" QuestId="13393" Type="KillMob" MobId="31847" KillCount="1" />
     <Objective QuestName="Field Repairs" QuestId="13393" Type="CollectItem" ItemId="44529" CollectCount="5" />
     <TurnIn QuestName="Field Repairs" QuestId="13393" TurnInName="Wrecked Demolisher" TurnInId="31868" />
     <If Condition="((!HasQuest(13394)) &amp;&amp; (!IsQuestCompleted(13394)))">
@@ -1449,7 +1217,6 @@
     <PickUp QuestName="Chain of Command" QuestId="13319" GiverName="Thassarian" GiverId="29799" />
     <PickUp QuestName="Cannot Reproduce" QuestId="13320" GiverName="Thassarian" GiverId="29799" />
     <Objective QuestName="Chain of Command" QuestId="13319" Type="KillMob" MobId="32250" KillCount="1" />
-    <Objective QuestName="Drag and Drop" QuestId="13318" Type="KillMob" MobId="32238" KillCount="1" />
     <Objective QuestName="Drag and Drop" QuestId="13318" Type="CollectItem" ItemId="44246" CollectCount="1" />
     <While Condition="((HasQuest(13318)) &amp;&amp; (!IsQuestCompleted(13318)))">
       <CustomBehavior File="UseItemOn" QuestId="13318" MobId="32229" ItemId="44246" NumOfTimes="100" Range="5" CollectionDistance="1000" />
@@ -1488,19 +1255,16 @@
     <If Condition="((!HasQuest(13321)) &amp;&amp; (!IsQuestCompleted(13321)))">
       <PickUp QuestName="Retest Now" QuestId="13321" GiverName="Chief Engineer Boltwrench" GiverId="30345" />
     </If>
-    <Objective QuestName="Drag and Drop" QuestId="13323" Type="KillMob" MobId="32238" KillCount="1" />
     <Objective QuestName="Drag and Drop" QuestId="13323" Type="CollectItem" ItemId="44246" CollectCount="1" />
     <While Condition="((HasQuest(13323)) &amp;&amp; (!IsQuestCompleted(13323)))">
       <CustomBehavior File="UseItemOn" QuestId="13323" MobId="32229" ItemId="44246" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Not a Bug" QuestId="13342" Type="KillMob" MobId="32260" KillCount="1" />
     <While Condition="((HasQuest(13342)) &amp;&amp; (!IsQuestCompleted(13342)))">
       <CustomBehavior File="UseItemOn" QuestId="13342" MobId="32314" ItemId="44433" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <Objective QuestName="Not a Bug" QuestId="13342" Type="CollectItem" ItemId="44434" CollectCount="5" />
-    <Objective QuestName="Need More Info" QuestId="13345" Type="KillMob" MobId="32297" KillCount="1" />
     <Objective QuestName="Need More Info" QuestId="13345" Type="CollectItem" ItemId="44459" CollectCount="1" />
     <Objective QuestName="Need More Info" QuestId="13345" Type="CollectItem" ItemId="44460" CollectCount="1" />
     <Objective QuestName="Need More Info" QuestId="13345" Type="CollectItem" ItemId="44461" CollectCount="1" />
@@ -1532,7 +1296,6 @@
     <CustomBehavior File="WaitTimer" WaitTime="12000" />
     <PickUp QuestName="Where Dragons Fell" QuestId="13398" GiverName="Matthias Lehner" GiverId="32423" />
     <Objective QuestName="Sindragosa's Fall" QuestId="13397" Type="KillMob" MobId="31731" KillCount="5" />
-    <Objective QuestName="Where Dragons Fell" QuestId="13398" Type="KillMob" MobId="31718" KillCount="1" />
     <Objective QuestName="Where Dragons Fell" QuestId="13398" Type="CollectItem" ItemId="44631" CollectCount="6" />
     <Objective QuestName="Sindragosa's Fall" QuestId="13397" Type="KillMob" MobId="31738" KillCount="8" />
     <Objective QuestName="Sindragosa's Fall" QuestId="13397" Type="KillMob" MobId="31783" KillCount="3" />
@@ -1558,7 +1321,6 @@
       <CustomBehavior File="UseItemOn" QuestId="13332" MobId="31887" ItemId="44127" NumOfTimes="100" Range="5" CollectionDistance="1000" X="7737.37" Y="2390.22" Z="377.556" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Not a Bug" QuestId="13344" Type="KillMob" MobId="32260" KillCount="1" />
     <While Condition="((HasQuest(13344)) &amp;&amp; (!IsQuestCompleted(13344)))">
       <CustomBehavior File="UseItemOn" QuestId="13344" MobId="32314" ItemId="44433" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
@@ -1599,7 +1361,6 @@
     <If Condition="((!HasQuest(13403)) &amp;&amp; (!IsQuestCompleted(13403)))">
       <PickUp QuestName="Tirion's Gambit" QuestId="13403" GiverName="Highlord Tirion Fordring" GiverId="31044" />
     </If>
-    <Objective QuestName="Tirion's Gambit" QuestId="13403" Type="KillMob" MobId="32507" KillCount="1" />
     <Objective QuestName="Tirion's Gambit" QuestId="13403" Type="CollectItem" ItemId="44784" CollectCount="1" />
     <While Condition="((HasQuest(13403)) &amp;&amp; (!IsQuestCompleted(13403)))">
       <CustomBehavior File="UseItemOn" QuestId="13403" MobId="32648" ItemId="44784" NumOfTimes="100" Range="5" CollectionDistance="1000" />

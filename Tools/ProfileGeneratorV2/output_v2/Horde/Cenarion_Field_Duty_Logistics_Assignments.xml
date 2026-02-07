@@ -11,30 +11,6 @@
   <Blackspots />
   <Mailboxes />
 
-  <!-- Quest Overrides -->
-  <Quest Id="8804" Name="Desert Survival Kits">
-    <Objective Type="KillMob" MobId="7132" KillCount="1">
-      <Hotspots>
-        <Hotspot X="6115.07" Y="-1181.11" Z="372.293" />
-        <Hotspot X="6248.27" Y="-1202.01" Z="371.053" />
-        <Hotspot X="6188.19" Y="-1170.89" Z="370.52" />
-        <Hotspot X="6200.25" Y="-1137.86" Z="366.636" />
-        <Hotspot X="6220.18" Y="-1123.06" Z="370.549" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8808" Name="Uniform Supplies">
-    <Objective Type="KillMob" MobId="1824" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1985.22" Y="-2473.04" Z="62.2665" />
-        <Hotspot X="2035.89" Y="-2305.16" Z="65.9569" />
-        <Hotspot X="1913.23" Y="-1947.4" Z="78.9758" />
-        <Hotspot X="1903.5" Y="-2199.84" Z="64.145" />
-        <Hotspot X="1917.45" Y="-1878.1" Z="77.2776" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Horde\Cenarion Field Duty Logistics Assignments" LogColor="Green" />
     <If Condition="((!HasQuest(8731)) &amp;&amp; (!IsQuestCompleted(8731)))">
@@ -137,7 +113,6 @@
       <PickUp QuestName="The Ultimate Deception" QuestId="8829" GiverName="Merok Longstride" GiverId="15613" />
     </If>
     <Objective QuestName="Boots for the Guard" QuestId="8805" Type="CollectItem" ItemId="7936" CollectCount="3" />
-    <Objective QuestName="Desert Survival Kits" QuestId="8804" Type="KillMob" MobId="7132" KillCount="1" />
     <Objective QuestName="Desert Survival Kits" QuestId="8804" Type="CollectItem" ItemId="7079" CollectCount="4" />
     <Objective QuestName="Desert Survival Kits" QuestId="8804" Type="CollectItem" ItemId="19440" CollectCount="4" />
     <Objective QuestName="Desert Survival Kits" QuestId="8804" Type="CollectItem" ItemId="20452" CollectCount="4" />
@@ -146,7 +121,6 @@
     <Objective QuestName="Grinding Stones for the Guard" QuestId="8806" Type="CollectItem" ItemId="3486" CollectCount="10" />
     <Objective QuestName="Uniform Supplies" QuestId="8808" Type="CollectItem" ItemId="14342" CollectCount="1" />
     <Objective QuestName="Uniform Supplies" QuestId="8808" Type="CollectItem" ItemId="14048" CollectCount="2" />
-    <Objective QuestName="Uniform Supplies" QuestId="8808" Type="KillMob" MobId="1824" KillCount="1" />
     <Objective QuestName="Uniform Supplies" QuestId="8808" Type="CollectItem" ItemId="14227" CollectCount="1" />
     <Objective QuestName="Extraordinary Materials" QuestId="8809" Type="CollectItem" ItemId="12655" CollectCount="10" />
     <Objective QuestName="Extraordinary Materials" QuestId="8809" Type="CollectItem" ItemId="12810" CollectCount="10" />

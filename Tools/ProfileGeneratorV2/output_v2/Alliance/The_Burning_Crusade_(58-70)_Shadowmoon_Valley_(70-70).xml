@@ -12,17 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="10661" Name="Spleendid!">
-    <Objective Type="KillMob" MobId="21408" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3398.99" Y="2230.65" Z="69.4526" />
-        <Hotspot X="-3386.51" Y="2252.14" Z="68.2237" />
-        <Hotspot X="-3432.29" Y="2453.94" Z="56.7851" />
-        <Hotspot X="-3414.9" Y="2485.19" Z="50.4778" />
-        <Hotspot X="-3380.21" Y="2549.55" Z="50.6775" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10642" Name="A Ghost in the Machine">
     <Objective Type="CollectItem" ItemId="30716" CollectCount="15">
       <CollectFrom>
@@ -81,24 +70,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10777" Name="Asghar's Totem">
-    <Objective Type="KillMob" MobId="22025" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3023.25" Y="2044.44" Z="96.9412" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10677" Name="The Second Course...">
-    <Objective Type="KillMob" MobId="21462" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3448.93" Y="883.59" Z="-34.5481" />
-        <Hotspot X="-3455.18" Y="844.137" Z="-39.2275" />
-        <Hotspot X="-3457.34" Y="915.443" Z="-29.1864" />
-        <Hotspot X="-3477.84" Y="917.736" Z="-26.9692" />
-        <Hotspot X="-3513.1" Y="921.716" Z="-23.2676" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10572" Name="Setting Up the Bomb">
     <Objective Type="CollectItem" ItemId="30631" CollectCount="1">
       <CollectFrom>
@@ -137,29 +108,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10586" Name="Bring Down the Warbringer!">
-    <Objective Type="KillMob" MobId="21287" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3640.07" Y="2083.31" Z="11.8418" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10589" Name="Gaining Access">
-    <Objective Type="KillMob" MobId="21499" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3227.25" Y="2925.98" Z="127.161" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="19755" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3136.76" Y="2837.66" Z="87.6203" />
-        <Hotspot X="-2996.29" Y="2930.93" Z="92.4555" />
-        <Hotspot X="-3066.18" Y="2822.19" Z="78.5001" />
-        <Hotspot X="-3058.08" Y="2862.25" Z="80.0548" />
-        <Hotspot X="-3251.09" Y="2912.5" Z="127.15" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10778" Name="The Rod of Lianthe">
     <Objective Type="CollectItem" ItemId="31317" CollectCount="1">
       <CollectFrom>
@@ -178,35 +126,6 @@
         <Hotspot X="-3024.56" Y="393.694" Z="1.571" />
         <Hotspot X="-3037.59" Y="391.485" Z="0.1073" />
         <Hotspot X="-3913.8" Y="666.605" Z="0.9307" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10635" Name="Divination: Gorefiend's Cloak">
-    <Objective Type="KillMob" MobId="21815" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3258.06" Y="698.529" Z="-0.1478" />
-        <Hotspot X="-3333.11" Y="693.652" Z="-1.8947" />
-        <Hotspot X="-3311.53" Y="681.949" Z="3.5705" />
-        <Hotspot X="-3352.51" Y="653.728" Z="8.9063" />
-        <Hotspot X="-3389.03" Y="685.481" Z="4.644" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10678" Name="The Main Course!">
-    <Objective Type="KillMob" MobId="21897" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3489.0" Y="1126.26" Z="10.8456" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10568" Name="Tablets of Baa'ri">
-    <Objective Type="KillMob" MobId="21455" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3408.0" Y="1203.43" Z="62.595" />
-        <Hotspot X="-3401.35" Y="1190.95" Z="57.24" />
-        <Hotspot X="-3328.97" Y="1231.77" Z="73.3943" />
-        <Hotspot X="-3380.88" Y="1226.77" Z="67.3501" />
-        <Hotspot X="-3384.42" Y="1205.49" Z="64.8928" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -239,24 +158,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10571" Name="Oronu the Elder">
-    <Objective Type="KillMob" MobId="21663" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3153.27" Y="1079.43" Z="75.4661" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="10683" Name="Tablets of Baa'ri">
-    <Objective Type="KillMob" MobId="21455" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3408.0" Y="1203.43" Z="62.595" />
-        <Hotspot X="-3401.35" Y="1190.95" Z="57.24" />
-        <Hotspot X="-3328.97" Y="1231.77" Z="73.3943" />
-        <Hotspot X="-3380.88" Y="1226.77" Z="67.3501" />
-        <Hotspot X="-3384.42" Y="1205.49" Z="64.8928" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10807" Name="The Ashtongue Broken">
     <Objective Type="KillMob" MobId="21803" KillCount="3">
       <Hotspots>
@@ -286,13 +187,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10684" Name="Oronu the Elder">
-    <Objective Type="KillMob" MobId="21663" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-3153.27" Y="1079.43" Z="75.4661" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="10808" Name="Thwart the Dark Conclave">
     <Objective Type="KillMob" MobId="22138" KillCount="1">
       <Hotspots>
@@ -307,7 +201,7 @@
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\The Burning Crusade (58-70)\Shadowmoon Valley (70-70)" LogColor="Green" />
     <If Condition="Me.Level &lt; 70">
-      <GrindTo Level="70" />
+      <GrindTo Level="70" /> <!--  (grind Infernal Attacker) -->
     </If>
     <PickUp QuestName="A'dal" QuestId="10210" GiverName="Haggard War Veteran" GiverId="19684" />
     <TurnIn QuestName="A'dal" QuestId="10210" TurnInName="A'dal" TurnInId="18481" />
@@ -339,7 +233,6 @@
       <CustomBehavior File="UseItemOn" QuestId="10563" MobId="21502" ItemId="30638" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="Spleendid!" QuestId="10661" Type="KillMob" MobId="21408" KillCount="1" />
     <Objective QuestName="Spleendid!" QuestId="10661" Type="CollectItem" ItemId="30819" CollectCount="8" />
     <Objective QuestName="A Ghost in the Machine" QuestId="10642" Type="CollectItem" ItemId="30716" CollectCount="15" />
     <TurnIn QuestName="The Hand of Gul'dan" QuestId="10680" TurnInName="Earthmender Torlok" TurnInId="21024" />
@@ -406,9 +299,7 @@
     <If Condition="((!HasQuest(10777)) &amp;&amp; (!IsQuestCompleted(10777)))">
       <PickUp QuestName="Asghar's Totem" QuestId="10777" GiverName="Parshah" GiverId="22024" />
     </If>
-    <Objective QuestName="Asghar's Totem" QuestId="10777" Type="KillMob" MobId="22025" KillCount="1" />
     <Objective QuestName="Asghar's Totem" QuestId="10777" Type="CollectItem" ItemId="31169" CollectCount="1" />
-    <Objective QuestName="The Second Course..." QuestId="10677" Type="KillMob" MobId="21462" KillCount="1" />
     <Objective QuestName="The Second Course..." QuestId="10677" Type="CollectItem" ItemId="30867" CollectCount="1" />
     <TurnIn QuestName="Asghar's Totem" QuestId="10777" TurnInName="Parshah" TurnInId="22024" />
     <If Condition="((!HasQuest(10778)) &amp;&amp; (!IsQuestCompleted(10778)))">
@@ -453,27 +344,22 @@
       <CustomBehavior File="UseItemOn" QuestId="10585" MobId="21735" ItemId="30672" NumOfTimes="100" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
-    <Objective QuestName="The Summoning Chamber" QuestId="10585" Type="KillMob" MobId="21735" KillCount="1" />
     <TurnIn QuestName="The Fate of Flanis" QuestId="10583" TurnInName="Stormer Ewan Wildwing" TurnInId="21471" />
     <TurnIn QuestName="The Summoning Chamber" QuestId="10585" TurnInName="Stormer Ewan Wildwing" TurnInId="21471" />
     <If Condition="((!HasQuest(10586)) &amp;&amp; (!IsQuestCompleted(10586)))">
       <PickUp QuestName="Bring Down the Warbringer!" QuestId="10586" GiverName="Stormer Ewan Wildwing" GiverId="21471" />
     </If>
-    <Objective QuestName="Bring Down the Warbringer!" QuestId="10586" Type="KillMob" MobId="21287" KillCount="1" />
-    <Objective QuestName="Bring Down the Warbringer!" QuestId="10586" Type="KillMob" MobId="21287" KillCount="1" />
     <Objective QuestName="Bring Down the Warbringer!" QuestId="10586" Type="CollectItem" ItemId="30689" CollectCount="1" />
     <TurnIn QuestName="Bring Down the Warbringer!" QuestId="10586" TurnInName="Wing Commander Nuainn" TurnInId="21357" />
     <If Condition="((!HasQuest(10589)) &amp;&amp; (!IsQuestCompleted(10589)))">
       <PickUp QuestName="Gaining Access" QuestId="10589" GiverName="Wing Commander Nuainn" GiverId="21357" />
     </If>
-    <Objective QuestName="Gaining Access" QuestId="10589" Type="KillMob" MobId="21499" KillCount="1" />
     <Objective QuestName="Gaining Access" QuestId="10589" Type="CollectItem" ItemId="30756" CollectCount="1" />
     <While Condition="((HasQuest(10589)) &amp;&amp; (!IsQuestCompleted(10589)))">
       <CustomBehavior File="UseItemOn" QuestId="10589" MobId="0" ItemId="30756" NumOfTimes="1" Range="5" CollectionDistance="1000" />
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Illidari-Bane Shard" QuestId="10621" GiverName="Wing Commander Nuainn" GiverId="21357" />
-    <Objective QuestName="Gaining Access" QuestId="10589" Type="KillMob" MobId="19755" KillCount="1" />
     <Objective QuestName="Gaining Access" QuestId="10589" Type="CollectItem" ItemId="30695" CollectCount="1" />
     <TurnIn QuestName="Gaining Access" QuestId="10589" TurnInName="Wing Commander Nuainn" TurnInId="21357" />
     <TurnIn QuestName="Illidari-Bane Shard" QuestId="10621" TurnInName="Ordinn Thunderfist" TurnInId="19370" />
@@ -515,9 +401,7 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <TurnIn QuestName="Kindness" QuestId="10804" TurnInName="Mordenai" TurnInId="22113" />
-    <Objective QuestName="Divination: Gorefiend's Cloak" QuestId="10635" Type="KillMob" MobId="21815" KillCount="1" />
     <Objective QuestName="Divination: Gorefiend's Cloak" QuestId="10635" Type="CollectItem" ItemId="30799" CollectCount="1" />
-    <Objective QuestName="The Main Course!" QuestId="10678" Type="KillMob" MobId="21897" KillCount="1" />
     <Objective QuestName="The Main Course!" QuestId="10678" Type="CollectItem" ItemId="30851" CollectCount="1" />
     <TurnIn QuestName="Divination: Gorefiend's Cloak" QuestId="10635" TurnInName="Ancient Shadowmoon Spirit" TurnInId="21797" />
     <If Condition="((!HasQuest(10619)) &amp;&amp; (!IsQuestCompleted(10619)))">
@@ -531,7 +415,6 @@
       <PickUp QuestName="Marks of Sargeras" QuestId="10826" GiverName="Harbinger Saronen" GiverId="22214" />
     </If>
     <TurnIn QuestName="Marks of Sargeras" QuestId="10826" TurnInName="Harbinger Saronen" TurnInId="22214" />
-    <Objective QuestName="Tablets of Baa'ri" QuestId="10568" Type="KillMob" MobId="21455" KillCount="1" />
     <Objective QuestName="Tablets of Baa'ri" QuestId="10568" Type="CollectItem" ItemId="30596" CollectCount="12" />
     <Objective QuestName="The Ashtongue Tribe" QuestId="10619" Type="KillMob" MobId="21803" KillCount="3" />
     <Objective QuestName="The Ashtongue Tribe" QuestId="10619" Type="KillMob" MobId="21454" KillCount="4" />
@@ -541,10 +424,8 @@
     <If Condition="((!HasQuest(10571)) &amp;&amp; (!IsQuestCompleted(10571)))">
       <PickUp QuestName="Oronu the Elder" QuestId="10571" GiverName="Anchorite Ceyla" GiverId="21402" />
     </If>
-    <Objective QuestName="Oronu the Elder" QuestId="10571" Type="KillMob" MobId="21663" KillCount="1" />
     <Objective QuestName="Oronu the Elder" QuestId="10571" Type="CollectItem" ItemId="30649" CollectCount="1" />
     <TurnIn QuestName="Oronu the Elder" QuestId="10571" TurnInName="Anchorite Ceyla" TurnInId="21402" />
-    <Objective QuestName="Tablets of Baa'ri" QuestId="10683" Type="KillMob" MobId="21455" KillCount="1" />
     <Objective QuestName="Tablets of Baa'ri" QuestId="10683" Type="CollectItem" ItemId="30596" CollectCount="12" />
     <Objective QuestName="The Ashtongue Broken" QuestId="10807" Type="KillMob" MobId="21803" KillCount="3" />
     <Objective QuestName="The Ashtongue Broken" QuestId="10807" Type="KillMob" MobId="21454" KillCount="4" />
@@ -554,7 +435,6 @@
       <PickUp QuestName="Oronu the Elder" QuestId="10684" GiverName="Arcanist Thelis" GiverId="21955" />
     </If>
     <TurnIn QuestName="The Ashtongue Broken" QuestId="10807" TurnInName="Varen the Reclaimer" TurnInId="21953" />
-    <Objective QuestName="Oronu the Elder" QuestId="10684" Type="KillMob" MobId="21663" KillCount="1" />
     <Objective QuestName="Oronu the Elder" QuestId="10684" Type="CollectItem" ItemId="30649" CollectCount="1" />
     <TurnIn QuestName="Oronu the Elder" QuestId="10684" TurnInName="Arcanist Thelis" TurnInId="21955" />
     <TurnIn QuestName="The Main Course!" QuestId="10678" TurnInName="Gnomus" TurnInId="21777" />

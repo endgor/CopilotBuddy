@@ -44,17 +44,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="18" Name="Brotherhood of Thieves">
-    <Objective Type="KillMob" MobId="38" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-8994.59" Y="-312.364" Z="71.9033" />
-        <Hotspot X="-8964.3" Y="-334.248" Z="71.6651" />
-        <Hotspot X="-9031.57" Y="-304.335" Z="74.4903" />
-        <Hotspot X="-9033.82" Y="-301.611" Z="74.7497" />
-        <Hotspot X="-9030.79" Y="-285.642" Z="75.5096" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="21" Name="Skirmish at Echo Ridge">
     <Objective Type="KillMob" MobId="80" KillCount="8">
       <Hotspots>
@@ -63,31 +52,6 @@
         <Hotspot X="-8632.33" Y="-143.753" Z="86.3842" />
         <Hotspot X="-8616.27" Y="-143.334" Z="87.4937" />
         <Hotspot X="-8640.19" Y="-143.559" Z="86.8829" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="6" Name="Bounty on Garrick Padfoot">
-    <Objective Type="KillMob" MobId="103" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9056.48" Y="-460.903" Z="72.8318" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="86" Name="Pie for Billy">
-    <Objective Type="KillMob" MobId="113" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9545.4" Y="4.4072" Z="60.651" />
-        <Hotspot X="-9547.6" Y="83.9896" Z="59.5094" />
-        <Hotspot X="-9548.47" Y="115.032" Z="59.1045" />
-        <Hotspot X="-9552.61" Y="151.449" Z="59.4064" />
-        <Hotspot X="-9529.79" Y="187.151" Z="57.8628" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="87" Name="Goldtooth">
-    <Objective Type="KillMob" MobId="327" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-9745.84" Y="87.567" Z="12.7743" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -212,7 +176,6 @@
     <If Condition="((!HasQuest(18)) &amp;&amp; (!IsQuestCompleted(18)))">
       <PickUp QuestName="Brotherhood of Thieves" QuestId="18" GiverName="Deputy Willem" GiverId="823" />
     </If>
-    <Objective QuestName="Brotherhood of Thieves" QuestId="18" Type="KillMob" MobId="38" KillCount="1" />
     <Objective QuestName="Brotherhood of Thieves" QuestId="18" Type="CollectItem" ItemId="752" CollectCount="8" />
     <TurnIn QuestName="Brotherhood of Thieves" QuestId="18" TurnInName="Deputy Willem" TurnInId="823" />
     <If Condition="((!HasQuest(3903)) &amp;&amp; (!IsQuestCompleted(3903)))">
@@ -229,7 +192,6 @@
     <If Condition="(Me.Class == WoWClass.Rogue) &amp;&amp; (Me.Race == WoWRace.Human)">
       <TurnIn QuestName="Encrypted Letter" QuestId="3102" TurnInName="Jorik Kerridan" TurnInId="915" />
     </If>
-    <Objective QuestName="Bounty on Garrick Padfoot" QuestId="6" Type="KillMob" MobId="103" KillCount="1" />
     <Objective QuestName="Bounty on Garrick Padfoot" QuestId="6" Type="CollectItem" ItemId="182" CollectCount="1" />
     <Objective QuestName="Milly's Harvest" QuestId="3904" Type="CollectItem" ItemId="11119" CollectCount="8" />
     <TurnIn QuestName="Milly's Harvest" QuestId="3904" TurnInName="Milly Osworth" TurnInId="9296" />
@@ -264,7 +226,6 @@
       <PickUp QuestName="Pie for Billy" QuestId="86" GiverName="Billy Maclure" GiverId="247" />
     </If>
     <PickUp QuestName="Young Lovers" QuestId="106" GiverName="Maybell Maclure" GiverId="251" />
-    <Objective QuestName="Pie for Billy" QuestId="86" Type="KillMob" MobId="113" KillCount="1" />
     <Objective QuestName="Pie for Billy" QuestId="86" Type="CollectItem" ItemId="769" CollectCount="4" />
     <TurnIn QuestName="Pie for Billy" QuestId="86" TurnInName="&quot;Auntie&quot; Bernice Stonefield" TurnInId="246" />
     <If Condition="((!HasQuest(84)) &amp;&amp; (!IsQuestCompleted(84)))">
@@ -282,7 +243,6 @@
     <If Condition="((!HasQuest(87)) &amp;&amp; (!IsQuestCompleted(87)))">
       <PickUp QuestName="Goldtooth" QuestId="87" GiverName="Billy Maclure" GiverId="247" />
     </If>
-    <Objective QuestName="Goldtooth" QuestId="87" Type="KillMob" MobId="327" KillCount="1" />
     <Objective QuestName="Goldtooth" QuestId="87" Type="CollectItem" ItemId="981" CollectCount="1" />
     <Objective QuestName="Gold Dust Exchange" QuestId="47" Type="CollectItem" ItemId="773" CollectCount="10" />
     <Objective QuestName="Kobold Candles" QuestId="60" Type="CollectItem" ItemId="772" CollectCount="8" />

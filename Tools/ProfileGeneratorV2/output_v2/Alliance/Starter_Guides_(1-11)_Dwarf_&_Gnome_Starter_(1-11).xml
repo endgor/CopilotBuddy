@@ -43,17 +43,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="1599" Name="Beginnings">
-    <Objective Type="KillMob" MobId="946" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6588.03" Y="374.293" Z="389.947" />
-        <Hotspot X="-6606.95" Y="388.925" Z="390.202" />
-        <Hotspot X="-6542.25" Y="371.445" Z="396.815" />
-        <Hotspot X="-6538.62" Y="354.985" Z="371.876" />
-        <Hotspot X="-6581.86" Y="319.805" Z="386.769" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="182" Name="The Troll Cave">
     <Objective Type="KillMob" MobId="706" KillCount="10">
       <Hotspots>
@@ -65,23 +54,7 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="218" Name="The Stolen Journal">
-    <Objective Type="KillMob" MobId="808" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-6508.82" Y="300.758" Z="370.346" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="315" Name="The Perfect Stout">
-    <Objective Type="KillMob" MobId="1397" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5054.49" Y="-318.6" Z="451.121" />
-        <Hotspot X="-5284.24" Y="-184.543" Z="440.684" />
-        <Hotspot X="-5350.38" Y="-221.805" Z="443.94" />
-        <Hotspot X="-5354.94" Y="-240.624" Z="444.226" />
-        <Hotspot X="-5334.12" Y="-236.347" Z="440.271" />
-      </Hotspots>
-    </Objective>
     <Objective Type="CollectItem" ItemId="2676" CollectCount="6">
       <CollectFrom>
         <GameObject Name="Shimmerweed Basket" Id="276" />
@@ -137,24 +110,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="412" Name="Operation Recombobulation">
-    <Objective Type="KillMob" MobId="1211" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5072.59" Y="441.611" Z="423.882" />
-        <Hotspot X="-5081.57" Y="420.627" Z="415.969" />
-        <Hotspot X="-5086.5" Y="462.997" Z="405.507" />
-        <Hotspot X="-5071.98" Y="459.991" Z="410.507" />
-        <Hotspot X="-5073.23" Y="440.334" Z="410.966" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="314" Name="Protecting the Herd">
-    <Objective Type="KillMob" MobId="1388" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5389.0" Y="-1282.0" Z="445.888" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="433" Name="The Public Servant">
     <Objective Type="KillMob" MobId="1117" KillCount="10">
       <Hotspots>
@@ -174,24 +129,6 @@
         <Hotspot X="-5830.94" Y="-1524.58" Z="358.252" />
         <Hotspot X="-5853.01" Y="-1524.74" Z="358.855" />
         <Hotspot X="-5751.1" Y="-1628.34" Z="359.028" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="417" Name="A Pilot's Revenge">
-    <Objective Type="KillMob" MobId="1961" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5116.94" Y="-2054.59" Z="426.963" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="1784" Name="The Tome of Divinity">
-    <Objective Type="KillMob" MobId="6123" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-5877.57" Y="-1988.23" Z="401.366" />
-        <Hotspot X="-5921.7" Y="-1979.57" Z="405.96" />
-        <Hotspot X="-5924.28" Y="-2009.03" Z="409.357" />
-        <Hotspot X="-5908.14" Y="-2040.67" Z="406.734" />
-        <Hotspot X="-5889.97" Y="-2007.89" Z="405.741" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -309,7 +246,6 @@
     <TurnIn QuestName="Bring Back the Mug" QuestId="3365" TurnInName="Nori Pridedrift" TurnInId="12738" />
     <PickUp QuestName="The Troll Cave" QuestId="182" GiverName="Grelin Whitebeard" GiverId="786" />
     <If Condition="(Me.Class == WoWClass.Warlock) &amp;&amp; (Me.Race == WoWRace.Gnome)">
-      <Objective QuestName="Beginnings" QuestId="1599" Type="KillMob" MobId="946" KillCount="1" />
       <Objective QuestName="Beginnings" QuestId="1599" Type="CollectItem" ItemId="6753" CollectCount="3" />
       <TurnIn QuestName="Beginnings" QuestId="1599" TurnInName="Alamar Grimm" TurnInId="460" />
     </If>
@@ -321,7 +257,6 @@
     <If Condition="((!HasQuest(218)) &amp;&amp; (!IsQuestCompleted(218)))">
       <PickUp QuestName="The Stolen Journal" QuestId="218" GiverName="Grelin Whitebeard" GiverId="786" />
     </If>
-    <Objective QuestName="The Stolen Journal" QuestId="218" Type="KillMob" MobId="808" KillCount="1" />
     <Objective QuestName="The Stolen Journal" QuestId="218" Type="CollectItem" ItemId="2004" CollectCount="1" />
     <TurnIn QuestName="The Stolen Journal" QuestId="218" TurnInName="Grelin Whitebeard" TurnInId="786" />
     <If Condition="((!HasQuest(282)) &amp;&amp; (!IsQuestCompleted(282)))">
@@ -375,7 +310,6 @@
     <If Condition="((!HasQuest(310)) &amp;&amp; (!IsQuestCompleted(310)))">
       <PickUp QuestName="Bitter Rivals" QuestId="310" GiverName="Marleth Barleybrew" GiverId="1375" />
     </If>
-    <Objective QuestName="The Perfect Stout" QuestId="315" Type="KillMob" MobId="1397" KillCount="1" />
     <Objective QuestName="The Perfect Stout" QuestId="315" Type="CollectItem" ItemId="2676" CollectCount="6" />
     <Objective QuestName="A Favor for Evershine" QuestId="319" Type="KillMob" MobId="1196" KillCount="6" />
     <Objective QuestName="A Favor for Evershine" QuestId="319" Type="KillMob" MobId="1127" KillCount="8" />
@@ -396,9 +330,7 @@
     <TurnIn QuestName="Return to Bellowfiz" QuestId="320" TurnInName="Pilot Bellowfiz" TurnInId="1378" />
     <TurnIn QuestName="Return to Marleth" QuestId="311" TurnInName="Marleth Barleybrew" TurnInId="1375" />
     <Objective QuestName="Frostmane Hold" QuestId="287" Type="KillMob" MobId="1123" KillCount="5" />
-    <Objective QuestName="Operation Recombobulation" QuestId="412" Type="KillMob" MobId="1211" KillCount="1" />
     <Objective QuestName="Operation Recombobulation" QuestId="412" Type="CollectItem" ItemId="3083" CollectCount="8" />
-    <Objective QuestName="Operation Recombobulation" QuestId="412" Type="KillMob" MobId="1211" KillCount="1" />
     <Objective QuestName="Operation Recombobulation" QuestId="412" Type="CollectItem" ItemId="3084" CollectCount="8" />
     <TurnIn QuestName="Operation Recombobulation" QuestId="412" TurnInName="Razzle Sprysprocket" TurnInId="1269" />
     <TurnIn QuestName="Frostmane Hold" QuestId="287" TurnInName="Senir Whitebeard" TurnInId="1252" />
@@ -466,7 +398,6 @@
       <TurnIn QuestName="The Binding" QuestId="1689" TurnInName="Gakin the Darkbinder" TurnInId="6122" />
     </If>
     <PickUp QuestName="Protecting the Herd" QuestId="314" GiverName="Rudra Amberstill" GiverId="1265" />
-    <Objective QuestName="Protecting the Herd" QuestId="314" Type="KillMob" MobId="1388" KillCount="1" />
     <Objective QuestName="Protecting the Herd" QuestId="314" Type="CollectItem" ItemId="3627" CollectCount="1" />
     <TurnIn QuestName="Protecting the Herd" QuestId="314" TurnInName="Rudra Amberstill" TurnInId="1265" />
     <PickUp QuestName="The Public Servant" QuestId="433" GiverName="Senator Mehr Stonehallow" GiverId="1977" />
@@ -483,7 +414,6 @@
     <If Condition="((!HasQuest(417)) &amp;&amp; (!IsQuestCompleted(417)))">
       <PickUp QuestName="A Pilot's Revenge" QuestId="417" GiverName="Pilot Hammerfoot" GiverId="1960" />
     </If>
-    <Objective QuestName="A Pilot's Revenge" QuestId="417" Type="KillMob" MobId="1961" KillCount="1" />
     <Objective QuestName="A Pilot's Revenge" QuestId="417" Type="CollectItem" ItemId="3183" CollectCount="1" />
     <TurnIn QuestName="A Pilot's Revenge" QuestId="417" TurnInName="Pilot Hammerfoot" TurnInId="1960" />
     <TurnIn QuestName="Shimmer Stout" QuestId="413" TurnInName="Mountaineer Barleybrew" TurnInId="1959" />
@@ -555,7 +485,6 @@
       <If Condition="((!HasQuest(1784)) &amp;&amp; (!IsQuestCompleted(1784)))">
         <PickUp QuestName="The Tome of Divinity" QuestId="1784" GiverName="Narm Faulk" GiverId="6177" />
       </If>
-      <Objective QuestName="The Tome of Divinity" QuestId="1784" Type="KillMob" MobId="6123" KillCount="1" />
       <Objective QuestName="The Tome of Divinity" QuestId="1784" Type="CollectItem" ItemId="6847" CollectCount="1" />
     </If>
     <TurnIn QuestName="The Tome of Divinity" QuestId="1784" TurnInName="Muiredon Battleforge" TurnInId="6178" />

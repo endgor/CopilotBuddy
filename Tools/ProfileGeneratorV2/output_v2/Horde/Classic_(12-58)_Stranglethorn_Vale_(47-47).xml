@@ -27,28 +27,6 @@
         <Hotspot X="-14307.3" Y="32.82" Z="0.14" />
       </Hotspots>
     </Objective>
-    <Objective Type="KillMob" MobId="2550" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-14921.0" Y="123.1" Z="7.5177" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2546" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-15024.5" Y="269.352" Z="7.5161" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2548" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-14924.9" Y="349.625" Z="8.1238" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="630" Name="Message in a Bottle">
-    <Objective Type="KillMob" MobId="1559" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-14737.8" Y="-392.236" Z="8.2503" />
-      </Hotspots>
-    </Objective>
   </Quest>
 
   <QuestOrder>
@@ -70,14 +48,10 @@
     <If Condition="((!HasQuest(630)) &amp;&amp; (!IsQuestCompleted(630)))">
       <PickUp QuestName="Message in a Bottle" QuestId="630" GiverName="Princess Poobah" GiverId="2634" />
     </If>
-    <Objective QuestName="Message in a Bottle" QuestId="630" Type="KillMob" MobId="1559" KillCount="1" />
     <Objective QuestName="Message in a Bottle" QuestId="630" Type="CollectItem" ItemId="4103" CollectCount="1" />
     <TurnIn QuestName="Message in a Bottle" QuestId="630" TurnInName="Princess Poobah" TurnInId="2634" />
-    <Objective QuestName="The Bloodsail Buccaneers" QuestId="608" Type="KillMob" MobId="2550" KillCount="1" />
     <Objective QuestName="Cortello's Riddle" QuestId="624" Type="CollectItem" ItemId="4056" CollectCount="1" />
-    <Objective QuestName="The Bloodsail Buccaneers" QuestId="608" Type="KillMob" MobId="2546" KillCount="1" />
     <Objective QuestName="Cortello's Riddle" QuestId="624" Type="CollectItem" ItemId="4056" CollectCount="1" />
-    <Objective QuestName="The Bloodsail Buccaneers" QuestId="608" Type="KillMob" MobId="2548" KillCount="1" />
     <Objective QuestName="Cortello's Riddle" QuestId="624" Type="CollectItem" ItemId="4056" CollectCount="1" />
     <While Condition="((HasQuest(608)) &amp;&amp; (!IsQuestCompleted(608)))">
       <RunTo X="-14921.0" Y="123.1" Z="7.5177" />

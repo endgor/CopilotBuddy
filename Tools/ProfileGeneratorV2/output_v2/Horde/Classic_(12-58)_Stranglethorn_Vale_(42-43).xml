@@ -30,15 +30,6 @@
         <Hotspot X="-14685.4" Y="486.47" Z="4.18" />
       </Hotspots>
     </Objective>
-    <Objective Type="KillMob" MobId="1563" KillCount="10">
-      <Hotspots>
-        <Hotspot X="-13549.2" Y="683.992" Z="0.8244" />
-        <Hotspot X="-14891.1" Y="299.779" Z="3.0002" />
-        <Hotspot X="-14617.7" Y="245.016" Z="0.6818" />
-        <Hotspot X="-14549.5" Y="182.202" Z="2.7541" />
-        <Hotspot X="-14455.1" Y="116.533" Z="4.9448" />
-      </Hotspots>
-    </Objective>
   </Quest>
   <Quest Id="573" Name="Mok'thardin's Enchantment">
     <Objective Type="CollectItem" ItemId="737" CollectCount="1">
@@ -47,50 +38,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="-13803.3" Y="372.89" Z="93.66" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1907" KillCount="10">
-      <Hotspots>
-        <Hotspot X="-13708.2" Y="494.076" Z="47.2308" />
-        <Hotspot X="-13720.7" Y="535.934" Z="36.8568" />
-        <Hotspot X="-13818.5" Y="681.93" Z="5.2206" />
-        <Hotspot X="-13741.7" Y="622.868" Z="15.4835" />
-        <Hotspot X="-13875.4" Y="690.943" Z="3.2041" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="617" Name="Akiris by the Bundle">
-    <Objective Type="KillMob" MobId="1907" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-13708.2" Y="494.076" Z="47.2308" />
-        <Hotspot X="-13720.7" Y="535.934" Z="36.8568" />
-        <Hotspot X="-13818.5" Y="681.93" Z="5.2206" />
-        <Hotspot X="-13741.7" Y="622.868" Z="15.4835" />
-        <Hotspot X="-13875.4" Y="690.943" Z="3.2041" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="609" Name="Voodoo Dues">
-    <Objective Type="KillMob" MobId="2536" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-13374.3" Y="-7.6942" Z="22.044" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2535" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-13349.3" Y="-28.5316" Z="22.2773" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="2537" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-13646.5" Y="-331.611" Z="8.3608" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="197" Name="Raptor Mastery">
-    <Objective Type="KillMob" MobId="730" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-13076.6" Y="387.179" Z="15.4089" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -122,20 +69,13 @@
     <Objective QuestName="The Bloodsail Buccaneers" QuestId="604" Type="CollectItem" ItemId="3921" CollectCount="1" />
     <Objective QuestName="Up to Snuff" QuestId="587" Type="CollectItem" ItemId="3910" CollectCount="15" />
     <Objective QuestName="Keep An Eye Out" QuestId="576" Type="CollectItem" ItemId="3897" CollectCount="1" />
-    <Objective QuestName="The Bloodsail Buccaneers" QuestId="604" Type="KillMob" MobId="1563" KillCount="10" />
     <Objective QuestName="Mok'thardin's Enchantment" QuestId="573" Type="CollectItem" ItemId="737" CollectCount="1" />
-    <Objective QuestName="Akiris by the Bundle" QuestId="617" Type="KillMob" MobId="1907" KillCount="1" />
     <Objective QuestName="Akiris by the Bundle" QuestId="617" Type="CollectItem" ItemId="4029" CollectCount="10" />
-    <Objective QuestName="Mok'thardin's Enchantment" QuestId="573" Type="KillMob" MobId="1907" KillCount="10" />
-    <Objective QuestName="Voodoo Dues" QuestId="609" Type="KillMob" MobId="2536" KillCount="1" />
     <Objective QuestName="Voodoo Dues" QuestId="609" Type="CollectItem" ItemId="3925" CollectCount="1" />
-    <Objective QuestName="Voodoo Dues" QuestId="609" Type="KillMob" MobId="2535" KillCount="1" />
     <Objective QuestName="Voodoo Dues" QuestId="609" Type="CollectItem" ItemId="3924" CollectCount="1" />
-    <Objective QuestName="Voodoo Dues" QuestId="609" Type="KillMob" MobId="2537" KillCount="1" />
     <Objective QuestName="Voodoo Dues" QuestId="609" Type="CollectItem" ItemId="3926" CollectCount="1" />
     <Objective QuestName="Zanzil's Secret" QuestId="621" Type="CollectItem" ItemId="4016" CollectCount="12" />
     <Objective QuestName="Venture Company Mining" QuestId="600" Type="CollectItem" ItemId="3917" CollectCount="10" />
-    <Objective QuestName="Raptor Mastery" QuestId="197" Type="KillMob" MobId="730" KillCount="1" />
     <Objective QuestName="Raptor Mastery" QuestId="197" Type="CollectItem" ItemId="3877" CollectCount="1" />
     <TurnIn QuestName="Mok'thardin's Enchantment" QuestId="573" TurnInName="Far Seer Mok'thardin" TurnInId="2465" />
     <Objective QuestName="Chapter I" QuestId="339" Type="CollectItem" ItemId="2725" CollectCount="1" />

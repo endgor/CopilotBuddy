@@ -26,13 +26,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="10116" Name="Wanted: Chieftain Mummaki">
-    <Objective Type="KillMob" MobId="19174" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1038.9" Y="8279.63" Z="57.7364" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="9894" Name="Safeguarding the Watchers">
     <Objective Type="KillMob" MobId="18282" KillCount="1">
       <Hotspots>
@@ -51,7 +44,16 @@
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\The Burning Crusade (58-70)\Zangarmarsh Group Quests" LogColor="Green" />
     <If Condition="Me.Level &lt; 58">
-      <GrindTo Level="58" />
+      <SetGrindArea>
+        <GrindArea>
+          <Name>Grind to Level 58 - Rajah Haghazed</Name>
+          <Factions>74</Factions>
+          <Hotspots>
+            <Hotspot X="-366.56" Y="6202.51" Z="26.38" />
+          </Hotspots>
+        </GrindArea>
+      </SetGrindArea>
+      <GrindTo Level="58" /> <!--  (grind Rajah Haghazed) -->
     </If>
     <PickUp QuestName="Leader of the Darkcrest" QuestId="9730" />
     <PickUp QuestName="Leader of the Bloodscale" QuestId="9817" />
@@ -59,13 +61,13 @@
     <Objective QuestName="Leader of the Bloodscale" QuestId="9817" Type="KillMob" MobId="18044" KillCount="1" />
     <TurnIn QuestName="Leader of the Darkcrest" QuestId="9730" TurnInName="Warden Hamoot" TurnInId="17858" />
     <PickUp QuestName="Wanted: Chieftain Mummaki" QuestId="10116" GiverName="Warden Hamoot" GiverId="17858" />
-    <Objective QuestName="Wanted: Chieftain Mummaki" QuestId="10116" Type="KillMob" MobId="19174" KillCount="1" />
     <Objective QuestName="Wanted: Chieftain Mummaki" QuestId="10116" Type="CollectItem" ItemId="27943" CollectCount="1" />
     <TurnIn QuestName="Wanted: Chieftain Mummaki" QuestId="10116" TurnInName="Ikuti" TurnInId="18008" />
     <If Condition="Me.Level &lt; 60">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 60 - Chieftain Mummaki</Name>
+          <Factions>51</Factions>
           <TargetMinLevel>64</TargetMinLevel>
           <TargetMaxLevel>64</TargetMaxLevel>
           <Hotspots>
@@ -87,6 +89,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 63 - Boglash</Name>
+          <Factions>14</Factions>
           <TargetMinLevel>61</TargetMinLevel>
           <TargetMaxLevel>61</TargetMaxLevel>
           <Hotspots>

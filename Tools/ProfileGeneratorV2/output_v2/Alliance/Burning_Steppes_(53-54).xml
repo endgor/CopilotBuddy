@@ -77,13 +77,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="3824" Name="Gor'tesh the Brute Lord">
-    <Objective Type="KillMob" MobId="9176" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-8110.83" Y="-1418.6" Z="133.21" />
-      </Hotspots>
-    </Objective>
-  </Quest>
 
   <QuestOrder>
     <CustomBehavior File="Message" Text="Leveling Guides\Alliance\Burning Steppes (53-54)" LogColor="Green" />
@@ -114,7 +107,6 @@
     <If Condition="((!HasQuest(4022)) &amp;&amp; (!IsQuestCompleted(4022)))">
       <PickUp QuestName="A Taste of Flame" QuestId="4022" GiverName="Cyrus Therepentous" GiverId="9459" />
     </If>
-    <Objective QuestName="A Taste of Flame" QuestId="4022" Type="KillMob" MobId="9461" KillCount="1" />
     <Objective QuestName="A Taste of Flame" QuestId="4022" Type="CollectItem" ItemId="10575" CollectCount="1" />
     <TurnIn QuestName="A Taste of Flame" QuestId="4022" TurnInName="Cyrus Therepentous" TurnInId="9459" />
     <Objective QuestName="Dragonkin Menace" QuestId="4182" Type="KillMob" MobId="7044" KillCount="1" />
@@ -122,7 +114,6 @@
     <Objective QuestName="Dragonkin Menace" QuestId="4182" Type="KillMob" MobId="7040" KillCount="10" />
     <Objective QuestName="Dragonkin Menace" QuestId="4182" Type="KillMob" MobId="7047" KillCount="15" />
     <Objective QuestName="Tablet of the Seven" QuestId="4296" Type="CollectItem" ItemId="11470" CollectCount="1" />
-    <Objective QuestName="Gor'tesh the Brute Lord" QuestId="3824" Type="KillMob" MobId="9176" KillCount="1" />
     <Objective QuestName="Gor'tesh the Brute Lord" QuestId="3824" Type="CollectItem" ItemId="11080" CollectCount="1" />
     <Objective QuestName="FIFTY! YEP!" QuestId="4283" Type="CollectItem" ItemId="11467" CollectCount="50" />
     <TurnIn QuestName="Gor'tesh the Brute Lord" QuestId="3824" TurnInName="Oralius" TurnInId="9177" />

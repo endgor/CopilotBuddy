@@ -23,26 +23,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="447" Name="A Recipe For Death">
-    <Objective Type="KillMob" MobId="1778" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1268.41" Y="1389.86" Z="48.9957" />
-        <Hotspot X="276.906" Y="1504.34" Z="137.583" />
-        <Hotspot X="255.81" Y="1576.89" Z="130.708" />
-        <Hotspot X="1248.44" Y="1306.71" Z="45.5006" />
-        <Hotspot X="214.446" Y="1558.48" Z="127.136" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1780" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1310.57" Y="1988.27" Z="14.2705" />
-        <Hotspot X="1312.86" Y="1984.43" Z="14.0761" />
-        <Hotspot X="1260.01" Y="1977.84" Z="16.4491" />
-        <Hotspot X="1240.55" Y="2014.81" Z="13.7392" />
-        <Hotspot X="1221.11" Y="1887.73" Z="11.5197" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="422" Name="Arugal's Folly">
     <Objective Type="CollectItem" ItemId="3155" CollectCount="1">
       <CollectFrom>
@@ -50,54 +30,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="866.42" Y="1231.33" Z="52.6" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="437" Name="The Dead Fields">
-    <Objective Type="KillMob" MobId="1983" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1073.84" Y="1543.37" Z="28.6752" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="425" Name="Ivar the Foul">
-    <Objective Type="KillMob" MobId="1971" KillCount="1">
-      <Hotspots>
-        <Hotspot X="1277.38" Y="1286.28" Z="52.9912" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="423" Name="Arugal's Folly">
-    <Objective Type="KillMob" MobId="1782" KillCount="1">
-      <Hotspots>
-        <Hotspot X="907.136" Y="1840.68" Z="5.757" />
-        <Hotspot X="803.027" Y="1613.52" Z="31.08" />
-        <Hotspot X="479.505" Y="954.025" Z="128.9" />
-        <Hotspot X="516.112" Y="984.685" Z="128.573" />
-        <Hotspot X="770.998" Y="1633.89" Z="32.0893" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="1779" KillCount="1">
-      <Hotspots>
-        <Hotspot X="911.89" Y="1804.12" Z="10.1177" />
-        <Hotspot X="943.026" Y="1785.46" Z="13.1265" />
-        <Hotspot X="844.599" Y="1818.64" Z="5.1764" />
-        <Hotspot X="1016.45" Y="1858.79" Z="10.9091" />
-        <Hotspot X="1051.38" Y="1824.67" Z="16.6664" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="424" Name="Arugal's Folly">
-    <Objective Type="KillMob" MobId="1972" KillCount="1">
-      <Hotspots>
-        <Hotspot X="410.687" Y="989.72" Z="108.119" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="530" Name="A Husband's Revenge">
-    <Objective Type="KillMob" MobId="2332" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-704.939" Y="1574.82" Z="17.1868" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -164,7 +96,6 @@
       <TurnIn QuestName="Return to Podrig" QuestId="6324" TurnInName="Deathguard Podrig" TurnInId="6389" />
     </If>
     <Objective QuestName="Prove Your Worth" QuestId="421" Type="KillMob" MobId="1769" KillCount="5" />
-    <Objective QuestName="A Recipe For Death" QuestId="447" Type="KillMob" MobId="1778" KillCount="1" />
     <Objective QuestName="A Recipe For Death" QuestId="447" Type="CollectItem" ItemId="3253" CollectCount="6" />
     <TurnIn QuestName="Prove Your Worth" QuestId="421" TurnInName="Dalar Dawnweaver" TurnInId="1938" />
     <If Condition="((!HasQuest(422)) &amp;&amp; (!IsQuestCompleted(422)))">
@@ -175,9 +106,7 @@
     <If Condition="((!HasQuest(429)) &amp;&amp; (!IsQuestCompleted(429)))">
       <PickUp QuestName="Wild Hearts" QuestId="429" GiverName="Rane Yorick" GiverId="1950" />
     </If>
-    <Objective QuestName="The Dead Fields" QuestId="437" Type="KillMob" MobId="1983" KillCount="1" />
     <Objective QuestName="The Dead Fields" QuestId="437" Type="CollectItem" ItemId="3622" CollectCount="1" />
-    <Objective QuestName="A Recipe For Death" QuestId="447" Type="KillMob" MobId="1780" KillCount="1" />
     <Objective QuestName="A Recipe For Death" QuestId="447" Type="CollectItem" ItemId="3254" CollectCount="6" />
     <TurnIn QuestName="Wild Hearts" QuestId="429" TurnInName="Apothecary Renferrel" TurnInId="1937" />
     <If Condition="((!HasQuest(430)) &amp;&amp; (!IsQuestCompleted(430)))">
@@ -208,12 +137,9 @@
     <If Condition="((!HasQuest(425)) &amp;&amp; (!IsQuestCompleted(425)))">
       <PickUp QuestName="Ivar the Foul" QuestId="425" GiverName="Rane Yorick" GiverId="1950" />
     </If>
-    <Objective QuestName="Ivar the Foul" QuestId="425" Type="KillMob" MobId="1971" KillCount="1" />
     <Objective QuestName="Ivar the Foul" QuestId="425" Type="CollectItem" ItemId="3621" CollectCount="1" />
     <TurnIn QuestName="Ivar the Foul" QuestId="425" TurnInName="Rane Yorick" TurnInId="1950" />
-    <Objective QuestName="Arugal's Folly" QuestId="423" Type="KillMob" MobId="1782" KillCount="1" />
     <Objective QuestName="Arugal's Folly" QuestId="423" Type="CollectItem" ItemId="3157" CollectCount="3" />
-    <Objective QuestName="Arugal's Folly" QuestId="423" Type="KillMob" MobId="1779" KillCount="1" />
     <Objective QuestName="Arugal's Folly" QuestId="423" Type="CollectItem" ItemId="3156" CollectCount="6" />
     <TurnIn QuestName="Rot Hide Clues" QuestId="439" TurnInName="High Executor Hadrec" TurnInId="1952" />
     <If Condition="((!HasQuest(440)) &amp;&amp; (!IsQuestCompleted(440)))">
@@ -235,7 +161,6 @@
     <If Condition="((!HasQuest(479)) &amp;&amp; (!IsQuestCompleted(479)))">
       <PickUp QuestName="Ambermill Investigations" QuestId="479" GiverName="Shadow Priest Allister" GiverId="2121" />
     </If>
-    <Objective QuestName="Arugal's Folly" QuestId="424" Type="KillMob" MobId="1972" KillCount="1" />
     <Objective QuestName="Arugal's Folly" QuestId="424" Type="CollectItem" ItemId="3634" CollectCount="1" />
     <Objective QuestName="Ambermill Investigations" QuestId="479" Type="CollectItem" ItemId="3354" CollectCount="8" />
     <TurnIn QuestName="Arugal's Folly" QuestId="424" TurnInName="Dalar Dawnweaver" TurnInId="1938" />
@@ -253,7 +178,6 @@
     <If Condition="((!HasQuest(443)) &amp;&amp; (!IsQuestCompleted(443)))">
       <PickUp QuestName="Rot Hide Ichor" QuestId="443" GiverName="High Executor Hadrec" GiverId="1952" />
     </If>
-    <Objective QuestName="A Husband's Revenge" QuestId="530" Type="KillMob" MobId="2332" KillCount="1" />
     <Objective QuestName="A Husband's Revenge" QuestId="530" Type="CollectItem" ItemId="3613" CollectCount="1" />
     <Objective QuestName="Resting in Pieces" QuestId="460" Type="CollectItem" ItemId="3317" CollectCount="1" />
     <While Condition="((HasQuest(443)) &amp;&amp; (!IsQuestCompleted(443)))">

@@ -23,17 +23,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="8336" Name="A Fistful of Slivers">
-    <Objective Type="KillMob" MobId="15274" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10187.8" Y="-6347.56" Z="30.459" />
-        <Hotspot X="10195.0" Y="-6320.27" Z="28.3769" />
-        <Hotspot X="10206.3" Y="-6307.28" Z="26.9459" />
-        <Hotspot X="10213.5" Y="-6351.58" Z="30.85" />
-        <Hotspot X="10214.2" Y="-6337.41" Z="30.85" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8330" Name="Solanian's Belongings">
     <Objective Type="CollectItem" ItemId="20471" CollectCount="1">
       <CollectFrom>
@@ -41,25 +30,6 @@
       </CollectFrom>
       <Hotspots>
         <Hotspot X="10294.9" Y="-6030.45" Z="28.44" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8344" Name="Windows to the Source">
-    <Objective Type="KillMob" MobId="15298" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10158.0" Y="-6026.5" Z="63.7448" />
-        <Hotspot X="10156.3" Y="-5992.24" Z="110.237" />
-        <Hotspot X="10083.7" Y="-6034.95" Z="42.2431" />
-        <Hotspot X="10131.4" Y="-6011.43" Z="110.154" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="15273" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10235.4" Y="-5984.8" Z="38.944" />
-        <Hotspot X="10214.1" Y="-5973.8" Z="38.9443" />
-        <Hotspot X="10217.6" Y="-5999.77" Z="38.9439" />
-        <Hotspot X="10226.7" Y="-5982.19" Z="38.9441" />
-        <Hotspot X="10189.6" Y="-6043.44" Z="25.9605" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -83,37 +53,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="8335" Name="Felendren the Banished">
-    <Objective Type="KillMob" MobId="15367" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10150.9" Y="-6006.24" Z="110.237" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="15298" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10158.0" Y="-6026.5" Z="63.7448" />
-        <Hotspot X="10156.3" Y="-5992.24" Z="110.237" />
-        <Hotspot X="10083.7" Y="-6034.95" Z="42.2431" />
-        <Hotspot X="10131.4" Y="-6011.43" Z="110.154" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="15273" KillCount="8">
-      <Hotspots>
-        <Hotspot X="10235.4" Y="-5984.8" Z="38.944" />
-        <Hotspot X="10214.1" Y="-5973.8" Z="38.9443" />
-        <Hotspot X="10217.6" Y="-5999.77" Z="38.9439" />
-        <Hotspot X="10226.7" Y="-5982.19" Z="38.9441" />
-        <Hotspot X="10189.6" Y="-6043.44" Z="25.9605" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8468" Name="Wanted: Thaelis the Hungerer">
-    <Objective Type="KillMob" MobId="15949" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9804.5" Y="-6704.95" Z="2.6949" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8463" Name="Unstable Mana Crystals">
     <Objective Type="CollectItem" ItemId="20743" CollectCount="6">
       <CollectFrom>
@@ -127,28 +66,6 @@
         <Hotspot X="9574.68" Y="-6607.12" Z="1.56" />
         <Hotspot X="9578.59" Y="-6798.21" Z="13.4" />
         <Hotspot X="9584.84" Y="-6649.49" Z="6.51" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8472" Name="Major Malfunction">
-    <Objective Type="KillMob" MobId="15638" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9533.15" Y="-6657.62" Z="12.7572" />
-        <Hotspot X="9646.82" Y="-6800.99" Z="11.3963" />
-        <Hotspot X="9805.17" Y="-6490.02" Z="9.4958" />
-        <Hotspot X="9866.35" Y="-6617.36" Z="9.0531" />
-        <Hotspot X="9896.41" Y="-6713.59" Z="12.1371" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8482" Name="Incriminating Documents">
-    <Objective Type="KillMob" MobId="15968" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9121.22" Y="-6171.12" Z="35.5665" />
-        <Hotspot X="9005.09" Y="-6194.03" Z="23.3583" />
-        <Hotspot X="9045.06" Y="-6164.24" Z="30.2885" />
-        <Hotspot X="9089.52" Y="-6126.73" Z="35.8958" />
-        <Hotspot X="9039.11" Y="-6298.55" Z="22.6258" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -169,24 +86,6 @@
         <Hotspot X="9124.06" Y="-6222.43" Z="45.961" />
         <Hotspot X="9179.39" Y="-6211.8" Z="18.6498" />
         <Hotspot X="9073.05" Y="-6255.76" Z="17.1847" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8491" Name="Pelt Collection">
-    <Objective Type="KillMob" MobId="15651" KillCount="1">
-      <Hotspots>
-        <Hotspot X="10113.8" Y="-6714.72" Z="22.3297" />
-        <Hotspot X="10085.2" Y="-6721.67" Z="32.2934" />
-        <Hotspot X="9214.48" Y="-6655.06" Z="37.9443" />
-        <Hotspot X="9098.89" Y="-6710.81" Z="22.8928" />
-        <Hotspot X="9337.78" Y="-6581.5" Z="40.0598" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8483" Name="The Dwarven Spy">
-    <Objective Type="KillMob" MobId="15420" KillCount="1">
-      <Hotspots>
-        <Hotspot X="9291.54" Y="-6682.77" Z="22.5366" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -257,20 +156,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="8885" Name="The Ring of Mmmrrrggglll">
-    <Objective Type="KillMob" MobId="15937" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8869.87" Y="-5775.96" Z="0.405" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="9076" Name="Wretched Ringleader">
-    <Objective Type="KillMob" MobId="16294" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8763.01" Y="-6103.01" Z="73.159" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8894" Name="Cleaning up the Grounds">
     <Objective Type="KillMob" MobId="15966" KillCount="6">
       <Hotspots>
@@ -291,20 +176,6 @@
       </Hotspots>
     </Objective>
   </Quest>
-  <Quest Id="8477" Name="The Spearcrafter's Hammer">
-    <Objective Type="KillMob" MobId="15408" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8668.46" Y="-7939.93" Z="153.41" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8479" Name="Zul'Marosh">
-    <Objective Type="KillMob" MobId="15407" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8425.4" Y="-7566.3" Z="174.681" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="8476" Name="Amani Encroachment">
     <Objective Type="KillMob" MobId="15643" KillCount="5">
       <Hotspots>
@@ -322,22 +193,6 @@
         <Hotspot X="8687.24" Y="-7944.7" Z="152.838" />
         <Hotspot X="8512.94" Y="-7948.96" Z="155.71" />
         <Hotspot X="8480.7" Y="-7978.5" Z="157.333" />
-      </Hotspots>
-    </Objective>
-  </Quest>
-  <Quest Id="8473" Name="A Somber Task">
-    <Objective Type="KillMob" MobId="15409" KillCount="1">
-      <Hotspots>
-        <Hotspot X="8279.69" Y="-6215.24" Z="54.5363" />
-      </Hotspots>
-    </Objective>
-    <Objective Type="KillMob" MobId="15637" KillCount="10">
-      <Hotspots>
-        <Hotspot X="8357.44" Y="-6186.64" Z="61.6855" />
-        <Hotspot X="8310.69" Y="-6160.47" Z="47.0399" />
-        <Hotspot X="8287.62" Y="-6173.84" Z="46.4004" />
-        <Hotspot X="8269.31" Y="-6065.89" Z="25.908" />
-        <Hotspot X="8251.28" Y="-6029.09" Z="19.8069" />
       </Hotspots>
     </Objective>
   </Quest>
@@ -433,7 +288,6 @@
       <PickUp QuestName="A Fistful of Slivers" QuestId="8336" GiverName="Arcanist Ithanas" GiverId="15296" />
       <PickUp QuestName="Thirst Unending" QuestId="8346" GiverName="Arcanist Helion" GiverId="15297" />
     </If>
-    <Objective QuestName="A Fistful of Slivers" QuestId="8336" Type="KillMob" MobId="15274" KillCount="1" />
     <Objective QuestName="A Fistful of Slivers" QuestId="8336" Type="CollectItem" ItemId="20482" CollectCount="6" />
     <If Condition="Me.Level &lt; 3">
       <SetGrindArea>
@@ -467,10 +321,8 @@
       <GrindTo Level="4" /> <!--  (grind Mana Wyrm) -->
     </If>
     <If Condition="(Me.Class == WoWClass.Warlock) &amp;&amp; (Me.Race == WoWRace.BloodElf)">
-      <Objective QuestName="Windows to the Source" QuestId="8344" Type="KillMob" MobId="15298" KillCount="1" />
       <Objective QuestName="Windows to the Source" QuestId="8344" Type="CollectItem" ItemId="20935" CollectCount="1" />
-      <Objective QuestName="Windows to the Source" QuestId="8344" Type="KillMob" MobId="15273" KillCount="1" />
-      <Objective QuestName="Windows to the Source" QuestId="8344" Type="CollectItem" ItemId="20934" CollectCount="1" />
+      <Objective QuestName="Windows to the Source" QuestId="8344" Type="CollectItem" ItemId="20934" CollectCount="4" />
     </If>
     <Objective QuestName="Solanian's Belongings" QuestId="8330" Type="CollectItem" ItemId="20472" CollectCount="1" />
     <TurnIn QuestName="Unfortunate Measures" QuestId="8326" TurnInName="Magistrix Erona" TurnInId="15278" />
@@ -508,10 +360,8 @@
     <If Condition="((!HasQuest(8335)) &amp;&amp; (!IsQuestCompleted(8335)))">
       <PickUp QuestName="Felendren the Banished" QuestId="8335" GiverName="Lanthan Perilon" GiverId="15281" />
     </If>
-    <Objective QuestName="Felendren the Banished" QuestId="8335" Type="KillMob" MobId="15367" KillCount="1" />
     <Objective QuestName="Felendren the Banished" QuestId="8335" Type="CollectItem" ItemId="20799" CollectCount="1" />
     <If Condition="(Me.Race == WoWRace.BloodElf)">
-      <Objective QuestName="Felendren the Banished" QuestId="8335" Type="KillMob" MobId="15298" KillCount="1" />
       <Objective QuestName="Felendren the Banished" QuestId="8335" Type="CollectItem" ItemId="20483" CollectCount="1" />
       <While Condition="((HasQuest(8335)) &amp;&amp; (!IsQuestCompleted(8335)))">
         <RunTo X="10235.4" Y="-5984.8" Z="38.944" />
@@ -520,8 +370,6 @@
       </While>
       <PickUp QuestName="Tainted Arcane Sliver" QuestId="8338" GiverName="Lanthan Perilon" GiverId="15281" />
     </If>
-    <Objective QuestName="Felendren the Banished" QuestId="8335" Type="KillMob" MobId="15273" KillCount="8" />
-    <Objective QuestName="Felendren the Banished" QuestId="8335" Type="KillMob" MobId="15298" KillCount="2" />
     <TurnIn QuestName="Felendren the Banished" QuestId="8335" TurnInName="Lanthan Perilon" TurnInId="15281" />
     <If Condition="((!HasQuest(8347)) &amp;&amp; (!IsQuestCompleted(8347)))">
       <PickUp QuestName="Aiding the Outrunners" QuestId="8347" GiverName="Lanthan Perilon" GiverId="15281" />
@@ -558,10 +406,8 @@
     <CustomBehavior File="SetHearthstone" MobId="15397" AreaId="3430" X="8700.38" Y="-6638.36" Z="72.8276" /> <!-- Set hearth: Falconwing Inn -->
     <PickUp QuestName="Wanted: Thaelis the Hungerer" QuestId="8468" GiverName="Innkeeper Delaniel" GiverId="15433" />
     <PickUp QuestName="Unstable Mana Crystals" QuestId="8463" GiverName="Aeldon Sunbrand" GiverId="15403" />
-    <Objective QuestName="Wanted: Thaelis the Hungerer" QuestId="8468" Type="KillMob" MobId="15949" KillCount="1" />
     <Objective QuestName="Wanted: Thaelis the Hungerer" QuestId="8468" Type="CollectItem" ItemId="21781" CollectCount="1" />
     <Objective QuestName="Unstable Mana Crystals" QuestId="8463" Type="CollectItem" ItemId="20743" CollectCount="6" />
-    <Objective QuestName="Major Malfunction" QuestId="8472" Type="KillMob" MobId="15638" KillCount="1" />
     <Objective QuestName="Major Malfunction" QuestId="8472" Type="CollectItem" ItemId="21808" CollectCount="6" />
     <TurnIn QuestName="Major Malfunction" QuestId="8472" TurnInName="Magister Jaronis" TurnInId="15418" />
     <If Condition="((!HasQuest(8895)) &amp;&amp; (!IsQuestCompleted(8895)))">
@@ -576,6 +422,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 7 - Arcane Patroller</Name>
+          <Factions>91</Factions>
           <TargetMinLevel>5</TargetMinLevel>
           <TargetMaxLevel>6</TargetMaxLevel>
           <Hotspots>
@@ -594,7 +441,6 @@
     <If Condition="((!HasQuest(8486)) &amp;&amp; (!IsQuestCompleted(8486)))">
       <PickUp QuestName="Arcane Instability" QuestId="8486" GiverName="Ley-Keeper Velania" GiverId="15401" />
     </If>
-    <Objective QuestName="Incriminating Documents" QuestId="8482" Type="KillMob" MobId="15968" KillCount="1" />
     <Objective QuestName="Incriminating Documents" QuestId="8482" Type="CollectItem" ItemId="20765" CollectCount="1" />
     <While Condition="((HasQuest(8486)) &amp;&amp; (!IsQuestCompleted(8486)))">
       <RunTo X="9080.07" Y="-6286.61" Z="25.2798" />
@@ -618,6 +464,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 8 - Mana Stalker</Name>
+          <Factions>91</Factions>
           <TargetMinLevel>5</TargetMinLevel>
           <TargetMaxLevel>6</TargetMaxLevel>
           <Hotspots>
@@ -644,7 +491,6 @@
     </If>
     <TurnIn QuestName="Ranger Sareyn" QuestId="9358" TurnInName="Ranger Sareyn" TurnInId="15942" />
     <PickUp QuestName="Defending Fairbreeze Village" QuestId="9252" GiverName="Ranger Sareyn" GiverId="15942" />
-    <Objective QuestName="Pelt Collection" QuestId="8491" Type="KillMob" MobId="15651" KillCount="1" />
     <Objective QuestName="Pelt Collection" QuestId="8491" Type="CollectItem" ItemId="20772" CollectCount="6" />
     <TurnIn QuestName="Roadside Ambush" QuestId="9035" TurnInName="Apprentice Meledor" TurnInId="15945" />
     <PickUp QuestName="Soaked Pages" QuestId="9062" GiverName="Apprentice Meledor" GiverId="15945" />
@@ -657,7 +503,6 @@
     <If Condition="((!HasQuest(8483)) &amp;&amp; (!IsQuestCompleted(8483)))">
       <PickUp QuestName="The Dwarven Spy" QuestId="8483" GiverName="Aeldon Sunbrand" GiverId="15403" />
     </If>
-    <Objective QuestName="The Dwarven Spy" QuestId="8483" Type="KillMob" MobId="15420" KillCount="1" />
     <Objective QuestName="The Dwarven Spy" QuestId="8483" Type="CollectItem" ItemId="20764" CollectCount="1" />
     <TurnIn QuestName="The Dwarven Spy" QuestId="8483" TurnInName="Aeldon Sunbrand" TurnInId="15403" />
     <PickUp QuestName="The Dead Scar" QuestId="8475" GiverName="Ranger Jaela" GiverId="15416" />
@@ -666,6 +511,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 9 - Plaguebone Pillager</Name>
+          <Factions>21</Factions>
           <TargetMinLevel>5</TargetMinLevel>
           <TargetMaxLevel>6</TargetMaxLevel>
           <Hotspots>
@@ -714,6 +560,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 10 - Wretched Hooligan</Name>
+          <Factions>16</Factions>
           <TargetMinLevel>6</TargetMinLevel>
           <TargetMaxLevel>7</TargetMaxLevel>
           <Hotspots>
@@ -723,7 +570,6 @@
       </SetGrindArea>
       <GrindTo Level="10" /> <!--  (grind Wretched Hooligan) -->
     </If>
-    <Objective QuestName="The Ring of Mmmrrrggglll" QuestId="8885" Type="KillMob" MobId="15937" KillCount="1" />
     <Objective QuestName="The Ring of Mmmrrrggglll" QuestId="8885" Type="CollectItem" ItemId="21770" CollectCount="1" />
     <Objective QuestName="Grimscale Pirates!" QuestId="8886" Type="CollectItem" ItemId="21771" CollectCount="6" />
     <TurnIn QuestName="The Ring of Mmmrrrggglll" QuestId="8885" TurnInName="Hathvelion Sungaze" TurnInId="15920" />
@@ -732,7 +578,6 @@
     <If Condition="((!HasQuest(9076)) &amp;&amp; (!IsQuestCompleted(9076)))">
       <PickUp QuestName="Wretched Ringleader" QuestId="9076" GiverName="Velendris Whitemorn" GiverId="15404" />
     </If>
-    <Objective QuestName="Wretched Ringleader" QuestId="9076" Type="KillMob" MobId="16294" KillCount="1" />
     <Objective QuestName="Wretched Ringleader" QuestId="9076" Type="CollectItem" ItemId="22487" CollectCount="1" />
     <TurnIn QuestName="Wretched Ringleader" QuestId="9076" TurnInName="Velendris Whitemorn" TurnInId="15404" />
     <PickUp QuestName="Missing in the Ghostlands" QuestId="9144" GiverName="Magistrix Landra Dawnstrider" GiverId="16210" />
@@ -791,6 +636,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 11 - Aldaron the Reckless</Name>
+          <Factions>16</Factions>
           <TargetMinLevel>8</TargetMinLevel>
           <TargetMaxLevel>8</TargetMaxLevel>
           <Hotspots>
@@ -846,13 +692,13 @@
     <PickUp QuestName="The Spearcrafter's Hammer" QuestId="8477" GiverName="Arathel Sunforge" GiverId="15400" />
     <TurnIn QuestName="Word from the Spire" QuestId="8890" TurnInName="Magister Duskwither" TurnInId="15951" />
     <TurnIn QuestName="Abandoned Investigations" QuestId="8891" TurnInName="Magister Duskwither" TurnInId="15951" />
-    <Objective QuestName="The Spearcrafter's Hammer" QuestId="8477" Type="KillMob" MobId="15408" KillCount="1" />
     <Objective QuestName="The Spearcrafter's Hammer" QuestId="8477" Type="CollectItem" ItemId="20759" CollectCount="1" />
     <PickUp QuestName="Zul'Marosh" QuestId="8479" GiverName="Ven'jashi" GiverId="15406" />
     <If Condition="Me.Level &lt; 12">
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 12 - Spearcrafter Otembe</Name>
+          <Factions>1643</Factions>
           <TargetMinLevel>10</TargetMinLevel>
           <TargetMaxLevel>10</TargetMaxLevel>
           <Hotspots>
@@ -862,7 +708,6 @@
       </SetGrindArea>
       <GrindTo Level="12" /> <!--  (grind Spearcrafter Otembe) -->
     </If>
-    <Objective QuestName="Zul'Marosh" QuestId="8479" Type="KillMob" MobId="15407" KillCount="1" />
     <Objective QuestName="Zul'Marosh" QuestId="8479" Type="CollectItem" ItemId="20760" CollectCount="1" />
     <Objective QuestName="Amani Invasion" QuestId="9360" Type="CollectItem" ItemId="23249" CollectCount="1" />
     <While Condition="((HasQuest(8479)) &amp;&amp; (!IsQuestCompleted(8479)))">
@@ -888,7 +733,6 @@
     <If Condition="((!HasQuest(8473)) &amp;&amp; (!IsQuestCompleted(8473)))">
       <PickUp QuestName="A Somber Task" QuestId="8473" GiverName="Larianna Riverwind" GiverId="15398" />
     </If>
-    <Objective QuestName="A Somber Task" QuestId="8473" Type="KillMob" MobId="15409" KillCount="1" />
     <Objective QuestName="A Somber Task" QuestId="8473" Type="CollectItem" ItemId="23228" CollectCount="1" />
     <While Condition="((HasQuest(8473)) &amp;&amp; (!IsQuestCompleted(8473)))">
       <RunTo X="8357.44" Y="-6186.64" Z="61.6855" />
@@ -896,7 +740,6 @@
       <CustomBehavior File="WaitTimer" WaitTime="3000" />
     </While>
     <PickUp QuestName="Old Whitebark's Pendant" QuestId="8474" GiverName="Larianna Riverwind" GiverId="15398" />
-    <Objective QuestName="A Somber Task" QuestId="8473" Type="KillMob" MobId="15637" KillCount="10" />
     <TurnIn QuestName="A Somber Task" QuestId="8473" TurnInName="Larianna Riverwind" TurnInId="15398" />
     <TurnIn QuestName="Old Whitebark's Pendant" QuestId="8474" TurnInName="Larianna Riverwind" TurnInId="15398" />
     <If Condition="((!HasQuest(10166)) &amp;&amp; (!IsQuestCompleted(10166)))">
@@ -924,6 +767,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 13 - Sangrias Stillblade</Name>
+          <Factions>14</Factions>
           <Hotspots>
             <Hotspot X="35.28" Y="85.58" Z="0.00" />
           </Hotspots>

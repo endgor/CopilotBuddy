@@ -12,13 +12,6 @@
   <Mailboxes />
 
   <!-- Quest Overrides -->
-  <Quest Id="1392" Name="Noboru the Cudgel">
-    <Objective Type="KillMob" MobId="5477" KillCount="1">
-      <Hotspots>
-        <Hotspot X="-10214.7" Y="-3303.35" Z="23.1034" />
-      </Hotspots>
-    </Objective>
-  </Quest>
   <Quest Id="1389" Name="Draenethyst Crystals">
     <Objective Type="CollectItem" ItemId="6071" CollectCount="6">
       <CollectFrom>
@@ -41,7 +34,6 @@
     <PickUp QuestName="Nothing But The Truth" QuestId="1372" GiverName="Deathstalker Zraedus" GiverId="5418" />
     <TurnIn QuestName="Nothing But The Truth" QuestId="1372" TurnInName="Apothecary Faustin" TurnInId="5414" />
     <Objective QuestName="Dream Dust in the Swamp" QuestId="1116" Type="CollectItem" ItemId="5803" CollectCount="10" />
-    <Objective QuestName="Noboru the Cudgel" QuestId="1392" Type="KillMob" MobId="5477" KillCount="1" />
     <Objective QuestName="Noboru the Cudgel" QuestId="1392" Type="CollectItem" ItemId="6196" CollectCount="1" />
     <CustomBehavior File="UseItemOn" ItemId="6196" MobId="0" NumOfTimes="1" CollectionDistance="100" />
     <PickUp QuestName="Noboru the Cudgel" QuestId="1392" GiverName="Apothecary Faustin" GiverId="5414" />
@@ -64,6 +56,7 @@
       <SetGrindArea>
         <GrindArea>
           <Name>Grind to Level 41 - Noboru the Cudgel</Name>
+          <Factions>51</Factions>
           <TargetMinLevel>39</TargetMinLevel>
           <TargetMaxLevel>39</TargetMaxLevel>
           <Hotspots>
