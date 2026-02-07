@@ -199,27 +199,45 @@ namespace Styx.Logic.BehaviorTree
 			Start();
 		}
 
+		/// <summary>
+		/// Current activity text — displayed in the StatusBar at the bottom of the UI.
+		/// Fires OnStatusTextChanged event (same as HB 4.3.4).
+		/// </summary>
 		public static string StatusText
 		{
 			get { return _statusText; }
 			set
 			{
-				// Only log when status actually changes (avoid spam)
-				if (_statusText != value)
+				if (!string.IsNullOrEmpty(value) && _statusText != value)
 				{
-					_statusText = value;
-					Logging.WriteDebug("StatusText: " + _statusText);
+					Logging.WriteDebug("StatusText: " + value);
 				}
+				string oldStatus = _statusText;
+				_statusText = value;
+				OnStatusTextChanged?.Invoke(null, new StatusTextChangedEventArgs(oldStatus, value));
 			}
 		}
 
+		/// <summary>
+		/// Event fired when StatusText changes — UI subscribes to update StatusBar.
+		/// Same as HB 4.3.4's TreeRoot.OnStatusTextChanged.
+		/// </summary>
+		public static event EventHandler<StatusTextChangedEventArgs> OnStatusTextChanged;
+
+		/// <summary>
+		/// High-level goal text — displayed in the Info panel.
+		/// Same as HB 4.3.4 (no event, polled by UpdateInfoPanel timer).
+		/// </summary>
 		public static string GoalText
 		{
 			get { return _goalText; }
 			set
 			{
+				if (!string.IsNullOrEmpty(value) && _goalText != value)
+				{
+					Logging.WriteDebug("GoalText: {0}", value);
+				}
 				_goalText = value;
-				Logging.WriteDebug("GoalText: {0}", _goalText);
 			}
 		}
 	}

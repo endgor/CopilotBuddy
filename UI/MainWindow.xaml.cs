@@ -90,6 +90,12 @@ namespace CopilotBuddy.UI
             };
             _infoTimer.Tick += (s, e) => UpdateInfoPanel();
             
+            // Subscribe to StatusText changes — updates StatusBar like HB 4.3.4
+            TreeRoot.OnStatusTextChanged += (sender, e) =>
+            {
+                Dispatcher.BeginInvoke(() => lblActivityText.Content = e.NewStatus ?? "Ready");
+            };
+            
             // Show default values immediately
             UpdateInfoPanel();
         }
@@ -357,6 +363,14 @@ namespace CopilotBuddy.UI
                 sb.AppendLine("Deaths: 0 (0/hr)");
                 sb.AppendLine("Loots: 0 (0/hr)");
                 sb.AppendLine("Honor Gained: 0 (0/HR)");
+            }
+            
+            // Display GoalText in info panel — polled every second like HB 4.3.4
+            var goalText = TreeRoot.GoalText;
+            if (!string.IsNullOrEmpty(goalText))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"Goal: {goalText}");
             }
             
             tbInfoBlock.Text = sb.ToString();
