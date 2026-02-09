@@ -61,7 +61,7 @@ public class ForcedWhile : ForcedBehavior
                 {
                     if (ex is ThreadAbortException)
                         throw;
-                    Logging.Write(Color.Red, "Unable to evaluate compile condition in If tag. Please check your profile.");
+                    Logging.Write(Color.Red, "Unable to evaluate compile condition in While tag. Please check your profile.");
                     Logging.Write(Color.Red, "CopilotBuddy stopped!");
                     Logging.WriteException(ex);
                     TreeRoot.Stop();

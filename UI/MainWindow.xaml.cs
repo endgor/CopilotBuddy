@@ -52,9 +52,9 @@ namespace CopilotBuddy.UI
             // Setup info panel timer
             InitializeInfoTimer();
 
-            // Log version
+            // Log version (HB 4.3.4: "Honorbuddy v{0} started.")
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            Logging.Write($"CopilotBuddy v{version.Major}.{version.Minor}.{version.Build} started");
+            Logging.Write("CopilotBuddy v{0}.{1}.{2} started.", version.Major, version.Minor, version.Build);
         }
 
         #endregion
@@ -147,7 +147,10 @@ namespace CopilotBuddy.UI
                     }
 
                     int wowPid = wowProcesses[0].Id;
-                    Logging.Write($"Found WoW.exe - PID: {wowPid}");
+                    Logging.Write(Colors.Green, "Please wait a few seconds while CopilotBuddy initializes.");
+                    Logging.WriteDebug("Using WoW with process ID {0}", wowPid);
+                    Logging.WriteDebug("Platform: {0}", Environment.Is64BitProcess ? "x64" : "x86");
+                    Logging.WriteDebug("Executable Path: {0}", AppDomain.CurrentDomain.BaseDirectory);
 
                     var memory = new Memory(wowPid);
                     ObjectManager.Initialize(memory);
@@ -158,7 +161,22 @@ namespace CopilotBuddy.UI
 
                     if (ObjectManager.IsInitialized)
                     {
-                        Logging.Write(Colors.LightGreen, $"Successfully attached to WoW (PID: {wowPid})");
+                        Logging.Write("Attached to WoW with ID {0}", wowPid);
+
+                        // Log character info (HB 4.3.4 pattern after attach)
+                        if (ObjectManager.Me != null)
+                        {
+                            Logging.Write("Character is a level {0} {1} {2}",
+                                ObjectManager.Me.Level,
+                                ObjectManager.Me.Race,
+                                ObjectManager.Me.Class);
+                            try
+                            {
+                                string zone = Lua.GetReturnVal<string>("return GetZoneText()", 0) ?? "Unknown";
+                                Logging.Write("Current zone is {0}", zone);
+                            }
+                            catch { }
+                        }
 
                         // Reinitialize and load settings for this character (HB 4.3.4 pattern)
                         LoadSettings();
@@ -235,7 +253,7 @@ namespace CopilotBuddy.UI
                             }
 
                             ToggleButtons(true);
-                            SetStatus("Honorbuddy Startup Complete");
+                            SetStatus("CopilotBuddy Startup Complete");
                             _infoTimer.Start();
                         });
                     }
@@ -422,10 +440,24 @@ namespace CopilotBuddy.UI
             cmbBotSelector.IsEnabled = false;
             btnSettings.IsEnabled = false;
 
-            SetStatus("Running...");
-            Logging.Write(Colors.LightGreen, "Bot started");
+            Logging.Write("Starting the bot.");
+            Logging.Write("Currently Using BotBase : {0}", BotManager.Current.Name);
+            if (ObjectManager.Me != null)
+            {
+                Logging.Write("Character is a level {0} {1} {2}",
+                    ObjectManager.Me.Level,
+                    ObjectManager.Me.Race,
+                    ObjectManager.Me.Class);
+                try
+                {
+                    string zone = Lua.GetReturnVal<string>("return GetZoneText()", 0) ?? "Unknown";
+                    Logging.Write("Current zone is {0}", zone);
+                }
+                catch { }
+            }
 
             TreeRoot.Start();
+            SetStatus("Running...");
         }
 
         private void StopBot()
@@ -441,8 +473,8 @@ namespace CopilotBuddy.UI
             cmbBotSelector.IsEnabled = true;
             btnSettings.IsEnabled = true;
 
-            SetStatus("Honorbuddy Stopped");
-            Logging.Write(Colors.Yellow, "Bot stopped");
+            Logging.Write("Stopping the bot!");
+            SetStatus("CopilotBuddy Stopped");
         }
 
         #endregion

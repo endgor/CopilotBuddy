@@ -191,6 +191,11 @@ namespace Styx.WoWInternals.WoWObjects
         public float RotationDegrees => Rotation * (180f / (float)Math.PI);
         public virtual WoWPoint Location => new(X, Y, Z);
         
+        /// <summary>
+        /// Alias for Location. Matches HB 4.3.4 API surface used by external plugins.
+        /// </summary>
+        public WoWPoint WorldLocation => Location;
+        
         #endregion
         
         #region Distance Properties

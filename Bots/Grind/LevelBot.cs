@@ -483,7 +483,7 @@ namespace Bots.Grind
             _releaseTimer.Reset();
             InfoPanel.Died();
             Navigator.Clear();
-            Logging.Write("I died!");
+            Logging.Write("I died.");
             _diedIndoors = StyxWoW.Me.IsIndoors;
             Lua.DoString("RepopMe()");
         }
@@ -1095,7 +1095,7 @@ namespace Bots.Grind
                         if (Mount.ShouldMount(hotspot))
                             Mount.MountUp(() => hotspot);
 
-                        TreeRoot.StatusText = $"Moving to hotspot ({hotspot.X:F1}, {hotspot.Y:F1}, {hotspot.Z:F1})";
+                        TreeRoot.StatusText = "Moving to hotspot";
                         return Navigator.GetRunStatusFromMoveResult(Navigator.MoveTo(hotspot));
                     })
                 )),

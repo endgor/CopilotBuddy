@@ -152,7 +152,7 @@ namespace Styx.Logic.Pathing
 		private static void OnMapChanged(BotEvents.Player.MapChangedEventArgs args)
 		{
 			Clear();
-			Logging.WriteDebug("[Navigator] Map changed. Path cleared.");
+			Logging.WriteDebug("[Navigator] Changed map(s) from {0} to {1}. Path cleared.", args.OldMapId, args.NewMapId);
 		}
 
 		private static void OnBotStart(EventArgs args)
@@ -406,6 +406,7 @@ namespace Styx.Logic.Pathing
 					BlackspotManager.EnsureBlackspotsMarked();
 
 					var result = TripperNavigator.FindPath(mapId, start, end, true);
+					LogPathResult(result, me.Location, destination, mapId);
 					if (result.Status.Succeeded && result.Points != null && result.Points.Length > 0)
 					{
 						foreach (var point in result.Points)
@@ -417,12 +418,6 @@ namespace Styx.Logic.Pathing
 						_currentFlags = result.Flags;
 						_currentPolyTypes = result.PolyTypes;
 						_currentAbilityFlags = result.AbilityFlags;
-
-						if (result.IsPartialPath)
-							Logging.Write("[Navigator] WARNING: Partial path — destination may be unreachable");
-
-						Logging.WriteDebug("[Navigator] Path generated with {0} points to: {1} ({2})", 
-							_currentPath.Count, destinationName, destination);
 					}
 					else
 					{
@@ -432,8 +427,6 @@ namespace Styx.Logic.Pathing
 						_currentFlags = null;
 						_currentPolyTypes = null;
 						_currentAbilityFlags = null;
-						Logging.WriteDebug("[Navigator] Pathfinding failed, using direct movement to: {0} ({1})", 
-							destinationName, destination);
 					}
 				}
 				else
@@ -1136,7 +1129,8 @@ namespace Styx.Logic.Pathing
 				}
 				// Stop walking while waiting for elevator (HB pattern)
 				WoWMovement.MoveStop();
-				Logging.WriteNavigator("Waiting for elevator...");
+				WoWMovement.Face(transport.Location);
+				Logging.WriteNavigator("Facing towards elevator. Waiting...");
 				return MoveResult.Moved;
 			}
 
@@ -1260,6 +1254,41 @@ namespace Styx.Logic.Pathing
 		}
 
 		/// <summary>
+		/// Logs the result of a pathfinding operation.
+		/// Matches HB 6.2.3 MeshNavigator.method_12 logging pattern.
+		/// </summary>
+		private static void LogPathResult(Tripper.Navigation.PathFindResult result, WoWPoint start, WoWPoint end, uint mapId)
+		{
+			if (!result.Succeeded)
+			{
+				if (result.Aborted)
+				{
+					Logging.Write("[Navigator] Path search from {0} to {1} was aborted due to {2} (time used: {3:F0}ms)",
+						start, end,
+						Styx.Logic.BehaviorTree.TreeRoot.IsRunning ? "combat" : "bot stopping",
+						result.Elapsed.TotalMilliseconds);
+					return;
+				}
+				Logging.Write("[Navigator] Could not generate path from {0} to {1} on map {2} (time used: {3:F0}ms) @ {4}",
+					start, end, mapId, result.Elapsed.TotalMilliseconds, result.FailStep);
+				return;
+			}
+
+			if (result.IsPartialPath)
+			{
+				Logging.Write("[Navigator] Could not generate full path from {0} to {1} (time used: {2:F0}ms)",
+					start, end, result.Elapsed.TotalMilliseconds);
+				return;
+			}
+
+			if (result.Elapsed.TotalMilliseconds > 50.0)
+			{
+				Logging.WriteDebug("[Navigator] Successfully generated path from {0} to {1} in {2:F0}ms ({3} points)",
+					start, end, result.Elapsed.TotalMilliseconds, result.PathLength);
+			}
+		}
+
+		/// <summary>
 		/// Door handling: auto-detect closed doors on the path and interact to open them.
 		/// Ported from HB 6.2.3 MeshNavigator.method_7/method_8.
 		/// Improvement: steers through the door center point before resuming normal path,
@@ -1346,7 +1375,7 @@ namespace Styx.Logic.Pathing
 			}
 
 			// Interact to open the door
-			Logging.WriteDebug("[Navigator] Opening door: {0}", closestDoor.Name);
+			Logging.WriteDebug("[Navigator] Opening door: {0} (Entry: {1})", closestDoor.Name, closestDoor.Entry);
 			closestDoor.Interact();
 			_doorInteractTimer.Reset();
 			

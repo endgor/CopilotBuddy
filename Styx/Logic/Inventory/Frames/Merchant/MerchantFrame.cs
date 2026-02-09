@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using GreenMagic;
 using Styx.Logic.Combat;
+using Styx.Helpers;
 using Styx.WoWInternals;
 using Styx.WoWInternals.WoWObjects;
 
@@ -161,8 +162,13 @@ namespace Styx.Logic.Inventory.Frames.Merchant
                 int? index = GetMerchantIndex(item.Entry);
                 if (index.HasValue)
                 {
+                    Logging.Write("Buying {0} {1}", stackCount, item.Name);
                     Lua.DoString("BuyMerchantItem(" + index.Value + "," + stackCount + ")");
                 }
+            }
+            else
+            {
+                Logging.Write("Not enough money to buy {0}", item.Name);
             }
         }
 
@@ -201,6 +207,7 @@ namespace Styx.Logic.Inventory.Frames.Merchant
 
         public void RepairAllItems(bool useGuildBankFunds)
         {
+            Logging.WriteDiagnostic("Repairing all items");
             Lua.DoString("RepairAllItems(" + (useGuildBankFunds ? "1" : "nil") + ")");
         }
 
