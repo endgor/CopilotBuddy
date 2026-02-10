@@ -290,27 +290,15 @@ namespace Bots.Grind
                         new TreeSharp.Action(ctx => ShouldUseSpiritHealer = true)
                     )
                 )),
-                // Ghost - far from corpse, need to move
-                new DecoratorIsNotPoiType(PoiType.Corpse, new Decorator(
-                    ctx => StyxWoW.Me.IsGhost && StyxWoW.Me.Location.Distance(StyxWoW.Me.CorpsePoint) > 40.0,
+                // Ghost - far from corpse, need to move (HB 4.3.4 pattern: DecoratorNeedToMoveToCorpse wraps ActionMoveToCorpse)
+                new Levelbot.Decorators.Death.DecoratorNeedToMoveToCorpse(
                     new Sequence(
-                        new Wait(10, ctx => StyxWoW.Me.CorpsePoint != WoWPoint.Empty, new ActionAlwaysSucceed()),
                         new ActionSetActivity("Moving to corpse"),
-                        new PrioritySelector(
-                            // Flying ghost (if applicable)
-                            new Decorator(
-                                ctx => !_diedIndoors && (StyxWoW.Me.Mounted || StyxWoW.Me.MovementInfo.CanFly),
-                                new TreeSharp.Action(ctx => Flightor.MoveTo(StyxWoW.Me.CorpsePoint))
-                            ),
-                            // Ground movement
-                            new TreeSharp.Action(ctx => Navigator.MoveTo(StyxWoW.Me.CorpsePoint))
-                        )
+                        new Levelbot.Actions.Death.ActionMoveToCorpse()
                     )
-                )),
-                // Ghost - near corpse, retrieve it
-                new Decorator(
-                    ctx => StyxWoW.Me.IsGhost && StyxWoW.Me.Location.Distance(StyxWoW.Me.CorpsePoint) < 40.0 ||
-                           BotPoi.Current.Type == PoiType.Corpse,
+                ),
+                // Ghost - near corpse, retrieve it (HB 4.3.4 pattern: DecoratorNeedToTakeCorpse wraps retrieval behavior)
+                new Levelbot.Decorators.Death.DecoratorNeedToTakeCorpse(
                     CreateCorpseRetrievalBehavior()
                 ),
                 // Succeed if dead or ghost (to prevent other behaviors from running)
@@ -328,7 +316,7 @@ namespace Bots.Grind
                 // Move to spirit healer
                 new Decorator(
                     ctx => ctx != null && ((WoWObject)ctx).DistanceSqr > 16.0,
-                    new TreeSharp.Action(ctx => Navigator.MoveTo(((WoWObject)ctx).Location))
+                    new TreeSharp.Action(ctx => { Navigator.MoveTo(((WoWObject)ctx).Location); })
                 ),
                 // Interact with spirit healer
                 new Decorator(
@@ -944,7 +932,7 @@ namespace Bots.Grind
 
         private static bool NeedToSell()
         {
-            // Respecter le setting FindVendorsAutomatically (CharacterSettings car lié à l'UI)
+            // Respect the FindVendorsAutomatically setting (CharacterSettings, bound to the UI)
             if (!CharacterSettings.Instance.FindVendorsAutomatically && !Vendors.ForceSell)
                 return false;
             if (ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Sell) == null)
@@ -954,7 +942,7 @@ namespace Bots.Grind
 
         private static bool NeedToTrain()
         {
-            // Utiliser CharacterSettings.Instance.TrainNewSkills (lié à l'UI)
+            // Use CharacterSettings.Instance.TrainNewSkills (bound to the UI)
             if ((!CharacterSettings.Instance.TrainNewSkills && !Vendors.ForceTrainer) ||
                 ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Train) == null)
                 return false;
@@ -963,7 +951,7 @@ namespace Bots.Grind
 
         private static bool NeedToRepair()
         {
-            // Respecter le setting FindVendorsAutomatically (CharacterSettings car lié à l'UI)
+            // Respect the FindVendorsAutomatically setting (CharacterSettings, bound to the UI)
             if (!CharacterSettings.Instance.FindVendorsAutomatically && !Vendors.ForceRepair)
                 return false;
             if (Vendors.RepairDisabled ||
