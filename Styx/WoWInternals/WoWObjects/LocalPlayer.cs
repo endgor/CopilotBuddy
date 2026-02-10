@@ -29,18 +29,19 @@ namespace Styx.WoWInternals.WoWObjects
     {
         #region Constants - Static Addresses 3.3.5a
         
-        // Adresses statiques pour le joueur local
-        private const uint AccountNamePtr = 0xB6A400;       // 11971136U
-        private const uint CorpsePointPtr = 0xBD1F48;       // 12388952U  
-        private const uint ZoneIdPtr = 0xBD1D7C;            // 12388364U
-        private const uint MapIdPtr = 0xAB63BC;             // 11232188U - From Offsets.txt: CurrentMapId
-        private const uint ContinentNamePtr = 0xCD8F20;     // 13469216U
-        private const uint RealmNamePtr = 0xBD1CF4;         // 12388228U (approximate)
-        private const uint PlayerNamePtr = 0xBD1E28;        // 12388520U
-        private const uint XPPtr = 0xBE5D88;                // 12475784U
-        private const uint RestingPtr = 0xAF7154;           // 11489876U
-        private const uint LastRedErrorPtr = 0xBCF390;      // 12385168U
-        private const uint KnownSpellsPtr = 0xBE5D88;       // 12475784U - Start of spell list
+        // Static addresses for the local player
+        // NOTE: hex values are authoritative — decimal comments are for reference only.
+        private const uint AccountNamePtr = 0xB6AA40;       // 11971136U
+        private const uint CorpsePointPtr = 0xBD0A58;       // 12388952U — matches GlobalOffsets.CorpsePositionX
+        private const uint ZoneIdPtr = 0xBD080C;            // 12388364U — matches GlobalOffsets.ZoneId
+        private const uint MapIdPtr = 0xAB63BC;             // 11232188U — matches GlobalOffsets.MapId
+        private const uint ContinentNamePtr = 0xCD8620;     // 13469216U
+        private const uint RealmNamePtr = 0xBD0784;         // 12388228U
+        private const uint PlayerNamePtr = 0xBD08A8;        // 12388520U
+        private const uint XPPtr = 0xBE5D88;                // 12475784U — FIXME: same as KnownSpellsPtr/SpellBook, XP should use descriptors
+        private const uint RestingPtr = 0xAF5254;           // 11489876U
+        private const uint LastRedErrorPtr = 0xBCFB90;      // 12385168U
+        private const uint KnownSpellsPtr = 0xBE5D88;       // 12475784U — matches GlobalOffsets.SpellBook
         
         #endregion
         
@@ -339,11 +340,11 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                // Formule WoW 3.3.5a approximative
+                // Approximate WoW 3.3.5a formula
                 int level = Level;
                 if (level >= 80) return 0;
                 
-                // Formule simplifiée
+                // Simplified formula
                 return (uint)(level * level * 100 + level * 500);
             }
         }
@@ -390,7 +391,12 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                return base.IsDead && CorpsePoint != WoWPoint.Empty;
+                // FIX: Was base.IsDead (CurrentHealth==0) which is FALSE for ghosts (health==1).
+                // base.IsGhost (CurrentHealth==1) is the correct check for released-spirit state.
+                // Dead (health=0) -> IsDead=true, IsGhost=false -> release spirit
+                // Ghost (health=1) -> IsDead=false, IsGhost=true -> corpse run
+                // Alive (health>1) -> IsDead=false, IsGhost=false -> normal play
+                return base.IsGhost && CorpsePoint != WoWPoint.Empty;
             }
         }
         
@@ -410,7 +416,7 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                // Lire depuis l'adresse statique de la cible
+                // Read from the static target address
                 if (Memory == null) return 0UL;
                 return Memory.Read<ulong>(0xBD07B0); // TARGET_GUID_PTR
             }
@@ -581,7 +587,7 @@ namespace Styx.WoWInternals.WoWObjects
 
         #region Skills
 
-        // Adresses statiques pour les skills 3.3.5a
+        // Static addresses for skills 3.3.5a
         private const uint SkillsBasePtr = 0xBE55C8;      // Base address for skill data
         private const int MaxSkills = 128;
         private const int SkillEntrySize = 12;            // sizeof(SkillInfo)
@@ -673,7 +679,7 @@ namespace Styx.WoWInternals.WoWObjects
 
         #region Party & Raid Members
 
-        // Adresses statiques 3.3.5a pour groupe/raid
+        // 3.3.5a static addresses for party/raid
         private const uint PartyMemberGuidsPtr = 0xBD1DD8;   // 12392776 - Party member GUIDs (5 slots * 8 bytes)
         private const uint RaidMemberPtrsPtr = 0xBECFC8;     // 12498280 - Raid member pointers (40 slots * 4 bytes)
 
@@ -1227,41 +1233,43 @@ namespace Styx.WoWInternals.WoWObjects
 
         /// <summary>
         /// Gets the total durability of all equipped items.
+        /// HB 4.3.4: Inventory.Equipped.PhysicalItems.Sum(i => i.Durability)
         /// </summary>
         public uint Durability
         {
             get
             {
-                uint totalDurability = 0;
                 try
                 {
-                    // Would need Inventory system to calculate properly
-                    // Placeholder for now
+                    return (uint)Inventory.Equipped.PhysicalItems
+                        .Sum(i => (long)i.Durability);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Logging.WriteException(ex);
+                    return 0;
                 }
-                return totalDurability;
             }
         }
 
         /// <summary>
         /// Gets the maximum durability of all equipped items.
+        /// HB 4.3.4: Inventory.Equipped.PhysicalItems.Sum(i => i.MaxDurability)
         /// </summary>
         public uint MaxDurability
         {
             get
             {
-                uint totalMaxDurability = 0;
                 try
                 {
-                    // Would need Inventory system to calculate properly
-                    // Placeholder for now
+                    return (uint)Inventory.Equipped.PhysicalItems
+                        .Sum(i => (long)i.MaxDurability);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Logging.WriteException(ex);
+                    return 0;
                 }
-                return totalMaxDurability;
             }
         }
 
@@ -1280,13 +1288,29 @@ namespace Styx.WoWInternals.WoWObjects
 
         /// <summary>
         /// Gets the lowest durability percentage among equipped items (0.0 to 1.0).
+        /// HB 4.3.4: iterates Equipped.PhysicalItems, finds min DurabilityPercent / 100.0
         /// </summary>
         public double LowestDurabilityPercent
         {
             get
             {
-                // Would need Inventory system
-                return 100.0;
+                try
+                {
+                    double lowest = 100.0;
+                    foreach (var item in Inventory.Equipped.PhysicalItems)
+                    {
+                        if (item.DurabilityPercent < lowest)
+                        {
+                            lowest = item.DurabilityPercent;
+                        }
+                    }
+                    return lowest / 100.0;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteException(ex);
+                    return 1.0;
+                }
             }
         }
 
