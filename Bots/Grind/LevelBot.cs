@@ -361,9 +361,9 @@ namespace Bots.Grind
                     new ActionSetPoi(ctx => new BotPoi(FindSafeResPoint(), PoiType.Corpse))
                 ),
                 new DecoratorIsPoiType(PoiType.Corpse, new Sequence(
-                    // If we're alive now, clear POI
+                    // If we're alive now (not ghost), clear POI
                     new DecoratorContinue(
-                        ctx => StyxWoW.Me.IsAlive,
+                        ctx => StyxWoW.Me.IsAlive && !StyxWoW.Me.IsGhost,
                         new Sequence(
                             new TreeSharp.Action(ctx => _corpseWaitStopwatch.Reset()),
                             new ActionClearPoi("Resurrected"),
@@ -434,17 +434,53 @@ namespace Bots.Grind
                    StyxWoW.Me.Location.Distance2DSqr(BotPoi.Current.Location) < 25.0;
         }
 
-        private static void GrabCorpse()
+        /// <summary>
+        /// HB 6.2.3 pattern: returns Failure if player is still ghost after attempts,
+        /// so the behavior tree Sequence breaks and retries on next tick.
+        /// Returns Success only when the player actually revived.
+        /// </summary>
+        private static readonly Random _jiggleRandom = new Random();
+        private static RunStatus GrabCorpse()
         {
+            // HB 6.2.3 pattern: don't try to revive while falling
+            if (StyxWoW.Me.IsFalling)
+            {
+                Logging.Write("Cannot retrieve corpse while falling — waiting to land.");
+                return RunStatus.Failure;
+            }
+
             int delay = Lua.GetReturnVal<int>("return GetCorpseRecoveryDelay()", 0);
             if (delay != 0)
             {
                 Logging.Write("Waiting for corpse recovery delay to expire.");
-                return;
+                return RunStatus.Failure;
             }
 
-            Logging.Write("Clicking corpse popup...");
-            Lua.DoString("RetrieveCorpse()");
+            // 3.3.5a server bug: ghost must move slightly before RetrieveCorpse() is accepted.
+            // Jiggle 2-3 yards in a random direction, then wait for the movement to complete.
+            WoWPoint myPos = StyxWoW.Me.Location;
+            double angle = _jiggleRandom.NextDouble() * Math.PI * 2;
+            float jiggleDist = 2.0f + (float)(_jiggleRandom.NextDouble() * 1.0); // 2-3 yards
+            WoWPoint jiggleTarget = new WoWPoint(
+                myPos.X + (float)(Math.Cos(angle) * jiggleDist),
+                myPos.Y + (float)(Math.Sin(angle) * jiggleDist),
+                myPos.Z);
+            Logging.Write("Jiggle-moving {0:F1} yards before RetrieveCorpse...", jiggleDist);
+            WoWMovement.ClickToMove(jiggleTarget);
+            System.Threading.Thread.Sleep(1500); // Let the ghost walk a bit
+            WoWMovement.MoveStop();
+
+            // HB 3.3.5a/4.3.4 retries via behavior tree re-entry; we batch 5 attempts
+            // with 1s delays to avoid repeated tree ticks through the elevator shaft.
+            for (int attempt = 0; attempt < 5; attempt++)
+            {
+                if (!StyxWoW.Me.IsGhost)
+                    break; // Successfully revived
+
+                Logging.Write("Clicking corpse popup... (attempt {0}/5)", attempt + 1);
+                Lua.DoString("RetrieveCorpse()");
+                System.Threading.Thread.Sleep(1000);
+            }
 
             if (CharacterSettings.Instance.RessAtSpiritHealers && !Battlegrounds.IsInsideBattleground)
             {
@@ -461,6 +497,16 @@ namespace Bots.Grind
                     _deathCount = 0;
                 }
             }
+
+            // If still ghost after all attempts, return Failure so Sequence breaks.
+            // POI stays set, stopwatch keeps running, tree retries next tick.
+            if (StyxWoW.Me.IsGhost)
+            {
+                Logging.Write("Still ghost after RetrieveCorpse attempts — will retry.");
+                return RunStatus.Failure;
+            }
+
+            return RunStatus.Success;
         }
 
         private static void ReleaseCorpse()
