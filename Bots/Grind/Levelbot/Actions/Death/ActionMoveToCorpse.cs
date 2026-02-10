@@ -21,8 +21,9 @@ namespace Levelbot.Actions.Death
                 }
 
                 WoWPoint corpse = me.CorpsePoint;
-                Logging.WriteDebug("[ActionMoveToCorpse] CorpsePoint={0}, IsGhost={1}, MyPos={2}",
-                    corpse, me.IsGhost, me.Location);
+                // Debug log commented to reduce spam
+                // Logging.WriteDebug("[ActionMoveToCorpse] CorpsePoint={0}, IsGhost={1}, MyPos={2}",
+                //     corpse, me.IsGhost, me.Location);
 
                 if (corpse == WoWPoint.Zero || corpse == WoWPoint.Empty)
                 {
