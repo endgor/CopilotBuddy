@@ -157,7 +157,7 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                // Les corps de joueurs ne sont généralement pas lootables (sauf PvP)
+                // Player corpses are generally not lootable (except PvP)
                 return (Flags & CorpseFlags.Lootable) != 0;
             }
         }
@@ -199,12 +199,12 @@ namespace Styx.WoWInternals.WoWObjects
     public enum CorpseFlags : uint
     {
         None = 0x0,
-        Bones = 0x1,           // Le corps est maintenant un squelette
+        Bones = 0x1,           // The corpse is now a skeleton
         Unk1 = 0x2,
         Unk2 = 0x4,
         HideHelm = 0x8,
         HideCloak = 0x10,
-        Lootable = 0x20,       // Peut être looté
+        Lootable = 0x20,       // Can be looted
         Unk3 = 0x40
     }
     

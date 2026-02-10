@@ -44,8 +44,8 @@ namespace CopilotBuddy.UI
 
 		private void Plugin_CheckedChanged(object sender, RoutedEventArgs e)
 		{
-			// Le binding TwoWay gère déjà le changement d'état
-			// Cette méthode peut être utilisée pour des actions supplémentaires
+			// The TwoWay binding already handles the state change
+			// This method can be used for additional actions
 			if (sender is System.Windows.Controls.CheckBox checkBox && checkBox.DataContext is PluginContainer container)
 			{
 				if (container.Enabled)

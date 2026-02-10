@@ -3,21 +3,21 @@ using System;
 namespace Styx.WoWInternals
 {
     /// <summary>
-    /// Type de nœud de taxi (points de vol).
+    /// Taxi node type (flight points).
     /// WoW 3.3.5a build 12340.
     /// </summary>
     public enum TaxiNodeType
     {
-        /// <summary>Position actuelle du joueur</summary>
+        /// <summary>Current player position</summary>
         Current = 0,
         
-        /// <summary>Nœud accessible</summary>
+        /// <summary>Reachable node</summary>
         Reachable = 1,
         
-        /// <summary>Nœud distant (pas encore découvert)</summary>
+        /// <summary>Distant node (not yet discovered)</summary>
         Distant = 2,
         
-        /// <summary>Aucun nœud</summary>
+        /// <summary>No node</summary>
         None = 3
     }
 }

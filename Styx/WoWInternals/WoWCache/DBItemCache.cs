@@ -13,16 +13,16 @@ namespace Styx.WoWInternals.WoWCache
     {
 
         /// <summary>
-        /// Récupère un bloc d'information item depuis le cache DB.
-        /// Appelle la fonction native WoW GetItemInfoBlock.
+        /// Retrieves an item info block from the DB cache.
+        /// Calls the native WoW GetItemInfoBlock function.
         /// </summary>
-        /// <param name="caller">Pointeur caller (généralement le cache DB)</param>
+        /// <param name="caller">Caller pointer (typically the DB cache)</param>
         /// <param name="index">Index/ID de l'item</param>
-        /// <param name="a3">Paramètre de référence (modifié par la fonction)</param>
-        /// <param name="a4">Paramètre 4</param>
-        /// <param name="a5">Paramètre 5</param>
-        /// <param name="a6">Paramètre 6</param>
-        /// <returns>Adresse du bloc d'information, ou 0 si non trouvé</returns>
+        /// <param name="a3">Reference parameter (modified by the function)</param>
+        /// <param name="a4">Parameter 4</param>
+        /// <param name="a5">Parameter 5</param>
+        /// <param name="a6">Parameter 6</param>
+        /// <returns>Address of the info block, or 0 if not found</returns>
         public static uint GetInfoBlockByID(uint caller, uint index, ref int a3, int a4, int a5, int a6)
         {
             ExecutorRand? executor = ObjectManager.Executor;
@@ -47,10 +47,10 @@ namespace Styx.WoWInternals.WoWCache
                     executor.AddLine("retn");
                     executor.Execute();
 
-                    // Lit le paramètre modifié
+                    // Read the modified parameter
                     a3 = executor.Memory.Read<int>(paramPtr);
 
-                    // Lit le résultat
+                    // Read the result
                     return executor.Memory.Read<uint>(executor.ReturnPointer);
                 }
                 catch (Exception ex)

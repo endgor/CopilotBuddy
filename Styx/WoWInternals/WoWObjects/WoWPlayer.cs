@@ -84,7 +84,7 @@ namespace Styx.WoWInternals.WoWObjects
                        Class == WoWClass.Paladin || 
                        Class == WoWClass.DeathKnight ||
                        Class == WoWClass.Druid;
-                // Note: Devrait vérifier la spec/stance, simplifié ici
+                // Note: Should check spec/stance, simplified here
             }
         }
         public bool IsHealer
@@ -95,7 +95,7 @@ namespace Styx.WoWInternals.WoWObjects
                        Class == WoWClass.Paladin ||
                        Class == WoWClass.Shaman ||
                        Class == WoWClass.Druid;
-                // Note: Devrait vérifier la spec, simplifié ici
+                // Note: Should check spec, simplified here
             }
         }
         public bool IsCaster

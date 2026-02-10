@@ -3,7 +3,7 @@ using System;
 namespace Styx.WoWInternals.WoWObjects
 {
     /// <summary>
-    /// Représente un bobber de pêche dans WoW.
+    /// Represents a fishing bobber in WoW.
     /// WoW 3.3.5a build 12340.
     /// </summary>
     public class WoWFishingBobber : WoWAnimatedSubObject
@@ -13,8 +13,8 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Indique si le bobber est en train de bouger (poisson qui mord).
-        /// AnimationState == 8 signifie que le poisson a mordu.
+        /// Indicates whether the bobber is moving (fish biting).
+        /// AnimationState == 8 means the fish has bitten.
         /// </summary>
         public bool IsBobbing => AnimationState == 8;
     }

@@ -14,7 +14,7 @@ namespace Styx.WoWInternals.WoWObjects
         private const uint TypeOffset = 0x14;           // 20 - WoWObjectType
         private const uint GuidOffset = 0x30;           // 48 - Object GUID
         private const uint ObjectFlagsOffset = 0xBC;    // 188 - Object flags
-        private const uint DescriptorOffset = 0x08;     // 8 - Pointeur vers descriptors
+        private const uint DescriptorOffset = 0x08;     // 8 - Pointer to descriptors
         
         // Descriptor field indices (multiply by 4 for offset)
         private const uint DescGuid = 0x00;             // Descriptor GUID
@@ -152,11 +152,11 @@ namespace Styx.WoWInternals.WoWObjects
                 if (BaseAddress == 0U) return false;
                 if (IsDisabled) return false;
                 
-                // Vérification basique - l'adresse doit être lisible
+                // Basic check - the address must be readable
                 try
                 {
                     if (Memory == null) return false;
-                    // Essayer de lire le type pour vérifier que l'adresse est valide
+                    // Try to read the type to verify the address is valid
                     uint type = Memory.Read<uint>(BaseAddress + TypeOffset);
                     return type > 0 && type <= 10; // Types valides: 1-10
                 }
@@ -502,7 +502,7 @@ namespace Styx.WoWInternals.WoWObjects
         internal void UpdateBaseAddress(uint ptr)
         {
             BaseAddress = ptr;
-            // Reset les caches si l'adresse change
+            // Reset caches if the address changes
             if (ptr == 0U)
             {
                 _cachedGuid = 0UL;

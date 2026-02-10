@@ -179,30 +179,30 @@ namespace Styx.WoWInternals
             {
                 WoWProcess.EnableRaisingEvents = true;
                 
-                // Vérifier le build
+                // Check the build
                 try
                 {
                     int build = WoWProcess.MainModule?.FileVersionInfo.FilePrivatePart ?? 0;
                     if (build != SupportedBuild)
                     {
-                        Logging.Write($"[ObjectManager] Build {build} non supporté (attendu: {SupportedBuild})");
-                        throw new Exception($"Build WoW {build} non supporté. Build requis: {SupportedBuild}");
+                        Logging.Write($"[ObjectManager] Build {build} not supported (expected: {SupportedBuild})");
+                        throw new Exception($"WoW build {build} not supported. Required build: {SupportedBuild}");
                     }
-                    Logging.WriteDebug($"[ObjectManager] Build WoW {build} détecté - OK");
+                    Logging.WriteDebug($"[ObjectManager] WoW build {build} detected - OK");
                 }
                 catch (Exception ex) when (ex is not InvalidOperationException)
                 {
-                    Logging.WriteDebug($"[ObjectManager] Vérification build échouée: {ex.Message}");
+                    Logging.WriteDebug($"[ObjectManager] Build verification failed: {ex.Message}");
                 }
             }
             
-            // Hook EndScene pour l'exécution de code
+            // Hook EndScene for code execution
             HookEndscene();
             
-            // Premier Update pour peupler la liste
+            // First Update to populate the object list
             Update();
             
-            Logging.WriteDebug("[ObjectManager] Initialisé avec succès");
+            Logging.WriteDebug("[ObjectManager] Initialized successfully");
         }
         public static bool HookEndscene(Action<string>? logger = null)
         {
@@ -214,14 +214,14 @@ namespace Styx.WoWInternals
             
             if (Wow == null)
             {
-                Log("[ObjectManager] HookEndscene: Memory non initialisée");
+                Log("[ObjectManager] HookEndscene: Memory not initialized");
                 return false;
             }
             
-            // Protection: ne pas re-hooker si déjà fait
+            // Protection: do not re-hook if already done
             if (Executor != null && Executor.IsInitialized)
             {
-                Log("[ObjectManager] HookEndscene: Déjà hooké, skip");
+                Log("[ObjectManager] HookEndscene: Already hooked, skipping");
                 return true;
             }
             
@@ -229,51 +229,51 @@ namespace Styx.WoWInternals
             {
                 Log($"[ObjectManager] D3DDevicePtr = 0x{D3DDevicePtr:X8}");
                 
-                // Étape 1: Lire le pointeur D3D device
+                // Step 1: Read the D3D device pointer
                 uint devicePtrAddr = Wow.Read<uint>(D3DDevicePtr);
                 Log($"[ObjectManager] devicePtrAddr = 0x{devicePtrAddr:X8}");
                 if (devicePtrAddr == 0U)
                 {
-                    throw new InvalidOperationException("DevicePointer introuvable (D3DDevicePtr = 0)");
+                    throw new InvalidOperationException("DevicePointer not found (D3DDevicePtr = 0)");
                 }
                 
-                // Étape 2: Lire le device réel
+                // Step 2: Read the actual device
                 uint device = Wow.Read<uint>(devicePtrAddr + D3DDeviceOffset);
                 Log($"[ObjectManager] device = 0x{device:X8} (at 0x{devicePtrAddr + D3DDeviceOffset:X8})");
                 if (device == 0U)
                 {
-                    throw new InvalidOperationException("Device introuvable (device = 0)");
+                    throw new InvalidOperationException("Device not found (device = 0)");
                 }
                 
-                // Étape 3: Lire la vtable
+                // Step 3: Read the vtable
                 uint vtablePtr = Wow.Read<uint>(device);
                 Log($"[ObjectManager] vtablePtr = 0x{vtablePtr:X8}");
                 if (vtablePtr == 0U)
                 {
-                    throw new InvalidOperationException("VTable introuvable (vtable = 0)");
+                    throw new InvalidOperationException("VTable not found (vtable = 0)");
                 }
                 
-                // Étape 4: Lire l'adresse EndScene (vtable[42])
+                // Step 4: Read the EndScene address (vtable[42])
                 uint endSceneAddr = Wow.Read<uint>(vtablePtr + EndSceneVtableOffset);
                 Log($"[ObjectManager] endSceneAddr = 0x{endSceneAddr:X8} (at 0x{vtablePtr + EndSceneVtableOffset:X8})");
                 if (endSceneAddr == 0U)
                 {
-                    throw new InvalidOperationException("EndScene introuvable (endScene = 0)");
+                    throw new InvalidOperationException("EndScene not found (endScene = 0)");
                 }
                 
                 Log($"[ObjectManager] D3D: Device=0x{device:X8}, VTable=0x{vtablePtr:X8}, EndScene=0x{endSceneAddr:X8}");
                 
-                // Créer l'Executor
+                // Create the Executor
                 Log("[ObjectManager] Creating ExecutorRand...");
                 Executor = new ExecutorRand(Wow, endSceneAddr);
                 Log($"[ObjectManager] ExecutorRand created, IsInitialized = {Executor?.IsInitialized}");
                 
-                Log("[ObjectManager] EndScene hook réussi");
+                Log("[ObjectManager] EndScene hook succeeded");
                 return true;
             }
             catch (Exception ex)
             {
-                Log($"[ObjectManager] EndScene hook échoué: {ex.Message}");
+                Log($"[ObjectManager] EndScene hook failed: {ex.Message}");
                 Log($"[ObjectManager] Stack: {ex.StackTrace}");
                 return false;
             }
@@ -281,31 +281,31 @@ namespace Styx.WoWInternals
         
         #endregion
         
-        #region Update - Cœur du système
+        #region Update - Core of the system
         public static void Update()
         {
             if (Wow == null)
             {
-                throw new InvalidOperationException("Memory non initialisée. Appelez Initialize() d'abord.");
+                throw new InvalidOperationException("Memory not initialized. Call Initialize() first.");
             }
             
             lock (_updateLock)
             {
                 try
                 {
-                    // Marquer tous les objets comme potentiellement invalides
+                    // Mark all objects as potentially invalid
                     foreach (var kvp in _objectList)
                     {
                         kvp.Value.UpdateBaseAddress(0U);
                     }
                     
-                    // Offsets pour lecture optimisée (lire plusieurs valeurs en une fois)
-                    // Comme dans HB: num=48 (guid), num2=20 (type), num3=60 (next)
+                    // Offsets for optimized reading (read multiple values at once)
+                    // Same as HB: num=48 (guid), num2=20 (type), num3=60 (next)
                     int guidOffset = (int)ObjectGuidOffset;      // 48
                     int typeOffset = (int)ObjectTypeOffset;      // 20
                     int nextOffset = (int)NextObjectOffset;      // 60
                     
-                    // Calculer la taille du buffer pour lecture groupée
+                    // Calculate the buffer size for batch reading
                     int minOffset = Math.Min(Math.Min(guidOffset, typeOffset), nextOffset);
                     int maxOffset = Math.Max(Math.Max(guidOffset + 8, typeOffset + 4), nextOffset + 4);
                     byte[] buffer = new byte[maxOffset - minOffset];
@@ -315,52 +315,52 @@ namespace Styx.WoWInternals
                     typeOffset -= minOffset;
                     nextOffset -= minOffset;
                     
-                    // Récupérer le GUID local
+                    // Retrieve the local GUID
                     ulong localGuid = LocalGuid;
                     
-                    // Récupérer le premier objet de la liste
+                    // Retrieve the first object from the list
                     uint curMgr = CurMgr;
                     if (curMgr == 0U) return;
                     
                     uint currentObject = Wow.Read<uint>(curMgr + FirstObjectOffset);
                     
-                    // Parcourir la liste chaînée
+                    // Traverse the linked list
                     while (currentObject != 0U && (currentObject & 1U) == 0U)
                     {
-                        // Lecture groupée pour performance
+                        // Batch reading for performance
                         Wow.ReadBytes(currentObject + (uint)minOffset, buffer);
                         
-                        // Extraire GUID
+                        // Extract GUID
                         ulong objGuid = BitConverter.ToUInt64(buffer, guidOffset);
                         
-                        // Si c'est le joueur local, mettre à jour Me
+                        // If it's the local player, update Me
                         if (objGuid == localGuid && Me != null)
                         {
                             Me.UpdateBaseAddress(currentObject);
                         }
                         
-                        // Mettre à jour ou créer l'objet
+                        // Update or create the object
                         if (_objectList.TryGetValue(objGuid, out WoWObject? existingObj))
                         {
                             existingObj.UpdateBaseAddress(currentObject);
                         }
                         else
                         {
-                            // Extraire le type
+                            // Extract the type
                             WoWObjectType objType = (WoWObjectType)BitConverter.ToUInt32(buffer, typeOffset);
                             
-                            // Créer le bon type d'objet
+                            // Create the correct object type
                             WoWObject newObj = CreateWoWObject(currentObject, objType, objGuid, localGuid);
                             _objectList.Add(objGuid, newObj);
                         }
                         
-                        // Passer à l'objet suivant
+                        // Move to the next object
                         uint nextObject = BitConverter.ToUInt32(buffer, nextOffset);
-                        if (nextObject == currentObject) break; // Fin de liste
+                        if (nextObject == currentObject) break; // End of list
                         currentObject = nextObject;
                     }
                     
-                    // Nettoyer les objets invalides (BaseAddress = 0)
+                    // Clean up invalid objects (BaseAddress = 0)
                     _objectsToRemove.Clear();
                     foreach (var kvp in _objectList)
                     {
@@ -370,14 +370,14 @@ namespace Styx.WoWInternals
                         }
                     }
                     
-                    // Supprimer et notifier
+                    // Remove and notify
                     foreach (var kvp in _objectsToRemove)
                     {
                         _objectList.Remove(kvp.Key);
                         kvp.Value.OnInvalidated();
                     }
                     
-                    // Déclencher l'event de fin de mise à jour
+                    // Trigger the end-of-update event
                     _onObjectListUpdateFinished?.Invoke(Me);
                 }
                 catch (Exception ex)
@@ -389,7 +389,7 @@ namespace Styx.WoWInternals
         }
         private static WoWObject CreateWoWObject(uint baseAddress, WoWObjectType? objType, ulong objGuid, ulong myGuid)
         {
-            // Si type non fourni, le lire depuis la mémoire
+            // If type not provided, read it from memory
             if (objType == null && Wow != null)
             {
                 objType = (WoWObjectType)Wow.Read<uint>(baseAddress + ObjectTypeOffset);
@@ -407,7 +407,7 @@ namespace Styx.WoWInternals
                     return new WoWUnit(baseAddress);
                     
                 case WoWObjectType.Player:
-                    // Si c'est nous, créer/retourner LocalPlayer
+                    // If it's us, create/return LocalPlayer
                     if (objGuid == myGuid)
                     {
                         if (Me == null)
@@ -494,7 +494,7 @@ namespace Styx.WoWInternals
                 {
                     Type objType = obj.GetType();
                     
-                    // Vérifier le type
+                    // Check the type
                     bool typeMatch = objType == targetType || 
                                     (allowInheritance && targetType.IsAssignableFrom(objType));
                     

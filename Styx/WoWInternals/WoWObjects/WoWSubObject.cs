@@ -5,27 +5,27 @@ using Styx.Helpers;
 namespace Styx.WoWInternals.WoWObjects
 {
     /// <summary>
-    /// Représente un sous-objet WoW (chaise, porte, bobber, etc.).
+    /// Represents a WoW sub-object (chair, door, bobber, etc.).
     /// WoW 3.3.5a build 12340.
     /// </summary>
     public class WoWSubObject
     {
         /// <summary>
-        /// Crée un nouveau sous-objet WoW.
+        /// Creates a new WoW sub-object.
         /// </summary>
-        /// <param name="baseAddress">Adresse de base en mémoire</param>
+        /// <param name="baseAddress">Base address in memory</param>
         internal WoWSubObject(uint baseAddress)
         {
             BaseAddress = baseAddress;
         }
 
         /// <summary>
-        /// Adresse de base du sous-objet en mémoire.
+        /// Base address of the sub-object in memory.
         /// </summary>
         public uint BaseAddress { get; private set; }
 
         /// <summary>
-        /// Distance d'interaction avec le sous-objet.
+        /// Interaction distance with the sub-object.
         /// Offset +12 (0xC).
         /// </summary>
         public float InteractDistance
@@ -39,7 +39,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// GameObject propriétaire de ce sous-objet.
+        /// Owner GameObject of this sub-object.
         /// Offset +4 pour le GUID.
         /// </summary>
         public WoWGameObject? OwnerObject
@@ -65,8 +65,8 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Vérifie si le sous-objet peut être utilisé.
-        /// Appelle la méthode virtuelle CanUse() via vtable.
+        /// Checks if the sub-object can be used.
+        /// Calls the virtual method CanUse() via vtable.
         /// </summary>
         public bool CanUse()
         {
@@ -93,7 +93,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Vérifie si le sous-objet peut être utilisé maintenant.
+        /// Checks if the sub-object can be used now.
         /// </summary>
         public bool CanUseNow()
         {
@@ -117,7 +117,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Vérifie si le sous-objet peut être utilisé maintenant avec raison d'échec.
+        /// Checks if the sub-object can be used now with failure reason.
         /// </summary>
         public bool CanUseNow(out GameError reason)
         {
@@ -149,7 +149,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Utilise le sous-objet (appelle la méthode Use via vtable).
+        /// Uses the sub-object (calls the Use method via vtable).
         /// </summary>
         public void Use()
         {
@@ -170,8 +170,8 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Construit l'assembleur pour CanUseNow.
-        /// Appelle la méthode virtuelle CanUseNow via vtable (+28).
+        /// Builds the assembler for CanUseNow.
+        /// Calls the virtual method CanUseNow via vtable (+28).
         /// </summary>
         private void BuildCanUseNowAsm(ExecutorRand executor, uint reason, uint interactDistance, uint a4)
         {

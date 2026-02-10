@@ -176,7 +176,7 @@ namespace Styx.WoWInternals.WoWObjects
         SpellPenetration = 47,
         BlockValue = 48,
         
-        // Stats supplémentaires
+        // Additional stats
         Armor = 50,
         FireResistance = 51,
         FrostResistance = 52,

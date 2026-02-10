@@ -140,8 +140,8 @@ namespace Styx.Loaders
 		{
 			try
 			{
-				// Dans HB original, télécharge les tokens depuis buddynav.de
-				// Pour CopilotBuddy, on collecte juste les tokens des assemblies chargées
+				// In original HB, downloads tokens from buddynav.de
+				// For CopilotBuddy, we just collect tokens from loaded assemblies
 				foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 				{
 					var publicKey = assembly.GetName().GetPublicKey();

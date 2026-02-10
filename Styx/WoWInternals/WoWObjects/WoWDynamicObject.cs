@@ -132,12 +132,12 @@ namespace Styx.WoWInternals.WoWObjects
                 var caster = Caster;
                 if (caster == null) return false;
                 
-                // Si le caster est hostile au joueur, le dynobj est hostile
-                // Si c'est nous ou un joueur allié, ce n'est pas hostile
+                // If the caster is hostile to the player, the dynobj is hostile
+                // If it's us or an allied player, it's not hostile
                 if (IsMine)
-                    return false; // Nos propres objets ne sont pas hostiles
+                    return false; // Our own objects are not hostile
                     
-                return !caster.IsFriendly; // Hostile si le caster n'est pas ami
+                return !caster.IsFriendly; // Hostile if the caster is not friendly
             }
         }
         public bool AmIInRange

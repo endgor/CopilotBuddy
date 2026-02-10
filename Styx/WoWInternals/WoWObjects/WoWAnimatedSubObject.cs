@@ -4,7 +4,7 @@ using GreenMagic;
 namespace Styx.WoWInternals.WoWObjects
 {
     /// <summary>
-    /// Représente un sous-objet animé WoW.
+    /// Represents an animated WoW sub-object.
     /// WoW 3.3.5a build 12340.
     /// </summary>
     public class WoWAnimatedSubObject : WoWSubObject
@@ -14,7 +14,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// État d'animation actuel du sous-objet.
+        /// Current animation state of the sub-object.
         /// Offset +16 (0x10).
         /// </summary>
         public int AnimationState

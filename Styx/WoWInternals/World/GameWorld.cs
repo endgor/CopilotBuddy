@@ -69,7 +69,7 @@ namespace Styx.WoWInternals.World
         }
 
         /// <summary>
-        /// Vérifie si deux points sont en ligne de vue (line of sight).
+        /// Checks if two points are in line of sight.
         /// Uses native WoW CGWorldFrame::Intersect with HitTestLOS flag.
         /// Ported from HB 4.3.4.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Styx.WoWInternals.World
         }
 
         /// <summary>
-        /// Vérifie si deux points sont en ligne de vue pour les sorts.
+        /// Checks if two points are in line of sight for spells.
         /// Uses native WoW CGWorldFrame::Intersect with HitTestSpellLoS flag.
         /// Ported from HB 4.3.4.
         /// </summary>
@@ -243,7 +243,7 @@ namespace Styx.WoWInternals.World
             GreenMagic.ExecutorRand? executor = ObjectManager.Executor;
             if (executor == null)
             {
-                // Fallback: boucle managée si pas d'executor disponible
+                // Fallback: managed loop if no executor available
                 TraceLineHitFlags[] mappedFallback = new TraceLineHitFlags[flags.Length];
                 for (int i = 0; i < flags.Length; i++)
                     mappedFallback[i] = MapFlags(flags[i]);

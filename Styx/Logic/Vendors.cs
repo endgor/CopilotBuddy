@@ -70,11 +70,11 @@ namespace Styx.Logic
 
 		private static void OnLevelUp(BotEvents.Player.LevelUpEventArgs args)
 		{
-			// Utiliser CharacterSettings car lié à la checkbox de l'UI
+			// Use CharacterSettings because it's bound to the UI checkbox
 			if (!CharacterSettings.Instance.TrainNewSkills)
 				return;
 
-			// En 3.3.5a, nouveaux sorts disponibles aux niveaux pairs
+			// In 3.3.5a, new spells available at even levels
 			if (args != null && args.NewLevel % 2 == 0)
 			{
 				NeedClassTraining = true;

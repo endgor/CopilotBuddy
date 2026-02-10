@@ -5,7 +5,7 @@ using Styx.Logic.Pathing;
 namespace Styx.WoWInternals.WoWObjects
 {
     /// <summary>
-    /// Représente une chaise dans WoW.
+    /// Represents a chair in WoW.
     /// WoW 3.3.5a build 12340.
     /// </summary>
     public class WoWChair : WoWSubObject
@@ -15,7 +15,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Positions des slots de chaise.
+        /// Chair slot positions.
         /// Offset +16 (0x10), array de WoWPoint.
         /// </summary>
         public WoWPoint[] SlotPositions
@@ -33,7 +33,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Nombre de slots de chaise disponibles.
+        /// Number of available chair slots.
         /// Returns 1 by default - multi-slot chairs are rare in 3.3.5a.
         /// Full implementation would require reading GameObjectDataSlot.Data0.
         /// </summary>

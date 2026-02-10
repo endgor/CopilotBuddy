@@ -9,7 +9,7 @@ namespace Styx.WoWInternals.WoWObjects
     public enum CorpseType : uint
     {
         /// <summary>
-        /// Squelette uniquement (bones) - ne peut pas être ressuscité
+        /// Skeleton only (bones) - cannot be resurrected
         /// </summary>
         Bones = 0,
         

@@ -5,7 +5,7 @@ using Styx.Helpers;
 namespace Styx.WoWInternals.WoWObjects
 {
     /// <summary>
-    /// Représente une porte dans WoW.
+    /// Represents a door in WoW.
     /// WoW 3.3.5a build 12340.
     /// </summary>
     public class WoWDoor : WoWAnimatedSubObject
@@ -15,9 +15,9 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Indique si la porte est fermée.
-        /// Vérifie l'état d'animation.
-        /// AnimationState 0 = fermée, 1 = en cours d'ouverture, 3 = ouverte.
+        /// Indicates whether the door is closed.
+        /// Checks the animation state.
+        /// AnimationState 0 = closed, 1 = opening, 3 = open.
         /// </summary>
         public bool IsClosed
         {
@@ -34,13 +34,13 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Indique si la porte est ouverte.
+        /// Indicates whether the door is open.
         /// </summary>
         public bool IsOpen => !IsClosed;
 
         /// <summary>
-        /// Vérifie si la porte peut être ouverte maintenant.
-        /// Appelle la fonction native WoW pour vérifier.
+        /// Checks if the door can be opened now.
+        /// Calls the native WoW function to check.
         /// </summary>
         public bool CanOpenNow()
         {
@@ -64,7 +64,7 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Vérifie si la porte peut être ouverte maintenant avec raison d'échec.
+        /// Checks if the door can be opened now with failure reason.
         /// </summary>
         public bool CanOpenNow(out uint reason)
         {
@@ -96,8 +96,8 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// Construit l'assembleur pour CanOpenNow.
-        /// Appelle la fonction native WoW à l'offset 7412176 (0x00713050).
+        /// Builds the assembler for CanOpenNow.
+        /// Calls the native WoW function at offset 7412176 (0x00713050).
         /// </summary>
         private void BuildCanOpenNowAsm(ExecutorRand executor, uint reason, uint interactDistance)
         {
