@@ -357,7 +357,7 @@ namespace Styx.Logic.Pathing
                     (!me.IsFlying && (!me.IsSwimming || !me.HasAura("Sea Legs"))))
                     return false;
 
-                Logging.WriteNavigator("[Flightor]: Unstuck attempt {0}", _unstuckAttempts);
+                Logging.WriteDiagnostic("[Flightor]: Unstuck attempt {0}", _unstuckAttempts);
                 ++_unstuckAttempts;
                 DoAntiStuck();
                 return true;
