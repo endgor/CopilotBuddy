@@ -95,17 +95,16 @@ namespace Styx.Offsets
 		public const uint TargetGuid = 0x00BD07B0;
 
 		/// <summary>GUID of current focus.</summary>
-		public const uint FocusGuid = 0x00BD07C8;
+		public const uint FocusGuid = 0x00BD07C0;
 
 		/// <summary>GUID of last target.</summary>
-		public const uint LastTargetGuid = 0x00BD07C0;
+		public const uint LastTargetGuid = 0x00BD07B8;
 
 		/// <summary>GUID of mouseover target.</summary>
 		public const uint MouseoverGuid = 0x00BD07A0;
 
-		// ==================== Pet ====================
-		/// <summary>GUID of current pet.</summary>
-		public const uint PetGuid = 0x00BD07E8;
+		/// <summary>GUID of the active mover (usually player, vehicle when possessed).</summary>
+		public const uint ActiveMoverGuid = 0x00BD07A8;
 
 		// ==================== In-Game Checks ====================
 		/// <summary>Non-zero when in game world.</summary>
@@ -142,7 +141,7 @@ namespace Styx.Offsets
 		public const uint FrameScript_Execute = 0x00819210;
 
 		/// <summary>Function to register Lua function.</summary>
-		public const uint FrameScript_RegisterFunction = 0x00817F90;
+		public const uint FrameScript_RegisterFunction = 0x004181B0;
 
 		/// <summary>Function to get Lua return value.</summary>
 		public const uint FrameScript_GetText = 0x00819D40;
