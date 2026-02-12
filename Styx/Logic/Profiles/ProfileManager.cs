@@ -108,9 +108,12 @@ namespace Styx.Logic.Profiles
 			}
 
 			var sortedProfiles = CurrentOuterProfile.GetScopeSortedProfiles();
+			uint mapId = ObjectManager.Me?.MapId ?? 0;
 			for (int i = 0; i < sortedProfiles.Count; i++)
 			{
-				if (level >= sortedProfiles[i].MinLevel && level < sortedProfiles[i].MaxLevel)
+				// BUG-10: Check ContinentId matches current map (HB 4.3.4)
+				if ((sortedProfiles[i].ContinentId == -1 || (long)sortedProfiles[i].ContinentId == (long)mapId)
+					&& level >= sortedProfiles[i].MinLevel && level < sortedProfiles[i].MaxLevel)
 				{
 					return sortedProfiles[i];
 				}
