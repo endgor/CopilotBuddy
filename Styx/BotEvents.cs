@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Styx.Helpers;
+using Styx.Logic;
 using Styx.Logic.BehaviorTree;
 using Styx.WoWInternals;
 using Styx.WoWInternals.WoWObjects;
@@ -809,18 +810,8 @@ namespace Styx
 		}
 	}
 
-	// Enums pour BotEvents.Battleground
-	public enum BattlegroundType
-	{
-		None,
-		AlteracValley,
-		WarsongGulch,
-		ArathiBasin,
-		EyeOfTheStorm,
-		StrandOfTheAncients,
-		IsleOfConquest,
-		Unknown
-	}
+	// BUG-24 fix: Removed duplicate BattlegroundType enum.
+	// Use the canonical one in Styx.Logic.BattlegroundType instead.
 
 	public enum SotAGateType
 	{
