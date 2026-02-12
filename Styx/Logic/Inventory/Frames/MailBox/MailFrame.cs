@@ -226,5 +226,61 @@ namespace Styx.Logic.Inventory.Frames.MailBox
 		/// Closes the mail frame.
 		/// </summary>
 		public void Close() => Hide();
+
+		/// <summary>
+		/// FEAT-33: Gets the GUIDs of items currently attached to the outgoing mail.
+		/// Uses Lua to check ITEM_QUALITY_COLORS-based attachment slots (max 12 slots in WotLK).
+		/// </summary>
+		public ulong[] SendMailItemGuids
+		{
+			get
+			{
+				var guids = new List<ulong>();
+				try
+				{
+					for (int i = 1; i <= 12; i++)
+					{
+						var results = Lua.GetReturnValues(
+							$"local name, itemId, texture, count, quality = GetSendMailItem({i}); return itemId or 0");
+						if (results != null && results.Count > 0)
+						{
+							int itemId = Lua.ParseLuaValue<int>(results[0]);
+							if (itemId > 0)
+							{
+								// Find first matching item in bags with this entry
+								foreach (var item in ObjectManager.GetObjectsOfType<WoWItem>())
+								{
+									if (item.Entry == (uint)itemId && item.IsValid)
+									{
+										guids.Add(item.Guid);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+				catch { }
+				return guids.ToArray();
+			}
+		}
+
+		/// <summary>
+		/// FEAT-33: Gets the WoWItem objects attached to the outgoing mail.
+		/// </summary>
+		public WoWItem[] SendMailItems
+		{
+			get
+			{
+				var items = new List<WoWItem>();
+				foreach (ulong guid in SendMailItemGuids)
+				{
+					var item = ObjectManager.GetObjectByGuid<WoWItem>(guid);
+					if (item != null)
+						items.Add(item);
+				}
+				return items.ToArray();
+			}
+		}
 	}
 }
