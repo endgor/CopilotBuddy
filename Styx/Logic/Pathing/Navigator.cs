@@ -331,18 +331,13 @@ namespace Styx.Logic.Pathing
 				_ = ex;
 			}
 
-			// P6.14 — Combat abort: If we're in combat, skip expensive pathfinding.
-			// In synchronous mode we can't abort mid-pathfind, but we CAN short-circuit
-			// before calling FindPath() and use direct click-to-move instead.
-			// This lets the combat routine take over faster (HB 6.2.3 equivalent of
-			// the 4-second combat abort timeout in method_16).
-			if (me.Combat && _currentPath.Count == 0)
-			{
-				// In combat with no existing path — move directly toward target
-				// to close distance or flee, without wasting time on pathfinding.
-				WoWMovement.ClickToMove(destination);
-				return MoveResult.Moved;
-			}
+			// HB 4.3.4/6.2.3: NEVER bypass navmesh pathfinding during combat.
+			// HB limits pathfinding DURATION (4-second abort) but always paths via navmesh.
+			// Our old code did direct ClickToMove in combat — this caused the bot to walk
+			// through walls when approaching targets after aggro.
+			// Now: if we're in combat with no path, we fall through to normal pathfinding
+			// below. The pathfinding is synchronous so it may block briefly, but that's
+			// how HB 4.3.4 works too (it blocks, with a 4-second combat abort timeout).
 
 			// If destination changed significantly, generate new path (with throttle to prevent regen spam)
 			// BUG FIX: Was using exact equality (_destination != destination) which triggers on float
@@ -560,30 +555,11 @@ namespace Styx.Logic.Pathing
 			}
 
 			// Move along path
-			// HB 4.3.4: Check both 2D distance and Z difference, push waypoint ahead
+			// HB 4.3.4/6.2.3: Keep following the existing navmesh path even during combat.
+			// HB NEVER clears a path just because combat started — the path is valid navigation
+			// data and should be followed to avoid walking through walls/obstacles.
 			if (_currentPath.Count > 0 && _currentPathIndex < _currentPath.Count)
 			{
-				// P6.14 — Combat abort during path following: when combat starts mid-path,
-				// abandon the current path and let the behavior tree's combat routine take over.
-				// This is the synchronous equivalent of HB 6.2.3's 4-second combat abort timeout.
-				// We clear the path so next MoveTo() call will use the direct-movement shortcut above.
-				if (me.Combat)
-				{
-					// BUG FIX: Don't set _destination = WoWPoint.Zero here.
-					// That caused the next MoveTo() call to see destinationChanged=true,
-					// which reset StuckHandler mid-unstick sequence.
-					// Instead, just clear the path — the destination stays so we don't
-					// reset stuck state when combat ends and we resume the same path.
-					_currentPath.Clear();
-					_currentPathIndex = 0;
-						_suppressDriftCheck = false;
-						_suppressDriftCheckIndex = 0;
-					_currentFlags = null;
-					_currentPolyTypes = null;
-					_currentAbilityFlags = null;
-					_pathRegenThrottle = new WaitTimer(TimeSpan.FromMilliseconds(500)); // Allow immediate regen after combat
-					return MoveResult.Moved;
-				}
 
 				// HB 6.2.3: Once in elevator mode (method_20), keep calling the elevator handler
 				// every tick regardless of player position relative to offmesh start.
@@ -657,8 +633,11 @@ namespace Styx.Logic.Pathing
 				    && !(_suppressDriftCheck && _currentPathIndex == _suppressDriftCheckIndex))
 				{
 					WoWPoint prevPoint = _currentPath[_currentPathIndex - 1];
-					float distToSegment = DistanceToLineSegment(me.Location, prevPoint, nextPoint);
-					if (distToSegment > PathPrecision * 5f) // >10 yards off path = stale
+					// HB 6.2.3 method_15: use 2D distance (Z ignored) and tighter threshold.
+					// HB uses PathPrecision (2yd), not 5× that. 10yd was too loose —
+					// the bot could be on the wrong side of a wall and still follow stale waypoints.
+					float distToSegment = DistanceToLineSegment2D(me.Location, prevPoint, nextPoint);
+					if (distToSegment > PathPrecision * 2f) // >4 yards off path = stale (HB 6.2.3 uses PathPrecision)
 					{
 						// BUG FIX: Don't set _destination = WoWPoint.Zero here.
 						// That caused destinationChanged=true on next MoveTo(), resetting
@@ -673,15 +652,21 @@ namespace Styx.Logic.Pathing
 					}
 				}
 				
-				// HB 6.2.3 method_27: waypoint reached = 2D distance² ≤ precision² AND |ΔZ| < 4.5
-				bool isFinalPoint = (_currentPathIndex == _currentPath.Count - 1);
-				float waypointPrecision = isFinalPoint ? precision : PathPrecision;
-				float distance2DSqr = me.Location.Distance2DSqr(nextPoint);
-				float zDiff = Math.Abs(me.Location.Z - nextPoint.Z);
-				bool reachedWaypoint = distance2DSqr <= waypointPrecision * waypointPrecision && zDiff < 4.5f;
-				
-				if (reachedWaypoint)
+				// HB 4.3.4 method_5 / HB 6.2.3 method_24: while-loop to advance through
+				// ALL reached waypoints in a single tick, preventing micro-pauses between nodes.
+				// Uses 2D distance² ≤ precision² AND |ΔZ| < 4.5 (HB 6.2.3 method_27).
+				while (_currentPathIndex < _currentPath.Count)
 				{
+					nextPoint = _currentPath[_currentPathIndex];
+					bool isFinalPoint = (_currentPathIndex == _currentPath.Count - 1);
+					float waypointPrecision = isFinalPoint ? precision : PathPrecision;
+					float distance2DSqr = me.Location.Distance2DSqr(nextPoint);
+					float zDiff = Math.Abs(me.Location.Z - nextPoint.Z);
+					bool reachedWaypoint = distance2DSqr <= waypointPrecision * waypointPrecision && zDiff < 4.5f;
+
+					if (!reachedWaypoint)
+						break; // Not at this waypoint yet — stop advancing
+
 					// Off-mesh guard: if this waypoint is an off-mesh entry point (elevator, portal),
 					// require tighter precision before advancing — don't skip critical transition points
 					if (_currentFlags != null && _currentPathIndex < _currentFlags.Length &&
@@ -696,13 +681,9 @@ namespace Styx.Logic.Pathing
 						}
 						
 						// Dispatch off-mesh connection based on AreaType (ported from HB 4.3.4 method_4)
-						// The offmesh START is at _currentPathIndex, the offmesh END is at _currentPathIndex+1.
-						// We pass the END point as the target for elevator/portal handling — that's where
-						// the bot needs to go. The START point is where the bot already is.
-						// Get offmesh end point (next waypoint after this connection)
 						WoWPoint offMeshEnd = (_currentPathIndex + 1 < _currentPath.Count)
 							? _currentPath[_currentPathIndex + 1]
-							: nextPoint; // Fallback to start if no next point
+							: nextPoint;
 
 						if (_currentPolyTypes != null && _currentPathIndex < _currentPolyTypes.Length)
 						{
@@ -712,16 +693,15 @@ namespace Styx.Logic.Pathing
 						}
 						else
 						{
-							// PolyTypes not available (mmap-extractor paths don't return them).
-							// Use geometry-based fallback: HandleOffMeshConnection detects
-							// elevators via Z-delta regardless of AreaType.
 							var offMeshResult = HandleOffMeshConnection(me, offMeshEnd, TripperNav.AreaType.Ground);
 							if (offMeshResult != null)
 								return offMeshResult.Value;
 						}
+						// Off-mesh connection is also an advance boundary (HB 4.3.4/6.2.3: break on flag & 4)
+						break;
 					}
 
-					// Reset stuck timer and unstick counter on successful waypoint advance
+					// Reset stuck timer on successful waypoint advance
 					_stuckCheckTimer.Reset();
 					_unstickAttempts = 0;
 					try { StuckHandler.Reset(); } catch { }
@@ -734,24 +714,23 @@ namespace Styx.Logic.Pathing
 					}
 					if (_currentPathIndex >= _currentPath.Count)
 					{
-						// HB 6.2.3 method_24: if we reached the end of a partial path,
-						// return Failed (not ReachedDestination) so the behavior tree
-						// knows the bot didn't actually arrive at the goal.
 						if (_isPartialPath)
 							return MoveResult.Failed;
 						return MoveResult.ReachedDestination;
 					}
-					nextPoint = _currentPath[_currentPathIndex];
+
+					// HB 4.3.4 method_5 / HB 6.2.3 method_24: after advancing, immediately
+					// issue MoveTowards on the new next waypoint so movement never pauses.
+					// (The loop will check if we've also reached THIS new waypoint.)
 				}
 
-				// HB 6.2.3 method_26: For CTM mover, push waypoint slightly ahead in movement
-				// direction to prevent character from stopping at each intermediate waypoint.
-				// Validate with a single navmesh raycast (if extended point is off-mesh, use exact waypoint).
+				// Now move towards the current waypoint with push-ahead
+				nextPoint = _currentPath[_currentPathIndex];
+				bool isLastPoint = (_currentPathIndex == _currentPath.Count - 1);
 				WoWPoint clickPoint = nextPoint;
 
 				// HB 4.3.4 method_6 / HB 6.2.3 method_25: add +2f to waypoint Z when
-				// traversing Water or Lava polygons. Without this, the bot tries to walk on
-				// the water surface mesh and can sink/drown or take lava damage.
+				// traversing Water or Lava polygons.
 				if (_currentPolyTypes != null && _currentPathIndex < _currentPolyTypes.Length)
 				{
 					var polyType = _currentPolyTypes[_currentPathIndex];
@@ -761,25 +740,37 @@ namespace Styx.Logic.Pathing
 					}
 				}
 
-				if (!isFinalPoint)
+				// HB 6.2.3 method_26: push waypoint ahead by PathPrecision in movement direction,
+				// but ONLY if a navmesh raycast confirms the pushed point is still on valid mesh.
+				// Without raycast validation, the push goes through wall corners causing wall-running.
+				// HB 4.3.4 smethod_0 doesn't raycast (simpler maps), but HB 6.2.3 method_26 does.
+				if (!isLastPoint && _currentPathIndex > 0)
 				{
 					WoWPoint direction = nextPoint - me.Location;
 					float length = (float)Math.Sqrt(direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
 					if (length > 0.01f)
 					{
 						direction = new WoWPoint(direction.X / length, direction.Y / length, direction.Z / length);
-						WoWPoint pushedPoint = nextPoint + direction * PathPrecision;
+						WoWPoint pushedPoint = new WoWPoint(
+							nextPoint.X + direction.X * PathPrecision,
+							nextPoint.Y + direction.Y * PathPrecision,
+							nextPoint.Z + direction.Z * PathPrecision);
 
-						// Single raycast validation: ensure our direct line from the player to the pushed point
-						// remains on the navmesh. Validating only nextPoint->pushedPoint allows corner-cutting.
-						if (!Raycast(me.Location, pushedPoint, out _))
+						// HB 6.2.3 method_26: validate push with navmesh raycast from waypoint to pushed point.
+						// Only apply the push if the path is provably clear (hitT == 1.0 = no obstruction).
+						// This prevents pushing through wall corners.
+						if (!Raycast(nextPoint, pushedPoint, out _))
 						{
 							clickPoint = pushedPoint;
 						}
+						// else: raycast hit an obstruction — use exact waypoint (no push)
 					}
 				}
 
-				WoWMovement.ClickToMove(clickPoint);
+				// HB 4.3.4/6.2.3: route through Navigator.PlayerMover.MoveTowards()
+				// instead of calling WoWMovement.ClickToMove() directly.
+				// This respects the standard movement pipeline and allows custom movers.
+				PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(clickPoint.X, clickPoint.Y, clickPoint.Z));
 				return MoveResult.Moved;
 			}
 			return MoveResult.PathGenerationFailed;
@@ -1080,7 +1071,12 @@ namespace Styx.Logic.Pathing
 		/// Calculates the shortest distance from a point to a line segment (2D, XY plane).
 		/// Used for path validity checking — detects when player has drifted off the current path.
 		/// </summary>
-		private static float DistanceToLineSegment(WoWPoint point, WoWPoint segA, WoWPoint segB)
+		/// <summary>
+		/// 2D distance from a point to a line segment (Z axis ignored).
+		/// HB 6.2.3 method_15/smethod_1: zeroes Z for drift detection to avoid
+		/// false positives on ramps/stairs where Z delta inflates 3D distance.
+		/// </summary>
+		private static float DistanceToLineSegment2D(WoWPoint point, WoWPoint segA, WoWPoint segB)
 		{
 			float dx = segB.X - segA.X;
 			float dy = segB.Y - segA.Y;
@@ -1088,23 +1084,23 @@ namespace Styx.Logic.Pathing
 
 			if (lenSqr < 0.0001f)
 			{
-				// Segment is essentially a point
-				return point.Distance(segA);
+				// Segment is essentially a point — 2D distance
+				float px = point.X - segA.X;
+				float py = point.Y - segA.Y;
+				return (float)Math.Sqrt(px * px + py * py);
 			}
 
 			// Project point onto segment, clamped to [0, 1]
 			float t = ((point.X - segA.X) * dx + (point.Y - segA.Y) * dy) / lenSqr;
 			t = Math.Max(0f, Math.Min(1f, t));
 
-			// Closest point on segment
+			// Closest point on segment (2D only)
 			float closestX = segA.X + t * dx;
 			float closestY = segA.Y + t * dy;
-			float closestZ = segA.Z + t * (segB.Z - segA.Z);
 
 			float ex = point.X - closestX;
 			float ey = point.Y - closestY;
-			float ez = point.Z - closestZ;
-			return (float)Math.Sqrt(ex * ex + ey * ey + ez * ez);
+			return (float)Math.Sqrt(ex * ex + ey * ey);
 		}
 
 		/// <summary>
