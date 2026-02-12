@@ -65,7 +65,22 @@ namespace Styx.Logic
 			{
 				if (string.IsNullOrEmpty(reason))
 					Logging.WriteDebug("Stop and dismount.");
-					
+
+				// BUG-04 fix: Descend safely before dismounting if flying
+				if (me.IsFlying)
+				{
+					Logging.WriteDebug("Descending before dismount (flying safety).");
+					WoWMovement.MoveStop();
+					WoWMovement.Descend();
+					int maxTicks = 300; // ~30 seconds max descent
+					while (me.IsFlying && maxTicks-- > 0)
+					{
+						Thread.Sleep(100);
+					}
+					WoWMovement.DescendStop();
+					Thread.Sleep(500); // Allow landing to settle
+				}
+				
 				WoWMovement.MoveStop();
 
 				if (shapeshift == ShapeshiftForm.FlightForm || shapeshift == ShapeshiftForm.EpicFlightForm)
@@ -76,6 +91,9 @@ namespace Styx.Logic
 				{
 					Lua.DoString("Dismount()");
 				}
+
+				// BUG-22 fix: Fire OnDismount event after dismounting
+				OnDismount?.Invoke(null, EventArgs.Empty);
 			}
 		}
 
