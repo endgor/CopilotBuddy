@@ -126,7 +126,8 @@ public class QuestArea : GrindArea
     }
 
     /// <summary>
-    /// Simple ear-clipping triangulation algorithm.
+    /// FEAT-41: Ear-clipping triangulation for simple (convex and concave) polygons.
+    /// Falls back to fan triangulation for < 4 vertices.
     /// </summary>
     private static List<Triangle> Triangulate(List<Vector2> polygon)
     {
@@ -135,13 +136,111 @@ public class QuestArea : GrindArea
         if (polygon.Count < 3)
             return triangles;
 
-        // Simple fan triangulation for convex polygons
-        // TODO: Implement proper ear-clipping for concave polygons
-        for (int i = 1; i < polygon.Count - 1; i++)
+        // For 3 vertices, just one triangle
+        if (polygon.Count == 3)
         {
-            triangles.Add(new Triangle(0, i, i + 1));
+            triangles.Add(new Triangle(0, 1, 2));
+            return triangles;
+        }
+
+        // Build index list for ear-clipping
+        var indices = new List<int>(polygon.Count);
+        
+        // Determine winding order (CW vs CCW)
+        float area = 0f;
+        for (int i = 0; i < polygon.Count; i++)
+        {
+            int j = (i + 1) % polygon.Count;
+            area += polygon[i].X * polygon[j].Y;
+            area -= polygon[j].X * polygon[i].Y;
+        }
+
+        if (area > 0) // CCW
+        {
+            for (int i = 0; i < polygon.Count; i++)
+                indices.Add(i);
+        }
+        else // CW — reverse
+        {
+            for (int i = polygon.Count - 1; i >= 0; i--)
+                indices.Add(i);
+        }
+
+        int n = indices.Count;
+        int errorCount = 0;
+
+        while (n > 2)
+        {
+            bool earFound = false;
+            for (int i = 0; i < n; i++)
+            {
+                int prev = (i + n - 1) % n;
+                int next = (i + 1) % n;
+
+                int a = indices[prev];
+                int b = indices[i];
+                int c = indices[next];
+
+                var va = polygon[a];
+                var vb = polygon[b];
+                var vc = polygon[c];
+
+                // Check if angle at b is convex (cross product > 0 for CCW)
+                float cross = (vb.X - va.X) * (vc.Y - va.Y) - (vb.Y - va.Y) * (vc.X - va.X);
+                if (cross <= 0)
+                    continue;
+
+                // Check no other vertex inside this triangle
+                bool isEar = true;
+                for (int j = 0; j < n; j++)
+                {
+                    if (j == prev || j == i || j == next)
+                        continue;
+
+                    if (PointInTriangle(polygon[indices[j]], va, vb, vc))
+                    {
+                        isEar = false;
+                        break;
+                    }
+                }
+
+                if (isEar)
+                {
+                    triangles.Add(new Triangle(a, b, c));
+                    indices.RemoveAt(i);
+                    n--;
+                    earFound = true;
+                    break;
+                }
+            }
+
+            if (!earFound)
+            {
+                // Degenerate polygon — fall back to fan
+                errorCount++;
+                if (errorCount > n)
+                    break;
+            }
         }
 
         return triangles;
+    }
+
+    /// <summary>
+    /// Checks if point p is inside triangle (a, b, c) using barycentric method.
+    /// </summary>
+    private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+    {
+        float d1 = Sign(p, a, b);
+        float d2 = Sign(p, b, c);
+        float d3 = Sign(p, c, a);
+        bool hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+        bool hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+        return !(hasNeg && hasPos);
+    }
+
+    private static float Sign(Vector2 p1, Vector2 p2, Vector2 p3)
+    {
+        return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
     }
 }
