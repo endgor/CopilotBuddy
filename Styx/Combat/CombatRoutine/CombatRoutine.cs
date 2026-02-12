@@ -94,39 +94,43 @@ namespace Styx.Combat.CombatRoutine
 		{
 		}
 
+		/// <summary>
+		/// BUG-05 fix: Returns a Decorator wrapping the legacy Rest() method.
+		/// HB 4.3.4 pattern: Decorator(NeedRest, Action(Rest))
+		/// </summary>
 		public virtual Composite RestBehavior
 		{
-			get { return null; }
+			get { return new Decorator(ret => NeedRest, new TreeSharp.Action(ret => Rest())); }
 		}
 
 		public virtual Composite PreCombatBuffBehavior
 		{
-			get { return null; }
+			get { return new Decorator(ret => NeedPreCombatBuffs, new TreeSharp.Action(ret => PreCombatBuff())); }
 		}
 
 		public virtual Composite PullBuffBehavior
 		{
-			get { return null; }
+			get { return new Decorator(ret => NeedPullBuffs, new TreeSharp.Action(ret => PullBuff())); }
 		}
 
 		public virtual Composite PullBehavior
 		{
-			get { return null; }
+			get { return new TreeSharp.Action(ret => Pull()); }
 		}
 
 		public virtual Composite CombatBuffBehavior
 		{
-			get { return null; }
+			get { return new Decorator(ret => NeedCombatBuffs, new TreeSharp.Action(ret => CombatBuff())); }
 		}
 
 		public virtual Composite CombatBehavior
 		{
-			get { return null; }
+			get { return new TreeSharp.Action(ret => Combat()); }
 		}
 
 		public virtual Composite HealBehavior
 		{
-			get { return null; }
+			get { return new Decorator(ret => NeedHeal, new TreeSharp.Action(ret => Heal())); }
 		}
 
 		public virtual Composite MoveToTargetBehavior
