@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Styx.Helpers;
+using Styx.Logic.Combat;
 using Styx.Logic.Pathing;
 using Styx.Logic.Profiles;
 using Styx.Logic.POI;
@@ -70,6 +71,10 @@ namespace Styx.Logic
         {
             get
             {
+                // BUG-26 fix: Check CR override first, fall back to settings
+                double? crOverride = RoutineManager.Current?.PullDistance;
+                if (crOverride.HasValue)
+                    return crOverride.Value;
                 return (double)LevelbotSettings.Instance.PullDistance;
             }
         }
@@ -95,7 +100,7 @@ namespace Styx.Logic
         {
             float rangeSqr = range * range;
             return ObjectManager.GetObjectsOfType<WoWUnit>(true)
-                .Where(u => u.Combat && u.Location.DistanceSqr(position) <= rangeSqr)
+                .Where(u => u.IsAlive && u.Attackable && u.IsHostile && u.Location.DistanceSqr(position) <= rangeSqr)
                 .Count();
         }
 
@@ -453,6 +458,7 @@ namespace Styx.Logic
             int num3 = 1000;
             bool combat = StyxWoW.Me.Combat;
             var currentGrindArea = StyxWoW.AreaManager.CurrentGrindArea;
+            Profile currentProfile = ProfileManager.CurrentProfile;
             if (currentGrindArea != null && !combat)
             {
                 num2 = currentGrindArea.TargetMinLevel;
@@ -477,11 +483,14 @@ namespace Styx.Logic
                          woWUnit.DistanceSqr > num || 
                          woWUnit.OnTaxi || 
                          woWUnit.CreatureType == WoWCreatureType.Critter || 
+                         woWUnit.IsNonCombatPet ||
                          woWUnit.IsFlightMaster || 
                          woWUnit.IsFlying || 
                          !woWUnit.Attackable || 
                          woWUnit.IsFriendly || 
-                         (woWUnit.TaggedByOther && !flag)))
+                         (woWUnit.TaggedByOther && !flag) ||
+                         (currentProfile != null && (currentProfile.AvoidMobs.Contains(woWUnit.Entry) || currentProfile.AvoidMobs.Contains(woWUnit.Name))) ||
+                         (currentProfile != null && Targeting.IsTooNearBlackspot(currentProfile.Blackspots, woWUnit.Location))))
                     {
                         units.RemoveAt(i);
                     }
@@ -599,8 +608,8 @@ namespace Styx.Logic
                         targetScore -= 25.0; // Not in line of sight - penalty
                     }
 
-                    // Penalty for nearby units
-                    targetScore -= (double)(5 * CountUnitsNearLocation(woWUnit.Location, 15f));
+                    // BUG-13: Use GetAggroWithin (hostile in combat) instead of CountUnitsNearLocation (all units)
+                    targetScore -= (double)(5 * Targeting.GetAggroWithin(woWUnit.Location, 15f));
                 }
                 units[j].Score += targetScore;
                 j--;
