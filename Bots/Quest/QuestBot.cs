@@ -150,7 +150,7 @@ public class QuestBot : BotBase
 
     private static Composite CreateTargetingBehavior()
     {
-        return (Composite)new Decorator((CanRunDecoratorDelegate)(context => StyxWoW.Me.IsMoving), (Composite)new DecoratorIsNotPoiType(PoiType.Kill, (Composite)new Decorator((CanRunDecoratorDelegate)(context => !StyxWoW.Me.Combat), (Composite)new DecoratorNeedToFindTarget((Composite)new Sequence(new Composite[2]
+        return (Composite)new Decorator((CanRunDecoratorDelegate)(context => StyxWoW.Me.IsMoving), (Composite)new DecoratorIsNotPoiType(PoiType.Kill, (Composite)new Decorator((CanRunDecoratorDelegate)(context => !StyxWoW.Me.Combat && !Vendors.NeedClassTraining), (Composite)new DecoratorNeedToFindTarget((Composite)new Sequence(new Composite[2]
         {
             (Composite)new ActionSetTarget(),
             (Composite)new Wait(5, (CanRunDecoratorDelegate)(context => (WoWObject)StyxWoW.Me.CurrentTarget != (WoWObject)null), (Composite)new ActionSetPoi((RetrieveBotPoiDelegate)(context => new BotPoi((WoWObject)StyxWoW.Me.CurrentTarget, PoiType.Kill))))
