@@ -25,6 +25,7 @@ namespace Styx.Logic.AreaManagement
 			TargetMinLevel = 0;
 			TargetMaxLevel = int.MaxValue;
 			Factions = new List<int>();
+			MobIDs = new List<int>();
 		}
 
 		public GrindArea(HotspotManager manager)
@@ -58,6 +59,8 @@ namespace Styx.Logic.AreaManagement
 		public int TargetMaxLevel { get; set; }
 
 		public List<int> Factions { get; set; }
+
+		public List<int> MobIDs { get; set; }
 
 		public int? MaximumHotspotTime { get; set; }
 
@@ -198,7 +201,17 @@ namespace Styx.Logic.AreaManagement
 				}
 			}
 
-			return grindArea;
+				var mobIdsElement = GetElement("MobIDs") ?? GetElement("mobids") ?? GetElement("MobIds");
+				if (mobIdsElement != null)
+				{
+					foreach (Match match in _numberRegex.Matches(mobIdsElement.Value))
+					{
+						if (int.TryParse(match.Value, out int mobId))
+							grindArea.MobIDs.Add(mobId);
+					}
+				}
+
+				return grindArea;
 		}
 
 		public override string ToString()
