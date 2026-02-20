@@ -474,23 +474,29 @@ namespace Styx.Logic
                 else
                 {
                     WoWUnit woWUnit = (WoWUnit)woWObject;
-                    if ((woWUnit is WoWPlayer || !woWUnit.Combat || !woWUnit.IsTargetingMeOrPet) && 
-                        (Targeting._blacklistedMobIds.Contains(woWUnit.Entry) || 
-                         woWUnit.Level < num2 || 
-                         woWUnit.Level > num3 || 
-                         Blacklist.Contains(woWUnit.Guid, false) || 
-                         woWUnit.Dead || 
-                         woWUnit.DistanceSqr > num || 
-                         woWUnit.OnTaxi || 
-                         woWUnit.CreatureType == WoWCreatureType.Critter || 
-                         woWUnit.IsNonCombatPet ||
-                         woWUnit.IsFlightMaster || 
-                         woWUnit.IsFlying || 
-                         !woWUnit.Attackable || 
-                         woWUnit.IsFriendly || 
-                         (woWUnit.TaggedByOther && !flag) ||
-                         (currentProfile != null && (currentProfile.AvoidMobs.Contains(woWUnit.Entry) || currentProfile.AvoidMobs.Contains(woWUnit.Name))) ||
-                         (currentProfile != null && Targeting.IsTooNearBlackspot(currentProfile.Blackspots, woWUnit.Location))))
+
+                    // Allowed if grind area or profile explicitly targets this faction/entry
+                    bool allowedByGrindArea = (currentProfile != null && currentProfile.Factions != null && currentProfile.Factions.Contains((uint)woWUnit.FactionId))
+                        || (currentGrindArea != null && (currentGrindArea.Factions.Contains((int)woWUnit.FactionId) || currentGrindArea.MobIDs.Contains((int)woWUnit.Entry)));
+
+                    bool shouldRemove = Targeting._blacklistedMobIds.Contains(woWUnit.Entry)
+                        || woWUnit.Level < num2
+                        || woWUnit.Level > num3
+                        || Blacklist.Contains(woWUnit.Guid, false)
+                        || woWUnit.Dead
+                        || woWUnit.DistanceSqr > num
+                        || woWUnit.OnTaxi
+                        || woWUnit.CreatureType == WoWCreatureType.Critter
+                        || woWUnit.IsNonCombatPet
+                        || woWUnit.IsFlightMaster
+                        || woWUnit.IsFlying
+                        || !woWUnit.Attackable
+                        || woWUnit.IsFriendly
+                        || (woWUnit.TaggedByOther && !flag)
+                        || (currentProfile != null && (currentProfile.AvoidMobs.Contains(woWUnit.Entry) || currentProfile.AvoidMobs.Contains(woWUnit.Name)))
+                        || (currentProfile != null && Targeting.IsTooNearBlackspot(currentProfile.Blackspots, woWUnit.Location));
+
+                    if ((woWUnit is WoWPlayer || !woWUnit.Combat || !woWUnit.IsTargetingMeOrPet) && shouldRemove && !allowedByGrindArea)
                     {
                         units.RemoveAt(i);
                     }
