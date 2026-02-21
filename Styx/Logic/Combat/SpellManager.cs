@@ -216,6 +216,12 @@ namespace Styx.Logic.Combat
 		// HB 4.3.4 compatibility wrappers
 		public static bool CanCast(string spellName) => CanCastSpell(spellName);
 
+		// HB convenience overload: allow calling CanCast with just an int spellId
+		public static bool CanCast(int spellId)
+		{
+			return CanCast(spellId, StyxWoW.Me?.CurrentTarget);
+		}
+
 		public static bool CanCast(int spellId, WoWUnit target, bool checkRange = true, bool checkMovement = false)
 		{
 			// Convert spellId to name and use existing CanCast
