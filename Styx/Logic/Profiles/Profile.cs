@@ -14,6 +14,8 @@ namespace Styx.Logic.Profiles
 	public class Profile : IEquatable<Profile>
 	{
 
+		public XElement XmlElement { get; private set; }
+
 		public static event EventHandler<UnknownProfileElementEventArgs>? OnUnknownProfileElement;
 
 		private readonly DualHashSet<uint, string> _protectedItems = new();
@@ -498,7 +500,8 @@ namespace Styx.Logic.Profiles
 					Logging.Write("Profile has no root element: {0}", path);
 					return;
 				}
-
+				// Preserve original XML element for callers that expect it (HB compatibility)
+				XmlElement = doc.Root;
 				ParseFromXml(doc.Root);
 			}
 			catch (Exception ex)
@@ -510,6 +513,8 @@ namespace Styx.Logic.Profiles
 		public Profile(XContainer xml, Profile? parent) : this()
 		{
 			Parent = parent;
+			// Keep the original XML element for HB compatibility
+			XmlElement = xml as XElement ?? (xml as XDocument)?.Root;
 			ParseFromXml(xml);
 		}
 
@@ -517,10 +522,12 @@ namespace Styx.Logic.Profiles
 		{
 			foreach (XElement element in xml.Elements())
 			{
+				bool handled = false;
 				string name = element.Name.LocalName.ToLowerInvariant();
 				switch (name)
 				{
 					case "name":
+						handled = true;
 						Name = element.Value;
 						break;
 					case "minlevel":
@@ -661,7 +668,7 @@ namespace Styx.Logic.Profiles
 						break;
 				}
 				// HonorBuddy behavior: if element wasn't handled by switch, treat it as unknown
-				if (element.NodeType != XmlNodeType.XmlDeclaration && element.NodeType != XmlNodeType.Comment)
+				if (!handled && element.NodeType != XmlNodeType.XmlDeclaration && element.NodeType != XmlNodeType.Comment)
 				{
 					if (OnUnknownProfileElement == null)
 						throw new ProfileUnknownElementException(element);
