@@ -51,6 +51,9 @@ public class QuestBehaviorHelper
         AddReferenceFromType<List<int>>(referencePaths);        // System.Collections
         AddReferenceFromType<Color>(referencePaths);            // System.Drawing
         AddReferenceFromType<System.Xml.XmlNode>(referencePaths); // System.Xml
+        // Ensure LINQ/XDocument types are explicitly referenced so forwarded XElement resolves during compilation
+        AddReferenceFromType<System.Xml.Linq.XDocument>(referencePaths);
+        AddReferenceFromType<System.Xml.Linq.XElement>(referencePaths);
         
         // Add System.Runtime for fundamental types
         var runtimePath = System.IO.Path.GetDirectoryName(typeof(object).Assembly.Location);
@@ -67,6 +70,10 @@ public class QuestBehaviorHelper
             var systemLinq = System.IO.Path.Combine(runtimePath, "System.Linq.dll");
             if (File.Exists(systemLinq) && referencePaths.Add(systemLinq))
                 _defaultReferences.Add(MetadataReference.CreateFromFile(systemLinq));
+
+            var systemXmlXDocument = System.IO.Path.Combine(runtimePath, "System.Xml.XDocument.dll");
+            if (File.Exists(systemXmlXDocument) && referencePaths.Add(systemXmlXDocument))
+                _defaultReferences.Add(MetadataReference.CreateFromFile(systemXmlXDocument));
             
             var systemConsole = System.IO.Path.Combine(runtimePath, "System.Console.dll");
             if (File.Exists(systemConsole) && referencePaths.Add(systemConsole))
