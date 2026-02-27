@@ -20,6 +20,14 @@ public class WeightSetEx : IDisposable
 {
   private static WeightSetEx _cachedWeightSet;
   private static IEnumerable<WeightSetEx> _loadedWeightSets;
+  // Default fallback weights used when a weight set does not define weapon stats
+  private static readonly Dictionary<Stat, float> DefaultStatWeights = new Dictionary<Stat, float>
+  {
+    { Stat.DPS, 1.0f },
+    { Stat.MinDamage, 0.5f },
+    { Stat.MaxDamage, 0.5f },
+    { Stat.Speed, 0.0f }
+  };
 
   private WeightSetEx(XElement weightElm)
   {
@@ -233,8 +241,20 @@ public class WeightSetEx : IDisposable
 
   public float GetStatScore(Stat stat, float statPoints)
   {
+    if (float.IsNaN(statPoints) || statPoints == 0f)
+      return 0.0f;
+
     WeightSetEx currentWeightSet = WeightSetEx.CurrentWeightSet;
-    return currentWeightSet != null && !float.IsNaN(statPoints) && currentWeightSet.StatScores.ContainsKey(stat) ? currentWeightSet.StatScores[stat] * statPoints : 0.0f;
+
+    // Use weight from loaded weight set when present
+    if (currentWeightSet != null && currentWeightSet.StatScores != null && currentWeightSet.StatScores.ContainsKey(stat))
+      return currentWeightSet.StatScores[stat] * statPoints;
+
+    // Fall back to conservative defaults for weapon-related stats when no weight set defines them
+    if (DefaultStatWeights.ContainsKey(stat))
+      return DefaultStatWeights[stat] * statPoints;
+
+    return 0.0f;
   }
 
   public float GetStatScore(string statName, float statPoints)

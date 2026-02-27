@@ -180,6 +180,57 @@ namespace Styx.WoWInternals.WoWObjects
         /// </summary>
         public bool IsBoss => Elite && (Level == -1 || Level > StyxWoW.Me.Level + 5);
         
+        /// <summary>
+        /// Simplified difficulty color calculation similar to HB.
+        /// Determines how close the mob's level is to the player.
+        /// </summary>
+        public DifficultyColor Difficulty
+        {
+            get
+            {
+                int level = StyxWoW.Me.Level;
+                int level2 = this.Level;
+                int num = level - level2;
+                if (num <= -10 || this.IsBoss)
+                {
+                    return DifficultyColor.Skull;
+                }
+                if (num < -4)
+                {
+                    return DifficultyColor.Red;
+                }
+                if (num <= -3)
+                {
+                    return DifficultyColor.Orange;
+                }
+                if (num >= -2 && num <= 2)
+                {
+                    return DifficultyColor.Yellow;
+                }
+                if (level < 10 && num <= 4)
+                {
+                    return DifficultyColor.Green;
+                }
+                if (level < 20 && num <= 5)
+                {
+                    return DifficultyColor.Green;
+                }
+                if (level < 30 && num <= 6)
+                {
+                    return DifficultyColor.Green;
+                }
+                if (level < 40 && num <= 7)
+                {
+                    return DifficultyColor.Green;
+                }
+                if (num <= 8)
+                {
+                    return DifficultyColor.Green;
+                }
+                return DifficultyColor.Gray;
+            }
+        }
+        
         public bool Looting => HasUnitFlag(UnitFlags.Looting);
         public bool PetInCombat => HasUnitFlag(UnitFlags.PetInCombat);
         public bool OnTaxi => HasUnitFlag(UnitFlags.OnTaxi);
@@ -603,6 +654,24 @@ namespace Styx.WoWInternals.WoWObjects
 
         public ulong CurrentTargetGuid => GetDescriptor<ulong>(UnitFields.Target);
         public WoWUnit? CurrentTarget => ObjectManager.GetObjectByGuid<WoWUnit>(CurrentTargetGuid);
+
+        /// <summary>
+        /// HB 4.3.4 compatible helper – returns true when any of the player's
+        /// minions (pets) is currently targeting this unit.
+        /// Used by Targeting filters to keep attackers on the list even if
+        /// their Aggro flag hasn't flipped yet.
+        /// </summary>
+        public bool IsTargetingAnyMinion
+        {
+            get
+            {
+                if (this.GotTarget)
+                {
+                    return StyxWoW.Me.Minions.Any(m => m.Guid == this.CurrentTargetGuid);
+                }
+                return false;
+            }
+        }
         public bool GotTarget => CurrentTarget != null;
 
         public ulong CharmedByGuid => GetDescriptor<ulong>(UnitFields.CharmedBy);

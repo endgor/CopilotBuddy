@@ -10,6 +10,7 @@ using Styx.Logic.Questing;
 using Styx.Patchables;
 using Styx.WoWInternals.DBC;
 using Styx.WoWInternals.WoWCache;
+using Styx; // for ThreatStatus and related types
 
 namespace Styx.WoWInternals.WoWObjects
 {
@@ -119,6 +120,36 @@ namespace Styx.WoWInternals.WoWObjects
             }
         }
         
+        #endregion
+
+        #region Combat Info
+
+        /// <summary>
+        /// Returns true if the player is currently being attacked by something.
+        /// This is a lightweight approximation of HonorBuddy's logic, using
+        /// threat status when available and falling back to "in combat".
+        /// </summary>
+        public bool IsBeingAttacked
+        {
+            get
+            {
+                try
+                {
+                    return ThreatInfo.ThreatStatus >= ThreatStatus.NoobishTank;
+                }
+                catch
+                {
+                    return Combat;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether the player is engaged in PvP combat.  HB exposed this
+        /// so certain logic can ignore PvP situations.  We return the PvP flag.
+        /// </summary>
+        public bool InPvpCombat => PvpFlagged;
+
         #endregion
         
         #region Location Info

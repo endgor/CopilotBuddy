@@ -7,6 +7,7 @@ using Styx.WoWInternals;
 using Styx.WoWInternals.Misc;
 using Styx.WoWInternals.WoWCache;
 using Styx.WoWInternals.WoWObjects;
+using GreenMagic;
 
 namespace Styx
 {
@@ -133,6 +134,13 @@ namespace Styx
         }
 
         public static bool GlobalCooldown => SpellManager.GlobalCooldown;
+
+        /// <summary>
+        /// Exposes the memory manager for convenience.  Mirrors HB's
+        /// <c>StyxWoW.Memory</c> property and simply proxies to the
+        /// underlying ObjectManager.Wow instance.
+        /// </summary>
+        public static Memory? Memory => ObjectManager.Wow;
 
         #endregion
 

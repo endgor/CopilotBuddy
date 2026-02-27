@@ -486,6 +486,59 @@ namespace GreenMagic
 
         #endregion
 
+        #region Frame Support
+
+        /// <summary>
+        /// HonorBuddy compatibility helper.  Many HB classes wrap their
+        /// calls to the game API in a <c>using (StyxWoW.Memory.AcquireFrame())
+        /// { ... }</c> block which ensures the executor remains in a safe
+        /// state while multiple memory reads are performed.  The real HB
+        /// implementation lives in ExternalProcessMemory and returns a
+        /// <c>GreyMagic.FrameLock</c>, but for our simplified memory manager
+        /// a basic <see cref="Styx.FrameLock"/> is sufficient.
+        /// </summary>
+        /// <param name="isHardLock">
+        /// Ignored; provided for API compatibility with HB.  In the original
+        /// code a "hard" lock would call <c>Executor.GrabFrame()</c>.
+        /// </param>
+        /// <returns>A disposable object that will call
+        /// <see cref="Styx.FrameLock.Dispose"/> when disposed.</returns>
+        public IDisposable AcquireFrame(bool isHardLock = false)
+        {
+            // We don't have a custom executor here, so just return the basic
+            // Styx.FrameLock which will call ObjectManager.Executor.BeginExecute/EndExecute.
+            return new Styx.FrameLock();
+        }
+
+        /// <summary>
+        /// Overload for the parameterless HB call.
+        /// </summary>
+        public IDisposable AcquireFrame()
+        {
+            return AcquireFrame(false);
+        }
+
+        /// <summary>
+        /// Same deal as <see cref="AcquireFrame"/>; included so that
+        /// <c>StyxWoW.Memory.ReleaseFrame(...)</c> compiles.  The HB version
+        /// returns a <c>FrameLockRelease</c> which handles reacquiring the
+        /// lock after a sleep, but we don't need that detail here.
+        /// </summary>
+        public IDisposable ReleaseFrame(bool reacquireAsHardLock = false)
+        {
+            return new Styx.FrameLock();
+        }
+
+        /// <summary>
+        /// Parameterless overload matching HB signature.
+        /// </summary>
+        public IDisposable ReleaseFrame()
+        {
+            return ReleaseFrame(false);
+        }
+
+        #endregion
+
         #region Memory Allocation
 
         public uint AllocateMemory(int size, uint allocationType, uint protect)

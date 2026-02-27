@@ -46,7 +46,10 @@ namespace Styx.WoWInternals.World
             WMO = 0x10,
             Doodad = 0x8,
             Liquid = 0x10000,
-            All = 0x100111
+            All = 0x100111,
+            // HB 5.4.8+/6.2.3 alias; equal to All (0x100111) but makes the
+            // targeting code more readable when asking only for collisions.
+            Collision = All
         }
 
         private static TraceLineHitFlags MapFlags(CGWorldFrameHitFlags flags)
