@@ -7,6 +7,9 @@ using System.Threading;
 using GreenMagic;
 using Styx.Helpers;
 using Styx.WoWInternals.WoWObjects;
+using Styx.WoWInternals.World;  // WorldLine, GameWorld
+using Styx.Logic;              // Battlegrounds
+using Styx.Logic.Pathing;      // WoWPoint
 
 namespace Styx.WoWInternals
 {
@@ -42,15 +45,89 @@ namespace Styx.WoWInternals
         private static readonly Dictionary<ulong, WoWObject> _objectsToRemove = new();
         private static ObjectListUpdateFinishedDelegate? _onObjectListUpdateFinished;
         private static readonly object _updateLock = new();
-        
+
+        // caches used by targeting and other systems (400ms window mirrors HB)
+        private static readonly TimeCachedValue<List<WoWUnit>> _cachedUnits =
+            new(TimeSpan.FromMilliseconds(400), () => GetObjectsOfType<WoWUnit>(allowInheritance: true));
+        private static readonly TimeCachedValue<List<WoWPlayer>> _cachedPlayers =
+            new(TimeSpan.FromMilliseconds(400), () => GetObjectsOfType<WoWPlayer>(allowInheritance: true));
+        private static readonly TimeCachedValue<List<WoWGameObject>> _cachedObjects =
+            new(TimeSpan.FromMilliseconds(400), () => GetObjectsOfType<WoWGameObject>(allowInheritance: true));
+        private static readonly TimeCachedValue<List<WoWItem>> _cachedItems =
+            new(TimeSpan.FromMilliseconds(400), () => GetObjectsOfType<WoWItem>(allowInheritance: true));
+
+        internal static void ResetCaches()
+        {
+            _cachedUnits.Reset();
+            _cachedPlayers.Reset();
+            _cachedObjects.Reset();
+            _cachedItems.Reset();
+
+            // also clear the derived value caches; clear under lock in case
+            // a concurrent AcquireFrame/ScanCaches is in progress.
+            lock (_cacheLock)
+            {
+                _distanceCache.Clear();
+                _losCache.Clear();
+                _threatCache.Clear();
+            }
+        }
+
         #endregion
         
+        // additional background caches that HB maintains (distance/los/threat)
+        // these dictionaries are mutated on every AcquireFrame/ScanCaches call.  HB's
+        // original implementation relied on all callers executing on the same thread
+        // so concurrent modifications never occurred.  In CopilotBuddy we may call
+        // AcquireFrame from the main pulse thread *and* have a dedicated background
+        // updater, which can trigger races.  A lock guards all access to avoid
+        // the "non-concurrent collection" InvalidOperationException seen in the
+        // log (see issue #XXX).
+        private static readonly object _cacheLock = new object();
+        private static readonly Dictionary<ulong, float> _distanceCache = new Dictionary<ulong, float>();
+        private static readonly Dictionary<ulong, bool> _losCache = new Dictionary<ulong, bool>();
+        private static readonly Dictionary<ulong, UnitThreatInfo> _threatCache = new Dictionary<ulong, UnitThreatInfo>();
+
+        internal static float GetDistance(ulong guid)
+        {
+            lock (_cacheLock)
+            {
+                if (_distanceCache.TryGetValue(guid, out float d))
+                    return d;
+            }
+            return float.MaxValue;
+        }
+
+        internal static bool InLineOfSight(ulong guid)
+        {
+            lock (_cacheLock)
+            {
+                return _losCache.TryGetValue(guid, out bool los) && los;
+            }
+        }
+
+        internal static UnitThreatInfo GetThreatInfo(ulong guid)
+        {
+            lock (_cacheLock)
+            {
+                if (_threatCache.TryGetValue(guid, out UnitThreatInfo info))
+                    return info;
+            }
+            return default;
+        }
+
         #region Public Properties - API Honorbuddy
         public static Process? WoWProcess { get; private set; }
         public static Memory? Wow { get; private set; }
         public static ExecutorRand? Executor { get; set; }
         public static LocalPlayer? Me { get; set; }
         public static bool IsInitialized => Wow != null;
+
+        // cached collections (underlying data refreshed every ObjectManager.Update())
+        public static List<WoWUnit> CachedUnits => _cachedUnits.Value;
+        public static List<WoWPlayer> CachedPlayers => _cachedPlayers.Value;
+        public static List<WoWGameObject> CachedObjects => _cachedObjects.Value;
+        public static List<WoWItem> CachedItems => _cachedItems.Value;
         public static bool IsInGame
         {
             get
@@ -201,6 +278,9 @@ namespace Styx.WoWInternals
             
             // First Update to populate the object list
             Update();
+
+            // start the background scan thread (mirror HB smethod_3 loop)
+            StartBackgroundThread();
             
             Logging.WriteDebug("[ObjectManager] Initialized successfully");
         }
@@ -293,9 +373,19 @@ namespace Styx.WoWInternals
             {
                 try
                 {
-                    // Mark all objects as potentially invalid
+                    // Mark all objects as potentially invalid.  HB originally ran on a single
+                    // thread so nobody could read an object while it was being cleared.
+                    // In CopilotBuddy the background updater runs concurrently with other
+                    // code (e.g. rest/taxi logic) which may access LocalPlayer.  If we
+                    // set Me.BaseAddress to 0 temporarily the reader throws an
+                    // InvalidOperationException like the one seen in the log above.
+                    //
+                    // To avoid this race we skip the local player during the marker
+                    // pass; its address will be updated later in the enumeration.
                     foreach (var kvp in _objectList)
                     {
+                        if (Me != null && ReferenceEquals(kvp.Value, Me))
+                            continue; // keep our own pointer valid until replaced
                         kvp.Value.UpdateBaseAddress(0U);
                     }
                     
@@ -385,6 +475,11 @@ namespace Styx.WoWInternals
                     Logging.WriteException(ex);
                     throw;
                 }
+                finally
+                {
+                    // clear any per-frame caches so callers get fresh data next pulse
+                    ResetCaches();
+                }
             }
         }
         private static WoWObject CreateWoWObject(uint baseAddress, WoWObjectType? objType, ulong objGuid, ulong myGuid)
@@ -437,7 +532,107 @@ namespace Styx.WoWInternals
         }
         
         #endregion
-        
+
+        #region Background Thread
+
+        private static Thread? _bgThread;
+        private static bool _bgThreadStarted;
+
+        private static void StartBackgroundThread()
+        {
+            if (_bgThreadStarted)
+                return;
+            _bgThreadStarted = true;
+            _bgThread = new Thread(ObjectManagerBackground)
+            {
+                IsBackground = true,
+                Name = "ObjectManager.Update"
+            };
+            _bgThread.Start();
+        }
+
+        private static void ObjectManagerBackground()
+        {
+            while (true)
+            {
+                try
+                {
+                    if (!StyxWoW.IsInGame || Wow == null)
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
+                    using (Wow.AcquireFrame())
+                    {
+                        Update();
+                        // scan derived values after the main object list update
+                        ScanCaches();
+                    }
+                }
+                catch
+                {
+                    // swallow exceptions to keep thread alive
+                }
+
+                Thread.Sleep(50);
+            }
+        }
+
+        /// <summary>
+        /// Replicates Honorbuddy's background scanners for distance, line-of-sight and threat.
+        /// Called every time we grab a memory frame (roughly 20 Hz).
+        /// </summary>
+        public static void ScanCaches()
+        {
+            // callers may be on the background updater thread or on the main pulse
+            // thread via Memory.AcquireFrame().  Protect the caches against
+            // simultaneous writers/readers.
+            lock (_cacheLock)
+            {
+                _distanceCache.Clear();
+                _losCache.Clear();
+                _threatCache.Clear();
+
+                if (Me == null)
+                    return;
+
+                // copy under lock to avoid concurrent-updates exceptions (HB-3.3.5a bugfix)
+                List<WoWUnit> units;
+                lock (_updateLock)
+                {
+                    units = _objectList.Values.OfType<WoWUnit>().ToList();
+                }
+                if (units.Count == 0)
+                    return;
+
+                Styx.Logic.Pathing.WoWPoint myLoc = Me.Location;
+
+                // compute LOS in batch just like Targeting did
+                if (!Battlegrounds.IsInsideBattleground)
+                {
+                    WorldLine[] lines = new WorldLine[units.Count];
+                    Styx.Logic.Pathing.WoWPoint start = Me.GetTraceLinePos();
+                    for (int i = 0; i < units.Count; i++)
+                        lines[i] = new WorldLine(start, units[i].GetTraceLinePos());
+
+                    bool[] los;
+                    GameWorld.MassTraceLine(lines, GameWorld.TraceLineHitFlags.Collision, out los);
+                    for (int i = 0; i < units.Count; i++)
+                        _losCache[units[i].Guid] = los[i];
+                }
+
+                // fill distance and threat caches
+                foreach (var unit in units)
+                {
+                    _distanceCache[unit.Guid] = myLoc.Distance(unit.Location);
+                    _threatCache[unit.Guid] = unit.ThreatInfo;
+                }
+            }
+        }
+
+        #endregion
+
         #region Query Methods - API Honorbuddy
         public static T? GetObjectByGuid<T>(ulong guid) where T : WoWObject
         {
@@ -527,6 +722,12 @@ namespace Styx.WoWInternals
                 
                 foreach (WoWObject obj in objects)
                 {
+                    // Skip any object that has been invalidated (base address = 0).
+                    // CachedUnits may still hold references to these briefly after a
+                    // removal; reading descriptors on them throws exceptions.
+                    if (obj.BaseAddress == 0U)
+                        continue;
+
                     Type objType = obj.GetType();
                     
                     // Check the type
