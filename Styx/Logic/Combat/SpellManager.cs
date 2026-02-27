@@ -92,6 +92,10 @@ namespace Styx.Logic.Combat
 		{
 			get
 			{
+				// HB 4.3.4 reads the cooldown list directly without grabbing a frame.
+				// Using AcquireFrame(true) injects code and can clash with other
+				// executor calls; remove it to mimic the original behavior and
+				// eliminate freezes.
 				try
 				{
 					Memory? memory = ObjectManager.Wow;
@@ -131,6 +135,7 @@ namespace Styx.Logic.Combat
 		{
 			get
 			{
+				// Mirror HB 4.3.4: raw walk of cooldown list, no frame lock.
 				try
 				{
 					Memory? memory = ObjectManager.Wow;
@@ -140,6 +145,7 @@ namespace Styx.Logic.Combat
 					long counter;
 					QueryPerformanceFrequency(out frequency);
 					QueryPerformanceCounter(out counter);
+	
 					long currentTime = counter * 1000L / frequency;
 
 					uint cooldownPtr = memory.Read<uint>(CooldownListBase);
@@ -722,7 +728,11 @@ namespace Styx.Logic.Combat
 						executor.AddLine("retn");
 						executor.Execute();
 						
-						int result = executor.Memory.Read<int>(executor.ReturnPointer);
+						int result;
+						using (StyxWoW.Memory.TemporaryCacheState(false))
+						{
+							result = executor.Memory.Read<int>(executor.ReturnPointer);
+						}
 						return result != 0;
 					}
 					finally
