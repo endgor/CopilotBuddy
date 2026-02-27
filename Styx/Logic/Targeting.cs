@@ -21,10 +21,11 @@ namespace Styx.Logic
     {
         private static readonly List<string> _blacklistedMobNames;
         private static Targeting _instance;
-        private TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate_0;
-        private IncludeTargetsFilterDelegate includeTargetsFilterDelegate_0;
-        private RemoveTargetsFilterDelegate removeTargetsFilterDelegate_0;
-        private WeighTargetsDelegate weighTargetsDelegate_0;
+        // backing fields for events (originally obfuscated names in HB)
+        private TargetListUpdateFinishedDelegate _targetListUpdateFinishedHandlers;
+        private IncludeTargetsFilterDelegate _includeTargetsFilterHandlers;
+        private RemoveTargetsFilterDelegate _removeTargetsFilterHandlers;
+        private WeighTargetsDelegate _weighTargetsFilterHandlers;
         private static readonly HashSet<uint> _blacklistedMobIds;
         // from original HB: special quest mobs used in include filter
         private static readonly HashSet<uint> _specialQuestMobIds = new HashSet<uint>
@@ -39,13 +40,13 @@ namespace Styx.Logic
         private bool _displayTargetingExceptions;
         private List<WoWObject> _objectList;
         private int _maxTargets;
-        private static Converter<WoWObject, WoWUnit> converter_0;
-        private static Func<WoWObject, bool> func_0;
-        private static Func<WoWObject, bool> func_1;
-        private static Func<WoWObject, bool> func_2;
-        private static Func<WoWObject, TargetPriority> func_3;
-        private static Func<TargetPriority, double> func_4;
-        private static Func<TargetPriority, WoWObject> func_5;
+        private static Converter<WoWObject, WoWUnit> _objectToUnitConverter;
+        private static Func<WoWObject, bool> _unitOrPlayerPredicate;
+        private static Func<WoWObject, bool> _unitPredicate;
+        private static Func<WoWObject, bool> _unitNotPlayerPredicate;
+        private static Func<WoWObject, TargetPriority> _targetPrioritySelector;
+        private static Func<TargetPriority, double> _getScoreFunc;
+        private static Func<TargetPriority, WoWObject> _targetToObjectSelector;
 
         protected Targeting()
         {
@@ -202,11 +203,11 @@ namespace Styx.Logic
             get
             {
                 List<WoWObject> objectList = this.ObjectList;
-                if (Targeting.converter_0 == null)
+                if (Targeting._objectToUnitConverter == null)
                 {
-                    Targeting.converter_0 = new Converter<WoWObject, WoWUnit>(ToWoWUnit);
+                    Targeting._objectToUnitConverter = new Converter<WoWObject, WoWUnit>(ToWoWUnit);
                 }
-                return objectList.ConvertAll<WoWUnit>(Targeting.converter_0);
+                return objectList.ConvertAll<WoWUnit>(Targeting._objectToUnitConverter);
             }
         }
 
@@ -226,25 +227,25 @@ namespace Styx.Logic
         {
             add
             {
-                TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate = this.targetListUpdateFinishedDelegate_0;
+                TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate = this._targetListUpdateFinishedHandlers;
                 TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate2;
                 do
                 {
                     targetListUpdateFinishedDelegate2 = targetListUpdateFinishedDelegate;
                     TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate3 = (TargetListUpdateFinishedDelegate)Delegate.Combine(targetListUpdateFinishedDelegate2, value);
-                    targetListUpdateFinishedDelegate = Interlocked.CompareExchange<TargetListUpdateFinishedDelegate>(ref this.targetListUpdateFinishedDelegate_0, targetListUpdateFinishedDelegate3, targetListUpdateFinishedDelegate2);
+                    targetListUpdateFinishedDelegate = Interlocked.CompareExchange<TargetListUpdateFinishedDelegate>(ref this._targetListUpdateFinishedHandlers, targetListUpdateFinishedDelegate3, targetListUpdateFinishedDelegate2);
                 }
                 while (targetListUpdateFinishedDelegate != targetListUpdateFinishedDelegate2);
             }
             remove
             {
-                TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate = this.targetListUpdateFinishedDelegate_0;
+                TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate = this._targetListUpdateFinishedHandlers;
                 TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate2;
                 do
                 {
                     targetListUpdateFinishedDelegate2 = targetListUpdateFinishedDelegate;
                     TargetListUpdateFinishedDelegate targetListUpdateFinishedDelegate3 = (TargetListUpdateFinishedDelegate)Delegate.Remove(targetListUpdateFinishedDelegate2, value);
-                    targetListUpdateFinishedDelegate = Interlocked.CompareExchange<TargetListUpdateFinishedDelegate>(ref this.targetListUpdateFinishedDelegate_0, targetListUpdateFinishedDelegate3, targetListUpdateFinishedDelegate2);
+                    targetListUpdateFinishedDelegate = Interlocked.CompareExchange<TargetListUpdateFinishedDelegate>(ref this._targetListUpdateFinishedHandlers, targetListUpdateFinishedDelegate3, targetListUpdateFinishedDelegate2);
                 }
                 while (targetListUpdateFinishedDelegate != targetListUpdateFinishedDelegate2);
             }
@@ -261,25 +262,25 @@ namespace Styx.Logic
         {
             add
             {
-                IncludeTargetsFilterDelegate includeTargetsFilterDelegate = this.includeTargetsFilterDelegate_0;
+                IncludeTargetsFilterDelegate includeTargetsFilterDelegate = this._includeTargetsFilterHandlers;
                 IncludeTargetsFilterDelegate includeTargetsFilterDelegate2;
                 do
                 {
                     includeTargetsFilterDelegate2 = includeTargetsFilterDelegate;
                     IncludeTargetsFilterDelegate includeTargetsFilterDelegate3 = (IncludeTargetsFilterDelegate)Delegate.Combine(includeTargetsFilterDelegate2, value);
-                    includeTargetsFilterDelegate = Interlocked.CompareExchange<IncludeTargetsFilterDelegate>(ref this.includeTargetsFilterDelegate_0, includeTargetsFilterDelegate3, includeTargetsFilterDelegate2);
+                    includeTargetsFilterDelegate = Interlocked.CompareExchange<IncludeTargetsFilterDelegate>(ref this._includeTargetsFilterHandlers, includeTargetsFilterDelegate3, includeTargetsFilterDelegate2);
                 }
                 while (includeTargetsFilterDelegate != includeTargetsFilterDelegate2);
             }
             remove
             {
-                IncludeTargetsFilterDelegate includeTargetsFilterDelegate = this.includeTargetsFilterDelegate_0;
+                IncludeTargetsFilterDelegate includeTargetsFilterDelegate = this._includeTargetsFilterHandlers;
                 IncludeTargetsFilterDelegate includeTargetsFilterDelegate2;
                 do
                 {
                     includeTargetsFilterDelegate2 = includeTargetsFilterDelegate;
                     IncludeTargetsFilterDelegate includeTargetsFilterDelegate3 = (IncludeTargetsFilterDelegate)Delegate.Remove(includeTargetsFilterDelegate2, value);
-                    includeTargetsFilterDelegate = Interlocked.CompareExchange<IncludeTargetsFilterDelegate>(ref this.includeTargetsFilterDelegate_0, includeTargetsFilterDelegate3, includeTargetsFilterDelegate2);
+                    includeTargetsFilterDelegate = Interlocked.CompareExchange<IncludeTargetsFilterDelegate>(ref this._includeTargetsFilterHandlers, includeTargetsFilterDelegate3, includeTargetsFilterDelegate2);
                 }
                 while (includeTargetsFilterDelegate != includeTargetsFilterDelegate2);
             }
@@ -289,25 +290,25 @@ namespace Styx.Logic
         {
             add
             {
-                RemoveTargetsFilterDelegate removeTargetsFilterDelegate = this.removeTargetsFilterDelegate_0;
+                RemoveTargetsFilterDelegate removeTargetsFilterDelegate = this._removeTargetsFilterHandlers;
                 RemoveTargetsFilterDelegate removeTargetsFilterDelegate2;
                 do
                 {
                     removeTargetsFilterDelegate2 = removeTargetsFilterDelegate;
                     RemoveTargetsFilterDelegate removeTargetsFilterDelegate3 = (RemoveTargetsFilterDelegate)Delegate.Combine(removeTargetsFilterDelegate2, value);
-                    removeTargetsFilterDelegate = Interlocked.CompareExchange<RemoveTargetsFilterDelegate>(ref this.removeTargetsFilterDelegate_0, removeTargetsFilterDelegate3, removeTargetsFilterDelegate2);
+                    removeTargetsFilterDelegate = Interlocked.CompareExchange<RemoveTargetsFilterDelegate>(ref this._removeTargetsFilterHandlers, removeTargetsFilterDelegate3, removeTargetsFilterDelegate2);
                 }
                 while (removeTargetsFilterDelegate != removeTargetsFilterDelegate2);
             }
             remove
             {
-                RemoveTargetsFilterDelegate removeTargetsFilterDelegate = this.removeTargetsFilterDelegate_0;
+                RemoveTargetsFilterDelegate removeTargetsFilterDelegate = this._removeTargetsFilterHandlers;
                 RemoveTargetsFilterDelegate removeTargetsFilterDelegate2;
                 do
                 {
                     removeTargetsFilterDelegate2 = removeTargetsFilterDelegate;
                     RemoveTargetsFilterDelegate removeTargetsFilterDelegate3 = (RemoveTargetsFilterDelegate)Delegate.Remove(removeTargetsFilterDelegate2, value);
-                    removeTargetsFilterDelegate = Interlocked.CompareExchange<RemoveTargetsFilterDelegate>(ref this.removeTargetsFilterDelegate_0, removeTargetsFilterDelegate3, removeTargetsFilterDelegate2);
+                    removeTargetsFilterDelegate = Interlocked.CompareExchange<RemoveTargetsFilterDelegate>(ref this._removeTargetsFilterHandlers, removeTargetsFilterDelegate3, removeTargetsFilterDelegate2);
                 }
                 while (removeTargetsFilterDelegate != removeTargetsFilterDelegate2);
             }
@@ -317,25 +318,25 @@ namespace Styx.Logic
         {
             add
             {
-                WeighTargetsDelegate weighTargetsDelegate = this.weighTargetsDelegate_0;
+                WeighTargetsDelegate weighTargetsDelegate = this._weighTargetsFilterHandlers;
                 WeighTargetsDelegate weighTargetsDelegate2;
                 do
                 {
                     weighTargetsDelegate2 = weighTargetsDelegate;
                     WeighTargetsDelegate weighTargetsDelegate3 = (WeighTargetsDelegate)Delegate.Combine(weighTargetsDelegate2, value);
-                    weighTargetsDelegate = Interlocked.CompareExchange<WeighTargetsDelegate>(ref this.weighTargetsDelegate_0, weighTargetsDelegate3, weighTargetsDelegate2);
+                    weighTargetsDelegate = Interlocked.CompareExchange<WeighTargetsDelegate>(ref this._weighTargetsFilterHandlers, weighTargetsDelegate3, weighTargetsDelegate2);
                 }
                 while (weighTargetsDelegate != weighTargetsDelegate2);
             }
             remove
             {
-                WeighTargetsDelegate weighTargetsDelegate = this.weighTargetsDelegate_0;
+                WeighTargetsDelegate weighTargetsDelegate = this._weighTargetsFilterHandlers;
                 WeighTargetsDelegate weighTargetsDelegate2;
                 do
                 {
                     weighTargetsDelegate2 = weighTargetsDelegate;
                     WeighTargetsDelegate weighTargetsDelegate3 = (WeighTargetsDelegate)Delegate.Remove(weighTargetsDelegate2, value);
-                    weighTargetsDelegate = Interlocked.CompareExchange<WeighTargetsDelegate>(ref this.weighTargetsDelegate_0, weighTargetsDelegate3, weighTargetsDelegate2);
+                    weighTargetsDelegate = Interlocked.CompareExchange<WeighTargetsDelegate>(ref this._weighTargetsFilterHandlers, weighTargetsDelegate3, weighTargetsDelegate2);
                 }
                 while (weighTargetsDelegate != weighTargetsDelegate2);
             }
@@ -354,29 +355,29 @@ namespace Styx.Logic
             if (Battlegrounds.IsInsideBattleground)
             {
                 IEnumerable<WoWObject> objectList = ObjectManager.ObjectList;
-                if (Targeting.func_0 == null)
+                if (Targeting._unitOrPlayerPredicate == null)
                 {
-                    Targeting.func_0 = new Func<WoWObject, bool>(IsUnitOrPlayer);
+                    Targeting._unitOrPlayerPredicate = new Func<WoWObject, bool>(IsUnitOrPlayer);
                 }
-                return objectList.Where(Targeting.func_0).ToList<WoWObject>();
+                return objectList.Where(Targeting._unitOrPlayerPredicate).ToList<WoWObject>();
             }
             else if (!this.IncludeWorldPlayers)
             {
                 IEnumerable<WoWObject> objectList2 = ObjectManager.ObjectList;
-                if (Targeting.func_2 == null)
+                if (Targeting._unitNotPlayerPredicate == null)
                 {
-                    Targeting.func_2 = new Func<WoWObject, bool>(IsUnitNotPlayer);
+                    Targeting._unitNotPlayerPredicate = new Func<WoWObject, bool>(IsUnitNotPlayer);
                 }
-                return objectList2.Where(Targeting.func_2).ToList<WoWObject>();
+                return objectList2.Where(Targeting._unitNotPlayerPredicate).ToList<WoWObject>();
             }
             else
             {
                 IEnumerable<WoWObject> objectList3 = ObjectManager.ObjectList;
-                if (Targeting.func_1 == null)
+                if (Targeting._unitPredicate == null)
                 {
-                    Targeting.func_1 = new Func<WoWObject, bool>(IsUnit);
+                    Targeting._unitPredicate = new Func<WoWObject, bool>(IsUnit);
                 }
-                return objectList3.Where(Targeting.func_1).ToList<WoWObject>();
+                return objectList3.Where(Targeting._unitPredicate).ToList<WoWObject>();
             }
         }
 
@@ -389,42 +390,42 @@ namespace Styx.Logic
                     if (StyxWoW.IsInGame)
                     {
                         List<WoWObject> initialObjectList = this.GetInitialObjectList();
-                        Delegate e = this.removeTargetsFilterDelegate_0;
+                        Delegate e = this._removeTargetsFilterHandlers;
                         object[] array = new object[] { initialObjectList };
                         this.InvokeFilterDelegate(e, array);
                         HashSet<WoWObject> hashSet = new HashSet<WoWObject>();
-                        Delegate e2 = this.includeTargetsFilterDelegate_0;
+                        Delegate e2 = this._includeTargetsFilterHandlers;
                         object[] array2 = new object[] { initialObjectList, hashSet };
                         this.InvokeFilterDelegate(e2, array2);
                         IEnumerable<WoWObject> source = hashSet;
-                        if (Targeting.func_3 == null)
+                        if (Targeting._targetPrioritySelector == null)
                         {
-                            Targeting.func_3 = new Func<WoWObject, TargetPriority>(CreateTargetPriority);
+                            Targeting._targetPrioritySelector = new Func<WoWObject, TargetPriority>(CreateTargetPriority);
                         }
-                        List<TargetPriority> list = source.Select(Targeting.func_3).ToList<TargetPriority>();
-                        Delegate e3 = this.weighTargetsDelegate_0;
+                        List<TargetPriority> list = source.Select(Targeting._targetPrioritySelector).ToList<TargetPriority>();
+                        Delegate e3 = this._weighTargetsFilterHandlers;
                         object[] array3 = new object[] { list };
                         this.InvokeFilterDelegate(e3, array3);
                         IEnumerable<TargetPriority> source2 = list;
-                        if (Targeting.func_4 == null)
+                        if (Targeting._getScoreFunc == null)
                         {
-                            Targeting.func_4 = new Func<TargetPriority, double>(GetScore);
+                            Targeting._getScoreFunc = new Func<TargetPriority, double>(GetScore);
                         }
-                        list = source2.OrderByDescending(Targeting.func_4).Take(this.MaxTargets).ToList<TargetPriority>();
+                        list = source2.OrderByDescending(Targeting._getScoreFunc).Take(this.MaxTargets).ToList<TargetPriority>();
                         IEnumerable<TargetPriority> source3 = list;
-                        if (Targeting.func_5 == null)
+                        if (Targeting._targetToObjectSelector == null)
                         {
-                            Targeting.func_5 = new Func<TargetPriority, WoWObject>(GetObject);
+                            Targeting._targetToObjectSelector = new Func<TargetPriority, WoWObject>(GetObject);
                         }
-                        this.ObjectList = source3.Select(Targeting.func_5).ToList<WoWObject>();
+                        this.ObjectList = source3.Select(Targeting._targetToObjectSelector).ToList<WoWObject>();
                         Targeting._blacklistedMobNames.Clear();
                         foreach (TargetPriority targetPriority in list)
                         {
                             Targeting._blacklistedMobNames.Add(string.Format("{0} Dist: {1}", targetPriority.Object.Name, Math.Ceiling(targetPriority.Object.Distance)));
                         }
-                        if (this.targetListUpdateFinishedDelegate_0 != null)
+                        if (this._targetListUpdateFinishedHandlers != null)
                         {
-                            this.targetListUpdateFinishedDelegate_0(Targeting._blacklistedMobNames);
+                            this._targetListUpdateFinishedHandlers(Targeting._blacklistedMobNames);
                         }
                     }
                 }
