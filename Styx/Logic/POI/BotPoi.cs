@@ -187,8 +187,9 @@ namespace Styx.Logic.POI
 							// Use _location directly to avoid recursion with Location property
 							if (_object0 is Vendor || Entry > 0)
 							{
-								_asObject = ObjectManager.GetObjectsOfType<WoWUnit>(false)
-									.FirstOrDefault(u => u.Entry == Entry && u.Location.Distance(_location) < 50);
+							_asObject = ObjectManager.CachedUnits
+								.Where(u => u.Entry == Entry && u.Location.Distance(_location) < 50)
+								.FirstOrDefault();
 							}
 							break;
 							
