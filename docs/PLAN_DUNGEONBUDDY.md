@@ -6,8 +6,7 @@
 
 **Complexité:** 🔴 ÉLEVÉE - Système complet avec scripts par donjon  
 **Temps estimé:** 2-3 mois  
-**Scripts disponibles:** 32 scripts WotLK dans `C:\Users\Texy\Desktop\.test\Dungeon Scripts\Wrath of the Lich King\`
-
+**Scripts disponibles:** 32 scripts WotLK dans 
 ---
 
 ## ✅ COMPATIBILITÉ WOTLK 3.3.5a
@@ -131,13 +130,7 @@ CopilotBuddy/
         ├── Helpers/
         │   └── ScriptHelpers.cs            # Helpers pour scripts (RunAway, TankFace, etc.)
         │
-        └── Dungeon Scripts/
-            └── Wrath of the Lich King/     # COPIER depuis .test
-                ├── Utgarde Keep.cs
-                ├── Utgarde Keep Heroic.cs
-                ├── The Nexus.cs
-                ├── The Nexus Heroic.cs
-                └── ... (32 fichiers)
+        
 ```
 
 **Total: ~50 fichiers à créer**
