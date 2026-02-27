@@ -99,6 +99,18 @@ namespace Styx.Helpers
 			set => CharacterSettings.Instance.MountDistance = value;
 		}
 
+		public bool UseFreeLook
+		{
+			get => CharacterSettings.Instance.UseFreeLook;
+			set => CharacterSettings.Instance.UseFreeLook = value;
+		}
+
+		public int FreeLook
+		{
+			get => CharacterSettings.Instance.FreeLook;
+			set => CharacterSettings.Instance.FreeLook = value;
+		}
+
 		public int LootRadius
 		{
 			get => CharacterSettings.Instance.LootRadius;
