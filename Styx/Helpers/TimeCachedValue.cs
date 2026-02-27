@@ -9,18 +9,18 @@ namespace Styx.Helpers
     /// </summary>
     public class TimeCachedValue<T>
     {
-        private readonly TimeSpan timeSpan_0;
-        private readonly Stopwatch stopwatch_0;
-        private readonly Func<T> func_0;
-        private T gparam_0;
+        private readonly TimeSpan _duration;
+        private readonly Stopwatch _stopwatch;
+        private readonly Func<T> _producer;
+        private T _cachedValue;
 
-        public TimeCachedValue(TimeSpan timeSpan, Func<T> producer)
+        public TimeCachedValue(TimeSpan duration, Func<T> producer)
         {
             if (producer == null)
-                throw new ArgumentNullException("producer");
-            func_0 = producer;
-            timeSpan_0 = timeSpan;
-            stopwatch_0 = new Stopwatch();
+                throw new ArgumentNullException(nameof(producer));
+            _producer = producer;
+            _duration = duration;
+            _stopwatch = new Stopwatch();
         }
 
         /// <summary>
@@ -30,12 +30,12 @@ namespace Styx.Helpers
         {
             get
             {
-                if (!stopwatch_0.IsRunning || stopwatch_0.Elapsed > timeSpan_0)
+                if (!_stopwatch.IsRunning || _stopwatch.Elapsed > _duration)
                 {
-                    gparam_0 = func_0();
-                    stopwatch_0.Restart();
+                    _cachedValue = _producer();
+                    _stopwatch.Restart();
                 }
-                return gparam_0;
+                return _cachedValue;
             }
         }
 
@@ -50,8 +50,8 @@ namespace Styx.Helpers
         /// </summary>
         public void Reset()
         {
-            stopwatch_0.Reset();
-            gparam_0 = default!;
+            _stopwatch.Reset();
+            _cachedValue = default!;
         }
     }
 }
