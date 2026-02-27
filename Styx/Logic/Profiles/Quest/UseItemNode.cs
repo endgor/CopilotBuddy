@@ -116,12 +116,12 @@ public class UseItemNode : OrderNode
         switch (targetType)
         {
             case UseItemTargetType.Npc:
-                target = ObjectManager.GetObjectsOfType<WoWUnit>(true)
+                target = ObjectManager.CachedUnits
                     .OrderBy(u => u.Distance)
                     .FirstOrDefault(u => u.Entry == targetId);
                 break;
             case UseItemTargetType.Gameobject:
-                target = ObjectManager.GetObjectsOfType<WoWGameObject>()
+                target = ObjectManager.CachedObjects
                     .OrderBy(g => g.Distance)
                     .FirstOrDefault(g => g.Entry == targetId);
                 break;
