@@ -42,7 +42,7 @@ namespace Styx.Logic
             BotEvents.Player.OnMapChanged += new BotEvents.Player.MapChangedDelegate(OnMapChanged);
         }
 
-        private static void OnMapChanged(BotEvents.Player.MapChangedEventArgs mapChangedEventArgs_0)
+        private static void OnMapChanged(BotEvents.Player.MapChangedEventArgs args)
         {
             _mountCache = null;
         }
