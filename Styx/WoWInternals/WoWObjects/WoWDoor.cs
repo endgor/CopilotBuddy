@@ -58,7 +58,11 @@ namespace Styx.WoWInternals.WoWObjects
                 Memory? wow = ObjectManager.Wow;
                 if (wow == null) return false;
 
-                byte result = wow.Read<byte>(executor.ReturnPointer);
+                byte result;
+                using (StyxWoW.Memory.TemporaryCacheState(false))
+                {
+                    result = wow.Read<byte>(executor.ReturnPointer);
+                }
                 return result != 0;
             }
         }
@@ -88,9 +92,12 @@ namespace Styx.WoWInternals.WoWObjects
                         return false;
                     }
 
-                    reason = wow.Read<uint>(reasonMem.Address);
-                    byte result = wow.Read<byte>(executor.ReturnPointer);
-                    return result != 0;
+                    using (StyxWoW.Memory.TemporaryCacheState(false))
+                    {
+                        reason = wow.Read<uint>(reasonMem.Address);
+                        byte result = wow.Read<byte>(executor.ReturnPointer);
+                        return result != 0;
+                    }
                 }
             }
         }
