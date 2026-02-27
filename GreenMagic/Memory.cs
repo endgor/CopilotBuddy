@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Runtime.InteropServices;
 using System.Text;
 using Fasm;
 using GreenMagic.Internals;
 using GreenMagic.Native;
+using Styx;
+using Styx.WoWInternals;
 
 namespace GreenMagic
 {
@@ -28,6 +31,10 @@ namespace GreenMagic
         private readonly bool _aslrEnabled;
         private readonly uint _imageBase;
         private readonly ManagedFasm _asm;
+
+        // cache control mimics HB GreyMagic.ExternalProcessMemory
+        private ThreadLocal<Dictionary<IntPtr, byte[]>> _cache = new ThreadLocal<Dictionary<IntPtr, byte[]>>(() => new Dictionary<IntPtr, byte[]>());
+        private ThreadLocal<bool> _cacheEnabled = new ThreadLocal<bool>(() => true);
 
         public Memory(int processId)
         {
@@ -185,11 +192,15 @@ namespace GreenMagic
             byte[] buffer = ReadBytes(address.ToUInt32(), elements * size);
             T[] result = new T[elements];
 
-            fixed (byte* ptr = buffer)
+            // original HB 3.3.5a guarded against a null buffer
+            if (buffer != null)
             {
-                for (int i = 0; i < elements; i++)
+                fixed (byte* ptr = buffer)
                 {
-                    result[i] = (T)Marshal.PtrToStructure(new IntPtr(ptr + i * size), type);
+                    for (int i = 0; i < elements; i++)
+                    {
+                        result[i] = (T)Marshal.PtrToStructure(new IntPtr(ptr + i * size), type);
+                    }
                 }
             }
 
@@ -486,52 +497,79 @@ namespace GreenMagic
 
         #endregion
 
-        #region Frame Support
-
         /// <summary>
-        /// HonorBuddy compatibility helper.  Many HB classes wrap their
-        /// calls to the game API in a <c>using (StyxWoW.Memory.AcquireFrame())
-        /// { ... }</c> block which ensures the executor remains in a safe
-        /// state while multiple memory reads are performed.  The real HB
-        /// implementation lives in ExternalProcessMemory and returns a
-        /// <c>GreyMagic.FrameLock</c>, but for our simplified memory manager
-        /// a basic <see cref="Styx.FrameLock"/> is sufficient.
+        /// Return an <see cref="ExternalReadCache"/> saving the current
+        /// enabled state.  Mirrors HB's ExternalProcessMemory.SaveCacheState.
         /// </summary>
-        /// <param name="isHardLock">
-        /// Ignored; provided for API compatibility with HB.  In the original
-        /// code a "hard" lock would call <c>Executor.GrabFrame()</c>.
-        /// </param>
-        /// <returns>A disposable object that will call
-        /// <see cref="Styx.FrameLock.Dispose"/> when disposed.</returns>
-        public IDisposable AcquireFrame(bool isHardLock = false)
+        public ExternalReadCache SaveCacheState()
         {
-            // We don't have a custom executor here, so just return the basic
-            // Styx.FrameLock which will call ObjectManager.Executor.BeginExecute/EndExecute.
-            return new Styx.FrameLock();
+            return new ExternalReadCache(this);
         }
 
         /// <summary>
-        /// Overload for the parameterless HB call.
+        /// Temporarily toggles the cache flag and returns a disposable that
+        /// restores the previous state when disposed.  Parameters and behavior
+        /// exactly match HB's TemporaryCacheState.
         /// </summary>
+        public ExternalReadCache TemporaryCacheState(bool enabledTemporarily)
+        {
+            return new ExternalReadCache(this, enabledTemporarily);
+        }
+
+        public void ClearCache()
+        {
+            _cache.Value.Clear();
+        }
+
+        public void DisableCache()
+        {
+            _cacheEnabled.Value = false;
+        }
+
+        public void EnableCache()
+        {
+            _cacheEnabled.Value = true;
+        }
+
+        public bool CacheEnabled
+        {
+            get { return _cacheEnabled.Value; }
+        }
+
+        #region Frame Support
+
+        /// <summary>
+        /// HB-compatible AcquireFrame helper.  3.3.5a and later simply
+        /// return a <see cref="Styx.FrameLock"/> and optionally hard-
+        /// grab the executor if requested.  We replicate the behavior here
+        /// using the current <see cref="ObjectManager.Executor"/> instance.
+        /// </summary>
+        public IDisposable AcquireFrame(bool isHardLock = false)
+        {
+            if (isHardLock)
+            {
+                ObjectManager.Executor?.GrabFrame();
+            }
+            return new Styx.FrameLock();
+        }
+
         public IDisposable AcquireFrame()
         {
             return AcquireFrame(false);
         }
 
         /// <summary>
-        /// Same deal as <see cref="AcquireFrame"/>; included so that
-        /// <c>StyxWoW.Memory.ReleaseFrame(...)</c> compiles.  The HB version
-        /// returns a <c>FrameLockRelease</c> which handles reacquiring the
-        /// lock after a sleep, but we don't need that detail here.
+        /// ReleaseFrame is a stub in HB; the real logic lives in
+        /// <see cref="FrameLockRelease"/> but callers only ever use it for
+        /// API compatibility.  We mirror the simple signature.
         /// </summary>
         public IDisposable ReleaseFrame(bool reacquireAsHardLock = false)
         {
+            if (reacquireAsHardLock)
+                ObjectManager.Executor?.GrabFrame();
             return new Styx.FrameLock();
         }
 
-        /// <summary>
-        /// Parameterless overload matching HB signature.
-        /// </summary>
         public IDisposable ReleaseFrame()
         {
             return ReleaseFrame(false);
