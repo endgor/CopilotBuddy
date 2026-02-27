@@ -340,10 +340,13 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                Memory? wow = ObjectManager.Wow;
-                if (wow == null)
-                    return 0f;
-                return wow.Read<float>(BaseAddress + 1944);
+                using (StyxWoW.Memory.AcquireFrame())
+                {
+                    Memory? wow = ObjectManager.Wow;
+                    if (wow == null)
+                        return 0f;
+                    return wow.Read<float>(BaseAddress + 1944);
+                }
             }
         }
 
@@ -351,10 +354,13 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                Memory? wow = ObjectManager.Wow;
-                if (wow == null)
-                    return 0f;
-                return wow.Read<float>(BaseAddress + 1948);
+                using (StyxWoW.Memory.AcquireFrame())
+                {
+                    Memory? wow = ObjectManager.Wow;
+                    if (wow == null)
+                        return 0f;
+                    return wow.Read<float>(BaseAddress + 1948);
+                }
             }
         }
 
@@ -362,10 +368,13 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                Memory? wow = ObjectManager.Wow;
-                if (wow == null)
-                    return 0f;
-                return wow.Read<float>(BaseAddress + 1952);
+                using (StyxWoW.Memory.AcquireFrame())
+                {
+                    Memory? wow = ObjectManager.Wow;
+                    if (wow == null)
+                        return 0f;
+                    return wow.Read<float>(BaseAddress + 1952);
+                }
             }
         }
 
@@ -1432,12 +1441,22 @@ namespace Styx.WoWInternals.WoWObjects
                 if (memory == null)
                     return WoWUnitReaction.Neutral;
 
-                return (WoWUnitReaction)memory.Read<uint>(executor.ReturnPointer);
+                using (StyxWoW.Memory.TemporaryCacheState(false))
+                {
+                    return (WoWUnitReaction)memory.Read<uint>(executor.ReturnPointer);
+                }
+            }
+            catch (InjectionSEHException seh)
+            {
+                // access violation inside injected code happens occasionally when the target
+                // process is unstable; treat as neutral instead of spewing a full stack trace
+                Logging.WriteDebug($"GetReactionTowardsNative VEH exception 0x{seh.ExceptionCode:X8} for {Name} vs {otherUnit.Name}");
+                return WoWUnitReaction.Neutral;
             }
             catch (Exception ex)
             {
                 Logging.WriteDebug($"GetReactionTowardsException: {Name} vs {otherUnit.Name}");
-                Logging.WriteDebug(ex.ToString());
+                Logging.WriteException(ex);
                 return WoWUnitReaction.Neutral;
             }
         }
