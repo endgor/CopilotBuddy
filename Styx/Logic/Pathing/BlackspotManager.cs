@@ -59,11 +59,24 @@ namespace Styx.Logic.Pathing
             // Subscribe to profile changes to load blackspots from profile
             BotEvents.Profile.OnNewProfileLoaded += OnNewProfileLoaded;
             
-            // TODO: Subscribe to OnTileLoaded when Navigation.dll exposes tile events
-            // HB 4.3.4 pattern: meshNavigator.Nav.OnTileLoaded += OnTileLoaded;
-            // This ensures blackspots are re-marked when tiles are loaded dynamically.
+            // maintain tile subscription when navigation provider switches (HB 6.2.3)
+            Navigator.OnNavigationProviderChanged += OnNavigationProviderChanged;
 
-            // Subscribe to Tripper navigation tile events so blackspots are applied
+            // also subscribe immediately to Tripper navigator; this covers the common case
+            try
+            {
+                var nav = Navigator.TripperNavigator; // create/get navigator
+                if (nav != null)
+                {
+                    nav.TileLoaded += OnTileLoaded;
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore if navigator not available yet
+            }
+
+            // Subscribe also to Tripper navigator directly for older versions or when provider not set
             try
             {
                 var nav = Navigator.TripperNavigator; // create/get navigator
@@ -116,7 +129,11 @@ namespace Styx.Logic.Pathing
                     RemoveBlackspots(args.OldProfile.Blackspots);
                     Logging.WriteDebug($"[Blackspot] Removed {args.OldProfile.Blackspots.Count} blackspots from old profile");
                 }
-                
+            }
+            catch (Exception) { }
+
+            try
+            {
                 // Add blackspots from new profile
                 if (args.NewProfile?.Blackspots != null && args.NewProfile.Blackspots.Count > 0)
                 {
@@ -134,6 +151,25 @@ namespace Styx.Logic.Pathing
             catch (Exception ex)
             {
                 Logging.WriteDebug($"[Blackspot] Error loading profile blackspots: {ex.Message}");
+            }
+        }
+
+        // HB 6.2.3: rewire tile subscription when provider changes
+        private static void OnNavigationProviderChanged(object sender, NavigationProviderChangedEventArgs<INavigationProvider> e)
+        {
+            try
+            {
+                var nav = Navigator.TripperNavigator;
+                if (nav != null)
+                {
+                    // remove first to avoid duplicate handlers
+                    nav.TileLoaded -= OnTileLoaded;
+                    nav.TileLoaded += OnTileLoaded;
+                }
+            }
+            catch (Exception)
+            {
+                // ignore; tile subscription is best-effort
             }
         }
 
@@ -507,6 +543,9 @@ namespace Styx.Logic.Pathing
 
                 _globalBlackspots.Add(blackspot);
                 
+                // replicate HB: also add to active list so property and checks see it
+                AddBlackspots(new[] { blackspot.Blackspot });
+
                 // Mark polygon if on current map
                 uint currentMap = StyxWoW.Me?.MapId ?? 0;
                 if (blackspot.MapId == currentMap)
@@ -527,6 +566,8 @@ namespace Styx.Logic.Pathing
             lock (_lock)
             {
                 _globalBlackspots.Remove(blackspot);
+                // also remove from active list per HB logic
+                RemoveBlackspot(blackspot.Blackspot);
                 SaveGlobalBlackspots();
             }
         }
