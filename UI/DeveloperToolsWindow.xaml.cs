@@ -558,7 +558,8 @@ namespace CopilotBuddy.UI
 
         private List<WGameObject> GetGameObjects()
         {
-            return ObjectManager.GetObjectsOfType<WoWGameObject>()
+            // use cached game objects to avoid expensive queries during UI refresh
+            return ObjectManager.CachedObjects
                 .OrderBy(o => o.DistanceSqr)
                 .Select(o => new WGameObject
                 {
@@ -582,7 +583,7 @@ namespace CopilotBuddy.UI
 
         private List<WUnit> GetUnits()
         {
-            return ObjectManager.GetObjectsOfType<WoWUnit>()
+            return ObjectManager.CachedUnits
                 .OrderBy(o => o.DistanceSqr)
                 .Select(o => new WUnit
                 {
