@@ -76,13 +76,8 @@ namespace Styx.WoWInternals
         #endregion
         
         // additional background caches that HB maintains (distance/los/threat)
-        // these dictionaries are mutated on every AcquireFrame/ScanCaches call.  HB's
-        // original implementation relied on all callers executing on the same thread
-        // so concurrent modifications never occurred.  In CopilotBuddy we may call
-        // AcquireFrame from the main pulse thread *and* have a dedicated background
-        // updater, which can trigger races.  A lock guards all access to avoid
-        // the "non-concurrent collection" InvalidOperationException seen in the
-        // log (see issue #XXX).
+        // these dictionaries are mutated on every ScanCaches call from WoWPulsator.
+        // A lock guards all access for safety.
         private static readonly object _cacheLock = new object();
         private static readonly Dictionary<ulong, float> _distanceCache = new Dictionary<ulong, float>();
         private static readonly Dictionary<ulong, bool> _losCache = new Dictionary<ulong, bool>();
@@ -279,8 +274,10 @@ namespace Styx.WoWInternals
             // First Update to populate the object list
             Update();
 
-            // start the background scan thread (mirror HB smethod_3 loop)
-            StartBackgroundThread();
+            // HB 6.2.3 pattern: NO background ObjectManager thread.
+            // Update() and ScanCaches() are called inline from WoWPulsator.Pulse
+            // on the single bot thread.  The background thread was a CopilotBuddy
+            // invention that caused lock contention and race conditions.
             
             Logging.WriteDebug("[ObjectManager] Initialized successfully");
         }
@@ -533,61 +530,22 @@ namespace Styx.WoWInternals
         
         #endregion
 
-        #region Background Thread
+        #region Background Thread — REMOVED
 
-        private static Thread? _bgThread;
-        private static bool _bgThreadStarted;
-
-        private static void StartBackgroundThread()
-        {
-            if (_bgThreadStarted)
-                return;
-            _bgThreadStarted = true;
-            _bgThread = new Thread(ObjectManagerBackground)
-            {
-                IsBackground = true,
-                Name = "ObjectManager.Update"
-            };
-            _bgThread.Start();
-        }
-
-        private static void ObjectManagerBackground()
-        {
-            while (true)
-            {
-                try
-                {
-                    if (!StyxWoW.IsInGame || Wow == null)
-                    {
-                        Thread.Sleep(1000);
-                        continue;
-                    }
-
-                    using (Wow.AcquireFrame())
-                    {
-                        Update();
-                        // scan derived values after the main object list update
-                        ScanCaches();
-                    }
-                }
-                catch
-                {
-                    // swallow exceptions to keep thread alive
-                }
-
-                Thread.Sleep(50);
-            }
-        }
+        // HB 6.2.3 pattern: no background ObjectManager thread.
+        // All Update() and ScanCaches() calls happen inline on the bot thread
+        // via WoWPulsator.Pulse().  The background thread was a CopilotBuddy
+        // invention that competed for AssemblyLock, corrupted m_FirstExecution
+        // state via BeginExecute/EndExecute, and caused the bot to freeze.
 
         /// <summary>
         /// Replicates Honorbuddy's background scanners for distance, line-of-sight and threat.
-        /// Called every time we grab a memory frame (roughly 20 Hz).
+        /// Called inline from WoWPulsator.Pulse() on the bot thread at TPS rate.
         /// </summary>
         public static void ScanCaches()
         {
-            // callers may be on the background updater thread or on the main pulse
-            // thread via Memory.AcquireFrame().  Protect the caches against
-            // simultaneous writers/readers.
+            // All callers are on the bot thread via WoWPulsator.Pulse().
+            // Lock kept for safety in case of future callers.
             lock (_cacheLock)
             {
                 _distanceCache.Clear();
@@ -608,7 +566,12 @@ namespace Styx.WoWInternals
 
                 Styx.Logic.Pathing.WoWPoint myLoc = Me.Location;
 
-                // compute LOS in batch just like Targeting did
+                // HB 4.3.4 DefaultTargetWeight: batch LOS via CGWorldFrame::Intersect.
+                // Uses CGWorldFrameHitFlags.HitTestLOS (native WoW LOS check) — NOT
+                // navmesh raycast (TraceLineHitFlags.Collision). Native LOS accounts
+                // for doors, destructible objects, and dynamic world geometry.
+                // The native call returns true = hit/blocked; we store the NEGATION
+                // so InLineOfSight(guid) returns true = clear LOS.
                 if (!Battlegrounds.IsInsideBattleground)
                 {
                     WorldLine[] lines = new WorldLine[units.Count];
@@ -617,9 +580,9 @@ namespace Styx.WoWInternals
                         lines[i] = new WorldLine(start, units[i].GetTraceLinePos());
 
                     bool[] los;
-                    GameWorld.MassTraceLine(lines, GameWorld.TraceLineHitFlags.Collision, out los);
+                    GameWorld.MassTraceLine(lines, GameWorld.CGWorldFrameHitFlags.HitTestLOS, out los);
                     for (int i = 0; i < units.Count; i++)
-                        _losCache[units[i].Guid] = los[i];
+                        _losCache[units[i].Guid] = !los[i]; // negate: true=hit → false; false=clear → true
                 }
 
                 // fill distance and threat caches

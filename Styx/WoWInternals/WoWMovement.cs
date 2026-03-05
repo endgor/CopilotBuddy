@@ -346,14 +346,15 @@ namespace Styx.WoWInternals
 			Face(target.Location);
 		}
 
-		/// <summary>FEAT-03: Face with no args — faces current target.</summary>
+		/// <summary>FEAT-03: Face with no args — faces current target.
+		/// HB 4.3.4: only faces when standing still, uses ConstantFace.</summary>
 		public static void Face()
 		{
 			LocalPlayer? me = ObjectManager.Me;
 			if (me == null) return;
-			ulong targetGuid = me.CurrentTargetGuid;
-			if (targetGuid != 0UL)
-				Face(targetGuid);
+			WoWUnit? currentTarget = me.CurrentTarget;
+			if (currentTarget != null && !me.IsMoving)
+				ConstantFace(currentTarget.Guid);
 		}
 
 		/// <summary>HB 4.3.4+ compatibility: Face an object by its GUID.</summary>
@@ -432,7 +433,11 @@ namespace Styx.WoWInternals
 			if ((direction & MovementDirection.Descend) != 0)
 			{
 				if (start)
-					Lua.DoString("SitStandOrDescendStart()");
+				{
+					// Only descend if actually flying/swimming - on ground SitStandOrDescendStart() toggles sit!
+					if (StyxWoW.Me != null && (StyxWoW.Me.IsFlying || StyxWoW.Me.IsSwimming))
+						Lua.DoString("SitStandOrDescendStart()");
+				}
 				else
 					Lua.DoString("DescendStop()");
 			}

@@ -5,6 +5,7 @@ using GreenMagic;
 using Styx.Helpers;
 using Styx.Logic;
 using Styx.Logic.Combat;
+using Styx.Logic.Inventory;
 using Styx.Logic.Pathing;
 using Styx.Logic.Questing;
 using Styx.Patchables;
@@ -2714,19 +2715,22 @@ namespace Styx.WoWInternals.WoWObjects
         }
 
         /// <summary>
-        /// FEAT-39: Gets estimated total repair cost via Lua GetRepairAllCost.
-        /// Must be at a repair vendor for this to return a valid value.
-        /// Returns copper amount.
+        /// HB 4.3.4: Gets estimated total repair cost.
+        /// HB 4.3.4 iterates CarriedItems and reads DurabilityCosts[itemLevel].Multiplier[subClassId]
+        /// from ClientDb. CB does not yet have ClientDb, so we fall back to Lua GetRepairAllCost()
+        /// which only returns a valid value when at a repair merchant.
+        /// When ClientDb is implemented, replace with the item-iteration approach.
         /// </summary>
-        public long GetEstimatedRepairCost()
+        public WoWPrice GetEstimatedRepairCost()
         {
             try
             {
                 // GetRepairAllCost() takes no args, returns totalCost, canRepair
-                return Lua.GetReturnVal<long>("return GetRepairAllCost()", 0);
+                long cost = Lua.GetReturnVal<long>("return GetRepairAllCost()", 0);
+                return new WoWPrice(cost);
             }
             catch { }
-            return 0;
+            return new WoWPrice(0L);
         }
 
         /// <summary>
