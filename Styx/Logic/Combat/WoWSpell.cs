@@ -279,56 +279,11 @@ namespace Styx.Logic.Combat
             get { return ObjectManager.Wow.Read<string>(_spellEntry.ToolTip); }
         }
 
-        // Cooldown check using Lua (from .Reference code that worked)
-        // Uses Lua GetSpellCooldown instead of injected executor call to avoid crashes
-        private static readonly Dictionary<int, (double expiresAt, long lastQueryTicks)> _cooldownCache = new Dictionary<int, (double, long)>();
-        private const int CooldownCacheMinMs = 50; // minimal interval between Lua queries for same spell
-
+        // HB 4.3.4 WoWSpell.cs line 426: delegates to CooldownTimeLeft
         public bool Cooldown
         {
-            get
-            {
-                long nowTicks = Environment.TickCount;
-                (var expiresAt, var lastQuery) = _cooldownCache.TryGetValue(Id, out var entry) ? entry : (0.0, 0L);
-                
-                // If cached and not expired and queried recently, reuse
-                if (expiresAt > 0.0 && expiresAt > GetTimeSeconds() && (nowTicks - lastQuery) < CooldownCacheMinMs)
-                    return true;
-
-                // Query Lua: start, duration
-                try
-                {
-                    var lua = Lua.GetReturnValues($"local s,d,_,_=GetSpellCooldown({Id}); if s==0 or d==0 then return 0,0 else return s,d end", "cooldown.lua");
-                    if (lua != null && lua.Count >= 2)
-                    {
-                        if (double.TryParse(lua[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double start) && 
-                            double.TryParse(lua[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double dur))
-                        {
-                            if (start > 0 && dur > 0)
-                            {
-                                double remaining = (start + dur) - GetTimeSeconds();
-                                if (remaining > 0)
-                                {
-                                    _cooldownCache[Id] = ((start + dur), nowTicks);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    // If Lua fails, assume not on cooldown
-                    return false;
-                }
-                
-                // Not on cooldown
-                _cooldownCache[Id] = (0.0, nowTicks);
-                return false;
-            }
+            get { return CooldownTimeLeft.TotalMilliseconds > 0.0; }
         }
-
-        private static double GetTimeSeconds() => Lua.GetReturnVal<double>("return GetTime()", 0);
 
         /// <summary>
         /// Gets the remaining cooldown time for this spell.
