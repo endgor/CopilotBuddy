@@ -22,6 +22,10 @@ namespace Styx.Logic.Profiles
 		private readonly DualHashSet<uint, string> _forceMail = new();
 		private readonly DualHashSet<uint, string> _avoidMobs = new();
 		private readonly HashSet<uint> _factions = new();
+		private readonly HashSet<uint> _questBlacklist = new();
+		private readonly HashSet<uint> _questGiverBlacklist = new();
+		private int? _targetMinLevel;
+		private int? _targetMaxLevel;
 		private readonly List<QuestInfo> _quests = new();
 		private readonly OrderNodeCollection _questOrder = new();
 		private readonly List<Blackspot> _blackspots = new();
@@ -62,6 +66,70 @@ namespace Styx.Logic.Profiles
 		public int MinLevel { get; set; }
 
 		public int MaxLevel { get; set; }
+
+		/// <summary>
+		/// Deprecated: target minimum level moved to GrindArea.
+		/// Kept for backward compatibility with old profiles.
+		/// </summary>
+		public int TargetMinLevel
+		{
+			get
+			{
+				if (_targetMinLevel.HasValue)
+					return _targetMinLevel.Value;
+				if (Parent != null)
+					return Parent.TargetMinLevel;
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Deprecated: target maximum level moved to GrindArea.
+		/// Kept for backward compatibility with old profiles.
+		/// </summary>
+		public int TargetMaxLevel
+		{
+			get
+			{
+				if (_targetMaxLevel.HasValue)
+					return _targetMaxLevel.Value;
+				if (Parent != null)
+					return Parent.TargetMaxLevel;
+				return int.MaxValue;
+			}
+		}
+
+		/// <summary>
+		/// Blacklisted quest IDs. Quests in this set should be skipped.
+		/// Inherits from parent if empty.
+		/// </summary>
+		public HashSet<uint> QuestBlacklist
+		{
+			get
+			{
+				if (_questBlacklist.Count > 0)
+					return _questBlacklist;
+				if (Parent != null)
+					return Parent.QuestBlacklist;
+				return _questBlacklist;
+			}
+		}
+
+		/// <summary>
+		/// Blacklisted quest giver NPC IDs. NPCs in this set should not be interacted with for quests.
+		/// Inherits from parent if empty.
+		/// </summary>
+		public HashSet<uint> QuestGiverBlacklist
+		{
+			get
+			{
+				if (_questGiverBlacklist.Count > 0)
+					return _questGiverBlacklist;
+				if (Parent != null)
+					return Parent.QuestGiverBlacklist;
+				return _questGiverBlacklist;
+			}
+		}
 
 		/// <summary>
 		/// Map ID this profile is for. -1 = any continent.
@@ -649,6 +717,11 @@ namespace Styx.Logic.Profiles
 					case "grindarea":
 						handled = true;
 						GrindArea = GrindArea.FromXML(element);
+						// Propagate deprecated target level settings to GrindArea
+						if (_targetMinLevel.HasValue)
+							GrindArea.TargetMinLevel = _targetMinLevel.Value;
+						if (_targetMaxLevel.HasValue)
+							GrindArea.TargetMaxLevel = _targetMaxLevel.Value;
 						// Copy factions to grindarea if specified at profile level
 						if (Factions.Count > 0 && GrindArea.Factions.Count == 0)
 						{
@@ -694,6 +767,41 @@ namespace Styx.Logic.Profiles
 						handled = true;
 						Profile sub = new Profile(element, this);
 						SubProfiles.Add(sub);
+						break;
+					case "targetminlevel":
+						handled = true;
+						if (int.TryParse(element.Value, out int targetMinLevel))
+						{
+							_targetMinLevel = targetMinLevel;
+							if (GrindArea != null)
+								GrindArea.TargetMinLevel = targetMinLevel;
+						}
+						Logging.WriteDebug("Warning: TargetMinLevel has been moved to GrindArea. Please update your profiles.");
+						break;
+					case "targetmaxlevel":
+						handled = true;
+						if (int.TryParse(element.Value, out int targetMaxLevel))
+						{
+							_targetMaxLevel = targetMaxLevel;
+							if (GrindArea != null)
+								GrindArea.TargetMaxLevel = targetMaxLevel;
+						}
+						Logging.WriteDebug("Warning: TargetMaxLevel has been moved to GrindArea. Please update your profiles.");
+						break;
+					case "mesh":
+						handled = true;
+						Logging.WriteDebug("Profile element 'Mesh' is deprecated and will be ignored.");
+						break;
+					case "questblacklist":
+					case "blacklistedquests":
+						handled = true;
+						ParseIdBlacklist(element, _questBlacklist, "quest", "blacklistedquest");
+						break;
+					case "questgiverblacklist":
+					case "blacklistedquestgivers":
+					case "blacklistedquestnpcs":
+						handled = true;
+						ParseIdBlacklist(element, _questGiverBlacklist, "questgiver", "blacklistedquestgiver");
 						break;
 				}
 				// HonorBuddy behavior: if element wasn't handled by switch, treat it as unknown
@@ -780,6 +888,57 @@ namespace Styx.Logic.Profiles
 								_avoidMobs.Add(mobId);
 							break;
 					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Parses a blacklist element containing children with Id/Entry attributes.
+		/// Used for quest and quest giver blacklists.
+		/// </summary>
+		private void ParseIdBlacklist(XElement parent, HashSet<uint> targetSet, params string[] validChildNames)
+		{
+			foreach (XElement child in parent.Elements())
+			{
+				try
+				{
+					string tagName = child.Name.LocalName.ToLowerInvariant();
+					// Accept child elements matching any of the valid names, plus generic "entry"
+					bool validTag = tagName == "entry";
+					if (!validTag)
+					{
+						foreach (string valid in validChildNames)
+						{
+							if (tagName == valid)
+							{
+								validTag = true;
+								break;
+							}
+						}
+					}
+					if (!validTag)
+						continue;
+
+					uint id = 0;
+					foreach (XAttribute attr in child.Attributes())
+					{
+						string attrName = attr.Name.LocalName.ToLowerInvariant();
+						if (attrName == "id" || attrName == "entry")
+						{
+							uint.TryParse(attr.Value, out id);
+						}
+					}
+
+					// Fall back to element text if no attribute found
+					if (id == 0)
+						uint.TryParse(child.Value, out id);
+
+					if (id > 0)
+						targetSet.Add(id);
+				}
+				catch (ProfileException ex)
+				{
+					Logging.WriteDebug(ex.Message);
 				}
 			}
 		}

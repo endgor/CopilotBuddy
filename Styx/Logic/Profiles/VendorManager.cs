@@ -69,8 +69,11 @@ namespace Styx.Logic.Profiles
             {
                 if (_filteredVendors == null)
                     return null;
-                RemoveBlacklisted();
-                return (Lookup<Vendor.VendorType, Vendor>)_filteredVendors.ToLookup(v => v.Type);
+                // Filter blacklisted vendors at query time instead of mutating _filteredVendors,
+                // so vendors that are later un-blacklisted remain available.
+                return (Lookup<Vendor.VendorType, Vendor>)_filteredVendors
+                    .Where(v => !Blacklist.Contains(v))
+                    .ToLookup(v => v.Type);
             }
         }
 
@@ -177,14 +180,6 @@ namespace Styx.Logic.Profiles
                 Logging.WriteException(ex);
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Removes blacklisted vendors from the filtered list.
-        /// </summary>
-        private void RemoveBlacklisted()
-        {
-            _filteredVendors?.RemoveAll(v => Blacklist.Contains(v));
         }
 
         /// <summary>

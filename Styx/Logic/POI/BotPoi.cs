@@ -151,10 +151,17 @@ namespace Styx.Logic.POI
 					case PoiType.Repair:
 					case PoiType.Train:
 					{
-						WoWObject? asObject = AsObject;
-						if (asObject != null)
+						try
 						{
-							_location = asObject.Location;
+							WoWObject? asObject = AsObject;
+							if (asObject != null && asObject.IsValid)
+							{
+								_location = asObject.Location;
+							}
+						}
+						catch (Exception)
+						{
+							// Object despawned — use cached _location
 						}
 						return _location;
 					}
@@ -176,6 +183,8 @@ namespace Styx.Logic.POI
 				{
 					_asObject = null; // Reset if invalid
 					
+					try
+					{
 					switch (Type)
 					{
 						case PoiType.Buy:
@@ -188,7 +197,7 @@ namespace Styx.Logic.POI
 							if (_object0 is Vendor || Entry > 0)
 							{
 							_asObject = ObjectManager.CachedUnits
-								.Where(u => u.Entry == Entry && u.Location.Distance(_location) < 50)
+								.Where(u => u.IsValid && u.Entry == Entry && u.Location.Distance(_location) < 50)
 								.FirstOrDefault();
 							}
 							break;
@@ -197,7 +206,7 @@ namespace Styx.Logic.POI
 							// Find nearest mailbox
 							_asObject = ObjectManager.ObjectList
 								.OfType<WoWGameObject>()
-								.Where(g => g.SubType == WoWGameObjectType.Mailbox)
+								.Where(g => g.IsValid && g.SubType == WoWGameObjectType.Mailbox)
 								.OrderBy(g => g.DistanceSqr)
 								.FirstOrDefault();
 							break;
@@ -206,7 +215,7 @@ namespace Styx.Logic.POI
 						case PoiType.QuestTurnIn:
 							// Search for unit or gameobject by entry
 							_asObject = ObjectManager.ObjectList
-								.Where(o => o is WoWUnit || o is WoWGameObject)
+								.Where(o => (o is WoWUnit || o is WoWGameObject) && o.IsValid)
 								.FirstOrDefault(o => o.Entry == Entry);
 							break;
 						
@@ -217,11 +226,13 @@ namespace Styx.Logic.POI
 							if (Guid != 0UL)
 							{
 								_asObject = ObjectManager.GetObjectByGuid<WoWObject>(Guid);
+								if (_asObject != null && !_asObject.IsValid)
+									_asObject = null;
 							}
 							if (_asObject == null && Entry > 0)
 							{
 								_asObject = ObjectManager.ObjectList
-									.Where(o => o is WoWUnit || o is WoWGameObject)
+									.Where(o => (o is WoWUnit || o is WoWGameObject) && o.IsValid)
 									.FirstOrDefault(o => o.Entry == Entry);
 							}
 							break;
@@ -231,8 +242,16 @@ namespace Styx.Logic.POI
 							if (Guid != 0UL)
 							{
 								_asObject = ObjectManager.GetObjectByGuid<WoWObject>(Guid);
+								if (_asObject != null && !_asObject.IsValid)
+									_asObject = null;
 							}
 							break;
+					}
+					}
+					catch (Exception)
+					{
+						// Object may have despawned during LINQ enumeration (stale descriptor read)
+						_asObject = null;
 					}
 				}
 				return _asObject;
