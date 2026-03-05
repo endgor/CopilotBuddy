@@ -48,6 +48,10 @@ namespace Styx.Logic.Pathing
 		// instead of ReachedDestination, so the behavior tree knows the bot isn't at the goal.
 		private static bool _isPartialPath;
 
+		// HB 6.2.3 areaType_0: player faction-specific area type, updated on bot start.
+		// RaycastBlocked must allow this area in addition to Ground/Water/Road.
+		private static TripperNav.AreaType _factionAreaType = TripperNav.AreaType.Ground;
+
 		// WotLK no-fly zone IDs — areas where flying is forbidden or problematic
 		private static readonly HashSet<uint> _noFlyZoneIds = new HashSet<uint>
 		{
@@ -240,6 +244,7 @@ namespace Styx.Logic.Pathing
 			{
 				_navigator = new TripperNav.Navigator();
 			}
+
 			if (!_navigator.IsLoaded)
 			{
 				try
@@ -267,6 +272,8 @@ namespace Styx.Logic.Pathing
 					if (me != null)
 					{
 						_navigator.SetFactionQueryFilter(me.IsHorde);
+						// HB 6.2.3 method_1: cache faction area type for RaycastBlocked
+						_factionAreaType = me.IsHorde ? TripperNav.AreaType.Horde : TripperNav.AreaType.Alliance;
 					}
 				}
 				catch (Exception ex)
@@ -403,11 +410,17 @@ namespace Styx.Logic.Pathing
 			// below. The pathfinding is synchronous so it may block briefly, but that's
 			// how HB 4.3.4 works too (it blocks, with a 4-second combat abort timeout).
 
-			// If destination changed significantly, generate new path (with throttle to prevent regen spam)
-			// BUG FIX: Was using exact equality (_destination != destination) which triggers on float
-			// jitter every tick, resetting stuck state mid-unstick sequence ("saute une fois puis rien").
-			// Now uses distance-based comparison: only regen path if destination moved >1 yard.
-			bool destinationChanged = _destination == WoWPoint.Zero || _destination.DistanceSqr(destination) > 1.0f;
+			// HB 6.2.3 method_9: Compare new destination against the PATH ENDPOINT (not raw _destination).
+			// A navmesh path endpoint is more stable than a moving mob's position — it stays at the
+			// closest reachable mesh point even as the mob wanders slightly. This prevents constant
+			// stuck-state resets when chasing a wandering mob.
+			// Threshold: PathPrecision (2yd), matching HB 6.2.3 method_27.
+			float destThresholdSqr = PathPrecision * PathPrecision; // 4.0f = 2yd
+			WoWPoint pathEndpoint = _currentPath.Count > 0 ? _currentPath[_currentPath.Count - 1] : _destination;
+			bool destinationChanged = _destination == WoWPoint.Zero
+				|| (pathEndpoint != WoWPoint.Zero
+					? pathEndpoint.DistanceSqr(destination) > destThresholdSqr
+					: _destination.DistanceSqr(destination) > destThresholdSqr);
 			// Also regen if path was cleared (drift, combat, MaxUnstick) but destination hasn't changed.
 			// In that case we do NOT reset stuck state — the unstick sequence continues.
 			bool needsPathRegen = !destinationChanged && _currentPath.Count == 0;
@@ -448,19 +461,10 @@ namespace Styx.Logic.Pathing
 					_ridingElevator = false;
 				}
 
-				// P6.14 — Combat abort: Skip pathfinding entirely if in combat.
-				// Direct click-to-move is sufficient for combat movement (kiting, chasing).
-				if (me.Combat)
-				{
-					_currentPath.Add(me.Location);
-					_currentPath.Add(destination);
-					_currentFlags = null;
-					_currentPolyTypes = null;
-					_currentAbilityFlags = null;
-					_currentPathIndex = 0;
-					WoWMovement.ClickToMove(destination);
-					return MoveResult.Moved;
-				}
+				// P6.14 — Combat bypass REMOVED (see comment at top of method about HB 4.3.4/6.2.3):
+				// HB NEVER skips navmesh in combat. Direct ClickToMove caused the bot to walk
+				// straight into hills/cliffs when targets are behind terrain. Now we always
+				// use navmesh pathfinding. The 500ms throttle prevents excessive recalculation.
 
 				// P6.9 — Flight path auto-detection (HB 6.2.3 method_10):
 				// For long distances (>400 yards), check if taking a taxi would be faster than running.
@@ -492,26 +496,25 @@ namespace Styx.Logic.Pathing
 					// a long detour path or return a partial path.
 					// NOTE: HB's WowNavigator loads tiles on-demand during A* via MeshProvider.
 					// We can't do that, so we pre-load tiles explicitly instead.
-					// TEST: Commenté pour isoler crash - EnsureTilesAroundPosition suspect
-					// try
-					// {
-					// 	TripperNavigator.EnsureTilesAroundPosition(mapId, start, LoadTilesAroundRadius);
-					// 	TripperNavigator.EnsureTilesAroundPosition(mapId, end, LoadTilesAroundRadius);
-					// 
-					// 	// COPILOTBUDDY ENHANCEMENT (not in HB): also load tiles at the midpoint
-					// 	// to bridge large gaps. HB doesn't need this because it loads tiles
-					// 	// on-demand during A*; we pre-load so need to cover the corridor.
-					// 	float distSqr = Vector3.DistanceSquared(start, end);
-					// 	if (distSqr > 40000f) // > 200 yards
-					// 	{
-					// 		var mid = (start + end) * 0.5f;
-					// 		TripperNavigator.EnsureTilesAroundPosition(mapId, mid, LoadTilesAroundRadius);
-					// 	}
-					// }
-					// catch
-					// {
-					// 	// Non-fatal: pathfinding still works with whatever tiles are loaded
-					// }
+					try
+					{
+						TripperNavigator.EnsureTilesAroundPosition(mapId, start, LoadTilesAroundRadius);
+						TripperNavigator.EnsureTilesAroundPosition(mapId, end, LoadTilesAroundRadius);
+
+						// COPILOTBUDDY ENHANCEMENT (not in HB): also load tiles at the midpoint
+						// to bridge large gaps. HB doesn't need this because it loads tiles
+						// on-demand during A*; we pre-load so need to cover the corridor.
+						float distSqr = Vector3.DistanceSquared(start, end);
+						if (distSqr > 40000f) // > 200 yards
+						{
+							var mid = (start + end) * 0.5f;
+							TripperNavigator.EnsureTilesAroundPosition(mapId, mid, LoadTilesAroundRadius);
+						}
+					}
+					catch
+					{
+						// Non-fatal: pathfinding still works with whatever tiles are loaded
+					}
 
 					// Ensure blackspots are marked on navmesh before pathfinding
 					// This is HB 4.3.4's OnTileLoaded workaround
@@ -586,16 +589,30 @@ namespace Styx.Logic.Pathing
 					uint skipMapId = (uint)(GetCurrentMapId());
 					var playerVec = new Vector3(me.Location.X, me.Location.Y, me.Location.Z);
 					int lastVisible = 0;
+
+					// GAP 8 — HB 6.2.3 method_13: ensure player tile is loaded once before the loop.
+					try { TripperNavigator.EnsureTilesAroundPosition(skipMapId, playerVec, 0); }
+					catch { /* safe failure */ }
+
 					for (int i = 1; i < Math.Min(_currentPath.Count - 1, 6); i++) // Check up to 5 waypoints ahead
 					{
-						// Don't skip past off-mesh connections
+						// Don't skip past off-mesh connections (HB 6.2.3 method_14: flag & 4)
 						if (i < _currentFlags.Length &&
 						    (_currentFlags[i] & TripperNav.StraightPathFlags.OffMeshConnection) != 0)
 							break;
 
 						var wp = new Vector3(_currentPath[i].X, _currentPath[i].Y, _currentPath[i].Z);
-						var status = TripperNavigator.Raycast(skipMapId, playerVec, wp, out float hitT, out _);
-						if (status.Succeeded && hitT >= 1.0f)
+
+						// GAP 8 — HB 6.2.3 method_13: ensure tile at candidate waypoint is loaded.
+						try { TripperNavigator.EnsureTilesAroundPosition(skipMapId, wp, 0); }
+						catch { /* safe failure — tiles may already be loaded */ }
+
+						// GAP 7 — HB 6.2.3 method_13: raycast with area type validation.
+						// Not only checks hitT for boundary intersection, but also iterates
+						// visited polygons and rejects rays crossing non-Ground/Water/Road/faction polys
+						// (e.g., Steep, Lava, Blocked areas).
+						bool blocked = TripperNavigator.RaycastBlocked(skipMapId, playerVec, wp, out float hitT, _factionAreaType);
+						if (!blocked && hitT >= 1.0f)
 						{
 							lastVisible = i;
 						}
@@ -671,11 +688,15 @@ namespace Styx.Logic.Pathing
 						_unstickAttempts++;
 						if (_unstickAttempts >= MaxUnstickAttempts)
 						{
-							// AUDIT FIX: After MaxUnstickAttempts failed attempts, force path regeneration
+							// After MaxUnstickAttempts failed attempts, add blackspot and force path regeneration.
+							// Without the blackspot, the new path goes through the same impassable terrain.
+							var me2 = ObjectManager.Me;
+							if (me2 != null)
+							{
+								Logging.WriteDebug("[NAV] {0} unstick attempts failed — adding blackspot at current location.", MaxUnstickAttempts);
+								BlackspotManager.AddBlackspot(me2.Location, 5f, 3f);
+							}
 							_unstickAttempts = 0;
-							// Force path regen by clearing path. Keep _destination so we don't
-							// accidentally trigger a full StuckHandler.Reset() on next call.
-							// StuckHandler.Reset() IS appropriate here since we're starting fresh.
 							_currentPath.Clear();
 							_currentPathIndex = 0;
 							_suppressDriftCheck = false;
@@ -694,25 +715,51 @@ namespace Styx.Logic.Pathing
 				// Path validity check (P6.7): if player has drifted far from the current path segment
 				// (knockback, teleport, fear, etc.), force path regeneration instead of following stale path
 				if (_currentPathIndex > 0 && !_ridingElevator && !_inElevatorSequence
-				    && !(_suppressDriftCheck && _currentPathIndex == _suppressDriftCheckIndex))
+				    && !(_suppressDriftCheck && _currentPathIndex == _suppressDriftCheckIndex)
+				    // GAP 2a — HB 6.2.3 method_15 line 1: skip drift check while falling
+				    && !me.IsFalling
+				    // GAP 2b — HB 6.2.3 method_15: skip drift check on off-mesh connection segments (flag & 4)
+				    && !(_currentFlags != null && (_currentPathIndex - 1) < _currentFlags.Length
+				         && (_currentFlags[_currentPathIndex - 1] & TripperNav.StraightPathFlags.OffMeshConnection) != 0))
 				{
 					WoWPoint prevPoint = _currentPath[_currentPathIndex - 1];
-					// HB 6.2.3 method_15: use 2D distance (Z ignored) and tighter threshold.
-					// HB uses PathPrecision (2yd), not 5× that. 10yd was too loose —
-					// the bot could be on the wrong side of a wall and still follow stale waypoints.
-					float distToSegment = DistanceToLineSegment2D(me.Location, prevPoint, nextPoint);
-					if (distToSegment > PathPrecision * 2f) // >4 yards off path = stale (HB 6.2.3 uses PathPrecision)
+
+					// GAP 4 — HB 6.2.3 method_15: raycast pre-check before distance-to-segment.
+					// If player can see the next waypoint via clear raycast, the player is
+					// on valid mesh heading the right way → NOT drifted, regardless of geometric distance.
+					// Only fall through to distance check if raycast is blocked.
+					// AUDIT FIX: Use RaycastBlocked (area-type checking) to match HB 6.2.3 method_15
+					// which calls method_13 (not plain raycast). This prevents declaring "on path"
+					// when the ray crosses a non-walkable area type (Lava, Blocked, Steep).
+					bool raycastClear = false;
+					uint driftMapId = (uint)(GetCurrentMapId());
+					var playerVecDrift = new Vector3(me.Location.X, me.Location.Y, me.Location.Z);
+					var nextVecDrift = new Vector3(nextPoint.X, nextPoint.Y, nextPoint.Z);
+					bool blocked = TripperNavigator.RaycastBlocked(driftMapId, playerVecDrift, nextVecDrift, out float driftHitT, _factionAreaType);
+					if (!blocked && driftHitT >= 1.0f)
 					{
-						// BUG FIX: Don't set _destination = WoWPoint.Zero here.
-						// That caused destinationChanged=true on next MoveTo(), resetting
-						// StuckHandler mid-unstick sequence. Instead, just clear the path
-						// so it gets regenerated, but keep _destination intact.
-						_currentPath.Clear();
-						_currentPathIndex = 0;
-						_suppressDriftCheck = false;
-						_suppressDriftCheckIndex = 0;
-						_pathRegenThrottle = new WaitTimer(TimeSpan.FromMilliseconds(500)); // Allow immediate regen
-						return MoveResult.Moved;
+						raycastClear = true; // clear path on valid mesh → not drifted
+					}
+
+					if (!raycastClear)
+					{
+						// HB 6.2.3 method_15: use 2D distance (Z ignored) and tighter threshold.
+						// HB uses PathPrecision (2yd), not 5× that. 10yd was too loose —
+						// the bot could be on the wrong side of a wall and still follow stale waypoints.
+						float distToSegment = DistanceToLineSegment2D(me.Location, prevPoint, nextPoint);
+						if (distToSegment > PathPrecision * 2f) // >4 yards off path = stale (HB 6.2.3 uses PathPrecision)
+						{
+							// BUG FIX: Don't set _destination = WoWPoint.Zero here.
+							// That caused destinationChanged=true on next MoveTo(), resetting
+							// StuckHandler mid-unstick sequence. Instead, just clear the path
+							// so it gets regenerated, but keep _destination intact.
+							_currentPath.Clear();
+							_currentPathIndex = 0;
+							_suppressDriftCheck = false;
+							_suppressDriftCheckIndex = 0;
+							_pathRegenThrottle = new WaitTimer(TimeSpan.FromMilliseconds(500)); // Allow immediate regen
+							return MoveResult.Moved;
+						}
 					}
 				}
 				
@@ -791,23 +838,27 @@ namespace Styx.Logic.Pathing
 				// Now move towards the current waypoint with push-ahead
 				nextPoint = _currentPath[_currentPathIndex];
 				bool isLastPoint = (_currentPathIndex == _currentPath.Count - 1);
-				WoWPoint clickPoint = nextPoint;
 
-				// HB 4.3.4 method_6 / HB 6.2.3 method_25: add +2f to waypoint Z when
-				// traversing Water or Lava polygons.
+				// GAP 5 — HB 6.2.3 method_25: apply water/lava +2f to nextPoint BEFORE push-ahead.
+				// Previously +2f was applied to clickPoint, but push-ahead recomputed pushedPoint
+				// from nextPoint.Z (without +2f), then replaced clickPoint → +2f was LOST.
+				// HB 6.2.3 method_25 applies +2f before calling method_26 (push-ahead).
 				if (_currentPolyTypes != null && _currentPathIndex < _currentPolyTypes.Length)
 				{
 					var polyType = _currentPolyTypes[_currentPathIndex];
 					if (polyType == TripperNav.AreaType.Water || polyType == TripperNav.AreaType.Lava)
 					{
-						clickPoint = new WoWPoint(clickPoint.X, clickPoint.Y, clickPoint.Z + 2f);
+						nextPoint = new WoWPoint(nextPoint.X, nextPoint.Y, nextPoint.Z + 2f);
 					}
 				}
+
+				WoWPoint clickPoint = nextPoint;
 
 				// HB 6.2.3 method_26: push waypoint ahead by PathPrecision in movement direction,
 				// but ONLY if a navmesh raycast confirms the pushed point is still on valid mesh.
 				// Without raycast validation, the push goes through wall corners causing wall-running.
-				// HB 4.3.4 smethod_0 doesn't raycast (simpler maps), but HB 6.2.3 method_26 does.
+				// GAP 3: use tight extents (0.5, 3, 0.5) for FindNearestPoly — HB 6.2.3 method_26
+				// prevents snapping to wrong floor in multi-layer areas.
 				if (!isLastPoint && _currentPathIndex > 0)
 				{
 					WoWPoint direction = nextPoint - me.Location;
@@ -820,10 +871,21 @@ namespace Styx.Logic.Pathing
 							nextPoint.Y + direction.Y * PathPrecision,
 							nextPoint.Z + direction.Z * PathPrecision);
 
-						// HB 6.2.3 method_26: validate push with navmesh raycast from waypoint to pushed point.
-						// Only apply the push if the path is provably clear (hitT == 1.0 = no obstruction).
-						// This prevents pushing through wall corners.
-						if (!Raycast(nextPoint, pushedPoint, out _))
+						// GAP 3: HB 6.2.3 method_26 uses tight extents (0.5f, 3f, 0.5f) for the
+						// FindNearestPoly that resolves the start polygon for the raycast.
+						// This prevents the push-ahead from snapping to a wrong-floor poly.
+						uint pushMapId = (uint)(GetCurrentMapId());
+						var waypointVec = new Vector3(nextPoint.X, nextPoint.Y, nextPoint.Z);
+						var pushedVec = new Vector3(pushedPoint.X, pushedPoint.Y, pushedPoint.Z);
+						var tightExtents = new Vector3(0.5f, 3f, 0.5f);
+
+						var status = TripperNavigator.RaycastWithExtents(
+							pushMapId, waypointVec, pushedVec, tightExtents,
+							out float hitT, out _, out _, out _);
+
+						// HB 6.2.3 method_26: only apply push if raycast is completely clear.
+						// HB checks num == 3.40282347E+38f (FLT_MAX); Detour returns FLT_MAX when no wall hit.
+						if (status.Succeeded && hitT == float.MaxValue)
 						{
 							clickPoint = pushedPoint;
 						}
@@ -1338,6 +1400,14 @@ namespace Styx.Logic.Pathing
 					Logging.WriteDiagnostic("Woops, we are not in the waiting spot");
 					WoWMovement.ClickToMove(startPoint);
 					return MoveResult.Moved;
+				}
+				// GAP 6 — HB 6.2.3 method_20: face toward elevator while waiting
+				// Prevents the character from standing sideways and falling off when it arrives.
+				// Uses 15° arc (tight) — HB 6.2.3 line ~869.
+				if (!me.IsSafelyFacing(transport, 15f))
+				{
+					WoWMovement.MoveStop();
+					me.SetFacing(transport.Location);
 				}
 				Styx.Logic.BehaviorTree.TreeRoot.StatusText = "Waiting for the elevator";
 				return MoveResult.Moved;

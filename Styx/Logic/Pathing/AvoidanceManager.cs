@@ -75,7 +75,11 @@ namespace Styx.Logic.Pathing
 
             lock (_lock)
             {
-                foreach (var unit in ObjectManager.CachedUnits)
+                var units = ObjectManager.CachedUnits;
+                if (units == null)
+                    return;
+
+                foreach (var unit in units)
                 {
                     if (!_avoidEntries.Contains(unit.Entry))
                         continue;

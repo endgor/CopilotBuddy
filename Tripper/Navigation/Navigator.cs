@@ -117,11 +117,12 @@ namespace Tripper.Navigation
         /// </summary>
         private void InitializeQueryFilters()
         {
-            // Default filter - standard ground/water movement (HB 6.2.3 pattern)
+            // HB 6.2.3 GetNewDefaultQueryFilter:
+            // Include = All, Exclude = Unwalkable | Transport
             _queryFilters["Default"] = new QueryFilter
             {
-                IncludeFlags = AbilityFlags.Run | AbilityFlags.Swim,
-                ExcludeFlags = AbilityFlags.Unwalkable,
+                IncludeFlags = AbilityFlags.All,
+                ExcludeFlags = AbilityFlags.Unwalkable | AbilityFlags.Transport,
                 AreaCosts = new Dictionary<AreaType, float>
                 {
                     { AreaType.Ground, 1.66f },
@@ -174,7 +175,32 @@ namespace Tripper.Navigation
         /// </summary>
         public void ResetQueryFilter()
         {
-            _currentQueryFilter = _queryFilters["Default"];
+            _currentQueryFilter = _queryFilters["Default"].Clone();
+            ApplyCurrentQueryFilterToNative();
+        }
+
+        /// <summary>
+        /// Applies the current managed query filter to the native Navigation.dll filter.
+        /// This keeps include/exclude flags and area costs in sync with HB behavior.
+        /// </summary>
+        private void ApplyCurrentQueryFilterToNative()
+        {
+            try
+            {
+                NativeMethods.SetIncludeFlags((ushort)_currentQueryFilter.IncludeFlags);
+                NativeMethods.SetExcludeFlags((ushort)_currentQueryFilter.ExcludeFlags);
+
+                // Start from HB default costs, then apply filter-specific overrides.
+                SetDefaultAreaCosts();
+                foreach (var kvp in _currentQueryFilter.AreaCosts)
+                {
+                    NativeMethods.SetAreaCost((uint)kvp.Key, kvp.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log($"Failed to apply query filter: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -190,8 +216,8 @@ namespace Tripper.Navigation
                     // Navigation.dll initializes automatically in DllMain
                     // Tiles are loaded on-demand when CalculatePath is called
                     
-                    // Set area costs in DLL (like HB WoD SetDefaultQueryFilterCosts)
-                    SetDefaultAreaCosts();
+                    // Sync managed filter to native filter once mesh layer is ready.
+                    ApplyCurrentQueryFilterToNative();
                     
                     IsLoaded = true;
                     Log("Navigation system ready (tiles load on-demand)");
@@ -568,6 +594,112 @@ namespace Tripper.Navigation
                 {
                     Log($"Raycast exception: {ex.Message}");
                     return Status.Failure;
+                }
+            }
+        }
+
+        /// <summary>
+        /// GAP 3: Raycast with custom extents for FindNearestPoly.
+        /// HB 6.2.3 method_26 uses tight extents (0.5, 3, 0.5) for push-ahead
+        /// to avoid snapping to the wrong nav-mesh layer in multi-floor areas.
+        /// </summary>
+        public Status RaycastWithExtents(uint mapId, Vector3 start, Vector3 end, Vector3 customExtents,
+            out float hitT, out Vector3 hitNormal, out ulong[] visitedPolys, out int visitedCount)
+        {
+            hitT = 1.0f;
+            hitNormal = Vector3.Zero;
+            visitedPolys = new ulong[64];
+            visitedCount = 0;
+
+            if (!IsLoaded)
+                return Status.Failure;
+
+            lock (_meshLock)
+            {
+                try
+                {
+                    var startC = new NativeMethods.XYZ(start);
+                    var endC = new NativeMethods.XYZ(end);
+                    var extentsC = new NativeMethods.XYZ(customExtents);
+
+                    // FindNearestPoly with custom (tight) extents — HB 6.2.3 method_26
+                    if (!NativeMethods.FindNearestPolyRef(mapId, startC, extentsC, out ulong startRef, out _))
+                        return Status.Failure;
+
+                    // Perform raycast from resolved poly
+                    NativeMethods.XYZ hitNormalC;
+                    uint status = NativeMethods.Raycast(mapId, startRef, startC, endC,
+                        out hitT, out hitNormalC, visitedPolys, out visitedCount, 64);
+
+                    hitNormal = hitNormalC.ToVector3();
+                    return new Status(status);
+                }
+                catch (Exception ex)
+                {
+                    Log($"RaycastWithExtents exception: {ex.Message}");
+                    return Status.Failure;
+                }
+            }
+        }
+
+        /// <summary>
+        /// GAP 7: Raycast with area type validation — matches HB 6.2.3 method_13.
+        /// After raycast, iterates visited polygons and checks that ALL have allowed area types
+        /// (Ground, Water, Road, and the player's faction area). Returns true if the path is
+        /// BLOCKED (hit boundary or bad area type).
+        /// </summary>
+        /// <param name="mapId">Map ID.</param>
+        /// <param name="start">Ray start position.</param>
+        /// <param name="end">Ray end position.</param>
+        /// <param name="hitT">Output normalized hit distance.</param>
+        /// <param name="factionArea">Player faction area type (Horde or Alliance) — HB 6.2.3 areaType_0.</param>
+        /// <returns>True if blocked (hit boundary OR traverses disallowed area type), false if clear.</returns>
+        public bool RaycastBlocked(uint mapId, Vector3 start, Vector3 end, out float hitT, AreaType factionArea = AreaType.Ground)
+        {
+            hitT = 1.0f;
+
+            if (!IsLoaded)
+                return true; // assume blocked if not loaded
+
+            lock (_meshLock)
+            {
+                try
+                {
+                    var startC = new NativeMethods.XYZ(start);
+                    var endC = new NativeMethods.XYZ(end);
+                    var extentsC = new NativeMethods.XYZ(Extents);
+
+                    if (!NativeMethods.FindNearestPolyRef(mapId, startC, extentsC, out ulong startRef, out _))
+                        return true;
+
+                    ulong[] path = new ulong[512];
+                    uint status = NativeMethods.Raycast(mapId, startRef, startC, endC,
+                        out hitT, out _, path, out int pathCount, 512);
+
+                    if (new Status(status).Failed)
+                        return true;
+
+                    // HB 6.2.3 method_13: iterate visited polys and break on non-Ground/Water/Road/faction
+                    for (int i = 0; i < pathCount; i++)
+                    {
+                        if (path[i] == 0) break;
+                        uint areaStatus = NativeMethods.GetPolyArea(mapId, path[i], out byte area);
+                        if (new Status(areaStatus).Failed)
+                            return true; // can't resolve area → assume blocked
+
+                        var areaType = (AreaType)area;
+                        if (areaType != AreaType.Ground && areaType != AreaType.Water && areaType != AreaType.Road && areaType != factionArea)
+                        {
+                            return true; // disallowed area type in ray path
+                        }
+                    }
+
+                    return hitT < 1.0f; // true = hit navmesh boundary
+                }
+                catch (Exception ex)
+                {
+                    Log($"RaycastBlocked exception: {ex.Message}");
+                    return true;
                 }
             }
         }
@@ -1204,26 +1336,32 @@ namespace Tripper.Navigation
         {
             try
             {
-                // Get current include/exclude flags
-                ushort currentInclude = NativeMethods.GetIncludeFlags();
-                ushort currentExclude = NativeMethods.GetExcludeFlags();
+                // HB pattern: build faction filter from a fresh default filter.
+                var baseFilter = _queryFilters["Default"].Clone();
+                var exclude = baseFilter.ExcludeFlags;
 
                 if (isHorde)
                 {
-                    // Horde: exclude Alliance flag, add huge cost to Alliance areas
-                    currentExclude |= (ushort)AbilityFlags.Alliance;
-                    currentExclude &= unchecked((ushort)~(ushort)AbilityFlags.Horde);
-                    NativeMethods.SetExcludeFlags(currentExclude);
+                    exclude |= AbilityFlags.Alliance;
+                    exclude &= ~AbilityFlags.Horde;
+
+                    _currentQueryFilter = baseFilter;
+                    _currentQueryFilter.ExcludeFlags = exclude;
+                    ApplyCurrentQueryFilterToNative();
+
                     NativeMethods.SetAreaCost((uint)AreaType.Alliance, 50.0f);    // huge penalty
                     NativeMethods.SetAreaCost((uint)AreaType.Horde, 1.66f);       // normal
                     Log("Faction filter set: Horde (excluding Alliance paths)");
                 }
                 else
                 {
-                    // Alliance: exclude Horde flag, add huge cost to Horde areas
-                    currentExclude |= (ushort)AbilityFlags.Horde;
-                    currentExclude &= unchecked((ushort)~(ushort)AbilityFlags.Alliance);
-                    NativeMethods.SetExcludeFlags(currentExclude);
+                    exclude |= AbilityFlags.Horde;
+                    exclude &= ~AbilityFlags.Alliance;
+
+                    _currentQueryFilter = baseFilter;
+                    _currentQueryFilter.ExcludeFlags = exclude;
+                    ApplyCurrentQueryFilterToNative();
+
                     NativeMethods.SetAreaCost((uint)AreaType.Horde, 50.0f);       // huge penalty
                     NativeMethods.SetAreaCost((uint)AreaType.Alliance, 1.66f);     // normal
                     Log("Faction filter set: Alliance (excluding Horde paths)");
@@ -1725,12 +1863,12 @@ namespace Tripper.Navigation
         /// <summary>
         /// Flags that must be present on a polygon for it to be traversable.
         /// </summary>
-        public AbilityFlags IncludeFlags { get; set; } = AbilityFlags.Run | AbilityFlags.Swim;
+        public AbilityFlags IncludeFlags { get; set; } = AbilityFlags.All;
 
         /// <summary>
         /// Flags that prevent a polygon from being traversable.
         /// </summary>
-        public AbilityFlags ExcludeFlags { get; set; } = AbilityFlags.Unwalkable;
+        public AbilityFlags ExcludeFlags { get; set; } = AbilityFlags.Unwalkable | AbilityFlags.Transport;
 
         /// <summary>
         /// Cost multipliers for different area types.
