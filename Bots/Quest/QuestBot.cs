@@ -190,6 +190,15 @@ public class QuestBot : BotBase
         bool isMoving = StyxWoW.Me.IsMoving;
         if (StyxWoW.Me.Combat)
             return;
+
+        // HB 6.2.3: Don't target path-aggro mobs when traveling to vendor/trainer/mail
+        // (HB 6.2.3 switched QuestBot to use LevelBot.LevelBotIncludeTargetsFilter which has this check)
+        PoiType poiType = BotPoi.Current.Type;
+        bool isVendorRun = poiType == PoiType.Sell || poiType == PoiType.Repair ||
+                           poiType == PoiType.Train || poiType == PoiType.Buy ||
+                           poiType == PoiType.Mail;
+        if (isVendorRun)
+            return;
         List<WoWUnit> woWunitList = new List<WoWUnit>();
         for (int index = 0; index < incomingUnits.Count; ++index)
         {

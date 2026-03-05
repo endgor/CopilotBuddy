@@ -34,11 +34,11 @@ namespace Levelbot.Actions.Combat
             if (target == null)
                 return RunStatus.Failure;
 
-            // Timeout check - 45 seconds trying to reach target
+            // Timeout check - 45 seconds trying to reach target (HB 3.3.5a value)
             if (Environment.TickCount - _moveStartTime >= 45000)
             {
                 _moveStartTime = 0;
-                TimeSpan blacklistTime = TimeSpan.FromSeconds(10);
+                TimeSpan blacklistTime = TimeSpan.FromMinutes(10);
                 if (target is WoWPlayer)
                     blacklistTime = TimeSpan.FromSeconds(45);
 
@@ -48,46 +48,20 @@ namespace Levelbot.Actions.Combat
                 return RunStatus.Failure;
             }
 
-            // Check if in range and line of sight
-            LocalPlayer? me = ObjectManager.Me;
-            if (me == null) return RunStatus.Failure;
-
-            float distance = target.Location.Distance(me.Location);
-            float meleeRange = me.MeleeReach + target.MeleeReach + 1.33f;
-            
-            // HB 3.3.5a: Stop at appropriate range based on class
-            // Melee: stop at melee range + 0.5 yards buffer
-            // Ranged: stop at 20 yards (safe range for all base spells)
-            float optimalRange = me.IsMelee ? meleeRange + 0.5f : 20f;
-            
-            // Stop movement FIRST if we're close enough (prevents overshoot)
-            if (me.IsMoving && distance <= optimalRange + 2f)
-            {
-                WoWMovement.MoveStop();
-            }
-            
-            if (distance <= optimalRange && target.InLineOfSight)
+            // HB 3.3.5a: If within PullDistance and line of sight, we're done
+            if (target.Location.Distance(ObjectManager.Me.Location) <= Targeting.PullDistance && target.InLineOfSpellSight)
             {
                 _moveStartTime = 0;
                 Navigator.Clear();
                 return RunStatus.Success;
             }
-            
-            // Too close for ranged - back up
-            if (!me.IsMelee && distance < meleeRange + 5f && target.InLineOfSight)
-            {
-                _moveStartTime = 0;
-                Navigator.Clear();
-                return RunStatus.Success; // Let combat routine handle backing up
-            }
 
             // Generate path and check if reachable
             WoWPoint targetLocation = target.Location;
-            var path = Navigator.GeneratePath(StyxWoW.Me?.Location ?? WoWPoint.Zero, targetLocation);
+            WoWPoint[] path = Navigator.GeneratePath(StyxWoW.Me.Location, targetLocation);
 
-            if (path != null && path.Length > 0 && IsPathEndCloseToTarget(path[path.Length - 1], targetLocation))
+            if (path.Length > 0 && IsPathEndCloseToTarget(path[path.Length - 1], targetLocation))
             {
-                // Update status
                 if (target.Type == WoWObjectType.Player)
                 {
                     TreeRoot.StatusText = string.Format("Moving towards level {0} {1} {2}",
@@ -101,9 +75,9 @@ namespace Levelbot.Actions.Combat
                 return Navigator.GetRunStatusFromMoveResult(Navigator.MoveTo(target.Location));
             }
 
-            // Cannot generate path - blacklist
+            // Cannot generate path - blacklist for 10 minutes (HB 3.3.5a value)
             _moveStartTime = 0;
-            TimeSpan blacklist = TimeSpan.FromSeconds(10);
+            TimeSpan blacklist = TimeSpan.FromMinutes(10);
             if (target is WoWPlayer)
                 blacklist = TimeSpan.FromSeconds(45);
 

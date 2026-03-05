@@ -154,7 +154,7 @@ namespace Bots.Grind
 
         private float GetPathPrecision()
         {
-            float speed = StyxWoW.Me?.MovementInfo?.CurrentSpeed ?? 7f;
+            float speed = StyxWoW.Me.MovementInfo.CurrentSpeed;
             return MathEx.Clamp(speed * 0.15f, 1.5f, 10f);
         }
 
@@ -191,7 +191,7 @@ namespace Bots.Grind
                             new ActionClearPoi("No targets in target list - POI.Kill Sanity Checks")
                         ),
                         new Decorator(
-                            ctx => BotPoi.Current.AsObject != null && BotPoi.Current.AsObject.ToUnit().IsDead,
+                            ctx => BotPoi.Current.AsObject != null && BotPoi.Current.AsObject.ToUnit().Dead,
                             new TreeSharp.Action(ctx => BotPoi.Clear("POI is dead from Combat"))
                         )
                     )),
@@ -199,41 +199,47 @@ namespace Bots.Grind
                     new Decorator(
                         ctx => !StyxWoW.Me.Combat,
                         new PrioritySelector(
-                            Routine?.RestBehavior ?? new ActionAlwaysFail(),
-                            Routine?.PreCombatBuffBehavior ?? new ActionAlwaysFail(),
+                            Routine.RestBehavior,
+                            Routine.PreCombatBuffBehavior,
                             new DecoratorIsPoiType(PoiType.Kill, new PrioritySelector(
-                                // Switch target if better one available
+                                // Switch target if better one available (HB 4.3.4: two nested decorators)
                                 new Decorator(
-                                    ctx => Targeting.Instance.TargetList.Count != 0 &&
-                                           BotPoi.Current.AsObject != Targeting.Instance.FirstUnit &&
-                                           BotPoi.Current.Type == PoiType.Kill,
-                                    new Sequence(
-                                        new ActionDebugString("Current POI is not the best pull target. Changing."),
-                                        new ActionSetPoi(true, ctx => new BotPoi(Targeting.Instance.FirstUnit, PoiType.Kill)),
-                                        new TreeSharp.Action(ctx => BotPoi.Current.AsObject?.ToUnit()?.Target())
+                                    ctx => Targeting.Instance.TargetList.Count != 0,
+                                    new Decorator(
+                                        ctx => BotPoi.Current.AsObject != Targeting.Instance.FirstUnit &&
+                                               BotPoi.Current.Type == PoiType.Kill,
+                                        new Sequence(
+                                            new ActionDebugString("Current POI is not the best pull target. Changing."),
+                                            new ActionSetPoi(true, ctx => new BotPoi(Targeting.Instance.FirstUnit, PoiType.Kill)),
+                                            new TreeSharp.Action(ctx => BotPoi.Current.AsObject.ToUnit().Target())
+                                        )
                                     )
                                 ),
                                 // Pull if ready
                                 new Decorator(
                                     ctx => CanPull(),
-                                    Routine?.PullBehavior ?? new ActionAlwaysFail()
+                                    Routine.PullBehavior
                                 )
                             ))
                         )
                     ),
                     // In combat: Heal, CombatBuff, Combat
-                    new Decorator(
-                        ctx => !StyxWoW.Me.Mounted && 
-                               (StyxWoW.Me.Combat || (StyxWoW.Me.GotAlivePet && StyxWoW.Me.Pet.Combat)) &&
-                               Targeting.Instance.FirstUnit != null,
+                    // combat branch: only run when we have a valid first target
+                new Decorator(
+                        ctx =>
+                        {
+                            bool combat = StyxWoW.Me.Combat || (StyxWoW.Me.GotAlivePet && StyxWoW.Me.Pet.Combat);
+                            return !StyxWoW.Me.Mounted && combat &&
+                                   Targeting.Instance.FirstUnit != null;
+                        },
                         new PrioritySelector(
                             new Decorator(
                                 ctx => StyxWoW.Me.Mounted,
                                 new TreeSharp.Action(ctx => Mount.Dismount("Combat"))
                             ),
-                            Routine?.HealBehavior ?? new ActionAlwaysFail(),
-                            Routine?.CombatBuffBehavior ?? new ActionAlwaysFail(),
-                            Routine?.CombatBehavior ?? new ActionAlwaysFail(),
+                            Routine.HealBehavior,
+                            Routine.CombatBuffBehavior,
+                            Routine.CombatBehavior,
                             new ActionAlwaysSucceed()
                         )
                     )
@@ -246,10 +252,8 @@ namespace Bots.Grind
             WoWUnit currentTarget = StyxWoW.Me.CurrentTarget;
             if (currentTarget == null)
                 return false;
-            
-            // Only check distance, NOT LoS. The CustomClass (Singular) will handle moving to LoS in its PullBehavior
-            // via Movement.CreateMoveToLosBehavior(). If we check LoS here, the bot never calls PullBehavior when
-            // the mob is behind a wall, causing it to get stuck.
+            if (!currentTarget.InLineOfSpellSight)
+                return false;
             return currentTarget.Distance <= Targeting.PullDistance;
         }
 
@@ -290,13 +294,24 @@ namespace Bots.Grind
                         new TreeSharp.Action(ctx => ShouldUseSpiritHealer = true)
                     )
                 )),
-                // Ghost - far from corpse, need to move (HB 4.3.4 pattern: DecoratorNeedToMoveToCorpse wraps ActionMoveToCorpse)
-                new Levelbot.Decorators.Death.DecoratorNeedToMoveToCorpse(
+                // Ghost - far from corpse, need to move
+                // HB 4.3.4 smethod_84: IsGhost && Distance > 40
+                new DecoratorIsNotPoiType(PoiType.Corpse, new Decorator(
+                    ctx => StyxWoW.Me.IsGhost && StyxWoW.Me.Location.Distance(StyxWoW.Me.CorpsePoint) > 40f,
                     new Sequence(
+                        // HB 4.3.4 smethod_85: Wait up to 10 sec for server to send CorpsePoint
+                        new Wait(10, ctx => StyxWoW.Me.CorpsePoint != WoWPoint.Empty, new ActionAlwaysSucceed()),
                         new ActionSetActivity("Moving to corpse"),
-                        new Levelbot.Actions.Death.ActionMoveToCorpse()
+                        // HB 4.3.4 smethod_86/87/88: fly if !diedIndoors && (Mounted || CanFly), else walk
+                        new PrioritySelector(
+                            new Decorator(
+                                ctx => !_diedIndoors && (StyxWoW.Me.Mounted || StyxWoW.Me.MovementInfo.CanFly),
+                                new TreeSharp.Action(ctx => Flightor.MoveTo(StyxWoW.Me.CorpsePoint))
+                            ),
+                            new TreeSharp.Action(ctx => Navigator.MoveTo(StyxWoW.Me.CorpsePoint))
+                        )
                     )
-                ),
+                )),
                 // Ghost - near corpse, retrieve it (HB 4.3.4 pattern: DecoratorNeedToTakeCorpse wraps retrieval behavior)
                 new Levelbot.Decorators.Death.DecoratorNeedToTakeCorpse(
                     CreateCorpseRetrievalBehavior()
@@ -435,52 +450,19 @@ namespace Bots.Grind
         }
 
         /// <summary>
-        /// HB 6.2.3 pattern: returns Failure if player is still ghost after attempts,
-        /// so the behavior tree Sequence breaks and retries on next tick.
-        /// Returns Success only when the player actually revived.
+        /// HB 4.3.4 smethod_6 — Attempt to retrieve corpse.
+        /// Returns Running while waiting for recovery delay, Success after RetrieveCorpse().
         /// </summary>
-        private static readonly Random _jiggleRandom = new Random();
         private static RunStatus GrabCorpse()
         {
-            // HB 6.2.3 pattern: don't try to revive while falling
-            if (StyxWoW.Me.IsFalling)
-            {
-                Logging.Write("Cannot retrieve corpse while falling — waiting to land.");
-                return RunStatus.Failure;
-            }
-
-            int delay = Lua.GetReturnVal<int>("return GetCorpseRecoveryDelay()", 0);
-            if (delay != 0)
+            if (Lua.GetReturnVal<int>("return GetCorpseRecoveryDelay()", 0) != 0)
             {
                 Logging.Write("Waiting for corpse recovery delay to expire.");
-                return RunStatus.Failure;
+                return RunStatus.Running;
             }
 
-            // 3.3.5a server bug: ghost must move slightly before RetrieveCorpse() is accepted.
-            // Jiggle 2-3 yards in a random direction, then wait for the movement to complete.
-            WoWPoint myPos = StyxWoW.Me.Location;
-            double angle = _jiggleRandom.NextDouble() * Math.PI * 2;
-            float jiggleDist = 2.0f + (float)(_jiggleRandom.NextDouble() * 1.0); // 2-3 yards
-            WoWPoint jiggleTarget = new WoWPoint(
-                myPos.X + (float)(Math.Cos(angle) * jiggleDist),
-                myPos.Y + (float)(Math.Sin(angle) * jiggleDist),
-                myPos.Z);
-            Logging.Write("Jiggle-moving {0:F1} yards before RetrieveCorpse...", jiggleDist);
-            WoWMovement.ClickToMove(jiggleTarget);
-            System.Threading.Thread.Sleep(1500); // Let the ghost walk a bit
-            WoWMovement.MoveStop();
-
-            // HB 3.3.5a/4.3.4 retries via behavior tree re-entry; we batch 5 attempts
-            // with 1s delays to avoid repeated tree ticks through the elevator shaft.
-            for (int attempt = 0; attempt < 5; attempt++)
-            {
-                if (!StyxWoW.Me.IsGhost)
-                    break; // Successfully revived
-
-                Logging.Write("Clicking corpse popup... (attempt {0}/5)", attempt + 1);
-                Lua.DoString("RetrieveCorpse()");
-                System.Threading.Thread.Sleep(1000);
-            }
+            Logging.Write("Clicking corpse popup...");
+            Lua.DoString("RetrieveCorpse()");
 
             if (CharacterSettings.Instance.RessAtSpiritHealers && !Battlegrounds.IsInsideBattleground)
             {
@@ -496,14 +478,6 @@ namespace Bots.Grind
                     ShouldUseSpiritHealer = true;
                     _deathCount = 0;
                 }
-            }
-
-            // If still ghost after all attempts, return Failure so Sequence breaks.
-            // POI stays set, stopwatch keeps running, tree retries next tick.
-            if (StyxWoW.Me.IsGhost)
-            {
-                Logging.Write("Still ghost after RetrieveCorpse attempts — will retry.");
-                return RunStatus.Failure;
             }
 
             return RunStatus.Success;
@@ -522,7 +496,11 @@ namespace Bots.Grind
             Lua.DoString("RepopMe()");
         }
 
-        private static WoWPoint FindSafeResPoint()
+        /// <summary>
+        /// HB 4.3.4 Class635.smethod_0 — Simple safe res point: tries direct nav, then raycasts
+        /// around corpse with FindHeight validation.
+        /// </summary>
+        private static WoWPoint FindCorpsePoint()
         {
             WoWPoint corpsePoint = StyxWoW.Me.CorpsePoint;
             WoWPoint myLocation = StyxWoW.Me.Location;
@@ -530,18 +508,123 @@ namespace Bots.Grind
             if (Navigator.CanNavigateFully(myLocation, corpsePoint))
                 return corpsePoint;
 
-            // Try to find a safe spot around corpse
             for (float degrees = 0.0f; degrees < 360.0f; degrees += 15f)
             {
                 for (float distance = 0.0f; distance <= 35.0f; distance += 5f)
                 {
-                    WoWPoint testPoint = corpsePoint.RayCast(WoWMathHelper.DegreesToRadians(degrees), distance);
-                    if (Navigator.CanNavigateFully(myLocation, testPoint))
-                        return testPoint;
+                    var vector = corpsePoint.RayCast(WoWMathHelper.DegreesToRadians(degrees), distance);
+                    float originalZ = vector.Z;
+                    if (Navigator.FindHeight(vector.X, vector.Y, out float newZ) &&
+                        Math.Abs(originalZ - newZ) <= 15f &&
+                        Navigator.CanNavigateFully(myLocation, new WoWPoint(vector.X, vector.Y, newZ)))
+                    {
+                        return new WoWPoint(vector.X, vector.Y, newZ);
+                    }
                 }
             }
 
             return corpsePoint;
+        }
+
+        /// <summary>
+        /// HB 4.3.4 Class635.smethod_1 — Full safe res point algorithm with hostile mob avoidance.
+        /// Uses MassTraceLine LOS checks and scores points by distance from nearest hostile.
+        /// </summary>
+        private static WoWPoint FindSafeResPoint()
+        {
+            // HB 4.3.4: woWPoint_0 = first read of CorpsePoint (used for safety check & fallback)
+            WoWPoint originalCorpse = StyxWoW.Me.CorpsePoint;
+
+            // Gather hostile NPC positions
+            List<WoWPoint> hostilePositions = ObjectManager.GetObjectsOfType<WoWUnit>(true, false)
+                .Where(u => !u.Dead && u.IsHostile)
+                .Select(u => u.Location)
+                .ToList();
+
+            Logging.Write("There are {0} hostile mobs near our corpse.", hostilePositions.Count);
+
+            // HB 4.3.4: second read of CorpsePoint (used for raycasting, raised by 2.132)
+            WoWPoint corpsePoint = StyxWoW.Me.CorpsePoint;
+            WoWPoint myLocation = StyxWoW.Me.Location;
+
+            // If corpse hasn't moved significantly and no hostiles within 25yd, use original point directly
+            if (corpsePoint.Distance2D(originalCorpse) < 39f && IsPointSafeFromHostiles(originalCorpse, hostilePositions))
+                return originalCorpse;
+
+            // Build raycast lines from corpse outward
+            WoWPoint raisedCorpse = corpsePoint;
+            raisedCorpse.Z += 2.132f;
+
+            var traceLines = new List<WorldLine>();
+            for (float degrees = 0.0f; degrees < 360.0f; degrees += 15f)
+            {
+                for (float distance = 0.0f; distance <= 35.0f; distance += 5f)
+                {
+                    WoWPoint endPoint = raisedCorpse.RayCast((float)(degrees * Math.PI / 180.0), distance);
+                    traceLines.Add(new WorldLine(raisedCorpse, endPoint));
+                }
+            }
+
+            // MassTraceLine for LOS — points that hit geometry are blocked
+            GameWorld.MassTraceLine(traceLines.ToArray(), GameWorld.CGWorldFrameHitFlags.HitTestLOS, out bool[] hitResults);
+
+            WoWPoint bestPoint = corpsePoint;
+            float bestDistance = 0f;
+
+            for (int i = 0; i < traceLines.Count; i++)
+            {
+                // Skip points blocked by LOS
+                if (hitResults != null && hitResults[i])
+                    continue;
+
+                WoWPoint candidate = traceLines[i].End;
+
+                // Validate path to candidate
+                WoWPoint[]? path = Navigator.GeneratePath(myLocation, candidate);
+                if (path == null || path.Length == 0)
+                    continue;
+
+                // Check path endpoint is close to candidate (within PathPrecision + Z tolerance)
+                WoWPoint pathEnd = path[path.Length - 1];
+                if (pathEnd.Distance2DSqr(candidate) > Navigator.PathPrecision * Navigator.PathPrecision ||
+                    Math.Abs(pathEnd.Z - candidate.Z) >= 3f)
+                    continue;
+
+                // Score: distance from nearest hostile (higher = safer)
+                float distFromHostile = GetDistanceToNearestHostile(candidate, hostilePositions);
+                if (distFromHostile > bestDistance)
+                {
+                    bestPoint = candidate;
+                    bestDistance = distFromHostile;
+                }
+            }
+
+            return bestPoint;
+        }
+
+        /// <summary>
+        /// HB 4.3.4 Class635.smethod_3 — Check if no hostile is within 25 yards of a point.
+        /// </summary>
+        private static bool IsPointSafeFromHostiles(WoWPoint point, IEnumerable<WoWPoint> hostilePositions)
+        {
+            // 625f = 25 * 25 (25 yard radius check)
+            return !hostilePositions.Any(h => h.DistanceSqr(point) < 625f);
+        }
+
+        /// <summary>
+        /// HB 4.3.4 Class635.smethod_4 — Get distance to the nearest hostile point.
+        /// Returns float.MaxValue if no hostiles exist.
+        /// </summary>
+        private static float GetDistanceToNearestHostile(WoWPoint point, IEnumerable<WoWPoint> hostilePositions)
+        {
+            WoWPoint nearest = hostilePositions
+                .OrderBy(h => h.Distance(point))
+                .FirstOrDefault();
+
+            if (nearest == default)
+                return float.MaxValue;
+
+            return nearest.Distance2D(point);
         }
 
         #endregion
@@ -632,6 +715,16 @@ namespace Bots.Grind
                                     BotPoi.Clear("Can't generate a path to lootable");
                                 })
                             ),
+                            // Stale loot POI: object despawned and no longer in ObjectManager
+                            new Decorator(
+                                ctx => BotPoi.Current.AsObject == null,
+                                new TreeSharp.Action(ctx =>
+                                {
+                                    Logging.Write("[LB] Loot object 0x{0:X016} no longer in world (despawned), clearing stale POI.", BotPoi.Current.Guid);
+                                    Blacklist.Add(BotPoi.Current.Guid, TimeSpan.FromMinutes(5.0));
+                                    BotPoi.Clear("Loot object despawned");
+                                })
+                            ),
                             // Move to lootable
                             new Decorator(
                                 ctx => BotPoi.Current.AsObject != null && !BotPoi.Current.AsObject.WithinInteractRange,
@@ -666,8 +759,8 @@ namespace Bots.Grind
                                             {
                                                 Logging.Write("Looting {0} Guid 0x{1:X016}", lootObj.Name, lootObj.Guid);
                                             }
-                                            // Loot all items via Lua
-                                            Lua.DoString("for i=1, GetNumLootItems() do LootSlot(i) ConfirmBindOnUse() end CloseLoot()");
+                                            // HB 4.3.4 smethod_37 → smethod_0 (LootAllItems)
+                                            LootAllItems();
                                         })
                                     ),
                                     // Skinning check
@@ -761,7 +854,7 @@ namespace Bots.Grind
             if (path != null && path.Length > 0)
             {
                 // Check if any path point is too far from target (blocked)
-                if (path.Any(p => p.Distance(myLocation) > Targeting.CollectionRange))
+                if (path.Any(p => p.Distance(myLocation) > 80f))
                     return true;
 
                 // Check if path end is too far from target
@@ -847,7 +940,10 @@ namespace Bots.Grind
                                                         if (entry.Index >= 0)
                                                             GossipFrame.Instance.SelectGossipOption(entry.Index);
                                                     }),
-                                                    new Wait(5, ctx => IsVendorFrameOpen(), new ActionIdle())
+                                                    // HB 6.2.3 fix: delay after gossip selection to let the game
+                                                    // process the request and open the correct frame
+                                                    new ActionSleep(500),
+                                                    new Wait(5, ctx => !GossipFrame.Instance.IsVisible, new ActionIdle())
                                                 )),
                                                 new ActionIdle()
                                             )
@@ -858,10 +954,11 @@ namespace Bots.Grind
                                 new Decorator(
                                     ctx => IsVendorFrameOpen(),
                                     new PrioritySelector(
-                                        // Sell/Repair
-                                        new DecoratorIsPoiType(new[] { PoiType.Sell, PoiType.Repair }, new Sequence(
+                                        // Sell/Repair — HB 6.2.3 pattern: require MerchantFrame visible
+                                        new DecoratorIsPoiType(new[] { PoiType.Sell, PoiType.Repair },
+                                            new Decorator(ctx => MerchantFrame.Instance.IsVisible, new Sequence(
                                             new DecoratorContinue(
-                                                ctx => BotPoi.Current.AsObject.ToUnit().IsVendor,
+                                                ctx => BotPoi.Current.AsObject?.ToUnit()?.IsVendor == true,
                                                 new Sequence(
                                                     new ActionDebugString("Selling items"),
                                                     new ActionSetActivity("Selling Items"),
@@ -870,7 +967,7 @@ namespace Bots.Grind
                                                 )
                                             ),
                                             new DecoratorContinue(
-                                                ctx => BotPoi.Current.AsObject.ToUnit().IsRepairMerchant,
+                                                ctx => BotPoi.Current.AsObject?.ToUnit()?.IsRepairMerchant == true,
                                                 new Sequence(
                                                     new ActionDebugString("Repairing items"),
                                                     new ActionSetActivity("Repairing Items"),
@@ -908,7 +1005,7 @@ namespace Bots.Grind
                                             new TreeSharp.Action(ctx => MerchantFrame.Instance.Close()),
                                             new TreeSharp.Action(ctx => StyxWoW.Me.ClearTarget()),
                                             new ActionAlwaysFail()
-                                        )),
+                                        ))),
                                         // Mail
                                         new DecoratorIsPoiType(PoiType.Mail, new Sequence(
                                             new ActionDebugString("Mailing items"),
@@ -942,7 +1039,7 @@ namespace Bots.Grind
                 new Decorator(
                     ctx => NeedToSell(),
                     new ActionSetPoi(ctx => new BotPoi(
-                        ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Sell), 
+                        ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Repair), 
                         PoiType.Sell))
                 ),
                 // Check if need to repair
@@ -978,41 +1075,43 @@ namespace Bots.Grind
 
         private static bool NeedToSell()
         {
-            // Respect the FindVendorsAutomatically setting (CharacterSettings, bound to the UI)
-            if (!CharacterSettings.Instance.FindVendorsAutomatically && !Vendors.ForceSell)
-                return false;
-            if (ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Sell) == null)
+            // HB 4.3.4 smethod_11 — no FindVendorsAutomatically check
+            if (ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Sell) == null)
                 return false;
             return Vendors.ForceSell || StyxWoW.Me.FreeNormalBagSlots <= ProfileManager.CurrentProfile.MinFreeBagSlots;
         }
 
         private static bool NeedToTrain()
         {
-            // Use CharacterSettings.Instance.TrainNewSkills (bound to the UI)
-            if ((!CharacterSettings.Instance.TrainNewSkills && !Vendors.ForceTrainer) ||
-                ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Train) == null)
+            // HB 4.3.4 smethod_12
+            if (!CharacterSettings.Instance.TrainNewSkills && !Vendors.ForceTrainer)
+                return false;
+            if (ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Train) == null)
                 return false;
             return Vendors.ForceTrainer || Vendors.NeedClassTraining;
         }
 
         private static bool NeedToRepair()
         {
-            // Respect the FindVendorsAutomatically setting (CharacterSettings, bound to the UI)
-            if (!CharacterSettings.Instance.FindVendorsAutomatically && !Vendors.ForceRepair)
+            // HB 4.3.4 smethod_13 — no FindVendorsAutomatically check
+            if (Vendors.RepairDisabled)
                 return false;
-            if (Vendors.RepairDisabled ||
-                ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Repair) == null)
+            if (ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Repair) == null)
                 return false;
 
-            // Update repair cost periodically
+            // HB 4.3.4: update repair cost periodically
             if (_repairCostTimer.IsFinished)
             {
-            ulong estimatedCost = 0; // TODO: Find proper HB 4.3.4 repair cost calculation
+                var cost = StyxWoW.Me.GetEstimatedRepairCost();
+                if (cost.TotalCoppers != 0L)
+                {
+                    Logging.WriteDebug("Updating repair cost for current equipped items. New value: [{0}]", cost);
+                    _lastRepairCost = (ulong)cost.TotalCoppers;
+                }
                 _repairCostTimer.Reset();
             }
 
-            // ensure player object valid before checking coinage
-            if (StyxWoW.Me == null || !StyxWoW.Me.IsValid || (long)StyxWoW.Me.Copper <= (long)_lastRepairCost)
+            if (StyxWoW.Me.Coinage <= _lastRepairCost)
             {
                 if (Vendors.ForceRepair)
                 {
@@ -1033,7 +1132,7 @@ namespace Bots.Grind
         private static bool NeedToBuy()
         {
             // HB 4.3.4: Minimum 1 gold required to buy
-            if (StyxWoW.Me.Copper < 10000)
+            if (StyxWoW.Me.Coinage < 10000)
             {
                 if (Vendors.ForceBuy)
                 {
@@ -1108,28 +1207,20 @@ namespace Bots.Grind
         public static PrioritySelector CreateRoamBehavior()
         {
             return new PrioritySelector(
-                // Find target if not looting/killing
-                    new DecoratorIsNotPoiType(new[] { PoiType.Kill, PoiType.Loot, PoiType.Skin, PoiType.Harvest },
+                // Find target if not looting/killing/vendoring
+                // HB 6.2.3 fix: also exclude Sell/Repair/Train/Buy/Mail to prevent
+                // pulling mobs during vendor runs (overwrites Sell POI with Kill)
+                    new DecoratorIsNotPoiType(new[] { PoiType.Kill, PoiType.Loot, PoiType.Skin, PoiType.Harvest,
+                        PoiType.Sell, PoiType.Repair, PoiType.Train, PoiType.Buy, PoiType.Mail },
                     new DecoratorNeedToFindTarget(new Sequence(
-                        new TreeSharp.Action(ctx => Targeting.Instance.FirstUnit.Target()),
+                        new TreeSharp.Action(ctx =>
+                    {
+                        // HB 4.3.4 smethod_113 — no dead check, trusts Targeting pulse
+                        Targeting.Instance.FirstUnit.Target();
+                    }),
                         new Wait(5, ctx => StyxWoW.Me.GotTarget, new ActionIdle()),
-                        new ActionSetPoi(ctx =>
-                        {
-                            var target = StyxWoW.Me.CurrentTarget;
-                            var poiType = PoiType.Kill;
-                                var unit = target as WoWUnit;
-                                if (unit != null &&
-                                    LootTargeting.LootMobs &&
-                                    unit.Distance <= LootTargeting.LootRadius &&
-                                    unit.Dead &&
-                                    !Blacklist.Contains(unit.Guid) &&
-                                    ((unit.KilledByMe && unit.CanLoot) ||
-                                     (unit.CanSkin && LootTargeting.SkinMobs && (CharacterSettings.Instance.NinjaSkin || unit.KilledByMe))))
-                                {
-                                    poiType = PoiType.Loot;
-                                }
-                            return new BotPoi(target, poiType);
-                        })
+                        // HB 4.3.4 smethod_115 — always Kill POI, no dead/loot logic
+                        new ActionSetPoi(ctx => new BotPoi(StyxWoW.Me.CurrentTarget, PoiType.Kill))
                     ))
                 ),
                 // Move to hotspot if needed
@@ -1170,6 +1261,7 @@ namespace Bots.Grind
 
         private static bool ShouldClearPoiForBetterTarget()
         {
+            // HB 4.3.4 smethod_8 — no dead check
             WoWUnit firstUnit = Targeting.Instance.FirstUnit;
             WoWUnit currentTarget = StyxWoW.Me.CurrentTarget;
 
@@ -1179,7 +1271,10 @@ namespace Bots.Grind
                 currentTarget == null)
                 return true;
 
-            return currentTarget != null && firstUnit != null && currentTarget.Guid != firstUnit.Guid;
+            if (currentTarget != null && firstUnit != null)
+                return currentTarget.Guid != firstUnit.Guid;
+
+            return false;
         }
 
         private static bool ShouldMoveToHotspot()
@@ -1254,6 +1349,15 @@ namespace Bots.Grind
             if (currentProfile == null || StyxWoW.Me.Combat)
                 return;
 
+            // HB 6.2.3: Don't add faction targets when traveling to vendor/trainer/mail
+            // Only aggro mobs (handled by DefaultIncludeTargetsFilter) should be included
+            PoiType poiType = BotPoi.Current.Type;
+            bool isVendorRun = poiType == PoiType.Sell || poiType == PoiType.Repair ||
+                               poiType == PoiType.Train || poiType == PoiType.Buy ||
+                               poiType == PoiType.Mail;
+            if (isVendorRun)
+                return;
+
             HashSet<uint> validFactions = new HashSet<uint>();
             GrindArea grindArea = StyxWoW.AreaManager?.CurrentGrindArea;
 
@@ -1300,6 +1404,18 @@ namespace Bots.Grind
         {
             // Sleep for estimated latency
             Thread.Sleep(100 + (int)(StyxWoW.WoWClient?.Latency ?? 100));
+        }
+
+        /// <summary>
+        /// HB 4.3.4 SetDefaultQueryFilter — Resets the mesh navigator query filter.
+        /// Called when navigation parameters need to be restored to defaults.
+        /// </summary>
+        public static void SetDefaultQueryFilter()
+        {
+            if (Navigator.IsNavigatorLoaded)
+            {
+                Navigator.TripperNavigator.ResetQueryFilter();
+            }
         }
 
         #endregion
