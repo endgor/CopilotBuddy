@@ -1,3 +1,4 @@
+using Styx;
 using System.Threading;
 using TreeSharp;
 
@@ -16,7 +17,7 @@ namespace CommonBehaviors.Actions
 		{
 			if (SleepTime > 0)
 			{
-				Thread.Sleep(SleepTime);
+				StyxWoW.Sleep(SleepTime);
 			}
 
 			return RunStatus.Success;

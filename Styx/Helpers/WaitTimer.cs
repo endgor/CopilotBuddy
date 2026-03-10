@@ -99,7 +99,7 @@ namespace Styx.Helpers
 		{
 			while (!IsFinished)
 			{
-				Thread.Sleep(10);
+				StyxWoW.Sleep(10);
 			}
 		}
 

@@ -173,11 +173,11 @@ public class UseGameObjectObjective : QuestObjective
         if (StyxWoW.Me.IsMoving)
         {
             WoWMovement.MoveStop();
-            Thread.Sleep(250);
+            StyxWoW.Sleep(250);
             return RunStatus.Running;
         }
         this._currentTarget.Interact();
-        Thread.Sleep(1500);
+        StyxWoW.Sleep(1500);
         return RunStatus.Success;
     }
 

@@ -237,7 +237,7 @@ public class CollectItemObjective : QuestObjective
             Logging.Write("This NPC is not a vendor.");
             return RunStatus.Failure;
         }
-        Thread.Sleep(500);
+        StyxWoW.Sleep(500);
         return RunStatus.Running;
     }
 
@@ -301,14 +301,14 @@ public class CollectItemObjective : QuestObjective
                 this._interactTimer.Stop();
                 return RunStatus.Failure;
             }
-            Thread.Sleep(500);
+            StyxWoW.Sleep(500);
             return RunStatus.Running;
         }
         
         if (StyxWoW.Me.Mounted)
             Mount.Dismount("Frame");
         WoWMovement.MoveStop();
-        Thread.Sleep(250);
+        StyxWoW.Sleep(250);
         return RunStatus.Running;
     }
 

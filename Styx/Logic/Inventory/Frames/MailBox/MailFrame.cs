@@ -79,10 +79,10 @@ namespace Styx.Logic.Inventory.Frames.MailBox
 				Lua.DoString($"AutoLootMailItem({mailIndex})", "Economist.lua");
 
 				while (int.Parse(Lua.GetReturnValues("return GetMoney()", "Economist.lua")[0]) < currentMoney + mailMoney)
-					Thread.Sleep(250);
+					StyxWoW.Sleep(250);
 
 				while (MailCount >= mailCount)
-					Thread.Sleep(250);
+					StyxWoW.Sleep(250);
 			}
 		}
 
@@ -178,7 +178,7 @@ namespace Styx.Logic.Inventory.Frames.MailBox
 						int bag = int.Parse(result[i]);
 						int slot = int.Parse(result[i + 1]);
 						Lua.DoString($"UseContainerItem({bag}, {slot})", "_main.lua");
-						Thread.Sleep(250);
+						StyxWoW.Sleep(250);
 					}
 				}
 			}
@@ -209,7 +209,7 @@ namespace Styx.Logic.Inventory.Frames.MailBox
 				while (currentItems.Count >= count && Environment.TickCount - startTick < 10000)
 				{
 					currentItems = ObjectManager.GetObjectsOfType<WoWItem>();
-					Thread.Sleep(250);
+					StyxWoW.Sleep(250);
 				}
 			}
 		}

@@ -33,7 +33,7 @@ namespace Styx.Logic.Questing
 			if (ptr == 0 || (ptr & 1) != 0)
 			{
 				QueryQuestsCompleted();
-				Thread.Sleep(100);
+				StyxWoW.Sleep(100);
 
 				ptr = wow.Read<uint>(CompletedQuestsPtr);
 
@@ -47,7 +47,7 @@ namespace Styx.Logic.Questing
 						if (ptr != 0 && (ptr & 1) == 0)
 							break;
 
-						Thread.Sleep(100);
+						StyxWoW.Sleep(100);
 						ptr = wow.Read<uint>(CompletedQuestsPtr);
 					}
 

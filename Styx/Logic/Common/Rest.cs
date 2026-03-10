@@ -94,10 +94,10 @@ public static class Rest
         if (!string.IsNullOrEmpty(LevelbotSettings.Instance.DrinkName) ||
             !string.IsNullOrEmpty(LevelbotSettings.Instance.FoodName))
         {
-            Thread.Sleep(1000);
+            StyxWoW.Sleep(1000);
             while (me.Auras.ContainsKey("Food") || me.Auras.ContainsKey("Drink"))
             {
-                Thread.Sleep(100);
+                StyxWoW.Sleep(100);
 
                 if (me.HealthPercent == 100.0 && me.ManaPercent == 100.0)
                     break;

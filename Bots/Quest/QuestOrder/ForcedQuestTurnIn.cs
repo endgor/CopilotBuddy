@@ -149,7 +149,7 @@ public class ForcedQuestTurnIn : ForcedBehavior
         Logging.WriteDebug("[CloseFrames] Closing frames...");
         GossipFrame.Instance.Close();
         QuestFrame.Instance.Close();
-        Thread.Sleep(300);
+        StyxWoW.Sleep(300);
         return RunStatus.Running;
     }
 
@@ -181,7 +181,7 @@ public class ForcedQuestTurnIn : ForcedBehavior
         }
         Logging.WriteDebug("[InteractWithNpc] Interacting...");
         woWobject.Interact();
-        Thread.Sleep(300);
+        StyxWoW.Sleep(300);
         return RunStatus.Running;
     }
 
@@ -216,7 +216,7 @@ public class ForcedQuestTurnIn : ForcedBehavior
     {
         Logging.WriteDebug("[ClickContinue] Clicking Continue button");
         QuestFrame.Instance.ClickContinue();
-        Thread.Sleep(1000);
+        StyxWoW.Sleep(1000);
         Logging.WriteDebug("[ClickContinue] After ClickContinue - QuestFrame.IsVisible: {0}", QuestFrame.Instance.IsVisible);
         return RunStatus.Success;
     }
@@ -264,7 +264,7 @@ public class ForcedQuestTurnIn : ForcedBehavior
             }
             Logging.WriteDebug("[CompleteQuest] CompleteQuest attempt {0}/5", this.completeQuestAttempts);
             QuestFrame.Instance.CompleteQuest();
-            Thread.Sleep(500);
+            StyxWoW.Sleep(500);
             Logging.WriteDebug("[CompleteQuest] After CompleteQuest - QuestFrame.IsVisible: {0}", QuestFrame.Instance.IsVisible);
             return RunStatus.Running;
         }
@@ -278,7 +278,7 @@ public class ForcedQuestTurnIn : ForcedBehavior
         if (!ForcedQuestTurnIn.Me.GotTarget)
             return RunStatus.Success;
         ForcedQuestTurnIn.Me.ClearTarget();
-        Thread.Sleep(300);
+        StyxWoW.Sleep(300);
         return RunStatus.Running;
     }
 

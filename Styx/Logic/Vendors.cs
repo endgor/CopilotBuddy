@@ -311,7 +311,7 @@ namespace Styx.Logic
 				}
 			}
 
-			Thread.Sleep(2000);
+			StyxWoW.Sleep(2000);
 			_merchantFrame.Close();
 			ForceBuy = false;
 			BotPoi.Clear("Restocked");

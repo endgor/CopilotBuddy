@@ -302,7 +302,7 @@ namespace Bots.Gatherbuddy
                     {
                         Logging.Write("[GatherBuddy] Using Hearthstone...");
                         Lua.DoString("UseItemByName(GetItemInfo(6948))");
-                        Thread.Sleep(12000); // Wait for hearth cast
+                        StyxWoW.Sleep(12000); // Wait for hearth cast
                     }
 
                     TreeRoot.Stop("GatherBuddy: BottingHours limit reached");
@@ -369,7 +369,7 @@ namespace Bots.Gatherbuddy
                             float jy = (float)(_random.NextDouble() * 4 - 2);
                             var jigglePoint = StyxWoW.Me!.Location.Add(jx, jy, 0);
                             Navigator.MoveTo(jigglePoint);
-                            Thread.Sleep(500);
+                            StyxWoW.Sleep(500);
                             WoWMovement.MoveStop();
                             return RunStatus.Success;
                         }),
@@ -436,7 +436,7 @@ namespace Bots.Gatherbuddy
                     // Interact — accept rez
                     WoWMovement.MoveStop();
                     spiritHealer.Interact();
-                    Thread.Sleep(1000);
+                    StyxWoW.Sleep(1000);
                     Lua.DoString("StaticPopup1Button1:Click()"); // Accept rez sickness
                     _shouldUseSpiritHealer = false;
                     _deathCount = 0;
@@ -578,7 +578,7 @@ namespace Bots.Gatherbuddy
                                 SleepForLag();
 
                                 // Wait for LOOT_OPENED
-                                Thread.Sleep(500);
+                                StyxWoW.Sleep(500);
 
                                 // Auto-loot all via Lua
                                 Lua.DoString(
@@ -618,7 +618,7 @@ namespace Bots.Gatherbuddy
                                     skinTarget.Interact();
                                     Logging.Write($"[GatherBuddy] Skinning {skinTarget.Name}");
                                     SleepForLag();
-                                    Thread.Sleep(2000); // Wait for skinning cast
+                                    StyxWoW.Sleep(2000); // Wait for skinning cast
                                     return RunStatus.Success;
                                 })
                             )
@@ -1036,7 +1036,7 @@ namespace Bots.Gatherbuddy
                 WoWMovement.MoveStop();
                 mailboxObj.Interact();
                 SleepForLag();
-                Thread.Sleep(1000); // Wait for mail frame
+                StyxWoW.Sleep(1000); // Wait for mail frame
 
                 // Collect items to mail based on quality settings
                 var itemsToMail = GetItemsToMail();
@@ -1223,13 +1223,13 @@ namespace Bots.Gatherbuddy
         /// </summary>
         private static void HandleGossipFrame()
         {
-            Thread.Sleep(500);
+            StyxWoW.Sleep(500);
             var results = Lua.GetReturnValues("return GossipFrame and GossipFrame:IsVisible() and '1' or '0'");
             if (results != null && results.Count > 0 && results[0] == "1")
             {
                 // Find the vendor gossip option (usually first one)
                 Lua.DoString("SelectGossipOption(1)");
-                Thread.Sleep(500);
+                StyxWoW.Sleep(500);
             }
         }
 
@@ -1345,7 +1345,7 @@ namespace Bots.Gatherbuddy
             int lag = 100;
             if (results != null && results.Count > 0 && int.TryParse(results[0], out int serverLag))
                 lag = serverLag;
-            Thread.Sleep(100 + lag);
+            StyxWoW.Sleep(100 + lag);
         }
 
         /// <summary>

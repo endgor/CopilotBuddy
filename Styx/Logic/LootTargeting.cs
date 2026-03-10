@@ -27,9 +27,11 @@ namespace Styx.Logic
         {
             get
             {
-                // WotLK 3.3.5a: Use Lua to check if loot frame is open
-                string result = Lua.GetReturnVal<string>("if LootFrame and LootFrame:IsShown() then return '1' else return '0' end", 0);
-                return result == "1";
+                // HB 3.3.5a: pure memory read at 0xBFACD8 (12560600).
+                // Non-zero = loot frame is shown.  No Lua needed.
+                Memory? wow = ObjectManager.Wow;
+                if (wow == null) return false;
+                return wow.Read<uint>((uint)0xBFACD8) != 0U;
             }
         }
 

@@ -45,7 +45,7 @@ namespace Styx.WoWInternals
 					{
 						break;
 					}
-					Thread.Sleep(WaitInterval);
+					StyxWoW.Sleep(WaitInterval);
 				}
 				return true;
 			}
@@ -60,7 +60,7 @@ namespace Styx.WoWInternals
 					{
 						break;
 					}
-					Thread.Sleep(WaitInterval);
+					StyxWoW.Sleep(WaitInterval);
 					if (DateTime.Now >= dateTime)
 					{
 						return false;

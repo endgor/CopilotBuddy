@@ -46,12 +46,12 @@ namespace Styx.Helpers
             if (!useForceQuit)
             {
                 Lua.DoString("Logout()");
-                Thread.Sleep(30000);
+                StyxWoW.Sleep(30000);
             }
             else
             {
                 Lua.DoString("ForceQuit()");
-                Thread.Sleep(10000);
+                StyxWoW.Sleep(10000);
             }
         }
 

@@ -45,7 +45,7 @@ namespace Levelbot.Actions.Death
                 while (ObjectManager.Me != null && !ObjectManager.Me.IsAlive 
                     && System.Environment.TickCount - startTime < 7500)
                 {
-                    Thread.Sleep(100);
+                    StyxWoW.Sleep(100);
                 }
                 if (ObjectManager.Me != null && ObjectManager.Me.IsAlive)
                     return;
@@ -60,7 +60,7 @@ namespace Levelbot.Actions.Death
                     && ((ObjectManager.Me != null && ObjectManager.Me.Dead && !ObjectManager.Me.IsGhost) 
                         || !StyxWoW.IsInGame))
                 {
-                    Thread.Sleep(200);
+                    StyxWoW.Sleep(200);
                 }
             }
         }

@@ -232,7 +232,7 @@ namespace Styx.Logic
                 $"local _,_,_,_,id = GetBattlegroundInfo(i); " +
                 $"if id == {(uint)type} then RequestBattlegroundInstanceInfo(i); end end");
             Lua.DoString($"JoinBattlefield(1, {(asGroup ? "true" : "false")})");
-            Thread.Sleep(500);
+            StyxWoW.Sleep(500);
         }
 
         /// <summary>

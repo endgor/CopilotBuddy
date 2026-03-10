@@ -81,7 +81,7 @@ namespace Levelbot.Actions.Death
             {
                 Logging.Write("Clicking corpse popup...");
                 Lua.DoString("RetrieveCorpse()");
-                Thread.Sleep(2000);
+                StyxWoW.Sleep(2000);
                 _safeSpot = WoWPoint.Empty;
                 _resTimeout = DateTime.MinValue;
             }

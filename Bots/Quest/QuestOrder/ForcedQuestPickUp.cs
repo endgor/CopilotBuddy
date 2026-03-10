@@ -6,6 +6,7 @@
 
 using CommonBehaviors.Actions;
 using CommonBehaviors.Decorators;
+using Styx;
 using Styx.Helpers;
 using Styx.Logic.BehaviorTree;
 using Styx.Logic.Inventory.Frames;
@@ -190,7 +191,7 @@ public class ForcedQuestPickUp : ForcedBehavior
             return RunStatus.Success;
         GossipFrame.Instance.Close();
         QuestFrame.Instance.Close();
-        Thread.Sleep(500);
+        StyxWoW.Sleep(500);
         return RunStatus.Running;
     }
 
@@ -233,7 +234,7 @@ public class ForcedQuestPickUp : ForcedBehavior
         if (questIndex == -1)
             return RunStatus.Failure;
         GossipFrame.Instance.SelectAvailableQuest(questIndex);
-        Thread.Sleep(500);
+        StyxWoW.Sleep(500);
         return RunStatus.Running;
     }
 
@@ -254,7 +255,7 @@ public class ForcedQuestPickUp : ForcedBehavior
         if (QuestFrame.Instance.IsVisible && (long)this.lastShownQuestId == (long)QuestFrame.Instance.CurrentShownQuestId)
         {
             QuestFrame.Instance.CompleteQuest();
-            Thread.Sleep(500);
+            StyxWoW.Sleep(500);
             return RunStatus.Running;
         }
         this.lastShownQuestId = -1;
@@ -266,7 +267,7 @@ public class ForcedQuestPickUp : ForcedBehavior
         if (!ObjectManager.Me.GotTarget)
             return RunStatus.Success;
         ObjectManager.Me.ClearTarget();
-        Thread.Sleep(300);
+        StyxWoW.Sleep(300);
         return RunStatus.Running;
     }
 

@@ -69,7 +69,7 @@ namespace Styx.Helpers
         public static void KeyUpDown(char key)
         {
             PressKey(key);
-            Thread.Sleep(10);
+            StyxWoW.Sleep(10);
             ReleaseKey(key);
         }
 

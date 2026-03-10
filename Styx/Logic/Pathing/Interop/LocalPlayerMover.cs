@@ -117,13 +117,13 @@ namespace Styx.Logic.Pathing.Interop
 		public void PerformJump()
 		{
 			Lua.DoString("JumpOrAscendStart()");
-			Thread.Sleep(50);
+			StyxWoW.Sleep(50);
 			Lua.DoString("AscendStop()");
 
 			int startTick = Environment.TickCount;
 			while (ObjectManager.Me?.IsFalling == true && Environment.TickCount - startTick < 2500)
 			{
-				Thread.Sleep(50);
+				StyxWoW.Sleep(50);
 			}
 		}
 

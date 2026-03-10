@@ -126,11 +126,11 @@ namespace Styx.Logic.Pathing
                              (SpellManager.HasSpell("Flight Form") || SpellManager.HasSpell("Swift Flight Form")))
                     {
                         WoWMovement.Move(WoWMovement.MovementDirection.JumpAscend);
-                        Thread.Sleep(50);
+                        StyxWoW.Sleep(50);
                         MountHelper.MountUpInternal(true);
-                        Thread.Sleep(50);
+                        StyxWoW.Sleep(50);
                         MountHelper.MountUpInternal(true);
-                        Thread.Sleep(50);
+                        StyxWoW.Sleep(50);
                         MountHelper.MountUpInternal(true);
                         WoWMovement.MoveStop();
                     }
@@ -181,7 +181,7 @@ namespace Styx.Logic.Pathing
                     (!me.HasAura("Sea Legs") || me.IsSwimming))
                     return;
 
-                Thread.Sleep(100);
+                StyxWoW.Sleep(100);
                 WoWMovement.Move(WoWMovement.MovementDirection.Forward | WoWMovement.MovementDirection.JumpAscend, TimeSpan.FromMilliseconds(100.0));
                 Navigator.PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(flightPoint.X, flightPoint.Y, flightPoint.Z));
             }
@@ -373,17 +373,17 @@ namespace Styx.Logic.Pathing
             // Original HB had 200+100+200+100+300 = 900ms blocking time
             // Shorter durations still allow movement direction changes while being less disruptive
             WoWMovement.Move(WoWMovement.MovementDirection.Backwards);
-            Thread.Sleep(100);
+            StyxWoW.Sleep(100);
             WoWMovement.MoveStop(WoWMovement.MovementDirection.Backwards);
-            Thread.Sleep(50);
+            StyxWoW.Sleep(50);
 
             WoWMovement.Move(WoWMovement.MovementDirection.StrafeRight | WoWMovement.MovementDirection.JumpAscend);
-            Thread.Sleep(100);
+            StyxWoW.Sleep(100);
             WoWMovement.MoveStop(WoWMovement.MovementDirection.StrafeRight | WoWMovement.MovementDirection.JumpAscend);
-            Thread.Sleep(50);
+            StyxWoW.Sleep(50);
 
             WoWMovement.Move(WoWMovement.MovementDirection.Forward | WoWMovement.MovementDirection.StrafeLeft);
-            Thread.Sleep(100);
+            StyxWoW.Sleep(100);
             WoWMovement.MoveStop();
         }
 
@@ -552,7 +552,7 @@ namespace Styx.Logic.Pathing
                     if (!quick)
                     {
                         StyxWoW.SleepForLagDuration();
-                        Thread.Sleep((int)flyingMount.CastTime);
+                        StyxWoW.Sleep((int)flyingMount.CastTime);
                         StyxWoW.SleepForLagDuration();
                     }
                 }
@@ -612,7 +612,7 @@ namespace Styx.Logic.Pathing
                         me.HasAura("Aquatic Form"))
                     {
                         Lua.DoString("CancelShapeshiftForm()");
-                        Thread.Sleep(250);
+                        StyxWoW.Sleep(250);
                         return RunStatus.Success;
                     }
 
