@@ -5,6 +5,7 @@ using GreenMagic;
 using Styx.Helpers;
 using Styx.Patchables;
 using Styx.WoWInternals;
+using Styx.WoWInternals.WoWObjects;
 
 namespace Styx.Logic.Combat
 {
@@ -287,15 +288,17 @@ namespace Styx.Logic.Combat
 
         /// <summary>
         /// Gets the remaining cooldown time for this spell.
+        /// HB 4.3.4 pattern: uses Lua GetSpellCooldown which correctly
+        /// includes GCD. The memory-based approach had timing issues.
         /// </summary>
         public TimeSpan CooldownTimeLeft
         {
             get
             {
-                var luaTime = Lua.GetReturnVal<double>(string.Format("local x,y=GetSpellCooldown({0}); return x+y-GetTime()", Id), 0);
-                if (luaTime <= 0)
+                double returnVal = Lua.GetReturnVal<double>(string.Format("local x,y=GetSpellCooldown({0}); return x+y-GetTime()", Id), 0U);
+                if (returnVal <= 0.0)
                     return TimeSpan.Zero;
-                return TimeSpan.FromSeconds(luaTime);
+                return TimeSpan.FromSeconds(returnVal);
             }
         }
 
@@ -336,9 +339,40 @@ namespace Styx.Logic.Combat
             get { return (WoWSpellSchool)_spellEntry.SchoolMask; }
         }
 
+        private static readonly HashSet<int> _loggedBadPowerType = new HashSet<int>();
+
         public bool CanCast
         {
-            get { return Lua.GetReturnVal<bool>("return IsUsableSpell(select(1, GetSpellInfo(" + Id + ")))", 0U); }
+            get
+            {
+                // Memory-based power check replaces Lua IsUsableSpell to avoid
+                // 1 Execute() (~16ms) per spell check. Covers 90%+ of cases.
+                // PowerCost is cached from first Lua call; PowerType is from DBC.
+                var me = ObjectManager.Me;
+                if (me == null || me.Dead)
+                    return false;
+                int cost = PowerCost;
+                if (cost <= 0)
+                    return true;
+                var pt = PowerType;
+                switch (pt)
+                {
+                    case WoWPowerType.Health:
+                    case WoWPowerType.Mana:
+                    case WoWPowerType.Rage:
+                    case WoWPowerType.Focus:
+                    case WoWPowerType.Energy:
+                    case WoWPowerType.Happiness:
+                    case WoWPowerType.Runes:
+                    case WoWPowerType.RunicPower:
+                        return me.GetCurrentPower(pt) >= cost;
+                    default:
+                        if (_loggedBadPowerType.Add(_id))
+                            Logging.WriteDebug("[WoWSpell] CanCast: spell {0} (id={1}) has unknown PowerType={2} (raw={3}), cost={4} — assuming castable",
+                                Name, _id, pt, (int)pt, cost);
+                        return true;
+                }
+            }
         }
 
         public string RangeDescription

@@ -15,8 +15,8 @@ namespace Styx.Logic.Combat
 	{
 		#region Constants - Offsets 3.3.5a (12340)
 
-		// Cooldown list base
-		private const uint CooldownListBase = 0xD3EDB4;  // 13890996 decimal
+		// Cooldown linked list head — HB 3.3.5a decompile: address 13890996 = SpellCooldownPtr(0xD3F5AC) + 8.
+		private const uint CooldownListBase = 0xD3F5B4;  // 13890996 decimal
 
 		#endregion
 
@@ -173,6 +173,52 @@ namespace Styx.Logic.Combat
 			}
 		}
 
+		/// <summary>
+		/// Gets the remaining cooldown for a specific spell by walking the cooldown
+		/// linked list via pure ReadProcessMemory. Zero Execute() overhead.
+		/// Node layout (HB 4.3.4 Struct78): +0x04=Next, +0x08=SpellId,
+		/// +0x10=StartTime, +0x14=SpellCooldown, +0x2C=GCDDuration.
+		/// </summary>
+		public static TimeSpan GetSpellCooldownTimeLeft(int spellId)
+		{
+			try
+			{
+				Memory? memory = ObjectManager.Wow;
+				if (memory == null) return TimeSpan.Zero;
+
+				long frequency;
+				long counter;
+				QueryPerformanceFrequency(out frequency);
+				QueryPerformanceCounter(out counter);
+				long currentTime = counter * 1000L / frequency;
+
+				uint nodePtr = memory.Read<uint>(CooldownListBase);
+
+				while (nodePtr != 0U && (nodePtr & 1U) == 0U)
+				{
+					uint nodeSpellId = memory.Read<uint>(nodePtr + 0x08U);
+					if (nodeSpellId == (uint)spellId)
+					{
+						uint startTime = memory.Read<uint>(nodePtr + 0x10U);
+						uint spellCd = memory.Read<uint>(nodePtr + 0x14U);
+						uint gcdDuration = memory.Read<uint>(nodePtr + 0x2CU);
+						uint effectiveDuration = spellCd > gcdDuration ? spellCd : gcdDuration;
+						long remaining = (long)(startTime + effectiveDuration) - currentTime;
+						if (remaining > 0)
+							return TimeSpan.FromMilliseconds(remaining);
+						return TimeSpan.Zero;
+					}
+					nodePtr = memory.Read<uint>(nodePtr + 0x04U);
+				}
+
+				return TimeSpan.Zero; // not in list = not on cooldown
+			}
+			catch
+			{
+				return TimeSpan.Zero;
+			}
+		}
+
 		public static bool HasSpell(string name)
 		{
 			return _knownSpells.ContainsKey(name);
@@ -238,53 +284,77 @@ namespace Styx.Logic.Combat
 		}
 
 		/// <summary>
-		/// HB 4.3.4 compatible CanCast with full validation.
-		/// Checks: HasSpell, GCD, Cooldown, IsCasting, Movement (if checkMovement), Power/Mana via spell.CanCast
+		/// HB 4.3.4 SpellManager.cs line 166: CanCast with full validation.
+		/// Ported exactly from HB 4.3.4 — uses spell.CooldownTimeLeft with lag
+		/// tolerance, checks IsCasting, movement, range, and power.
 		/// </summary>
 		public static bool CanCast(string spellName, WoWUnit target, bool checkRange = true, bool checkMovement = false)
 		{
-			// Step 1: Check if we know the spell
-			if (!HasSpell(spellName))
-				return false;
-
 			WoWSpell? spell = GetSpellByName(spellName);
 			if (spell == null)
 				return false;
-
-			// Step 2: Check if we're currently casting (can't cast while casting)
-			LocalPlayer? me = StyxWoW.Me;
-			if (me == null)
-				return false;
-
-			if (me.IsCasting)
-				return false;
-
-			// Step 3: Check Global Cooldown (BUG-19 fix: allow pre-cast within lag tolerance)
-			// SUS-06 fix: use dynamic latency instead of hardcoded 150ms
-			if (GlobalCooldownLeft.TotalMilliseconds > StyxWoW.WoWClient.Latency * 2)
-				return false;
-
-			// Step 4: Check cooldown — HB 4.3.4 SpellManager.cs line 225: spell.Cooldown
-			if (spell.Cooldown)
-				return false;
-
-			// Step 5: Check movement restrictions (cast time spells can't be cast while moving)
-			if (checkMovement && spell.CastTime > 0 && me.IsMoving)
-				return false;
-
-			// Step 6: Target validation (if target required)
-			if (target != null && !target.IsValid)
-				return false;
-
-			// Step 7: Check usability (mana/power) — HB 4.3.4 SpellManager.cs line 227: spell.CanCast
-			return spell.CanCast;
+			return CanCast(spell, target, checkRange, checkMovement);
 		}
 
 		public static bool CanCast(WoWSpell spell, WoWUnit target, bool checkRange = true, bool checkMovement = false)
 		{
+			return CanCast(spell, target, checkRange, checkMovement, true);
+		}
+
+		/// <summary>
+		/// HB 4.3.4 SpellManager.cs line 166-222: CanCast with accountForLagTolerance.
+		/// Ported exactly from the decompiled source.
+		/// </summary>
+		public static bool CanCast(WoWSpell spell, WoWUnit target, bool checkRange, bool checkMovement, bool accountForLagTolerance)
+		{
 			if (spell == null)
 				return false;
-			return CanCast(spell.Name, target, checkRange, checkMovement);
+
+			if (!HasSpell(spell.Name))
+				return false;
+
+			LocalPlayer? me = StyxWoW.Me;
+			if (me == null)
+				return false;
+
+			// HB 4.3.4: Range checks
+			if (checkRange && target != null)
+			{
+				if (spell.MaxRange != 0f && target.Distance > (double)spell.MaxRange)
+					return false;
+				if (spell.MaxRange == 0f && !target.IsWithinMeleeRange)
+					return false;
+				if (spell.MinRange != 0f && target.Distance < (double)spell.MinRange)
+					return false;
+			}
+
+			// HB 4.3.4: Movement check (cast time or funnel spells can't be cast while moving)
+			if (checkMovement && (spell.CastTime != 0U || spell.IsFunnel) && me.IsMoving)
+				return false;
+
+			// HB 4.3.4: Lag tolerance path
+			if (accountForLagTolerance && me.ChanneledCastingSpellId == 0)
+			{
+				uint lag = StyxWoW.WoWClient.Latency * 2U;
+				if (me.IsCasting && (me.CurrentCastTimeLeft.TotalMilliseconds > lag || spell.CooldownTimeLeft.TotalMilliseconds > lag))
+					return false;
+				else if (!me.IsCasting && spell.CooldownTimeLeft.TotalMilliseconds > lag)
+					return false;
+				else
+					return spell.CanCast;
+			}
+			// HB 4.3.4: Non-lag-tolerance path
+			else if (!me.IsCasting)
+			{
+				if (!spell.Cooldown)
+					return spell.CanCast;
+				return false;
+			}
+			else
+			{
+				// IsCasting = true
+				return false;
+			}
 		}
 
 		public static bool Cast(string spellName) => CastSpell(spellName);
@@ -620,12 +690,12 @@ namespace Styx.Logic.Combat
 			if (!returnImmediately)
 			{
 				// Wait for cast to complete
-				System.Threading.Thread.Sleep((int)spell.CastTime);
+				StyxWoW.Sleep((int)spell.CastTime);
 
 				// Wait for GCD
 				while (GlobalCooldown)
 				{
-					System.Threading.Thread.Sleep(10);
+					StyxWoW.Sleep(10);
 				}
 			}
 
