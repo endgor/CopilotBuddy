@@ -158,6 +158,7 @@ namespace Styx.Loaders
                                 break;
 
                             case "Optimise":
+                            case "Optimize":
                                 if (parts.Length == 3 && !string.IsNullOrEmpty(parts[2]) && parts[2] == "On" 
                                     && !Options.CompilerOptions.Contains("/optimise"))
                                 {
@@ -224,10 +225,39 @@ namespace Styx.Loaders
             {
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(assemblyPath) || !File.Exists(assemblyPath))
+                    string resolvedPath = assemblyPath;
+
+                    // If bare filename (e.g. "System.Design.dll"), try to resolve from loaded assemblies
+                    // or shared framework directories
+                    if (!string.IsNullOrWhiteSpace(resolvedPath) && !File.Exists(resolvedPath) 
+                        && !Path.IsPathRooted(resolvedPath))
+                    {
+                        // Try loaded assemblies first
+                        var loaded = AppDomain.CurrentDomain.GetAssemblies();
+                        var match = loaded.FirstOrDefault(a => 
+                            !string.IsNullOrEmpty(a.Location) &&
+                            Path.GetFileName(a.Location).Equals(resolvedPath, StringComparison.OrdinalIgnoreCase));
+                        if (match != null)
+                        {
+                            resolvedPath = match.Location;
+                        }
+                        else
+                        {
+                            // Try to load by assembly name
+                            try
+                            {
+                                var asm = Assembly.Load(new AssemblyName(Path.GetFileNameWithoutExtension(resolvedPath)));
+                                if (asm != null && !string.IsNullOrEmpty(asm.Location))
+                                    resolvedPath = asm.Location;
+                            }
+                            catch { }
+                        }
+                    }
+
+                    if (string.IsNullOrWhiteSpace(resolvedPath) || !File.Exists(resolvedPath))
                         continue;
 
-                    references.Add(MetadataReference.CreateFromFile(assemblyPath));
+                    references.Add(MetadataReference.CreateFromFile(resolvedPath));
                 }
                 catch
                 {
