@@ -55,17 +55,30 @@ namespace GreenMagic
             if (_process.MainModule == null)
                 throw new Exception("Process has no main module");
 
-            // OpenProcess flags: 2035711 | 3840 for Vista+
-            uint flags = 2035711U;
-            if (Environment.OSVersion.Version.Major > 5)
-                flags |= 3840U;
+            // OpenProcess: request only the rights we actually use.
+            // VM_READ | VM_WRITE | VM_OPERATION | QUERY_INFORMATION | QUERY_LIMITED_INFORMATION
+            // + SYNCHRONIZE (required for WaitForSingleObject on process handle)
+            // HB used PROCESS_ALL_ACCESS (0x1F0FFF) — reduces handle detection surface.
+            uint flags = 0x0010  // PROCESS_VM_READ
+                       | 0x0020  // PROCESS_VM_WRITE
+                       | 0x0008  // PROCESS_VM_OPERATION
+                       | 0x0400  // PROCESS_QUERY_INFORMATION
+                       | 0x1000  // PROCESS_QUERY_LIMITED_INFORMATION
+                       | 0x0200  // PROCESS_SET_INFORMATION (for thread access)
+                       | 0x100000; // SYNCHRONIZE
 
             _hProcess = Imports.OpenProcess(flags, false, processId);
             
             if (_hProcess != IntPtr.Zero)
             {
-                // OpenThread with flags: 2032639
-                _hThread = Imports.OpenThread(2032639U, false, (uint)_process.Threads[0].Id);
+                // OpenThread: minimum rights for SuspendThread, ResumeThread,
+                // GetThreadContext, SetThreadContext used by EIP hijack init.
+                uint threadFlags = 0x0002   // THREAD_SUSPEND_RESUME
+                                 | 0x0008   // THREAD_GET_CONTEXT
+                                 | 0x0010   // THREAD_SET_CONTEXT
+                                 | 0x0040   // THREAD_QUERY_INFORMATION
+                                 | 0x100000; // SYNCHRONIZE
+                _hThread = Imports.OpenThread(threadFlags, false, (uint)_process.Threads[0].Id);
                 _hWnd = _process.MainWindowHandle;
 
                 if (_asm == null)
@@ -631,7 +644,17 @@ namespace GreenMagic
 
         public uint AllocateMemory(int size, uint allocationType, uint protect)
         {
-            return Imports.VirtualAllocEx(ProcessHandle, 0U, size, allocationType, protect);
+            // HB 6.2.3 two-step pattern: allocate as PAGE_READWRITE first,
+            // then VirtualProtectEx to the real protection if different.
+            // This avoids creating pages with the final protection atomically
+            // (VirtualAllocEx with RWX is more suspicious than alloc RW + protect).
+            uint addr = Imports.VirtualAllocEx(ProcessHandle, 0U, size, allocationType, 0x04); // PAGE_READWRITE
+            if (addr != 0 && protect != 0x04)
+            {
+                if (!Imports.VirtualProtectEx(ProcessHandle, addr, (uint)size, protect, out _))
+                    throw new System.ComponentModel.Win32Exception();
+            }
+            return addr;
         }
 
         public uint AllocateMemory(int size)
