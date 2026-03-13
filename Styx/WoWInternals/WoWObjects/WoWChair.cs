@@ -41,10 +41,10 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                // Most chairs in 3.3.5a are single-slot
-                // Multi-slot benches would require GameObjectDataSlot.Data0 parsing
-                // For bot purposes, assuming 1 slot is sufficient
-                return 1;
+                WoWGameObject? owner = OwnerObject;
+                if (owner != null && owner.GetDataSlot(GameObjectDataSlot.NumChairSlots, out int slots))
+                    return slots;
+                return 0;
             }
         }
     }
