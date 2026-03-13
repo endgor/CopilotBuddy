@@ -168,6 +168,12 @@ namespace Styx.Logic.Combat
 
         public uint spellDescriptionVariableID;
         public uint SpellDifficultyId;
+
+        /// <summary>
+        /// Alias for rangeIndex. HB 4.3.4 renamed this field to SpellRangeId.
+        /// Singular434 accesses spell.InternalInfo.SpellRangeId at runtime.
+        /// </summary>
+        public readonly uint SpellRangeId => rangeIndex;
     }
 
     /// <summary>
