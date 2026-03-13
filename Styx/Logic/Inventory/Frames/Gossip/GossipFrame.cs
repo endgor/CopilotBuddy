@@ -116,20 +116,23 @@ namespace Styx.Logic.Inventory.Frames.Gossip
             get
             {
                 List<GossipQuestEntry> list = new List<GossipQuestEntry>();
-                if (!base.IsVisible)
-                    return list;
-
-                for (int i = 0; i < 10; i++)
+                using (new FrameLock())
                 {
-                    try
+                    if (!base.IsVisible)
+                        return list;
+
+                    for (int i = 0; i < 10; i++)
                     {
-                        GossipQuestEntry entry = GetAvailableQuestInfo(i);
-                        if (entry != null)
-                            list.Add(entry);
-                    }
-                    catch
-                    {
-                        break;
+                        try
+                        {
+                            GossipQuestEntry entry = GetAvailableQuestInfo(i);
+                            if (entry != null)
+                                list.Add(entry);
+                        }
+                        catch
+                        {
+                            break;
+                        }
                     }
                 }
                 return list;
