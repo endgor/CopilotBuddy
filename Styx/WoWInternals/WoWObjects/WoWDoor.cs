@@ -27,9 +27,13 @@ namespace Styx.WoWInternals.WoWObjects
                 if (owner == null)
                     return true;
 
-                // AnimationState: 0 = closed, 1 = opening, 3 = open
-                // For doors, state 3 means fully open
-                return AnimationState != 3;
+                if (owner.GetDataSlot(GameObjectDataSlot.Opens, out bool opens) && opens)
+                {
+                    if (owner.GetDataSlot(GameObjectDataSlot.Alternate, out bool alternate) && alternate)
+                        return AnimationState != 1;
+                    return AnimationState != 3;
+                }
+                return true;
             }
         }
 
