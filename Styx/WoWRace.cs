@@ -16,8 +16,8 @@ namespace Styx
 		Tauren = 6,
 		Gnome = 7,
 		Troll = 8,
-		// 9 = Goblin (Cataclysm only - DO NOT USE in WotLK)
-		BloodElf = 10,
+		Goblin, // Race ID 9 — not playable in WotLK but exists in ChrRaces.dbc (NPC race: Booty Bay, Ratchet, etc.)
+		BloodElf,
 		Draenei = 11,
 		FelOrc = 12,
 		Naga = 13,
