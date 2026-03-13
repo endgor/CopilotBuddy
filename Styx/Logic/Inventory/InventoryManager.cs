@@ -123,7 +123,8 @@ namespace Styx.Logic.Inventory
         public static WoWItem[] GetItemsToMail()
         {
             var items = new List<WoWItem>();
-            var allItems = ObjectManager.GetObjectsOfType<WoWItem>().ToArray();
+            var allItems = StyxWoW.Me?.CarriedItems;
+            if (allItems == null) return items.ToArray();
 
             foreach (var item in allItems)
             {
