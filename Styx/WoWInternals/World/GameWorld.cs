@@ -145,7 +145,7 @@ namespace Styx.WoWInternals.World
                         executor.AddLine("push {0}", memory["IntersectionPoint"]);
                         executor.AddLine("push {0}", memory["To"]);
                         executor.AddLine("push {0}", memory["From"]);
-                        executor.AddLine("call {0}", 7861008U);  // HB 3.3.5a offset: 0x0077F310
+                        executor.AddLine("call {0}", Styx.Offsets.GlobalOffsets.CGWorldFrame_Intersect);
                         executor.AddLine("add esp, 0x18");
                         executor.AddLine("retn");
                         executor.Execute();
@@ -297,7 +297,7 @@ namespace Styx.WoWInternals.World
                     executor.AddLine("push eax");
                     executor.AddLine("add eax, 12");
                     executor.AddLine("push eax");
-                    executor.AddLine("call {0}", 7861008U);  // CGWorldFrame::Intersect 3.3.5a
+                    executor.AddLine("call {0}", Styx.Offsets.GlobalOffsets.CGWorldFrame_Intersect);
                     executor.AddLine("add esp, 0x18");
                     executor.AddLine("mov edx, {0}", memory["HitResults"]);
                     executor.AddLine("add edx, ebx");
