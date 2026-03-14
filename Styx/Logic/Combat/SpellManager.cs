@@ -568,6 +568,46 @@ namespace Styx.Logic.Combat
 			return false;
 		}
 
+		// HB 4.3.4: bool-as-2nd-arg overloads (avoids ambiguity with WoWUnit target)
+		public static bool CastRandom(IEnumerable<string> spellNames, bool checkRange)
+			=> CastRandom(spellNames, StyxWoW.Me?.CurrentTarget, checkRange);
+
+		public static bool CastRandom(IEnumerable<WoWSpell> spells, bool checkRange)
+			=> CastRandom(spells, StyxWoW.Me?.CurrentTarget, checkRange);
+
+		public static bool BuffRandom(IEnumerable<string> spellNames, bool checkRange)
+			=> BuffRandom(spellNames, StyxWoW.Me?.CurrentTarget, checkRange);
+
+		public static bool BuffRandom(IEnumerable<WoWSpell> spells, bool checkRange)
+			=> BuffRandom(spells, StyxWoW.Me?.CurrentTarget, checkRange);
+
+		// HB 4.3.4: CastRandom / BuffRandom with int spell IDs
+		public static bool CastRandom(IEnumerable<int> spellIds, WoWUnit target, bool checkRange)
+		{
+			var spells = spellIds.Select(id => _knownSpells.Values.FirstOrDefault(s => s.Id == id))
+			                     .OfType<WoWSpell>();
+			return CastRandom(spells, target, checkRange);
+		}
+
+		public static bool CastRandom(IEnumerable<int> spellIds, WoWUnit target)
+			=> CastRandom(spellIds, target, false);
+
+		public static bool CastRandom(IEnumerable<int> spellIds, bool checkRange)
+			=> CastRandom(spellIds, StyxWoW.Me?.CurrentTarget, checkRange);
+
+		public static bool BuffRandom(IEnumerable<int> spellIds, WoWUnit target, bool checkRange)
+		{
+			var spells = spellIds.Select(id => _knownSpells.Values.FirstOrDefault(s => s.Id == id))
+			                     .OfType<WoWSpell>();
+			return BuffRandom(spells, target, checkRange);
+		}
+
+		public static bool BuffRandom(IEnumerable<int> spellIds, WoWUnit target)
+			=> BuffRandom(spellIds, target, false);
+
+		public static bool BuffRandom(IEnumerable<int> spellIds, bool checkRange)
+			=> BuffRandom(spellIds, StyxWoW.Me?.CurrentTarget, checkRange);
+
 		#endregion
 
 		public static void CastSpellById(uint spellId)

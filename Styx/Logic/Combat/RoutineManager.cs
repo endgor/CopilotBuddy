@@ -165,7 +165,8 @@ namespace Styx.Logic.Combat
 		}
 
 		/// <summary>
-		/// Gets the currently selected combat routine.
+		/// Gets or sets the currently selected combat routine.
+		/// HB 4.3.4: RoutineManager.Current setter allows CCs to assign themselves directly.
 		/// </summary>
 		public static CombatRoutine Current
 		{
@@ -177,6 +178,10 @@ namespace Styx.Logic.Combat
 					Logging.Write("No Combat Routine loaded. Using default.");
 				}
 				return _current;
+			}
+			set
+			{
+				_current = value;
 			}
 		}
 
