@@ -56,5 +56,18 @@ namespace Styx.WoWInternals
         public WoWItem Ranged => this.GetEquippedItem(WoWInventorySlot.Ranged);
 
         public WoWItem Tabard => this.GetEquippedItem(WoWInventorySlot.Tabard);
+
+        public WoWItem Bag1 => this.GetEquippedItem(WoWInventorySlot.Bag1);
+
+        public WoWItem Bag2 => this.GetEquippedItem(WoWInventorySlot.Bag2);
+
+        public WoWItem Bag3 => this.GetEquippedItem(WoWInventorySlot.Bag3);
+
+        public WoWItem Bag4 => this.GetEquippedItem(WoWInventorySlot.Bag4);
+
+        // HB 4.3.4 singular name aliases
+        public WoWItem Shoulder => this.GetEquippedItem(WoWInventorySlot.Shoulders);
+
+        public WoWItem Wrist => this.GetEquippedItem(WoWInventorySlot.Wrists);
     }
 }

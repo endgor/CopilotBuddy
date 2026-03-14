@@ -19,7 +19,7 @@ namespace Styx.WoWInternals
         }
 
         /// <summary>
-        /// Equipped items (slots 0-22): Head, Neck, Shoulders, etc.
+        /// Equipped items (slots 0-22): Head, Neck, Shoulders, ..., Tabard, Bag1-Bag4.
         /// </summary>
         public WoWPaperDoll Equipped { get; private set; }
 

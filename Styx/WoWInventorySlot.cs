@@ -4,7 +4,7 @@ namespace Styx
 {
 	public enum WoWInventorySlot
 	{
-		None,
+		None = -1,
 		Head,
 		Neck,
 		Shoulders,
@@ -23,6 +23,10 @@ namespace Styx
 		MainHand,
 		OffHand,
 		Ranged,
-		Tabard
+		Tabard,
+		Bag1,
+		Bag2,
+		Bag3,
+		Bag4
 	}
 }
