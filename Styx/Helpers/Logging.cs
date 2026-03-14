@@ -357,6 +357,24 @@ namespace Styx.Helpers
             Write(LogLevel.Normal, WpfColors.LightGreen, "[Combat] " + message);
         }
 
+        /// <summary>
+        /// Writes a message to the log file only, without displaying it in the UI.
+        /// Ported from HB 4.3.4 Logging.FileOnly.
+        /// </summary>
+        public static void FileOnly(string message)
+        {
+            WriteToFile($"[{DateTime.Now:HH:mm:ss.fff}] [F] {message}");
+        }
+
+        /// <summary>
+        /// Writes a formatted message to the log file only, without displaying it in the UI.
+        /// Ported from HB 4.3.4 Logging.FileOnly.
+        /// </summary>
+        public static void FileOnly(string format, params object[] args)
+        {
+            FileOnly(string.Format(CultureInfo.InvariantCulture, format, args));
+        }
+
         #endregion
 
         #region File Logging
