@@ -152,17 +152,34 @@ public class QuestBot : BotBase
     {
         // Honorbuddy 4.3.4 semantics (clean, readable):
         // - Only run while moving
-        // - Only when the current BotPoi is NOT a Kill POI
+        // - Only when NOT heading to vendor/trainer/mailbox (mirrors QuestIncludeTargetsFilter guard)
         // - Only when not in combat
         // - If we find a valid CurrentTarget within 5s, set a Kill POI for it
+        //
+        // HB 6.2.3 fix: guard against ALL non-combat POI types, not just Kill.
+        // Without this, TargetingBehavior fires freely when POI=Train (Train≠Kill), finds a
+        // path-aggro mob via stale ObjectList, sets Kill POI → VendorBehavior on the same
+        // PrioritySelector restart resets it back to Train → oscillation loop.
 
         CanRunDecoratorDelegate isMoving = context => StyxWoW.Me.IsMoving;
         CanRunDecoratorDelegate notInCombat = context => !StyxWoW.Me.Combat;
         CanRunDecoratorDelegate hasTarget = context => StyxWoW.Me.CurrentTarget != null;
         RetrieveBotPoiDelegate buildKillPoi = context => new BotPoi(StyxWoW.Me.CurrentTarget, PoiType.Kill);
 
+        // Block targeting whenever there's already a meaningful POI in flight.
+        // Matches the vendor-run guard in QuestIncludeTargetsFilter.
+        PoiType[] nonCombatPoiTypes = new[]
+        {
+            PoiType.Kill,
+            PoiType.Sell,
+            PoiType.Repair,
+            PoiType.Train,
+            PoiType.Buy,
+            PoiType.Mail,
+        };
+
         return (Composite)new Decorator(isMoving,
-            (Composite)new DecoratorIsNotPoiType(PoiType.Kill,
+            (Composite)new DecoratorIsNotPoiType(nonCombatPoiTypes,
             (Composite)new Decorator(notInCombat,
             (Composite)new DecoratorNeedToFindTarget(
                 (Composite)new Sequence(new Composite[]

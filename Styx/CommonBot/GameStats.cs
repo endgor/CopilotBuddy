@@ -63,8 +63,8 @@ namespace Styx.CommonBot
 
         static GameStats()
         {
-            // Subscribe to bot events - same as HB 5.4.8
-            BotEvents.OnBotStarted += OnBotStarted;
+            // Use OnBotStart — TreeRoot calls RaiseBotStart(), not RaiseBotStarted().
+            BotEvents.OnBotStart += OnBotStarted;
             BotEvents.OnPulse += OnPulse;
             BotEvents.Player.OnMobKilled += OnMobKilled;
             BotEvents.Player.OnMobLooted += OnMobLooted;

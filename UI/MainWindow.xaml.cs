@@ -358,39 +358,35 @@ namespace CopilotBuddy.UI
 
         private void UpdateInfoPanel()
         {
+            // HB 4.3.4 pattern: always display current values; no IsMeasuring gate.
+            // Values start at 0 and accumulate once the bot starts.
             var sb = new System.Text.StringBuilder();
-            
-            if (GameStats.IsMeasuring)
+
+            sb.AppendLine($"XP/HR: {GameStats.XPPerHour:F0}");
+            sb.AppendLine($"Kills: {GameStats.MobsKilled} ({GameStats.MobsPerHour:F0}/hr)");
+            sb.AppendLine($"Deaths: {GameStats.Deaths} ({GameStats.DeathsPerHour:F0}/hr)");
+            sb.AppendLine($"Loots: {GameStats.Loots} ({GameStats.LootsPerHour:F0}/hr)");
+            sb.AppendLine($"Honor Gained: {GameStats.HonorGained} ({GameStats.HonorPerHour:F0}/hr)");
+            sb.AppendLine($"BGs Won: {GameStats.BGsWon} Lost: {GameStats.BGsLost} Total: {GameStats.BGsCompleted} ({GameStats.BGsPerHour:F0}/hr)");
+
+            // TTL only meaningful below max level (80 in WotLK 3.3.5a)
+            var me = ObjectManager.Me;
+            if (me != null && me.Level < 80 && GameStats.TimeToLevel > TimeSpan.Zero)
             {
-                sb.AppendLine($"XP/HR: {GameStats.XPPerHour:N0}");
-                sb.AppendLine($"Kills: {GameStats.MobsKilled} ({GameStats.MobsPerHour:N1}/hr)");
-                sb.AppendLine($"Deaths: {GameStats.Deaths} ({GameStats.DeathsPerHour:N1}/hr)");
-                sb.AppendLine($"Loots: {GameStats.Loots} ({GameStats.LootsPerHour:N1}/hr)");
-                sb.AppendLine($"Honor Gained: {GameStats.HonorGained} ({GameStats.HonorPerHour:N0}/HR)");
-                
-                if (GameStats.TimeToLevel.TotalHours > 0)
-                {
-                    sb.AppendLine($"TTL: {GameStats.TimeToLevel:hh\\:mm\\:ss}");
-                }
+                var ttl = GameStats.TimeToLevel;
+                sb.AppendLine($"Time to Level: {(int)ttl.TotalHours} hour(s) {ttl.Minutes:00} minute(s) {ttl.Seconds:00} second(s)");
             }
-            else
-            {
-                sb.AppendLine("XP/HR: 0");
-                sb.AppendLine("Kills: 0 (0/hr)");
-                sb.AppendLine("Deaths: 0 (0/hr)");
-                sb.AppendLine("Loots: 0 (0/hr)");
-                sb.AppendLine("Honor Gained: 0 (0/HR)");
-            }
-            
-            // Display GoalText in info panel — polled every second like HB 4.3.4
+
+            // Goal text — polled every second like HB 4.3.4
             var goalText = TreeRoot.GoalText;
             if (!string.IsNullOrEmpty(goalText))
             {
                 sb.AppendLine();
                 sb.AppendLine($"Goal: {goalText}");
             }
-            
+
             tbInfoBlock.Text = sb.ToString();
+            tbInfoBlock.TextWrapping = System.Windows.TextWrapping.Wrap;
         }
 
         #endregion
