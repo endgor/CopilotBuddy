@@ -203,8 +203,7 @@ namespace Bots.DungeonBuddy
                 // --- IN DUNGEON: Dungeon completed → teleport out + requeue ---
                 new Decorator(
                     ctx => LfgManager.CurrentState == LfgState.InDungeon &&
-                           LfgManager.DungeonCompleted &&
-                           DungeonBuddySettings.Instance.AutoRequeue,
+                           LfgManager.DungeonCompleted,
                     new Sequence(
                         new Action(ctx =>
                         {
@@ -236,17 +235,16 @@ namespace Bots.DungeonBuddy
                 // --- NOT IN LFG: Set role + Queue ---
                 new Decorator(
                     ctx => LfgManager.CurrentState == LfgState.NotInLfg &&
-                           DungeonBuddySettings.Instance.Mode == DungeonMode.LookingForGroup,
+                           DungeonBuddySettings.Instance.QueueType != QueueType.SoloFarm,
                     new Sequence(
                         // Set role si pas encore fait
                         new DecoratorContinue(
                             ctx => !_hasSetRole,
                             new Action(ctx =>
                             {
-                                var role = DungeonBuddySettings.Instance.PreferredRole;
-                                LfgManager.SetRole(role);
+                                LfgManager.SetRole(PartyRole.Dps);
                                 _hasSetRole = true;
-                                Logging.Write($"[DungeonBuddy] Role set to {role}");
+                                Logging.Write("[DungeonBuddy] Role set to Dps");
                                 return RunStatus.Success;
                             })
                         ),
@@ -473,7 +471,7 @@ namespace Bots.DungeonBuddy
                     if (tank == null || !tank.IsAlive)
                         return RunStatus.Failure;
                     
-                    float followDist = DungeonBuddySettings.Instance.FollowDistance;
+                    float followDist = DungeonBuddySettings.Instance.FollowingDistance;
                     if (StyxWoW.Me.Location.DistanceSqr(tank.Location) > followDist * followDist)
                     {
                         Navigator.MoveTo(tank.Location);
