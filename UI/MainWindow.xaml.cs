@@ -435,25 +435,42 @@ namespace CopilotBuddy.UI
             cmbBotSelector.IsEnabled = false;
             btnSettings.IsEnabled = false;
 
-            Logging.Write("Starting the bot.");
-            Logging.Write("Currently Using BotBase : {0}", BotManager.Current.Name);
-            if (ObjectManager.Me != null)
+            try
             {
-                Logging.Write("Character is a level {0} {1} {2}",
-                    ObjectManager.Me.Level,
-                    ObjectManager.Me.Race,
-                    ObjectManager.Me.Class);
-                // zone query can hang if injection is slow; do it off the UI thread so the Start button
-                // animation isn't blocked.  It is just informational.
-                Task.Run(() =>
+                Logging.Write("Starting the bot.");
+                Logging.Write("Currently Using BotBase : {0}", BotManager.Current.Name);
+                if (ObjectManager.Me != null)
                 {
-                    // no injection required; RealZoneText is read directly from memory
-                    Logging.Write("Current zone is {0}", ObjectManager.Me.RealZoneText);
-                });
+                    Logging.Write("Character is a level {0} {1} {2}",
+                        ObjectManager.Me.Level,
+                        ObjectManager.Me.Race,
+                        ObjectManager.Me.Class);
+                    Task.Run(() =>
+                    {
+                        Logging.Write("Current zone is {0}", ObjectManager.Me.RealZoneText);
+                    });
+                }
+                TreeRoot.Start();
+                SetStatus("Running...");
             }
-
-            TreeRoot.Start();
-            SetStatus("Running...");
+            catch (HonorbuddyUnableToStartException ex)
+            {
+                Logging.Write(Colors.Red, ex.Message);
+                Logging.WriteException(ex);
+                StopBot();
+            }
+            catch (UserException ex)
+            {
+                Logging.Write(Colors.Red, ex.Message);
+                Logging.WriteException(ex);
+                StopBot();
+            }
+            catch (Exception ex)
+            {
+                Logging.Write(Colors.Red, ex.Message);
+                Logging.WriteException(ex);
+                StopBot();
+            }
         }
 
         private void StopBot()
@@ -511,7 +528,7 @@ namespace CopilotBuddy.UI
             {
                 Filter = "Profile files (*.xml)|*.xml|All files (*.*)|*.*",
                 Title = "Load Profile",
-                InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Profiles")
+                InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Default Profiles")
             };
 
             if (openFileDialog.ShowDialog() == true)
