@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,13 +8,14 @@ using Bots.DungeonBuddy.Attributes;
 using Bots.DungeonBuddy.Profiles;
 using Styx;
 using Styx.Helpers;
+using Styx.Loaders;
 using TreeSharp;
 
 namespace Bots.DungeonBuddy
 {
     /// <summary>
     /// Charge et gère les scripts de donjons.
-    /// Les scripts .cs sont inclus dans le .csproj et compilés avec le projet.
+    /// Scripts dynamiques depuis Dungeon Scripts\ + types compilés dans l'assembly.
     /// </summary>
     public static class DungeonManager
     {
@@ -29,8 +31,8 @@ namespace Bots.DungeonBuddy
         public static Dungeon CurrentDungeon => _currentDungeon;
 
         /// <summary>
-        /// Charge tous les scripts de donjon via réflection sur l'assembly compilée.
-        /// Les scripts .cs doivent être inclus dans le .csproj.
+        /// Charge les scripts de donjon depuis Dungeon Scripts\ (compilation dynamique, pattern HB 4.3.4),
+        /// plus les scripts compilés dans l'assembly.
         /// </summary>
         public static void LoadDungeonScripts()
         {
@@ -38,16 +40,72 @@ namespace Bots.DungeonBuddy
             _encounterHandlers.Clear();
             _objectHandlers.Clear();
 
+            // 1. Dynamic loading from Dungeon Scripts\ folder (HB 4.3.4 pattern)
+            // HB: string text = Path.Combine(Application.StartupPath, "Dungeon Scripts");
+            string scriptDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Dungeon Scripts");
+            if (Directory.Exists(scriptDir))
+            {
+                Logging.Write("[DungeonBuddy] Compiling dungeon scripts...");
+                int errors = 0;
+
+                var scriptPaths = new List<string>();
+                scriptPaths.AddRange(Directory.GetFiles(scriptDir, "*.cs", SearchOption.TopDirectoryOnly));
+                scriptPaths.AddRange(Directory.GetDirectories(scriptDir, "*", SearchOption.TopDirectoryOnly));
+
+                foreach (string path in scriptPaths)
+                {
+                    try
+                    {
+                        var loader = new DynamicLoader<Dungeon>(path, true);
+                        if (loader.CompilerResults != null &&
+                            loader.CompilerResults.Errors.Cast<CompilerError>().Any(e => !e.IsWarning))
+                        {
+                            errors++;
+                            Logging.Write("[DungeonBuddy] Could not compile dungeon script from {0}", path);
+                        }
+                        else
+                        {
+                            foreach (var dungeon in loader)
+                                RegisterInstance(dungeon);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.WriteDiagnostic("[DungeonBuddy] Error loading {0}: {1}", path, ex.Message);
+                        errors++;
+                    }
+                }
+
+                if (errors > 0)
+                    Logging.Write("[DungeonBuddy] Compiling failed for {0} dungeon scripts. Check log for details.", errors);
+            }
+
+            // 2. Also scan the compiled assembly for any built-in scripts
             LoadDungeonTypes();
 
-            Logging.Write($"[DungeonBuddy] Loaded {_dungeonTypes.Count} dungeon scripts");
+            if (_dungeonTypes.Count == 0)
+                Logging.Write("[DungeonBuddy] No dungeon scripts found.");
+            else
+                Logging.Write("[DungeonBuddy] Loaded {0} dungeon scripts.", _dungeonTypes.Count);
         }
 
         /// <summary>
-        /// Scanne l'assembly pour trouver tous les types héritant de Dungeon.
-        /// NOTE: Les fichiers .cs des scripts doivent être inclus dans le .csproj
-        /// pour être compilés. La compilation dynamique (comme HB) peut être ajoutée plus tard.
-        /// Cette méthode est appelée une seule fois, pas par fichier.
+        /// Registers a dungeon instance: stores its Type and indexes its handlers.
+        /// The instance is disposed after registration.
+        /// </summary>
+        private static void RegisterInstance(Dungeon dungeon)
+        {
+            var dungeonId = dungeon.DungeonId;
+            if (!_dungeonTypes.ContainsKey(dungeonId))
+            {
+                _dungeonTypes[dungeonId] = dungeon.GetType();
+                IndexHandlers(dungeon.GetType(), dungeonId);
+            }
+            dungeon.Dispose();
+        }
+
+        /// <summary>
+        /// Scanne l'assembly compilée pour les types héritant de Dungeon.
         /// </summary>
         private static void LoadDungeonTypes()
         {
@@ -118,12 +176,14 @@ namespace Bots.DungeonBuddy
 
             // Trouver le type de donjon correspondant au MapId
             Type matchedType = null;
+            uint matchedDungeonId = 0;
             foreach (var kvp in _dungeonTypes)
             {
                 var dungeonId = kvp.Key;
                 if (dungeonId == mapId || GetMapIdForDungeon(dungeonId) == mapId)
                 {
                     matchedType = kvp.Value;
+                    matchedDungeonId = dungeonId;
                     break;
                 }
             }
@@ -133,6 +193,7 @@ namespace Bots.DungeonBuddy
                 _currentDungeon = (Dungeon)Activator.CreateInstance(matchedType);
                 _currentDungeon.Attach();
                 BossManager.Initialize(_currentDungeon);
+                ProfileManager.LoadProfileForDungeon(matchedDungeonId);
                 Logging.Write($"[DungeonBuddy] Activated script: {_currentDungeon.Name}");
             }
             else
@@ -227,6 +288,18 @@ namespace Bots.DungeonBuddy
         {
             _currentDungeon?.Detach();
             _currentDungeon = null;
+            ProfileManager.UnloadProfile();
+        }
+
+        /// <summary>
+        /// Reload dungeon scripts at runtime (HB 4.3.4: DungeonManager.ReloadDungeons()).
+        /// </summary>
+        public static void ReloadDungeons()
+        {
+            Logging.Write("[DungeonBuddy] Reloading dungeon scripts...");
+            _currentDungeon?.Detach();
+            _currentDungeon = null;
+            LoadDungeonScripts();
         }
     }
 }
