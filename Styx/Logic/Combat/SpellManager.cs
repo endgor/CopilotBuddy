@@ -886,34 +886,36 @@ namespace Styx.Logic.Combat
 		#region LuaEvent Auto-Refresh (ported from HB 4.3.4 smethod_0/1/2/3)
 
 		/// <summary>
-		/// HB 4.3.4 smethod_1: Called once during engine initialization.
-		/// Hooks BotEvents.OnBotStarted so each bot run re-subscribes the Lua
+		/// HB 6.2.3 smethod_7: Called once during engine initialization.
+		/// Hooks BotEvents.OnBotStart so each bot run re-subscribes the Lua
 		/// events and forces a spellbook rebuild.
+		/// NOTE: TreeRoot calls RaiseBotStart(), NOT RaiseBotStarted().
 		/// </summary>
 		internal static void Initialize()
 		{
-			BotEvents.OnBotStarted += OnBotStarted_RefreshSpells;
+			BotEvents.OnBotStart += OnBotStarted_RefreshSpells;
 			_knownSpells.Clear();
 			_lastKnownSpellCount = 0;
 			Refresh();
-			Logging.WriteDebug("[SpellManager] Initialize \u2014 subscribed to BotEvents.OnBotStarted");
+			Logging.WriteDebug("[SpellManager] Initialize \u2014 subscribed to BotEvents.OnBotStart");
 		}
 
 		/// <summary>
-		/// HB 4.3.4 smethod_2: Called during engine teardown.
-		/// Unhooks BotEvents.OnBotStarted and clears the spellbook.
+		/// HB 6.2.3 pattern: Called during engine teardown.
+		/// Unhooks BotEvents.OnBotStart and clears the spellbook.
 		/// </summary>
 		internal static void Shutdown()
 		{
 			_knownSpells.Clear();
 			_lastKnownSpellCount = 0;
-			BotEvents.OnBotStarted -= OnBotStarted_RefreshSpells;
-			Logging.WriteDebug("[SpellManager] Shutdown \u2014 unsubscribed from BotEvents.OnBotStarted");
+			BotEvents.OnBotStart -= OnBotStarted_RefreshSpells;
+			Logging.WriteDebug("[SpellManager] Shutdown \u2014 unsubscribed from BotEvents.OnBotStart");
 		}
 
 		/// <summary>
-		/// HB 4.3.4 smethod_0: OnBotStarted handler. Rebuilds the spellbook, then
+		/// HB 6.2.3 smethod_0: OnBotStart handler. Rebuilds the spellbook, then
 		/// detach+reattach the two Lua events (idempotent pattern from HB 4.3.4).
+		/// TreeRoot calls RaiseBotStart() during Start(), so this fires each bot run.
 		/// </summary>
 		private static void OnBotStarted_RefreshSpells(EventArgs args)
 		{

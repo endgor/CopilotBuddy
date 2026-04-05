@@ -92,7 +92,10 @@ namespace Styx.Logic
 			NeedClassTraining = false;
 			ForceTrainer = false;
 			
-			// Refresh SpellManager cache so newly learned spells are available
+			// Best-effort refresh. BuyTrainerService(0) is async — the server response
+			// (and the WoW client's spellbook update) arrives ~30-50ms later. If this
+			// call short-circuits because NumKnownSpells hasn't changed yet, the
+			// LEARNED_SPELL_IN_TAB Lua event handler in SpellManager will catch it.
 			Styx.Logic.Combat.SpellManager.Refresh();
 		}
 
