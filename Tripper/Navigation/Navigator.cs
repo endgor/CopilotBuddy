@@ -1682,9 +1682,9 @@ namespace Tripper.Navigation
             {
                 try
                 {
-                    // AddOffMeshConnection not currently exported by Navigation.dll
-                    // Would need to add export to DllMain.cpp if needed
-                    Log($"AddOffMeshConnection not implemented in Navigation.dll");
+                    NativeMethods.AddOffMeshConnection(mapId,
+                        new NativeMethods.XYZ(start), new NativeMethods.XYZ(end),
+                        radius, flags, type, interactId);
                 }
                 catch (Exception ex)
                 {
@@ -1709,10 +1709,7 @@ namespace Tripper.Navigation
             {
                 try
                 {
-                    // LoadTileOffMesh not currently exported by Navigation.dll
-                    // Tiles are loaded on-demand automatically
-                    Log($"Tile offmesh loading handled automatically by Navigation.dll");
-                    return true;
+                    return NativeMethods.LoadTileOffMesh(mapId, tileX, tileY);
                 }
                 catch (Exception ex)
                 {
