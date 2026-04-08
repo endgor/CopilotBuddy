@@ -14,6 +14,14 @@ namespace Styx.Combat.CombatRoutine
 
 		public abstract WoWClass Class { get; }
 
+		/// <summary>
+		/// Display string for routine selection UI. HB 4.3.4 pattern.
+		/// </summary>
+		public override string ToString()
+		{
+			return string.Format("[{0}] {1}", Class, Name);
+		}
+
 		public virtual double? PullDistance
 		{
 			get { return null; }

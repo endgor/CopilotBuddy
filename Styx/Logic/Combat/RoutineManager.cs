@@ -1,7 +1,9 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Styx.Combat.CombatRoutine;
 using Styx.Helpers;
 using Styx.Loaders;
@@ -83,42 +85,35 @@ namespace Styx.Logic.Combat
 
 			try
 			{
-				string[] csFiles = Directory.GetFiles(routinesPath, "*.cs", SearchOption.AllDirectories);
-				
-				if (csFiles.Length == 0)
-				{
-					Logging.WriteDebug("No .cs files found in Routines folder");
-					return;
-				}
+				// HB 4.3.4 pattern: compile each root .cs file and each subdirectory separately
+				// This prevents cross-routine namespace conflicts.
+				var classCollection = new ClassCollection<CombatRoutine>();
+				var entries = new List<string>();
+				entries.AddRange(Directory.GetFiles(routinesPath, "*.cs", SearchOption.TopDirectoryOnly));
+				entries.AddRange(Directory.GetDirectories(routinesPath, "*", SearchOption.TopDirectoryOnly));
 
-				Logging.Write("Compiling {0} routine source files...", csFiles.Length);
+				foreach (string entry in entries)
+				{
+					string entryName = Path.GetFileName(entry);
+					Logging.WriteDebug("Compiling {0}", entryName);
+					CompilerResults compilerResults;
+					classCollection.CompileAndLoadFrom(entry, out compilerResults);
 
-				try
-				{
-					IList<CombatRoutine> loadedRoutines = CustomClassLoader.LoadFrom<CombatRoutine>(routinesPath, "v4.0");
-					
-					foreach (CombatRoutine routine in loadedRoutines)
+					if (compilerResults != null && compilerResults.Errors.HasErrors)
 					{
-						_routines.Add(routine);
-						Logging.Write("Loaded routine: {0} for class {1}", 
-							routine.Name ?? "Unknown", routine.Class);
-					}
-					
-					Logging.Write("Compilation complete. Loaded {0} combat routine(s)", _routines.Count);
-				}
-				catch (InvalidOperationException ex)
-				{
-					Logging.Write("COMPILATION ERROR:");
-					foreach (var line in ex.Message.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
-					{
-						Logging.Write("  {0}", line);
+						Logging.Write("Could not compile routine from: {0}", entryName);
+						Logging.Write(Utilities.FormatCompilerErrors(compilerResults));
 					}
 				}
-				catch (Exception ex)
+
+				foreach (CombatRoutine routine in classCollection)
 				{
-					Logging.Write("Failed to compile routines: {0}", ex.Message);
-					Logging.WriteException(ex);
+					_routines.Add(routine);
+					Logging.Write("Loaded routine: {0} for class {1}", 
+						routine.Name ?? "Unknown", routine.Class);
 				}
+
+				Logging.Write("Loaded {0} combat routine(s)", _routines.Count);
 			}
 			catch (Exception ex)
 			{
@@ -136,32 +131,47 @@ namespace Styx.Logic.Combat
 			}
 
 			WoWClass playerClass = ObjectManager.Me.Class;
-			
-			foreach (CombatRoutine routine in _routines)
+			var matching = _routines.Where(r => r.Class == playerClass).ToList();
+
+			if (matching.Count == 0)
 			{
-				if (routine.Class == playerClass)
+				Logging.Write("Could not find a routine fitting for your class. Using default.");
+				_current = new DefaultCombatRoutine();
+				return;
+			}
+
+			if (matching.Count == 1)
+			{
+				_current = matching[0];
+			}
+			else
+			{
+				// Multiple routines for this class — let the user pick (HB 4.3.4 pattern)
+				var form = new RoutineSelectionForm(matching);
+				if (form.ShowDialog() == DialogResult.OK && form.SelectedRoutine != null)
 				{
-					_current = routine;
-					Logging.Write("Chose {0} as your combat class.", routine.Name);
-					Logging.Write("Confirmed {0} as your class.", playerClass);
-					
-					try
-					{
-						routine.Initialize();
-						Logging.WriteDebug("Routine initialized successfully");
-					}
-					catch (Exception ex)
-					{
-						Logging.Write("Routine Initialize() failed: {0}", ex.Message);
-						Logging.WriteException(ex);
-					}
-					return;
+					_current = form.SelectedRoutine;
+				}
+				else
+				{
+					// User cancelled — pick the first one
+					_current = matching[0];
 				}
 			}
-			
-			// No matching routine found
-			Logging.Write("Could not find a routine fitting for your class. Using default.");
-			_current = new DefaultCombatRoutine();
+
+			Logging.Write("Chose {0} as your combat class.", _current.Name);
+			Logging.Write("Confirmed {0} as your class.", playerClass);
+
+			try
+			{
+				_current.Initialize();
+				Logging.WriteDebug("Routine initialized successfully");
+			}
+			catch (Exception ex)
+			{
+				Logging.Write("Routine Initialize() failed: {0}", ex.Message);
+				Logging.WriteException(ex);
+			}
 		}
 
 		/// <summary>
