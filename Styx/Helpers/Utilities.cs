@@ -14,6 +14,11 @@ namespace Styx.Helpers
     public static class Utilities
     {
         /// <summary>
+        /// Gets the directory of the running executable — matches HB's Utilities.AssemblyDirectory.
+        /// </summary>
+        public static string AssemblyDirectory => AppContext.BaseDirectory;
+
+        /// <summary>
         /// Gets object string representation or returns nullRet if null
         /// </summary>
         public static string GetObjectString(object? obj, string nullRet)

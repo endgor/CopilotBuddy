@@ -276,7 +276,8 @@ namespace Styx.Loaders
                     "System.Drawing.Primitives.dll",
                     "System.Text.RegularExpressions.dll",
                     "System.Linq.dll",
-                    "System.Linq.Expressions.dll"
+                    "System.Linq.Expressions.dll",
+                    "System.Data.Common.dll"
                 };
                 foreach (var refName in essentialRefs)
                 {
