@@ -98,23 +98,60 @@ namespace Styx.CommonBot.CharacterManagement
                 score += item.DPS * 3.0f; // DPS is very valuable
             }
 
-            // Check if it's an upgrade over currently equipped item
-            WoWInventorySlot slot = GetItemSlot(item);
-            if (slot != WoWInventorySlot.None)
+            // Bug #5: guard against null Inventory (ObjectManager.Wow == null during startup/shutdown)
+            WoWPlayerInventory inventory = StyxWoW.Me.Inventory;
+            if (inventory == null)
+                return score;
+
+            // Bug #3: for rings and trinkets, check BOTH slots and compare against the weaker one.
+            // HB 6.2.3 yields Finger1+Finger2 and Trinket1+Trinket2 for dual-slot types.
+            // Previously only Finger1/Trinket1 was checked, meaning Finger2/Trinket2 was never replaced.
+            WoWInventorySlot slot1 = GetItemSlot(item);
+            if (slot1 != WoWInventorySlot.None)
             {
-                WoWItem equipped = StyxWoW.Me.Inventory.GetItemBySlot((uint)slot);
-                if (equipped != null && equipped.ItemInfo != null)
+                WoWInventorySlot slot2 = GetSecondaryItemSlot(item);
+                WoWInventorySlot[] slotsToCheck = slot2 != WoWInventorySlot.None
+                    ? new[] { slot1, slot2 }
+                    : new[] { slot1 };
+
+                // Find the weakest equipped item across all valid slots for this item type
+                float weakestEquippedScore = float.MaxValue;
+                bool anySlotEmpty = false;
+                foreach (WoWInventorySlot checkSlot in slotsToCheck)
                 {
-                    float equippedScore = EvaluateItem(equipped.ItemInfo, 1);
-                    // Only consider it if it's actually an upgrade
-                    if (score <= equippedScore * 1.05f) // Require at least 5% improvement
+                    WoWItem equipped = inventory.GetItemBySlot((uint)checkSlot);
+                    if (equipped == null || equipped.ItemInfo == null)
                     {
-                        return 0f;
+                        // Empty slot — item is automatically an upgrade
+                        anySlotEmpty = true;
+                        break;
                     }
+                    float equippedScore = EvaluateItem(equipped.ItemInfo, 1);
+                    if (equippedScore < weakestEquippedScore)
+                        weakestEquippedScore = equippedScore;
                 }
+
+                // Only consider it if it's at least 5% better than the weakest slot
+                if (!anySlotEmpty && score <= weakestEquippedScore * 1.05f)
+                    return 0f;
             }
 
             return score;
+        }
+
+        /// <summary>
+        /// Returns the secondary inventory slot for dual-slot item types (rings, trinkets).
+        /// Returns <see cref="WoWInventorySlot.None"/> for single-slot types.
+        /// HB 6.2.3 pattern: yield Finger1 + Finger2, Trinket1 + Trinket2.
+        /// </summary>
+        private static WoWInventorySlot GetSecondaryItemSlot(ItemInfo item)
+        {
+            switch (item.InventoryType)
+            {
+                case InventoryType.Finger:  return WoWInventorySlot.Finger2;
+                case InventoryType.Trinket: return WoWInventorySlot.Trinket2;
+                default:                    return WoWInventorySlot.None;
+            }
         }
 
         /// <summary>
