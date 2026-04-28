@@ -44,7 +44,7 @@ namespace Styx.Logic
         private static Func<TargetPriority, double> _getScoreFunc;
         private static Func<TargetPriority, WoWObject> _targetToObjectSelector;
 
-        protected Targeting()
+        public Targeting()
         {
             this.DisplayTargetingExceptions = true;
             this.ObjectList = new List<WoWObject>();

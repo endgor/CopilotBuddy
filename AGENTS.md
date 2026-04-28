@@ -64,12 +64,8 @@ DBs copied to output on build: `CreatureSpawns.db`, `item_loot.db`.
 
 ## VS Code XML Profile Support
 
-`.vscode/settings.json` configures XML validation and auto-close against `Tools/ProfileGeneratorV2/schemas/HBProfile.xsd` (not present in this repo — schema location for reference only).
+`.vscode/settings.json` configures XML validation and auto-close against `Tools/ProfileGeneratorV2/schemas/HBProfile.xsd` (schema not present in repo).
 
 ## Testing
 
 No automated tests. Manual in-game testing only.
-
-## Verified Files
-
-`docs/QC-VERIFIED-FILES.md` lists files audited against HB references. Check it before modifying a listed file.

@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Styx;
 using Styx.WoWInternals;
 using Styx.WoWInternals.WoWObjects;
 using Styx.Logic.Pathing;
 using Styx.Helpers;
+using Bots.DungeonBuddy.Attributes;
 using Bots.DungeonBuddy.Profiles;
+using TreeSharp;
 
 namespace Bots.DungeonBuddy
 {
@@ -17,6 +22,12 @@ namespace Bots.DungeonBuddy
     {
         private static readonly HashSet<uint> _killedBossIds = new();
         private static readonly List<Boss> _bosses = new();
+        public static readonly Stopwatch BossTimer = new Stopwatch();
+
+        /// <summary>
+        /// Fired after a boss is marked as dead. Payload is the killed boss.
+        /// </summary>
+        public static event Action<Boss> OnBossKill;
 
         public class Boss
         {
@@ -37,16 +48,17 @@ namespace Bots.DungeonBuddy
         }
 
         /// <summary>
-        /// Boss actuel à tuer (le plus proche, non-mort)
+        /// Boss actuel à tuer. Utilise la liste enregistrée (pas le flag IsBoss) pour supporter
+        /// les boss de bas niveau comme RFC (level 16-17) contre un joueur level 80.
         /// </summary>
         public static WoWUnit CurrentBoss
         {
             get
             {
-                return ObjectManager.GetObjectsOfType<WoWUnit>()
-                    .Where(u => u.IsBoss && u.IsAlive && !_killedBossIds.Contains(u.Entry))
-                    .OrderBy(u => u.DistanceSqr)
-                    .FirstOrDefault();
+                return _bosses
+                    .Where(b => !b.IsDead)
+                    .Select(b => b.ToWoWUnit())
+                    .FirstOrDefault(u => u != null && u.IsAlive);
             }
         }
 
@@ -57,24 +69,71 @@ namespace Bots.DungeonBuddy
         public static IReadOnlyList<Boss> BossEncounters => _bosses;
 
         /// <summary>
-        /// Initialise les boss pour le donjon actuel
+        /// Initialise les boss pour le donjon actuel.
+        /// Remet à zéro les boss tués et re-peuple la liste depuis les attributs [EncounterHandler].
         /// </summary>
         public static void Initialize(Dungeon dungeon)
         {
             _killedBossIds.Clear();
             _bosses.Clear();
+
+            if (dungeon == null)
+                return;
+
+            // Re-register bosses from [EncounterHandler] attributes on the dungeon script.
+            // IndexHandlers() populated these at load time; Initialize() is called per-dungeon-entry
+            // so we must re-populate here to keep the list valid.
+            foreach (var method in dungeon.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                foreach (EncounterHandlerAttribute attr in method.GetCustomAttributes(typeof(EncounterHandlerAttribute), false))
+                {
+                    if (attr.BossEntry != 0)
+                        RegisterBoss((uint)attr.BossEntry, attr.BossName);
+                }
+            }
         }
 
         /// <summary>
-        /// Marque un boss comme tué
+        /// Marque un boss comme tué et fire l'événement OnBossKill.
         /// </summary>
         public static void MarkBossDead(uint entryId)
         {
             _killedBossIds.Add(entryId);
-            
+
             var boss = _bosses.FirstOrDefault(b => b.EntryId == entryId);
-            if (boss != null)
+            if (boss != null && !boss.IsDead)
+            {
                 boss.IsDead = true;
+                BossTimer.Reset();
+                OnBossKill?.Invoke(boss);
+            }
+        }
+
+        /// <summary>
+        /// HB 4.3.4 parity: poll one dead boss candidate per tick and mark it dead.
+        /// Used as a dedicated root branch (DungeonBot.method_12 array[2]).
+        /// </summary>
+        public static Composite CreateCheckForDeadBossBehavior()
+        {
+            return new PrioritySelector(
+                new ContextChangeHandler(ctx => _bosses
+                    .Where(b => !b.IsDead)
+                    .Select(b => b.ToWoWUnit())
+                    .FirstOrDefault(u => u != null && u.IsDead)),
+                new Decorator(
+                    ctx => ctx is WoWUnit,
+                    new global::TreeSharp.Action(ctx =>
+                    {
+                        var bossUnit = ctx as WoWUnit;
+                        if (bossUnit != null)
+                        {
+                            MarkBossDead(bossUnit.Entry);
+                        }
+
+                        return RunStatus.Success;
+                    })
+                )
+            );
         }
 
         /// <summary>

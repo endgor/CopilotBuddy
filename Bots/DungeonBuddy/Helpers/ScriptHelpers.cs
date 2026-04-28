@@ -116,7 +116,7 @@ namespace Bots.DungeonBuddy.Helpers
         // PHASE 2, 3, 4: COMBAT, OBJECTS, BOSSES (Ported from HB 4.3.4)
         // ═══════════════════════════════════════════════════════════
 
-        public static BossManager.Boss CurrentBoss => BossManager.Bosses.FirstOrDefault(b => !b.IsDead);
+        public static WoWUnit CurrentBoss => BossManager.Bosses.FirstOrDefault(b => !b.IsDead)?.ToWoWUnit();
 
         public static bool ShouldKillBoss(string name)
         {

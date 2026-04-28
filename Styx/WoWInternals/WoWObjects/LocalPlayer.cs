@@ -1293,22 +1293,18 @@ namespace Styx.WoWInternals.WoWObjects
 
         /// <summary>
         /// Whether the player is in an instanced zone.
+        /// Uses Lua IsInInstance() — more reliable than the MapId offset for 3.3.5a
+        /// (0xAB63BC can reflect the last associated instance map, not the current map).
+        /// Matches HB 4.3.4 LocalPlayer.IsInInstance which also reads field 2 of Map.dbc,
+        /// but relies on MapId() being current — in 3.3.5a the Lua call is authoritative.
         /// </summary>
         public bool IsInInstance
         {
             get
             {
-                if (Memory == null)
-                    return false;
-
                 try
                 {
-                    WoWDb.Row? row = StyxWoW.Db?[ClientDb.Map]?.GetRow(MapId);
-                    if (row == null)
-                        return false;
-
-                    uint instanceType = row.GetField<uint>(2);
-                    return instanceType != 0;
+                    return Lua.GetReturnVal<bool>("return IsInInstance()", 0);
                 }
                 catch
                 {

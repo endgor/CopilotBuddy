@@ -9,6 +9,7 @@ using Bots.DungeonBuddy.Profiles;
 using Styx;
 using Styx.Helpers;
 using Styx.Loaders;
+using Styx.Logic.Pathing;
 using Styx.WoWInternals;
 using Styx.WoWInternals.WoWObjects;
 using TreeSharp;
@@ -410,6 +411,31 @@ if (Activator.CreateInstance(type) is not Dungeon instance)
             _currentDungeon = null;
             _currentDungeonBehavior = null;
             ProfileManager.UnloadProfile();
+        }
+
+        /// <summary>
+        /// Retourne la position d'entrée d'un donjon depuis son script, SANS activer ce script.
+        /// Utilisé par SoloFarm pour naviguer vers l'entrée avant d'entrer dans l'instance.
+        /// Évite d'appeler SetDungeonById (qui déclenche Attach/BossManager/Profile) hors instance.
+        /// </summary>
+        public static WoWPoint GetEntranceForDungeon(uint dungeonId)
+        {
+            if (!_dungeonTypes.TryGetValue(dungeonId, out var dungeonType))
+                return WoWPoint.Zero;
+
+            try
+            {
+                if (Activator.CreateInstance(dungeonType) is not Dungeon dungeon)
+                    return WoWPoint.Zero;
+
+                var entrance = dungeon.Entrance;
+                dungeon.Dispose();
+                return entrance;
+            }
+            catch
+            {
+                return WoWPoint.Zero;
+            }
         }
 
         /// <summary>

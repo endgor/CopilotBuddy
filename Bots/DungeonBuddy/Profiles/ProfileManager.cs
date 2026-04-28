@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
+using Bots.DungeonBuddy.Helpers;
+using Bots.DungeonBuddy.Profiles.Handlers;
 using Styx;
 using Styx.Helpers;
 using Styx.Logic.Pathing;
@@ -9,6 +13,7 @@ using Styx.Logic.Profiles;
 using Styx.Patchables;
 using Styx.WoWInternals;
 using Styx.WoWInternals.DBC;
+using Styx.WoWInternals.WoWObjects;
 
 namespace Bots.DungeonBuddy.Profiles
 {
@@ -19,11 +24,27 @@ namespace Bots.DungeonBuddy.Profiles
     /// </summary>
     public static class ProfileManager
     {
-        private static readonly string _profilesPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory, "Default Profiles", "DungeonBuddy");
+        private static readonly string _profilesPath = Path.Combine(Logging.ApplicationPath, "Default Profiles\\DungeonBuddy\\");
 
         // HB 4.3.4: string_0 = Path.Combine(Logging.ApplicationPath, "Default Profiles\\DungeonBuddy\\")
-        public static DungeonProfile CurrentProfile { get; private set; }
+        public static Profile CurrentProfile { get; private set; }
+
+        public static event EventHandler<EventArgs> OnProfileSet;
+
+        public static void Load(Profile profile)
+        {
+            if (CurrentProfile != null)
+                UnloadProfile();
+
+            CurrentProfile = profile;
+            if (CurrentProfile != null && CurrentProfile.Blackspots != null)
+            {
+                var blackspots = CurrentProfile.Blackspots;
+                BlackspotManager.AddBlackspots(blackspots.ConvertAll<global::Styx.Logic.Profiles.Blackspot>(b => b));
+            }
+
+            OnProfileSet?.Invoke(null, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Scanne Default Profiles\DungeonBuddy\ pour trouver le profil XML correspondant au dungeonId.
@@ -50,16 +71,28 @@ namespace Bots.DungeonBuddy.Profiles
                         continue;
                     }
 
-                    UnloadProfile();
-                    CurrentProfile = DungeonProfile.Load(root);
+                    ErrorCollection errors;
+                    Profile profile;
+                    try
+                    {
+                        profile = Profile.Load(file, out errors);
+                    }
+                    catch (XmlException ex)
+                    {
+                        Logger.Write("There was an XML error in your profile!");
+                        Logger.Write(ex.Message);
+                        return;
+                    }
 
-                    if (CurrentProfile.Blackspots.Count > 0)
-                        BlackspotManager.AddBlackspots(CurrentProfile.Blackspots);
+                    foreach (Error error in errors)
+                        Logger.WriteError(error);
 
-                    Logging.Write("[DungeonBuddy] Loaded profile: {0} ({1} hotspots, {2} blackspots)",
-                        Path.GetFileNameWithoutExtension(file),
-                        CurrentProfile.HotSpots.Count,
-                        CurrentProfile.Blackspots.Count);
+                    if (!errors.HasErrors)
+                    {
+                        Load(profile);
+                        Logger.Write("Successfully loaded: {0}", Path.GetFileNameWithoutExtension(file));
+                    }
+
                     return;
                 }
                 catch (Exception ex)
@@ -78,17 +111,17 @@ namespace Bots.DungeonBuddy.Profiles
         {
             try
             {
-                var root = XElement.Load(path);
-                UnloadProfile();
-                CurrentProfile = DungeonProfile.Load(root);
+                ErrorCollection errors;
+                Profile profile = Profile.Load(path, out errors);
 
-                if (CurrentProfile.Blackspots.Count > 0)
-                    BlackspotManager.AddBlackspots(CurrentProfile.Blackspots);
+                foreach (Error error in errors)
+                    Logger.WriteError(error);
 
-                Logging.Write("[DungeonBuddy] Loaded profile: {0} ({1} hotspots, {2} blackspots)",
-                    System.IO.Path.GetFileNameWithoutExtension(path),
-                    CurrentProfile.HotSpots.Count,
-                    CurrentProfile.Blackspots.Count);
+                if (!errors.HasErrors)
+                {
+                    Load(profile);
+                    Logger.Write("Successfully loaded: {0}", System.IO.Path.GetFileNameWithoutExtension(path));
+                }
             }
             catch (Exception ex)
             {
@@ -99,7 +132,8 @@ namespace Bots.DungeonBuddy.Profiles
         public static void UnloadProfile()
         {
             if (CurrentProfile != null && CurrentProfile.Blackspots.Count > 0)
-                BlackspotManager.RemoveBlackspots(CurrentProfile.Blackspots);
+                BlackspotManager.RemoveBlackspots(CurrentProfile.Blackspots.ConvertAll<global::Styx.Logic.Profiles.Blackspot>(b => b));
+
             CurrentProfile = null;
         }
 
@@ -113,50 +147,56 @@ namespace Bots.DungeonBuddy.Profiles
         /// <exception cref="InstanceNotFoundException">Aucun donjon ne correspond au mapId+difficulty</exception>
         public static uint GetLfgDungeonIdFromMapId(uint mapId)
         {
-            int difficultyIndex = LfgManager.CurrentDifficulty - 1;
+            int difficultyIndex = Lua.GetReturnVal<int>("return GetInstanceDifficulty()", 0) - 1;
+            var candidates = new List<LfgDungeons>();
 
             var table = StyxWoW.Db?[ClientDb.LfgDungeons];
             if (table == null)
                 throw new InstanceNotFoundException("Unable to find LfgDungeon for mapId " + mapId);
 
-            uint minIndex = (uint)table.MinIndex;
-            uint maxIndex = (uint)table.MaxIndex;
-
-            LfgDungeons[] candidates = null;
-            int count = 0;
-
-            for (uint i = minIndex; i <= maxIndex; i++)
+            for (uint i = (uint)table.MinIndex; i <= (uint)table.MaxIndex; i++)
             {
                 var dungeon = new LfgDungeons(i);
                 if (!dungeon.IsValid || dungeon.IsHolidayEvent)
                     continue;
                 if (dungeon.MapId == (int)mapId && dungeon.Difficulty == (uint)difficultyIndex)
-                {
-                    if (candidates == null)
-                        candidates = new LfgDungeons[8];
-                    if (count < candidates.Length)
-                        candidates[count++] = dungeon;
-                }
+                    candidates.Add(dungeon);
             }
 
-            if (count == 0)
-                throw new InstanceNotFoundException("Unable to find LfgDungeon for mapId " + mapId);
+            if (candidates.Count > 1)
+            {
+                int dungeonLevel = Lua.GetReturnVal<int>("return GetCurrentMapDungeonLevel()", 0);
+                candidates.RemoveAll(d => d.RecommendedLevel != (uint)dungeonLevel);
+            }
 
-            if (count == 1)
+            if (candidates.Count > 0)
                 return candidates[0].Id;
 
-            uint dungeonLevel = Lua.GetReturnVal<uint>("return GetCurrentMapDungeonLevel() or 0", 0);
-            for (int i = 0; i < count; i++)
-            {
-                if (candidates[i].RecommendedLevel != dungeonLevel)
-                    candidates[i] = null;
-            }
-            for (int i = 0; i < count; i++)
-            {
-                if (candidates[i] != null)
-                    return candidates[i].Id;
-            }
             throw new InstanceNotFoundException("Unable to find LfgDungeon for mapId " + mapId);
+        }
+
+        public static bool IsNpcInPullBlackspot(WoWUnit unit)
+        {
+            if (CurrentProfile == null || CurrentProfile.PullBlackspots == null)
+                return false;
+
+            return CurrentProfile.PullBlackspots
+                .Select(p => new { Pull = p, RadiusSqr = p.Radius * p.Radius })
+                .Where(x => unit.Location.DistanceSqr(x.Pull.Location) < x.RadiusSqr)
+                .Select(x => x.Pull)
+                .Any(pull =>
+                {
+                    if (pull.Height == 0f)
+                        return true;
+
+                    if (pull.Height > 0f && pull.Z + pull.Height < unit.Z)
+                        return false;
+
+                    if (pull.Height < 0f && pull.Z + pull.Height > unit.Z)
+                        return false;
+
+                    return unit.Z >= pull.Z;
+                });
         }
     }
 }
