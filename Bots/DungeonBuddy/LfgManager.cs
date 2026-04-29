@@ -221,7 +221,9 @@ namespace Bots.DungeonBuddy
         /// Retourne 0 si pas dans un groupe LFG.
         /// HB 4.3.4: DungeonManager utilise cette valeur pour choisir le script de donjon.
         /// </summary>
-        public static uint CurrentLfgDungeonId => Lua.GetReturnVal<uint>("return GetPartyLFGID() or 0", 0);
+        // Use pcall to avoid Lua runtime error (status=2) when not in an LFG group.
+        // GetPartyLFGID() throws in WotLK 3.3.5a when no LFG instance is active.
+        public static uint CurrentLfgDungeonId => Lua.GetReturnVal<uint>("local ok,v = pcall(GetPartyLFGID); return (ok and v) or 0", 0);
 
         /// <summary>
         /// Obtient la difficulté du donjon actuel (1=Normal, 2=Heroic)
