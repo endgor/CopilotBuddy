@@ -45,22 +45,37 @@ namespace Bots.DungeonBuddy
             {
                 return ObjectManager.GetObjectsOfType<WoWUnit>().FirstOrDefault(u => u.Entry == this.Entry);
             }
+
+            /// <summary>
+            /// Best-effort world location: uses live ObjectManager unit if in range,
+            /// otherwise WoWPoint.Zero. Callers should guard for Zero.
+            /// </summary>
+            public WoWPoint Location => ToWoWUnit()?.Location ?? WoWPoint.Zero;
+
+            /// <summary>
+            /// Marks this boss as dead. Called by dungeon scripts (HB Boss.MarkAsDead() parity).
+            /// </summary>
+            public void MarkAsDead() { IsDead = true; }
+
+            /// <summary>
+            /// Resets this boss to alive. Called by BossManager.Reset().
+            /// </summary>
+            public void Reset() { IsDead = false; }
         }
 
         /// <summary>
-        /// Boss actuel à tuer. Utilise la liste enregistrée (pas le flag IsBoss) pour supporter
-        /// les boss de bas niveau comme RFC (level 16-17) contre un joueur level 80.
+        /// HB 4.3.4 parity: returns the first Boss object that is not yet dead,
+        /// ordered by registration order (kill order from [EncounterHandler] attributes).
+        /// Does NOT require the boss to be in ObjectManager range — using ObjectManager
+        /// here would return null when bosses are out of draw distance at the dungeon
+        /// entrance, causing IsComplete = true and premature 'dungeon complete'.
+        /// Matches HB smethod_9: IsAlive check + Optional/KillOptionalBosses guard.
+        /// (Faction guard omitted — inner Boss has no Faction field; all registered bosses default to Both.)
         /// </summary>
-        public static WoWUnit CurrentBoss
-        {
-            get
-            {
-                return _bosses
-                    .Where(b => !b.IsDead)
-                    .Select(b => b.ToWoWUnit())
-                    .FirstOrDefault(u => u != null && u.IsAlive);
-            }
-        }
+        public static Boss? CurrentBoss =>
+            _bosses
+                .Where(b => !b.IsDead && (!b.IsOptional || DungeonBuddySettings.Instance.KillOptionalBosses))
+                .FirstOrDefault();
 
         /// <summary>
         /// Liste de tous les boss du donjon
@@ -95,6 +110,7 @@ namespace Bots.DungeonBuddy
 
         /// <summary>
         /// Marque un boss comme tué et fire l'événement OnBossKill.
+        /// Also syncs Profile.Boss.MarkAsDead() so PathBreadCrumbs advances to the next boss.
         /// </summary>
         public static void MarkBossDead(uint entryId)
         {
@@ -107,6 +123,11 @@ namespace Bots.DungeonBuddy
                 BossTimer.Reset();
                 OnBossKill?.Invoke(boss);
             }
+
+            // Sync to Profile.Boss so GetSoloFarmMoveToPoint advances to the next boss.
+            ProfileManager.CurrentProfile?.BossEncounters
+                .FirstOrDefault(b => b.Entry == entryId)
+                ?.MarkAsDead();
         }
 
         /// <summary>
