@@ -34,7 +34,12 @@ namespace Bots.DungeonBuddy
             }
             foreach (WoWUnit woWUnit in incomingObjects.Select(_toUnitSelector))
             {
-                if (!StyxWoW.Me.IsTank())
+                // HB 4.3.4 exact: IsTank() check. For SoloFarm (no party), PartyMode==Off
+                // means the player is alone and must pull proactively like a tank.
+                bool actAsTank = StyxWoW.Me.IsTank() ||
+                                 DungeonBuddySettings.Instance.PartyMode == PartyMode.Off;
+
+                if (!actAsTank)
                 {
                     if (!woWUnit.Combat)
                     {
@@ -47,7 +52,11 @@ namespace Bots.DungeonBuddy
                 }
                 else if (!StyxWoW.Me.Combat)
                 {
-                    if ((woWUnit.DistanceSqr > 1600.0 && !woWUnit.IsTargetingMyPartyMember) || !woWUnit.IsHostile || ProfileManager.IsNpcInPullBlackspot(woWUnit) || (!woWUnit.IsFlying && !Navigator.CanNavigateFully(StyxWoW.Me.Location, woWUnit.Location)))
+                    // NOTE: CanNavigateFully deliberately excluded here — inside a dungeon it calls
+                    // FindPath per-unit per-pulse and can throw (unloaded tiles on first entry),
+                    // which Targeting.Pulse() catches silently, leaving ObjectList empty.
+                    // Distance + hostility check is sufficient in a dungeon context.
+                    if ((woWUnit.DistanceSqr > 1600.0 && !woWUnit.IsTargetingMyPartyMember) || !woWUnit.IsHostile || ProfileManager.IsNpcInPullBlackspot(woWUnit))
                     {
                         continue;
                     }
@@ -73,12 +82,22 @@ namespace Bots.DungeonBuddy
 
         protected override void DefaultTargetWeight(List<Targeting.TargetPriority> objs)
         {
+            // Solo mode (PartyMode.Off) acts as tank for targeting purposes — mirror
+            // the actAsTank logic from DefaultIncludeTargetsFilter so that the weight
+            // function is consistent with the include filter.  Without this, pre-combat
+            // solo scores all full-health mobs at 0 → unstable sort → FirstUnit oscillates
+            // between equidistant mobs every tick → continuous POI flip → CTM zigzag.
+            bool actAsTank = (StyxWoW.Me.Role & WoWPartyMember.GroupRole.Tank) != WoWPartyMember.GroupRole.None
+                             || DungeonBuddySettings.Instance.PartyMode == PartyMode.Off;
+
             foreach (Targeting.TargetPriority targetPriority in objs)
             {
                 WoWUnit woWUnit = targetPriority.Object.ToUnit();
                 targetPriority.Score = 100.0;
-                if ((StyxWoW.Me.Role & WoWPartyMember.GroupRole.Tank) != WoWPartyMember.GroupRole.None)
+                if (actAsTank)
                 {
+                    // Distance scoring: nearest mob gets highest score (100 - dist).
+                    // As we walk toward a target its score rises, locking it in as FirstUnit.
                     targetPriority.Score -= woWUnit.Distance;
                     if (woWUnit.IsTargetingMyPartyMember)
                     {
