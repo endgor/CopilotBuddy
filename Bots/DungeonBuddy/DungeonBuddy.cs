@@ -5,6 +5,7 @@ using System.Linq;
 using Bots.DungeonBuddy.Avoidance;
 using Bots.DungeonBuddy.Enums;
 using Bots.DungeonBuddy.Helpers;
+using Bots.DungeonBuddy.Profiles;
 using Bots.Grind;
 using CommonBehaviors.Actions;
 using CommonBehaviors.Decorators;
@@ -15,6 +16,11 @@ using Styx.Logic;
 using Styx.Logic.BehaviorTree;
 using Styx.Logic.Combat;
 using Styx.Logic.Inventory;
+using Styx.Database;
+using Styx.Logic.Inventory.Frames.Gossip;
+using Styx.Logic.Inventory.Frames.LootFrame;
+using Styx.Logic.Inventory.Frames.MailBox;
+using Styx.Logic.Inventory.Frames.Merchant;
 using Styx.Logic.Pathing;
 using Styx.Logic.POI;
 using Styx.WoWInternals;
@@ -56,6 +62,7 @@ namespace Bots.DungeonBuddy
         // Timers
         private readonly Stopwatch _proposalDelay = new();
         private readonly Stopwatch _requeueDelay = new();
+        private readonly WaitTimer _proposalAcceptTimer = new WaitTimer(TimeSpan.FromMinutes(2.0));
         private readonly Random _rng = new();
         private int _proposalWaitMs;  // Délai aléatoire avant AcceptProposal
 
@@ -74,15 +81,21 @@ namespace Bots.DungeonBuddy
         private WoWPoint _corpseRunBreadcrumb = WoWPoint.Zero;
         private readonly WaitTimer _corpseRunWaitTimer = new WaitTimer(TimeSpan.FromMinutes(2.0));
         private WoWUnit? _corpseSpiritHealer;
-        private readonly Stopwatch _debugMoveLogThrottle = new();
-        private readonly Stopwatch _debugDungeonLogThrottle = new();
-        private readonly Stopwatch _soloFarmStatusLogThrottle = new();
         private readonly WaitTimer _pathValidationRefreshTimer = new WaitTimer(TimeSpan.FromSeconds(2.0));
         private dynamic? _cachedBossPath;
         private bool _soloFarmResetInstancesPending;
         private WoWPoint _outsideFlyPoint = WoWPoint.Zero;
         private readonly List<uint> _healthstoneEntries = new List<uint> { 51999U, 52000U, 52001U, 52002U, 52003U, 52004U, 52005U, 67248U, 67250U };
         private readonly uint[] _mageTableEntries = { 186812U, 207386U, 207387U };
+
+        // Blacklist for vendors that don't exist or aren't real vendors — port of DungeonBot.hashSet_0
+        private readonly HashSet<uint> _vendorBlacklist = new HashSet<uint>();
+
+        // Cached delegate to allow safe detach of START_LOOT_ROLL event in Stop()
+        private LuaEventHandlerDelegate? _lootRollHandler;
+
+        // Throttle for Leader group invite attempts (HB waitTimer_5 parity)
+        private readonly WaitTimer _inviteRetryTimer = new WaitTimer(TimeSpan.FromSeconds(10.0));
 
         public override Composite Root => _root ??= CreateRootBehavior();
 
@@ -92,17 +105,11 @@ namespace Bots.DungeonBuddy
 
         public override void Start()
         {
-            Logging.Write("[DungeonBuddy] Starting...");
-
             var settings = DungeonBuddySettings.Instance;
-            Logging.Write($"[DungeonBuddy] Config: QueueType={settings.QueueType}, SelectedDungeons=[{string.Join(",", settings.SelectedDungeonIds)}]");
 
             // Charger les scripts de donjon (réflection sur l'assembly)
             DungeonManager.LoadDungeonScripts();
             Targeting.Instance = new DungeonTargeting();
-
-            Logging.Write("[DungeonBuddy] Script folder: {0}", System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Dungeon Scripts"));
-            Logging.Write("[DungeonBuddy] Profile folder: {0}", System.IO.Path.Combine(Logging.ApplicationPath, "Default Profiles\\DungeonBuddy\\"));
 
             // Attacher les événements LFG
             LfgManager.AttachLfgEvents();
@@ -121,13 +128,24 @@ namespace Bots.DungeonBuddy
                 DungeonManager.SetDungeonById(settings.SelectedDungeonIds[0]);
             }
 
-            Logging.Write("[DungeonBuddy] Started successfully!");
+            // Enable data.bin vendor lookup for SoloFarm.
+            // DungeonBuddy profiles have no <Vendors> section — NpcQueries.GetNearestNpc
+            // fallback in VendorManager requires this flag (same pattern as GatherBuddy).
+            CharacterSettings.Instance.FindVendorsAutomatically = true;
+
+            // Attach loot roll handler (HB ns4/Class4.cs parity: START_LOOT_ROLL event)
+            _lootRollHandler = OnStartLootRoll;
+            Lua.Events.AttachEvent("START_LOOT_ROLL", _lootRollHandler);
+
         }
 
         public override void Stop()
         {
-            Logging.Write("[DungeonBuddy] Stopping...");
-
+            if (_lootRollHandler != null)
+            {
+                Lua.Events.DetachEvent("START_LOOT_ROLL", _lootRollHandler);
+                _lootRollHandler = null;
+            }
             LfgManager.DetachLfgEvents();
             Targeting.Instance = new Targeting();
             DungeonManager.Clear();
@@ -151,15 +169,11 @@ namespace Bots.DungeonBuddy
                 OnMapChanged(currentMap);
             }
 
-            // Mettre à jour l'avoidance
+            // Keep avoidance updated every pulse.
             Bots.DungeonBuddy.Avoidance.AvoidanceManager.Update();
 
-            // Keep targeting list fresh every pulse (HB behavior depends on a live FirstUnit/TargetList).
-            if (StyxWoW.Me.IsInInstance)
-                Targeting.Instance.Pulse();
-
             // Recovery: si on est dans un donjon mais CurrentDungeon == null (race condition
-            // pendant le loading screen — OnMapChanged a pu firer avant IsInInstance = true),
+            // pendant le loading screen — OnMapChanged a pu fire avant IsDungeon = true),
             // réinitialiser immédiatement.
             if (StyxWoW.Me.CurrentMap.IsDungeon && DungeonManager.CurrentDungeon == null)
             {
@@ -174,16 +188,16 @@ namespace Bots.DungeonBuddy
 
         private void OnMapChanged(uint newMapId)
         {
-            // HB 4.3.4 method_41: détermine la direction (entrée/sortie) via CurrentMap.IsDungeon,
-            // PAS IsInInstance. IsInInstance peut être false pendant le loading screen même
+            // HB 4.3.4 method_41: détermine la direction (entrée/sortie) via map type,
+            // pas IsInInstance. IsInInstance peut être false pendant le loading screen même
             // si MapId est déjà 389 (dungeon) — ce qui causait un faux « Left instance »
             // suivi de DungeonManager.Clear() + perte de CurrentDungeon.
-            bool isInDungeonMap = StyxWoW.Me.CurrentMap.IsDungeon;
+            bool isInDungeonMap = StyxWoW.Me.CurrentMap.IsDungeon ||
+                                  StyxWoW.Me.CurrentMap.IsRaid ||
+                                  LfgManager.CurrentLfgDungeonId > 0U;
 
             if (isInDungeonMap)
             {
-                Logging.Write($"[DungeonBuddy] Entered instance (MapId={newMapId})");
-
                 var settings = DungeonBuddySettings.Instance;
                 if (settings.QueueType == QueueType.SoloFarm && settings.SelectedDungeonIds.Length > 0)
                     DungeonManager.SetDungeonById(settings.SelectedDungeonIds[0]);
@@ -194,13 +208,18 @@ namespace Bots.DungeonBuddy
                 LfgManager.DungeonCompletedReason = CompleteReason.None;
                 _soloFarmResetInstancesPending = false;
                 _outsideFlyPoint = WoWPoint.Zero;
+
+                // Force le behavior tree à redémarrer depuis zéro au prochain tick.
+                // Sans ça, le Decorator de CreateOutsideDungeonBehavior reste suspendu
+                // dans son while(Running) et ne ré-évalue jamais son guard !IsInInstance.
+                _root?.Stop(null!);
             }
             else
             {
                 // Quitte l'instance — seulement clear si on était effectivement dans un donjon
                 if (DungeonManager.CurrentDungeon != null)
                 {
-                    Logging.Write($"[DungeonBuddy] Left instance");
+                    Logging.Write("Left dungeon: {0}", DungeonManager.CurrentDungeon.Name);
                     DungeonManager.Clear();
                     BossManager.Reset();
                     _activeDungeonBehavior = null;
@@ -217,17 +236,6 @@ namespace Bots.DungeonBuddy
             }
         }
 
-        private static bool ShouldLog(Stopwatch throttle, int intervalMs)
-        {
-            if (!throttle.IsRunning || throttle.ElapsedMilliseconds >= intervalMs)
-            {
-                throttle.Restart();
-                return true;
-            }
-
-            return false;
-        }
-
         // ═══════════════════════════════════════════════════════════
         // BEHAVIOR TREE
         // ═══════════════════════════════════════════════════════════
@@ -235,15 +243,20 @@ namespace Bots.DungeonBuddy
         private PrioritySelector CreateRootBehavior()
         {
             return new PrioritySelector(
-                // HB method_12 parity: only run this block while we're on a dungeon map.
+                CreateLfgBehavior(),
+
                 new Decorator(
                     ctx => StyxWoW.Me.CurrentMap.IsDungeon,
+                    // in-instance branch (HB smethod_126: CurrentMap.IsDungeon)
                     new PrioritySelector(
                         // 1) method_27
                         CreateDeathBehavior(),
 
-                        // 2) method_45
-                        CreateLfgBehavior(),
+                        // 2) method_45 — loot corpses BEFORE dungeon nav and combat (HB 4.3.4 array[1] parity).
+                        // In WotLK each corpse must be looted individually. Running this before
+                        // CreateDungeonBehavior ensures remaining corpses are drained before the
+                        // bot moves to the next kill target.
+                        CreateCorpseLootBehavior(),
 
                         // 3) BossManager.CreateCheckForDeadBossBehavior
                         BossManager.CreateCheckForDeadBossBehavior(),
@@ -255,14 +268,17 @@ namespace Bots.DungeonBuddy
                         CreateCombatBehavior(),
 
                         // 6) method_13 guarded by smethod_127
+                        // SoloFarm via portal never sets DungeonCompletedReason → also trigger
+                        // on BossManager.CurrentBoss == null (all required bosses killed).
                         new Decorator(
                             ctx => DungeonBuddySettings.Instance.QueueType == QueueType.SoloFarm &&
-                                   LfgManager.DungeonCompletedReason != CompleteReason.None &&
-                                   _soloFarmExitTimer.IsFinished,
+                                   _soloFarmExitTimer.IsFinished &&
+                                   (LfgManager.DungeonCompletedReason != CompleteReason.None ||
+                                    (BossManager.Bosses.Count > 0 && BossManager.CurrentBoss == null)),
                             CreateSoloFarmExitBehavior()),
 
-                        // 7) method_19
-                        CreateLootBehavior(),
+                        // 7) method_19 — ritual assist + consumable objects (mage table, soul well)
+                        CreateRitualAndConsumableBehavior(),
 
                         // 8) method_4
                         CreateInDungeonSupportBehavior()
@@ -276,115 +292,378 @@ namespace Bots.DungeonBuddy
             );
         }
 
+        /// <summary>
+        /// Port of HB 4.3.4 DungeonBot.method_26() — vendor interaction behavior.
+        /// Only runs when BotPoi.Current is Sell, Repair, Buy, or Train.
+        /// Navigate to POI → validate NPC → interact → sell/repair → clear POI.
+        /// </summary>
+        private Composite CreateVendorBehavior()
+        {
+            WoWUnit? vendorNpc = null;
+            var vendorPois = new[] { PoiType.Sell, PoiType.Buy, PoiType.Repair, PoiType.Train };
+
+            return new DecoratorIsPoiType(
+                vendorPois,
+                new PrioritySelector(
+                    // [0] Move toward POI location while far (smethod_209 / smethod_11)
+                    new Decorator(
+                        ctx => BotPoi.Current.Location.DistanceSqr(StyxWoW.Me.Location) > 16f,
+                        new Action(ctx => Navigator.GetRunStatusFromMoveResult(
+                            Navigator.MoveTo(BotPoi.Current.Location)))
+                    ),
+
+                    // [1] Find vendor NPC in ObjectManager — side-effect Decorator, always fails
+                    // so PrioritySelector continues to [2].
+                    new Decorator(
+                        ctx =>
+                        {
+                            vendorNpc = ObjectManager.GetObjectsOfType<WoWUnit>()
+                                .Where(u => u.IsValid && u.IsAlive && u.Entry == BotPoi.Current.Entry)
+                                .OrderBy(u => u.DistanceSqr)
+                                .FirstOrDefault();
+                            return true;
+                        },
+                        new ActionAlwaysFail()
+                    ),
+
+                    // [2] NPC not found → blacklist entry + clear POI (smethod_210 + ActionClearPoi)
+                    new Decorator(
+                        ctx => vendorNpc == null,
+                        new Sequence(
+                            new Action(ctx =>
+                            {
+                                if (BotPoi.Current.Entry > 0)
+                                    _vendorBlacklist.Add(BotPoi.Current.Entry);
+                                return RunStatus.Success;
+                            }),
+                            new ActionClearPoi("No NPC found at POI location")
+                        )
+                    ),
+
+                    // [3] NPC exists but is not a vendor/repair merchant → blacklist + clear (smethod_211)
+                    new Decorator(
+                        ctx => vendorNpc != null && !vendorNpc.IsVendor && !vendorNpc.IsRepairMerchant,
+                        new Sequence(
+                            new Action(ctx =>
+                            {
+                                _vendorBlacklist.Add(vendorNpc!.Entry);
+                                return RunStatus.Success;
+                            }),
+                            new ActionClearPoi("NPC is not a vendor")
+                        )
+                    ),
+
+                    // [4] Navigate to vendor NPC if outside interact range (class.method_4/5)
+                    new Decorator(
+                        ctx => vendorNpc != null && vendorNpc.DistanceSqr > vendorNpc.InteractRangeSqr,
+                        new Action(ctx => Navigator.GetRunStatusFromMoveResult(
+                            Navigator.MoveTo(vendorNpc!.Location)))
+                    ),
+
+                    // [5] Sell / Repair / Buy (DecoratorIsPoiType port of smethod_0)
+                    new DecoratorIsPoiType(
+                        new[] { PoiType.Buy, PoiType.Sell, PoiType.Repair },
+                        new PrioritySelector(
+                            // Merchant not open yet → stop + interact + handle gossip
+                            new Decorator(
+                                ctx => !MerchantFrame.Instance.IsVisible,
+                                new Sequence(
+                                    new Action(ctx =>
+                                    {
+                                        WoWMovement.MoveStop();
+                                        vendorNpc?.Interact();
+                                        return RunStatus.Success;
+                                    }),
+                                    new WaitContinue(
+                                        TimeSpan.FromSeconds(3),
+                                        ctx => MerchantFrame.Instance.IsVisible || GossipFrame.Instance.IsVisible,
+                                        new ActionAlwaysSucceed()
+                                    ),
+                                    // Gossip frame opened (NPC has multiple options) — select vendor entry
+                                    new DecoratorContinue(
+                                        ctx => GossipFrame.Instance.IsVisible && !MerchantFrame.Instance.IsVisible,
+                                        new Action(ctx =>
+                                        {
+                                            var entry = GossipFrame.Instance.GossipOptionEntries
+                                                ?.FirstOrDefault(e => e.Type == GossipEntry.GossipEntryType.Vendor);
+                                            if (entry != null)
+                                                GossipFrame.Instance.SelectGossipOption(entry.Value.Index);
+                                            return RunStatus.Success;
+                                        })
+                                    )
+                                )
+                            ),
+
+                            // Merchant is open → repair + sell + clear POI (smethod_214 + smethod_4 + ActionClearPoi)
+                            new Decorator(
+                                ctx => MerchantFrame.Instance.IsVisible,
+                                new Sequence(
+                                    new Action(ctx =>
+                                    {
+                                        MerchantFrame.Instance.RepairAllItems();
+                                        SellItemsAtVendor();
+                                        return RunStatus.Success;
+                                    }),
+                                    new ActionClearPoi("Done repairing + selling")
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        /// <summary>
+        /// Mailbox interaction behavior — runs only when BotPoi.Current is PoiType.Mail.
+        /// Navigates to mailbox game object, interacts, sends qualifying items, closes frame, clears POI.
+        /// Port of HB GatherbuddyBot mailbox pattern adapted to behavior tree style.
+        /// </summary>
+        private Composite CreateMailboxBehavior()
+        {
+            WoWGameObject? mailboxObj = null;
+
+            return new DecoratorIsPoiType(
+                new[] { PoiType.Mail },
+                new PrioritySelector(
+                    // [0] Move toward mailbox POI while outside 4m
+                    new Decorator(
+                        ctx => BotPoi.Current.Location.DistanceSqr(StyxWoW.Me.Location) > 16f,
+                        new Action(ctx => Navigator.GetRunStatusFromMoveResult(
+                            Navigator.MoveTo(BotPoi.Current.Location)))
+                    ),
+
+                    // [1] Locate mailbox in ObjectManager (side-effect, always fails to continue)
+                    new Decorator(
+                        ctx =>
+                        {
+                            mailboxObj = ObjectManager.GetObjectsOfType<WoWGameObject>()
+                                .Where(go => go.IsValid && go.SubType == WoWGameObjectType.Mailbox)
+                                .OrderBy(go => go.DistanceSqr)
+                                .FirstOrDefault();
+                            return true;
+                        },
+                        new ActionAlwaysFail()
+                    ),
+
+                    // [2] Mailbox not found at location → clear POI and give up
+                    new Decorator(
+                        ctx => mailboxObj == null,
+                        new ActionClearPoi("Mailbox not found near POI location")
+                    ),
+
+                    // [3] Move to mailbox if outside interact range
+                    new Decorator(
+                        ctx => mailboxObj != null && mailboxObj.DistanceSqr > mailboxObj.InteractRangeSqr,
+                        new Action(ctx => Navigator.GetRunStatusFromMoveResult(
+                            Navigator.MoveTo(mailboxObj!.Location)))
+                    ),
+
+                    // [4] Within range — open frame, send items, close
+                    new Decorator(
+                        ctx => mailboxObj != null,
+                        new PrioritySelector(
+                            // Frame not visible yet → stop + interact + wait up to 3s
+                            new Decorator(
+                                ctx => !MailFrame.Instance.IsVisible,
+                                new Sequence(
+                                    new Action(ctx =>
+                                    {
+                                        WoWMovement.MoveStop();
+                                        mailboxObj?.Interact();
+                                        return RunStatus.Success;
+                                    }),
+                                    new WaitContinue(
+                                        TimeSpan.FromSeconds(3),
+                                        ctx => MailFrame.Instance.IsVisible,
+                                        new ActionAlwaysSucceed()
+                                    )
+                                )
+                            ),
+
+                            // Frame is open → send items + close + clear POI
+                            new Decorator(
+                                ctx => MailFrame.Instance.IsVisible,
+                                new Sequence(
+                                    new Action(ctx =>
+                                    {
+                                        var items = GetItemsToMailInSoloFarm();
+                                        if (items.Length > 0)
+                                        {
+                                            string recipient = CharacterSettings.Instance.MailRecipient;
+                                            MailFrame.Instance.SendMailWithManyAttachments(recipient, 0, items);
+                                            Logging.Write("[DungeonBuddy] Mailed {0} items to {1}", items.Length, recipient);
+                                        }
+                                        MailFrame.Instance.Close();
+                                        return RunStatus.Success;
+                                    }),
+                                    new ActionClearPoi("Done mailing items")
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
         private Composite CreateOutsideDungeonBehavior()
         {
-            IEnumerable<PoiType> vendorPois = new[]
+            // All POI types that block normal SoloFarm navigation while pending vendor/mail
+            var blockingPois = new[]
             {
                 PoiType.Sell,
                 PoiType.Buy,
                 PoiType.Repair,
-                PoiType.Train
+                PoiType.Train,
+                PoiType.Mail
             };
 
             return new Decorator(
-                ctx => !StyxWoW.Me.CurrentMap.IsDungeon,
+                ctx =>
+                {
+                    var me = StyxWoW.Me;
+                    // HB smethod_131: !CurrentMap.IsDungeon (not IsInInstance)
+                    return me != null && StyxWoW.IsInWorld && !me.CurrentMap.IsDungeon;
+                },
                 new PrioritySelector(
+                    // Vendor interaction — gated by DecoratorIsPoiType (Sell/Repair/Buy/Train)
+                    CreateVendorBehavior(),
+
+                    // Mailbox interaction — gated by DecoratorIsPoiType (Mail)
+                    CreateMailboxBehavior(),
+
                     new Decorator(
                         ctx => DungeonBuddySettings.Instance.QueueType == QueueType.SoloFarm &&
                                DungeonManager.CurrentDungeon != null,
-                        new DecoratorIsNotPoiType(
-                            vendorPois,
-                            new PrioritySelector(
-                                new Decorator(
-                                    ctx => _soloFarmResetInstancesPending,
-                                    new Sequence(
-                                        new ActionSetActivity("Reseting Instances"),
-                                        new Action(ctx =>
-                                        {
-                                            Logging.Write("Reseting Instances");
-                                            Lua.DoString("ResetInstances();");
-                                            return RunStatus.Success;
-                                        }),
-                                        new Action(ctx =>
-                                        {
-                                            _soloFarmResetInstancesPending = false;
-                                            _outsideFlyPoint = WoWPoint.Zero;
-                                            return RunStatus.Success;
-                                        })
-                                    )
-                                ),
+                        new PrioritySelector(
+                            // Set vendor POI when bags are full or gear needs repair
+                            new Decorator(
+                                ctx => BotPoi.Current.Type == PoiType.None &&
+                                       (ShouldSellItemsInSoloFarm(ctx) || ShouldRepairInSoloFarm(ctx)),
+                                new Action(ctx =>
+                                {
+                                    var vendor = FindVendorForSoloFarm(UnitNPCFlags.Vendor | UnitNPCFlags.Repair);
+                                    if (vendor == null)
+                                    {
+                                        Logging.Write("[DungeonBuddy] SoloFarm: bags full but no vendor found in DB — waiting.");
+                                        return RunStatus.Running; // block dungeon entry
+                                    }
+                                    var poi = new BotPoi(vendor.Location, PoiType.Sell);
+                                    poi.Entry = (uint)vendor.Entry;
+                                    poi.Name = vendor.Name;
+                                    BotPoi.Current = poi;
+                                    Logging.Write("[DungeonBuddy] Heading to vendor: {0}", vendor.Name);
+                                    return RunStatus.Success;
+                                })
+                            ),
 
-                                new Decorator(
-                                    ctx => !DungeonManager.CurrentDungeon.IsFlyingCorpseRun,
-                                    new PrioritySelector(
-                                        new ActionSetActivity("Moving to Instance Portal on foot"),
-                                        new Decorator(
-                                            ctx => !ObjectManager.Me.Mounted &&
-                                                   Mount.ShouldMount(DungeonManager.CurrentDungeon.Entrance) &&
-                                                   Mount.CanMount(),
-                                            new PrioritySelector(
-                                                new Decorator(
-                                                    ctx => StyxWoW.Me.IsMoving,
-                                                    new Action(ctx =>
-                                                    {
-                                                        WoWMovement.MoveStop();
-                                                        return RunStatus.Success;
-                                                    })
-                                                ),
-                                                new Action(ctx =>
-                                                {
-                                                    Mount.MountUp(() => DungeonManager.CurrentDungeon.Entrance);
-                                                    return RunStatus.Success;
-                                                })
-                                            )
-                                        ),
-                                        CreateSoloFarmBehavior()
-                                    )
-                                ),
+                            // Set mail POI when qualifying items are ready to mail
+                            new Decorator(
+                                ctx => BotPoi.Current.Type == PoiType.None && ShouldMailItemsInSoloFarm(ctx),
+                                new Action(ctx =>
+                                {
+                                    var mailbox = FindNearestMailbox();
+                                    if (mailbox == null) return RunStatus.Failure;
+                                    BotPoi.Current = new BotPoi(mailbox.Location, PoiType.Mail);
+                                    Logging.Write("[DungeonBuddy] Items to mail — heading to mailbox");
+                                    return RunStatus.Success;
+                                })
+                            ),
 
-                                new Decorator(
-                                    ctx => DungeonManager.CurrentDungeon.IsFlyingCorpseRun,
-                                    new PrioritySelector(
-                                        new ActionSetActivity("Flying to Instance Portal"),
-                                        new Decorator(
-                                            ctx => DungeonManager.CurrentDungeon.CorpseRunBreadCrumb == null ||
-                                                   DungeonManager.CurrentDungeon.CorpseRunBreadCrumb.Count == 0,
-                                            new Action(ctx =>
-                                            {
-                                                Flightor.MoveTo(DungeonManager.CurrentDungeon.Entrance);
-                                                return RunStatus.Running;
-                                            })
-                                        ),
+                            // Normal SoloFarm navigation — blocked while vendor/mail POI pending
+                            new DecoratorIsNotPoiType(
+                                blockingPois,
+                                new PrioritySelector(
+                                    new Decorator(
+                                        ctx => _soloFarmResetInstancesPending,
                                         new Sequence(
+                                            new ActionSetActivity("Reseting Instances"),
                                             new Action(ctx =>
                                             {
-                                                var crumbs = DungeonManager.CurrentDungeon.CorpseRunBreadCrumb;
-                                                if (_outsideFlyPoint == WoWPoint.Zero && crumbs != null && crumbs.Count > 0)
-                                                {
-                                                    crumbs.CycleTo(crumbs.First);
-                                                    _outsideFlyPoint = crumbs.Dequeue();
-                                                }
+                                                Logging.Write("Reseting Instances");
+                                                Lua.DoString("ResetInstances();");
                                                 return RunStatus.Success;
                                             }),
                                             new Action(ctx =>
                                             {
-                                                var crumbs = DungeonManager.CurrentDungeon.CorpseRunBreadCrumb;
-                                                if (crumbs == null || crumbs.Count == 0)
+                                                _soloFarmResetInstancesPending = false;
+                                                _outsideFlyPoint = WoWPoint.Zero;
+                                                return RunStatus.Success;
+                                            })
+                                        )
+                                    ),
+
+                                    new Decorator(
+                                        ctx => !DungeonManager.CurrentDungeon.IsFlyingCorpseRun,
+                                        new PrioritySelector(
+                                            new ActionSetActivity("Moving to Instance Portal on foot"),
+                                            new Decorator(
+                                                ctx => !ObjectManager.Me.Mounted &&
+                                                       Mount.ShouldMount(DungeonManager.CurrentDungeon.Entrance) &&
+                                                       Mount.CanMount(),
+                                                new PrioritySelector(
+                                                    new Decorator(
+                                                        ctx => StyxWoW.Me.IsMoving,
+                                                        new Action(ctx =>
+                                                        {
+                                                            WoWMovement.MoveStop();
+                                                            return RunStatus.Success;
+                                                        })
+                                                    ),
+                                                    new Action(ctx =>
+                                                    {
+                                                        Mount.MountUp(() => DungeonManager.CurrentDungeon.Entrance);
+                                                        return RunStatus.Success;
+                                                    })
+                                                )
+                                            ),
+                                            CreateSoloFarmBehavior()
+                                        )
+                                    ),
+
+                                    new Decorator(
+                                        ctx => DungeonManager.CurrentDungeon.IsFlyingCorpseRun,
+                                        new PrioritySelector(
+                                            new ActionSetActivity("Flying to Instance Portal"),
+                                            new Decorator(
+                                                ctx => DungeonManager.CurrentDungeon.CorpseRunBreadCrumb == null ||
+                                                       DungeonManager.CurrentDungeon.CorpseRunBreadCrumb.Count == 0,
+                                                new Action(ctx =>
                                                 {
                                                     Flightor.MoveTo(DungeonManager.CurrentDungeon.Entrance);
                                                     return RunStatus.Running;
-                                                }
-
-                                                if (StyxWoW.Me.Location.Distance2DSqr(_outsideFlyPoint) < 225f)
+                                                })
+                                            ),
+                                            new Sequence(
+                                                new Action(ctx =>
                                                 {
-                                                    _outsideFlyPoint = crumbs.Dequeue();
-                                                    if (_outsideFlyPoint == crumbs.First)
-                                                        return RunStatus.Success;
-                                                }
+                                                    var crumbs = DungeonManager.CurrentDungeon.CorpseRunBreadCrumb;
+                                                    if (_outsideFlyPoint == WoWPoint.Zero && crumbs != null && crumbs.Count > 0)
+                                                    {
+                                                        crumbs.CycleTo(crumbs.First);
+                                                        _outsideFlyPoint = crumbs.Dequeue();
+                                                    }
+                                                    return RunStatus.Success;
+                                                }),
+                                                new Action(ctx =>
+                                                {
+                                                    var crumbs = DungeonManager.CurrentDungeon.CorpseRunBreadCrumb;
+                                                    if (crumbs == null || crumbs.Count == 0)
+                                                    {
+                                                        Flightor.MoveTo(DungeonManager.CurrentDungeon.Entrance);
+                                                        return RunStatus.Running;
+                                                    }
 
-                                                Flightor.MoveTo(_outsideFlyPoint);
-                                                return RunStatus.Running;
-                                            })
+                                                    if (StyxWoW.Me.Location.Distance2DSqr(_outsideFlyPoint) < 225f)
+                                                    {
+                                                        _outsideFlyPoint = crumbs.Dequeue();
+                                                        if (_outsideFlyPoint == crumbs.First)
+                                                            return RunStatus.Success;
+                                                    }
+
+                                                    Flightor.MoveTo(_outsideFlyPoint);
+                                                    return RunStatus.Running;
+                                                })
+                                            )
                                         )
                                     )
                                 )
@@ -399,12 +678,93 @@ namespace Bots.DungeonBuddy
         // HB METHOD_19 (UTILITY INTERACTIONS)
         // ═══════════════════════════════════════════════════════════
 
-        private Composite CreateLootBehavior()
+        private Composite CreateRitualAndConsumableBehavior()
         {
-            // HB method_19 = method_20 + method_21
+            // HB method_19 = method_20 + method_21 — ritual assist + mage table / soul well.
+            // CreateCorpseLootBehavior (method_45) was extracted to priority 2 in CreateRootBehavior.
             return new PrioritySelector(
                 CreateRitualAssistBehavior(),
                 CreateConsumableObjectBehavior());
+        }
+
+        /// <summary>
+        /// Port de HB 4.3.4 method_45() + method_46() + method_47() — loot les cadavres.
+        /// Find nearest lootable dead unit respecting LootMode (BossesOnly / Always),
+        /// moves to it and loots via Lua. Gated by: not in combat, bags not full, valid target.
+        /// HB smethod_5(this WoWUnit) = ProfileManager.CurrentProfile.BossEncounters.Any(b => b.Entry == unit.Entry).
+        /// </summary>
+        private Composite CreateCorpseLootBehavior()
+        {
+            WoWUnit? lootTarget = null;
+
+            return new PrioritySelector(
+                // method_119 equivalent: update loot context each tick
+                new ContextChangeHandler(ctx =>
+                {
+                    lootTarget = FindLootTarget();
+                    return lootTarget;
+                }),
+
+                // method_46 equivalent: guard + loot action
+                new Decorator(
+                    ctx => lootTarget != null && lootTarget.IsValid && !StyxWoW.Me.Combat &&
+                           StyxWoW.Me.FreeNormalBagSlots > 2,
+                    new Action(ctx =>
+                    {
+                        if (lootTarget == null || !lootTarget.IsValid)
+                            return RunStatus.Failure;
+
+                        if (!lootTarget.Lootable)
+                            return RunStatus.Failure;
+
+                        if (lootTarget.DistanceSqr > lootTarget.InteractRangeSqr)
+                        {
+                            var result = Navigator.MoveTo(lootTarget.Location);
+                            if (result == MoveResult.Failed || result == MoveResult.PathGenerationFailed)
+                                return RunStatus.Failure;
+                            return RunStatus.Running;
+                        }
+
+                        if (!LootFrame.Instance.IsVisible)
+                        {
+                            WoWMovement.MoveStop();
+                            lootTarget.Interact();
+                            return RunStatus.Running;
+                        }
+
+                        Lua.DoString("for i=1, GetNumLootItems() do LootSlot(i) ConfirmBindOnUse() ConfirmLootSlot(i) end CloseLoot()");
+                        Blacklist.Add(lootTarget, TimeSpan.FromMinutes(20.0));
+                        return RunStatus.Success;
+                    })
+                )
+            );
+        }
+
+        /// <summary>
+        /// Port de HB 4.3.4 method_47() — trouve le cadavre lootable le plus proche.
+        /// Respecte LootMode: BossesOnly → only units registered in Profile.BossEncounters;
+        /// Always → any lootable corpse in LootRadius.
+        /// </summary>
+        private static WoWUnit? FindLootTarget()
+        {
+            if (StyxWoW.Me.FreeNormalBagSlots < 3)
+                return null;
+
+            float lootRadiusSq = CharacterSettings.Instance.LootRadius * CharacterSettings.Instance.LootRadius;
+            var mode = DungeonBuddySettings.Instance.LootMode;
+
+            return ObjectManager.GetObjectsOfType<WoWUnit>()
+                .Where(u => u.IsValid &&
+                            !Blacklist.Contains(u) &&
+                            u.Dead &&
+                            u.Lootable &&
+                            u.CanLoot &&
+                            u.DistanceSqr < lootRadiusSq &&
+                            (mode == LootMode.Always ||
+                             (mode == LootMode.BossesOnly &&
+                              ProfileManager.CurrentProfile?.BossEncounters.Any(b => b.Entry == u.Entry) == true)))
+                .OrderBy(u => u.DistanceSqr)
+                .FirstOrDefault();
         }
 
         private WoWGameObject? Ritual
@@ -653,6 +1013,7 @@ namespace Bots.DungeonBuddy
                                     {
                                         Logging.Write("[DungeonBuddy] Accepting dungeon invite");
                                         LfgManager.AcceptProposal();
+                                        _proposalAcceptTimer.Reset();
                                         return RunStatus.Success;
                                     }),
                                     new Action(ctx =>
@@ -749,6 +1110,31 @@ namespace Bots.DungeonBuddy
                             return RunStatus.Success;
                         })
                     )
+                ),
+
+                // --- LEADER: invite configured party members (HB smethod_177 + method_79) ---
+                new Decorator(
+                    ctx => DungeonBuddySettings.Instance.PartyMode == PartyMode.Leader &&
+                           DungeonBuddySettings.Instance.PartyMembers != null &&
+                           DungeonBuddySettings.Instance.PartyMembers.Length > 0 &&
+                           StyxWoW.Me.PartyMemberInfos.Count < DungeonBuddySettings.Instance.PartyMembers.Length &&
+                           _inviteRetryTimer.IsFinished,
+                    new Action(ctx =>
+                    {
+                        _inviteRetryTimer.Reset();
+                        var inParty = StyxWoW.Me.PartyMemberInfos
+                            .Select(m => m.Name)
+                            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                        var missing = DungeonBuddySettings.Instance.PartyMembers
+                            .Where(name => !string.IsNullOrEmpty(name) && !inParty.Contains(name))
+                            .ToList();
+                        if (missing.Count == 0)
+                            return RunStatus.Failure;
+                        Logging.Write("[DungeonBuddy] Sending group invites to: {0}", string.Join(", ", missing));
+                        foreach (var name in missing)
+                            Lua.DoString($"InviteUnit(\"{name}\")");
+                        return RunStatus.Success;
+                    })
                 ),
 
                 // --- FOLLOWER: if we are leader, promote tank (HB smethod_321-322) ---
@@ -922,7 +1308,8 @@ namespace Bots.DungeonBuddy
                 bool needsMaintenance = Vendors.NeedClassTraining ||
                                         ShouldRepairInSoloFarm(this) ||
                                         ShouldBuyDrinksInSoloFarm(this) ||
-                                        ShouldSellItemsInSoloFarm(this);
+                                        ShouldSellItemsInSoloFarm(this) ||
+                                        ShouldMailItemsInSoloFarm(this);
 
                 if (!StyxWoW.Me.IsAlive)
                     return false;
@@ -946,7 +1333,8 @@ namespace Bots.DungeonBuddy
             bool needsMaintenance = Vendors.NeedClassTraining ||
                                     ShouldRepairInSoloFarm(this) ||
                                     ShouldBuyDrinksInSoloFarm(this) ||
-                                    ShouldSellItemsInSoloFarm(this);
+                                    ShouldSellItemsInSoloFarm(this) ||
+                                    ShouldMailItemsInSoloFarm(this);
 
             if (!needsMaintenance)
                 return true;
@@ -1395,9 +1783,10 @@ namespace Bots.DungeonBuddy
                 {
                     var me = StyxWoW.Me;
                     if (me == null) return false;
-                    bool notDungeon = !me.CurrentMap.IsDungeon;
+                    // HB smethod_131 parity: !CurrentMap.IsDungeon
+                    bool outsideInstance = StyxWoW.IsInWorld && !me.CurrentMap.IsDungeon;
                     bool isSoloFarm = DungeonBuddySettings.Instance.QueueType == QueueType.SoloFarm;
-                    return notDungeon && isSoloFarm;
+                    return outsideInstance && isSoloFarm;
                 },
                 new Sequence(
                     new Action(ctx =>
@@ -1405,8 +1794,6 @@ namespace Bots.DungeonBuddy
                         var settings = DungeonBuddySettings.Instance;
                         if (settings.SelectedDungeonIds.Length == 0)
                         {
-                            if (ShouldLog(_soloFarmStatusLogThrottle, 5000))
-                                Logging.Write("[DungeonBuddy] SoloFarm: no dungeon selected in settings");
                             TreeRoot.StatusText = "SoloFarm: No dungeon selected";
                             return RunStatus.Failure;
                         }
@@ -1424,17 +1811,8 @@ namespace Bots.DungeonBuddy
 
                         if (entrance == WoWPoint.Zero)
                         {
-                            if (ShouldLog(_soloFarmStatusLogThrottle, 5000))
-                                Logging.Write("[DungeonBuddy] SoloFarm: entrance unavailable for dungeonId={0}", selectedDungeonId);
                             TreeRoot.StatusText = "SoloFarm: Entrance unavailable";
                             return RunStatus.Failure;
-                        }
-
-                        float distSq = StyxWoW.Me.Location.DistanceSqr(entrance);
-                        if (ShouldLog(_soloFarmStatusLogThrottle, 5000))
-                        {
-                            double dist = Math.Sqrt(distSq);
-                            Logging.Write("[DungeonBuddy] SoloFarm: moving to entrance (dungeonId={0}, distance={1:F1})", selectedDungeonId, dist);
                         }
 
                         // HB outside-instance portal travel keeps driving toward entrance until map changes.
@@ -1462,28 +1840,17 @@ namespace Bots.DungeonBuddy
                 ctx => DungeonBuddySettings.Instance.QueueType == QueueType.SoloFarm &&
                        LfgManager.DungeonCompletedReason != CompleteReason.None &&
                        _soloFarmExitTimer.IsFinished &&
-                       StyxWoW.Me.IsInInstance,
-                new Action(ctx =>
-                {
-                    TreeRoot.StatusText = "SoloFarm: Dungeon complete — moving to exit";
-
-                    var exit = DungeonManager.CurrentDungeon?.ExitLocation ?? WoWPoint.Zero;
-                    if (exit != WoWPoint.Zero)
+                      StyxWoW.Me?.CurrentMap.IsDungeon == true,
+                new Sequence(
+                    new Action(ctx =>
                     {
-                        if (StyxWoW.Me.Location.DistanceSqr(exit) > 4 * 4)
-                        {
-                            Navigator.MoveTo(exit);
-                            return RunStatus.Running;
-                        }
-                        // Reached exit portal — OnMapChanged will fire and reset the bot state.
-                    }
-                    else
-                    {
-                        Logging.WriteDebug("[DungeonBuddy] SoloFarm: ExitLocation not defined — bot will idle at end of run.");
-                    }
-
-                    return RunStatus.Running;
-                })
+                        Logging.Write("Dungeon completed. Moving to Portal. [Reason: {0}]", LfgManager.DungeonCompletedReason);
+                        return RunStatus.Success;
+                    }),
+                    new DecoratorContinue(
+                        ctx => StyxWoW.Me?.CurrentMap.IsDungeon == true,
+                        ScriptHelpers.CreateMoveToContinue(() => DungeonManager.CurrentDungeon?.ExitLocation ?? WoWPoint.Zero))
+                )
             );
         }
 
@@ -1501,7 +1868,7 @@ namespace Bots.DungeonBuddy
         private Composite CreateHotspotMovementBehavior()
         {
             return new Decorator(
-                ctx => StyxWoW.Me.IsInInstance &&
+                  ctx => StyxWoW.Me.CurrentMap.IsDungeon &&
                        !StyxWoW.Me.Combat &&
                        LfgManager.DungeonCompletedReason == CompleteReason.None &&
                        Targeting.Instance.TargetList.Count == 0,
@@ -1576,17 +1943,13 @@ namespace Bots.DungeonBuddy
                 ctx =>
                 {
                     var me = StyxWoW.Me;
-                    return me != null && me.IsInInstance && DungeonManager.CurrentDungeon != null;
+                    return me != null && me.CurrentMap.IsDungeon && DungeonManager.CurrentDungeon != null;
                 },
                 new Action(ctx =>
                 {
                     var current = DungeonManager.CurrentDungeonBehavior;
                     if (current == null)
-                    {
-                        if (ShouldLog(_debugDungeonLogThrottle, 1000))
-                            Logging.WriteDebug($"[DB:DungeonTick] CurrentDungeonBehavior=null MapId={StyxWoW.Me.MapId} IsInInstance={StyxWoW.Me.IsInInstance}");
                         return RunStatus.Failure;
-                    }
 
                     // Call Start() once when the behavior instance changes (new dungeon loaded).
                     // HB equivalent: composite_0, nulled only on dungeon change (method_41/method_43),
@@ -1594,21 +1957,12 @@ namespace Bots.DungeonBuddy
                     // tight Start/Stop loop every pulse when the script has nothing to do.
                     if (_activeDungeonBehavior != current)
                     {
-                        Logging.WriteDebug($"[DB:DungeonTick] Switching dungeon behavior instance: {DungeonManager.CurrentDungeon?.Name ?? "<null>"}");
                         _activeDungeonBehavior?.Stop(ctx);
                         _activeDungeonBehavior = current;
                         _activeDungeonBehavior.Start(ctx);
                     }
 
-                    RunStatus result = _activeDungeonBehavior.Tick(ctx);
-                    if (ShouldLog(_debugDungeonLogThrottle, 1000))
-                    {
-                        var first = Targeting.Instance.FirstUnit;
-                        string targetInfo = first == null ? "none" : $"{first.Name}({first.Entry}) dist={Math.Sqrt(first.DistanceSqr):F1}";
-                        Logging.WriteDebug($"[DB:DungeonTick] result={result} Poi={BotPoi.Current.Type} Target={targetInfo} InCombat={StyxWoW.Me.Combat}");
-                    }
-
-                    return result;
+                    return _activeDungeonBehavior.Tick(ctx);
                 })
             );
         }
@@ -1644,18 +1998,6 @@ namespace Bots.DungeonBuddy
                         Routine?.RestBehavior ?? new ActionAlwaysFail(),
                         Routine?.PreCombatBuffBehavior ?? new ActionAlwaysFail(),
 
-                        // Set Kill POI from targeting list when idle (no active POI)
-                        new DecoratorContinue(
-                            ctx => BotPoi.Current.Type == PoiType.None &&
-                                   Targeting.Instance.FirstUnit != null &&
-                                   !Targeting.Instance.FirstUnit.Dead,
-                            new Action(ctx =>
-                            {
-                                BotPoi.Current = new BotPoi(Targeting.Instance.FirstUnit, PoiType.Kill);
-                                return RunStatus.Success;
-                            })
-                        ),
-
                         new DecoratorIsPoiType(PoiType.Kill, new PrioritySelector(
 
                             // If kill POI object is temporarily unresolved (streaming/object cache),
@@ -1664,15 +2006,7 @@ namespace Bots.DungeonBuddy
                                 ctx => BotPoi.Current.AsObject == null &&
                                        BotPoi.Current.Location != WoWPoint.Zero &&
                                        StyxWoW.Me.Location.DistanceSqr(BotPoi.Current.Location) > 4 * 4,
-                                new Sequence(
-                                    new Action(ctx =>
-                                    {
-                                        if (ShouldLog(_debugMoveLogThrottle, 1000))
-                                            Logging.WriteDebug($"[DB:CombatMove] POI object unresolved -> moving to POI location {BotPoi.Current.Location}");
-                                        return RunStatus.Success;
-                                    }),
-                                    new NavigationAction(ctx => BotPoi.Current.Location)
-                                )
+                                new NavigationAction(ctx => BotPoi.Current.Location)
                             ),
 
                             // [0] smethod_25 : TargetList vide/mort OU (aggroTimer pas expiré ET mob ni agressif ni taggué)
@@ -1709,6 +2043,8 @@ namespace Bots.DungeonBuddy
                             ),
 
                             // [2] smethod_32/33/34/35 : pas en LOS → naviguer
+                            // HB smethod_33 uses CanNavigateFully(from, to, maxHops=20) to detect unreachable;
+                            // our Navigator wrapper has no maxHops overload so we use the 2-arg form.
                             new Decorator(
                                 ctx => !Targeting.Instance.FirstUnit.InLineOfSpellSight,
                                 new PrioritySelector(
@@ -1759,15 +2095,7 @@ namespace Bots.DungeonBuddy
                                     ctx => Routine?.MoveToTargetBehavior == null &&
                                            StyxWoW.Me.CurrentTarget != null &&
                                            StyxWoW.Me.CurrentTarget.DistanceSqr > 4 * 4,
-                                    new Sequence(
-                                        new Action(ctx =>
-                                        {
-                                            if (ShouldLog(_debugMoveLogThrottle, 1000))
-                                                Logging.WriteDebug($"[DB:CombatMove] Moving to melee range of {StyxWoW.Me.CurrentTarget?.Name} dist={Math.Sqrt(StyxWoW.Me.CurrentTarget?.DistanceSqr ?? 0):F1}");
-                                            return RunStatus.Success;
-                                        }),
-                                        new NavigationAction(ctx => StyxWoW.Me.CurrentTarget.Location)
-                                    )
+                                    new NavigationAction(ctx => StyxWoW.Me.CurrentTarget.Location)
                                 ),
 
                                 // [6] Pull
@@ -1889,8 +2217,18 @@ namespace Bots.DungeonBuddy
         private Composite CreateInDungeonSupportBehavior()
         {
             return new Decorator(
-                ctx => StyxWoW.Me.IsInInstance,
+                ctx => StyxWoW.Me.CurrentMap.IsDungeon,
                 new PrioritySelector(
+                    // HB method_4/method_5 parity (smethod_81/smethod_85/smethod_96):
+                    // when a valid FirstUnit exists and current POI is not Kill,
+                    // switch to Kill so combat branch can engage aggroed mobs.
+                    new Decorator(
+                        ctx => BotPoi.Current.Type != PoiType.Kill &&
+                               Targeting.Instance.FirstUnit != null &&
+                               Targeting.Instance.FirstUnit.IsAlive,
+                        new ActionSetPoi(true, ctx => new BotPoi(Targeting.Instance.FirstUnit, PoiType.Kill))
+                    ),
+
                     new Decorator(
                         ctx => DungeonBuddySettings.Instance.QueueType == QueueType.SoloFarm,
                         new Sequence(
@@ -1912,6 +2250,7 @@ namespace Bots.DungeonBuddy
                 new Decorator(ShouldRepairInSoloFarm, new ActionAlwaysFail()),
                 new Decorator(ShouldBuyDrinksInSoloFarm, new ActionAlwaysFail()),
                 new Decorator(ShouldSellItemsInSoloFarm, new ActionAlwaysFail()),
+                new Decorator(ShouldMailItemsInSoloFarm, new ActionAlwaysFail()),
                 new Decorator(ShouldTrainInSoloFarm, new ActionAlwaysFail()),
                 new Decorator(IsInWrongInstanceInSoloFarm, new ActionAlwaysFail()),
 
@@ -1933,22 +2272,28 @@ namespace Bots.DungeonBuddy
 
         private Composite CreateSoloFarmMovementBehavior()
         {
-            WoWPoint moveTo = WoWPoint.Zero;
+            // ARCH: The outer Decorator(ShouldMoveInSoloFarm, ...) only evaluates its
+            // condition once at Start(). An inner PrioritySelector coroutine resumes
+            // where it left off every tick — the navigator Action always returned Running,
+            // making movement unstoppable once started.
+            //
+            // Using a single Action here instead: Action.Execute() is a while(true) loop
+            // that calls RunAction every tick. ShouldMoveInSoloFarm is re-evaluated each
+            // tick. The moment Me.Combat fires or a mob enters the targeting list,
+            // this Action returns Failure → tree unwinds → Root goes non-Running →
+            // Start() called next tick → CombatBehavior evaluated from the top.
+            return new Action(ctx =>
+            {
+                if (!ShouldMoveInSoloFarm(ctx))
+                    return RunStatus.Failure;
 
-            return new PrioritySelector(
-                new ContextChangeHandler(ctx => moveTo = GetSoloFarmMoveToPoint()),
-                new Decorator(
-                    ctx => moveTo != WoWPoint.Zero,
-                    new PrioritySelector(
-                        Helpers.ScriptHelpers.CreateMountBehavior(() => moveTo),
-                        new Action(ctx =>
-                        {
-                            Navigator.MoveTo(moveTo);
-                            return RunStatus.Success;
-                        })
-                    )
-                )
-            );
+                var moveTo = GetSoloFarmMoveToPoint();
+                if (moveTo == WoWPoint.Zero)
+                    return RunStatus.Failure;
+
+                Navigator.MoveTo(moveTo);
+                return RunStatus.Running;
+            });
         }
 
         /// <summary>
@@ -1999,6 +2344,8 @@ namespace Bots.DungeonBuddy
             }
 
             // Case 5: Find boss unit directly in ObjectManager (HB method_23 priority 5 / method_24)
+            // Use Profile.Boss for alive status — Profile.Boss has Location from XML;
+            // BossManager.Boss (inner) has no location and empty PathBreadCrumbs.
             var bossUnit = FindCurrentBossUnit();
             if (bossUnit != null)
             {
@@ -2006,14 +2353,19 @@ namespace Bots.DungeonBuddy
                 return bossUnit.Location;
             }
 
-            // Case 6: Boss PathBreadCrumbs (HB method_23 priority 6)
+            // Case 6: Boss PathBreadCrumbs from Profile (HB method_23 priority 6).
+            // Profile.Boss.PathBreadCrumbs is populated from <Path><Hotspot .../></Path> in the XML,
+            // or falls back to the boss's X/Y/Z coordinates when no explicit path is defined.
+            // This is what drives movement toward the boss when no targets are visible.
             TreeRoot.StatusText = string.Empty;
-            var currentBoss = BossManager.Bosses.FirstOrDefault(b => !b.IsDead);
-            if (currentBoss != null && currentBoss.PathBreadCrumbs.Count > 0)
+            var currentProfileBoss = ProfileManager.CurrentProfile?.BossEncounters
+                .FirstOrDefault(b => b.IsAlive);
+            if (currentProfileBoss != null && currentProfileBoss.PathBreadCrumbs.Count > 0)
             {
-                var crumb = currentBoss.PathBreadCrumbs.Peek();
+                var crumb = currentProfileBoss.PathBreadCrumbs.Peek();
+                TreeRoot.StatusText = $"Moving to boss {currentProfileBoss.Name}";
                 if (StyxWoW.Me.Location.DistanceSqr(crumb) < 25f)
-                    currentBoss.PathBreadCrumbs.Dequeue();
+                    currentProfileBoss.PathBreadCrumbs.Dequeue();
                 return crumb;
             }
 
@@ -2023,16 +2375,22 @@ namespace Bots.DungeonBuddy
         /// <summary>
         /// Port de HB 4.3.4 DungeonBot.method_24() — cherche le prochain boss à tuer dans
         /// l'ObjectManager directement (bypass targeting), ordonné par KillOrder puis distance.
+        /// Uses Profile.BossEncounters for alive state and kill order (Profile.Boss has
+        /// Location from XML; BossManager.Boss inner class has no location).
         /// </summary>
         private static WoWUnit? FindCurrentBossUnit()
         {
-            var bosses = BossManager.Bosses;
+            var profileBosses = ProfileManager.CurrentProfile?.BossEncounters;
+            if (profileBosses == null || profileBosses.Count == 0)
+                return null;
+
             return ObjectManager.GetObjectsOfType<WoWUnit>()
-                .Where(u => u.IsValid && u.IsAlive && IsTargetableBossUnit(u, bosses))
+                .Where(u => u.IsValid && u.IsAlive && IsTargetableBossUnit(u, profileBosses))
                 .OrderBy(u =>
                 {
-                    for (int i = 0; i < bosses.Count; i++)
-                        if (bosses[i].Entry == u.Entry) return i;
+                    // Order by KillOrder from profile, then distance
+                    for (int i = 0; i < profileBosses.Count; i++)
+                        if (profileBosses[i].Entry == u.Entry) return profileBosses[i].KillOrder;
                     return int.MaxValue;
                 })
                 .ThenBy(u => u.DistanceSqr)
@@ -2041,14 +2399,15 @@ namespace Bots.DungeonBuddy
 
         /// <summary>
         /// Port de HB 4.3.4 DungeonBot.method_25() — filtre de validité boss pour navigation.
+        /// Uses Profile.Boss.IsAlive for alive state.
         /// </summary>
-        private static bool IsTargetableBossUnit(WoWUnit unit, IReadOnlyList<BossManager.Boss> bosses)
+        private static bool IsTargetableBossUnit(WoWUnit unit, IReadOnlyList<Profiles.Handlers.Boss> bosses)
         {
-            var currentBoss = bosses.FirstOrDefault(b => !b.IsDead);
+            var currentBoss = bosses.FirstOrDefault(b => b.IsAlive);
             if (currentBoss != null && unit.Entry == currentBoss.Entry)
                 return true;
             var unitBoss = bosses.FirstOrDefault(b => b.Entry == unit.Entry);
-            if (unitBoss != null && !unitBoss.IsOptional && !unitBoss.IsDead)
+            if (unitBoss != null && !unitBoss.Optional && unitBoss.IsAlive)
                 return true;
             return false;
         }
@@ -2103,8 +2462,16 @@ namespace Bots.DungeonBuddy
         // HB smethod_93
         private static bool ShouldSellItemsInSoloFarm(object context)
         {
-            return StyxWoW.Me.FreeBagSlots < DungeonBuddySettings.Instance.MinFreeBagSlots &&
-                   GetItemsToSellCount() > 0;
+            // Use Lua to get free bag slots — bypasses the memory reading chain
+            // (BagStructure offset + WoWBag.FreeSlots) which can return stale/wrong values.
+            // GetContainerNumFreeSlots(0)=backpack, 1-4=equipped bags.
+            int freeSlots = Lua.GetReturnVal<int>(
+                "local f=0; for i=0,4 do f=f+GetContainerNumFreeSlots(i) end; return f", 0);
+            // Math.Max(1, minSlots): if MinFreeBagSlots was saved as 0, treat it as 1
+            // so completely full bags (freeSlots=0) always trigger the vendor check.
+            int minSlots = Math.Max(1, DungeonBuddySettings.Instance.MinFreeBagSlots);
+            Logging.WriteDebug("[DungeonBuddy] SoloFarm bag check: freeSlots={0} minSlots={1}", freeSlots, minSlots);
+            return freeSlots < minSlots;
         }
 
         // HB smethod_94
@@ -2140,16 +2507,131 @@ namespace Bots.DungeonBuddy
         // HB smethod_98
         private static bool ShouldMoveInSoloFarm(object context)
         {
-            return !StyxWoW.Me.IsActuallyInCombat;
+            // IsActuallyInCombat requires FirstUnit != null which lags behind actual aggro.
+            // Check Me.Combat (raw flag) and TargetList directly so we stop as soon as
+            // the combat flag fires or a mob enters the targeting system — matching
+            // the same guards used by CreateHotspotMovementBehavior.
+            return !StyxWoW.Me.Combat &&
+                   !StyxWoW.Me.IsActuallyInCombat &&
+                   Targeting.Instance.TargetList.Count == 0;
         }
 
         private static int GetItemsToSellCount()
         {
+            // HB smethod_6: respect SellItemQuality threshold, not just grey items.
+            var maxQuality = DungeonBuddySettings.Instance.SellItemQuality;
             return StyxWoW.Me.CarriedItems.Count(item =>
                 item.IsValid &&
                 item.SellPrice > 0 &&
-                item.Quality == WoWItemQuality.Poor &&
+                item.Quality <= maxQuality &&
                 !Styx.Logic.Profiles.ProtectedItemsManager.Contains(item.Entry));
+        }
+
+        /// <summary>
+        /// Port of HB ns4/Class4.cs loot roll handler.
+        /// Fires on START_LOOT_ROLL — rolls per DungeonBuddySettings.LootRollType (default: Greed).
+        /// ConfirmLootRoll is a no-op if not needed, but harmless to call.
+        /// </summary>
+        private static void OnStartLootRoll(object sender, LuaEventArgs e)
+        {
+            if (e.Args.Length < 1) return;
+
+            Logging.Write("[DungeonBuddy] Rolling for loot!");
+            string itemLink = Lua.GetReturnVal<string>($"return GetLootRollItemLink({e.Args[0]})", 0);
+            if (string.IsNullOrEmpty(itemLink))
+            {
+                Logging.WriteDebug("[DungeonBuddy] GetLootRollItemLink returned empty for roll {0}", e.Args[0]);
+                return;
+            }
+
+            int rollType = (int)DungeonBuddySettings.Instance.LootRollType;
+            Lua.DoString($"RollOnLoot({e.Args[0]}, {rollType}) ConfirmLootRoll({e.Args[0]}, {rollType})");
+        }
+
+        // Returns true when MailBoeItems is enabled, a recipient is configured,
+        // and there are items in bags that qualify for mailing.
+        private static bool ShouldMailItemsInSoloFarm(object context)
+        {
+            if (!DungeonBuddySettings.Instance.MailBoeItems)
+                return false;
+            if (string.IsNullOrEmpty(CharacterSettings.Instance.MailRecipient))
+                return false;
+            return GetItemsToMailInSoloFarm().Length > 0;
+        }
+
+        // Returns all carried items that are non-soulbound, non-conjured, and at or above
+        // MailItemQuality. Protected items are excluded. Port of HB GatherbuddyBot GetItemsToMail.
+        private static WoWItem[] GetItemsToMailInSoloFarm()
+        {
+            var minQuality = DungeonBuddySettings.Instance.MailItemQuality;
+            return StyxWoW.Me?.CarriedItems
+                .Where(item => item.IsValid
+                    && !item.IsSoulbound
+                    && !item.IsConjured
+                    && item.Quality >= minQuality
+                    && !Styx.Logic.Profiles.ProtectedItemsManager.Contains(item.Entry))
+                .ToArray() ?? Array.Empty<WoWItem>();
+        }
+
+        // Returns the closest mailbox game object in ObjectManager, or null if none loaded.
+        private static WoWGameObject? FindNearestMailbox()
+        {
+            return ObjectManager.GetObjectsOfType<WoWGameObject>()
+                .Where(go => go.IsValid && go.SubType == WoWGameObjectType.Mailbox)
+                .OrderBy(go => go.DistanceSqr)
+                .FirstOrDefault();
+        }
+
+        // Port of HB DungeonBot.smethod_2(VendorType) — find nearest sell/repair vendor via data.bin.
+        // CB equivalent: NpcQueries.GetNearestNpc (same SQLite backend as VendorManager's fallback).
+        private static NpcResult? FindVendorForSoloFarm(UnitNPCFlags flags)
+        {
+            try
+            {
+                var faction = StyxWoW.Me?.Faction;
+                if (faction == null) return null;
+                return NpcQueries.GetNearestNpc(
+                    faction,
+                    StyxWoW.Me.MapId,
+                    StyxWoW.Me.Location,
+                    flags);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteDebug("[DungeonBuddy] Vendor DB lookup failed: {0}", ex.Message);
+                return null;
+            }
+        }
+
+        // Sells items at the open MerchantFrame respecting DungeonBuddySettings.SellItemQuality.
+        // Port of HB DungeonBot.smethod_4() / smethod_6() via Lua UseContainerItem (like GatherBuddy).
+        private static void SellItemsAtVendor()
+        {
+            int maxQuality = (int)DungeonBuddySettings.Instance.SellItemQuality;
+            var protectedIds = Styx.Logic.Profiles.ProtectedItemsManager.GetAllItemIds();
+            string protectedStr = protectedIds.Count > 0
+                ? string.Join(",", protectedIds.Select(id => $"[{id}]=1"))
+                : "";
+            // Build quality filter: sell anything whose quality index <= maxQuality.
+            string qualFilter = string.Join(",", Enumerable.Range(0, maxQuality + 1).Select(q => $"[{q}]=1"));
+
+            Lua.DoString(
+                $"local sell={{{qualFilter}}}; " +
+                $"local prot={{{protectedStr}}}; " +
+                "for bag=0,4 do " +
+                "  for slot=1,GetContainerNumSlots(bag) do " +
+                "    local link = GetContainerItemLink(bag,slot); " +
+                "    if link then " +
+                "      local _,_,quality,_,_,_,_,_,_,_,price = GetItemInfo(link); " +
+                "      local id = tonumber(link:match('item:(%d+)')); " +
+                "      if quality and sell[quality] and not prot[id] and price and price > 0 then " +
+                "        UseContainerItem(bag,slot); " +
+                "      end " +
+                "    end " +
+                "  end " +
+                "end");
+
+            Logging.Write("[DungeonBuddy] Sold items at vendor (quality <= {0})", (WoWItemQuality)maxQuality);
         }
 
         // ═══════════════════════════════════════════════════════════
@@ -2159,7 +2641,7 @@ namespace Bots.DungeonBuddy
         private Composite CreateFollowBehavior()
         {
             return new Decorator(
-                ctx => StyxWoW.Me.IsInInstance && !StyxWoW.Me.Combat &&
+                  ctx => StyxWoW.Me.CurrentMap.IsDungeon && !StyxWoW.Me.Combat &&
                        !StyxWoW.Me.IsTank(), // IsTank() = extension method (role-based via UnitGroupRolesAssigned)
                 new Action(ctx =>
                 {
