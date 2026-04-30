@@ -2462,16 +2462,8 @@ namespace Bots.DungeonBuddy
         // HB smethod_93
         private static bool ShouldSellItemsInSoloFarm(object context)
         {
-            // Use Lua to get free bag slots — bypasses the memory reading chain
-            // (BagStructure offset + WoWBag.FreeSlots) which can return stale/wrong values.
-            // GetContainerNumFreeSlots(0)=backpack, 1-4=equipped bags.
-            int freeSlots = Lua.GetReturnVal<int>(
-                "local f=0; for i=0,4 do f=f+GetContainerNumFreeSlots(i) end; return f", 0);
-            // Math.Max(1, minSlots): if MinFreeBagSlots was saved as 0, treat it as 1
-            // so completely full bags (freeSlots=0) always trigger the vendor check.
-            int minSlots = Math.Max(1, DungeonBuddySettings.Instance.MinFreeBagSlots);
-            Logging.WriteDebug("[DungeonBuddy] SoloFarm bag check: freeSlots={0} minSlots={1}", freeSlots, minSlots);
-            return freeSlots < minSlots;
+            return (ulong)StyxWoW.Me.FreeBagSlots < (ulong)DungeonBuddySettings.Instance.MinFreeBagSlots
+                && GetItemsToSellCount() > 0;
         }
 
         // HB smethod_94
