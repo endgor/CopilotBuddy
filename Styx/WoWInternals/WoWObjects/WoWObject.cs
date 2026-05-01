@@ -3,6 +3,7 @@ using System.Threading;
 using GreenMagic;
 using Styx.Helpers;
 using Styx.Logic.Pathing;
+using Styx.Patchables;
 
 namespace Styx.WoWInternals.WoWObjects
 {
@@ -265,26 +266,42 @@ namespace Styx.WoWInternals.WoWObjects
         /// Whether this object is indoors. Override on LocalPlayer uses Lua for accuracy.
         /// FEAT-45: Made virtual so LocalPlayer can override.
         /// </summary>
-        public virtual bool IsIndoors
+        /// <summary>
+        /// Whether this object is outdoors. HB 4.3.4 calls the client IsOutdoors routine on the object.
+        /// </summary>
+        public virtual bool IsOutdoors
         {
             get
             {
+                if (BaseAddress == 0U)
+                    return false;
+
+                ExecutorRand? executor = ObjectManager.Executor;
+                Memory? wow = ObjectManager.Wow;
+                if (executor == null || wow == null)
+                    return false;
+
                 try
                 {
-                    string result = Lua.GetReturnVal<string>("return IsIndoors() and '1' or '0'", 0);
-                    return result == "1";
+                    lock (executor.AssemblyLock)
+                    {
+                        executor.Clear();
+                        executor.AddLine("mov ecx, {0}", BaseAddress);
+                        executor.AddLine("call {0}", (uint)GlobalOffsets.IsOutdoors); // 0x71B7F0, 3.3.5a IsOutdoors
+                        executor.AddLine("retn");
+                        executor.Execute();
+                        return wow.Read<byte>(executor.ReturnPointer) != 0;
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Logging.WriteException(ex);
                     return false;
                 }
             }
         }
-        /// <summary>
-        /// Whether this object is outdoors. Override on LocalPlayer uses Lua for accuracy.
-        /// FEAT-45: Made virtual so LocalPlayer can override.
-        /// </summary>
-        public virtual bool IsOutdoors => !IsIndoors;
+
+        public virtual bool IsIndoors => !IsOutdoors;
         /// <summary>
         /// Whether this object is in line of sight from the player.
         /// Uses native CGWorldFrame::Intersect raycasting.

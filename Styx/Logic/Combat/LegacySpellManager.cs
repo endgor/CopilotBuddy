@@ -54,6 +54,12 @@ namespace Styx.Logic.Combat
             return SpellManager.Cast(spellName);
         }
 
+        [Obsolete("This property is obsolete and will be removed in the future, use StyxWoW.GlobalCooldown or SpellManager.GlobalCooldown for all your global cooldown needs!")]
+        public static bool GlobalCooldown
+        {
+            get { return SpellManager.GlobalCooldown; }
+        }
+
         /// <summary>
         /// Casts a spell by name on a specific target.
         /// </summary>

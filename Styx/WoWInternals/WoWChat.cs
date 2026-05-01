@@ -1,627 +1,358 @@
 #nullable disable
 using System;
-using System.Threading;
-using GreenMagic;
+using System.Globalization;
 
 namespace Styx.WoWInternals
 {
-    public static class WoWChat
-    {
-        private static ChatMessageHandler _onChatMessage;
-        private static ChatMessageHandler _onSayMessage;
-        private static ChatMessageHandler _onPartyMessage;
-        private static ChatMessageHandler _onRaidMessage;
-        private static ChatMessageHandler _onRaidLeaderMessage;
-        private static ChatMessageHandler _onGuildMessage;
-        private static ChatMessageHandler _onOfficerMessage;
-        private static ChatMessageHandler _onYellMessage;
-        private static ChatMessageHandler _onChannelMessage;
-        private static ChatMessageHandler _onWhisperFromMessage;
-        private static ChatMessageHandler _onWhisperToMessage;
-        private static ChatMessageHandler _onEmoteMessage;
-        private static ChatMessageHandler _onBattlegroundMessage;
-        private static ChatMessageHandler _onBattlegroundLeaderMessage;
-        private static uint _lastReadPosition;
-        private static bool _isFirstRead;
+	public static class WoWChat
+	{
+		static WoWChat()
+		{
+			Lua.Events.AttachEvent("CHAT_MSG_ADDON", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_AFK", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_BATTLEGROUND", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_BATTLEGROUND_LEADER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_BG_SYSTEM_HORDE", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_CHANNEL", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_DND", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_EMOTE", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_GUILD", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_MONSTER_EMOTE", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_MONSTER_PARTY", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_MONSTER_SAY", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_MONSTER_WHISPER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_MONSTER_YELL", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_OFFICER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_PARTY", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_PARTY_LEADER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_RAID", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_RAID_BOSS_EMOTE", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_RAID_BOSS_WHISPER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_RAID_LEADER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_RAID_WARNING", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_SAY", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_SYSTEM", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_TEXT_EMOTE", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_WHISPER", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_WHISPER_INFORM", OnLuaChatEvent);
+			Lua.Events.AttachEvent("CHAT_MSG_YELL", OnLuaChatEvent);
+		}
 
-        static WoWChat()
-        {
-            WoWChat._isFirstRead = true;
-        }
+		public static event ChatMessageHandlerEx<ChatAddonEventArgs> Addon;
+		public static event ChatMessageHandlerEx<ChatAuthoredEventArgs> Afk;
+		public static event ChatMessageHandlerEx<ChatAuthoredEventArgs> Dnd;
+		public static event ChatMessageHandlerEx<ChatAuthoredEventArgs> TextEmote;
+		public static event ChatMessageHandlerEx<ChatAuthoredEventArgs> Emote;
+		public static event ChatMessageHandlerEx<ChatWhisperEventArgs> Whisper;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> WhisperTo;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> Battleground;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> Yell;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> BattlegroundLeader;
+		public static event ChatMessageHandlerEx<ChatSimpleMessageEventArgs> AllianceBattleground;
+		public static event ChatMessageHandlerEx<ChatSimpleMessageEventArgs> HordeBattleground;
+		public static event ChatMessageHandlerEx<ChatSimpleMessageEventArgs> NeutralBattleground;
+		public static event ChatMessageHandlerEx<ChatSimpleMessageEventArgs> System;
+		public static event ChatMessageHandlerEx<ChatChannelSpecificEventArgs> Channel;
+		public static event ChatMessageHandlerEx<ChatGuildEventArgs> Guild;
+		public static event ChatMessageHandlerEx<ChatMonsterEventArgs> MonsterEmote;
+		public static event ChatMessageHandlerEx<ChatMonsterSayEventArgs> MonsterSay;
+		public static event ChatMessageHandlerEx<ChatMonsterEventArgs> MonsterYell;
+		public static event ChatMessageHandlerEx<ChatMonsterEventArgs> MonsterWhisper;
+		public static event ChatMessageHandlerEx<ChatMonsterEventArgs> MonsterParty;
+		public static event ChatMessageHandlerEx<ChatMonsterEventArgs> RaidBossEmote;
+		public static event ChatMessageHandlerEx<ChatMonsterEventArgs> RaidBossWhisper;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> Officer;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> Party;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> PartyLeader;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> Raid;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> RaidLeader;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> RaidWarning;
+		public static event ChatMessageHandlerEx<ChatLanguageSpecificEventArgs> Say;
 
-        public static void SendChatMessage(string content, ChatType chatType, string channel)
-        {
-            string text = "NIL";
-            switch (chatType)
-            {
-                case ChatType.Say:
-                    text = "SAY";
-                    break;
-                case ChatType.Party:
-                    text = "PARTY";
-                    break;
-                case ChatType.Raid:
-                    text = "RAID";
-                    break;
-                case ChatType.Guild:
-                    text = "GUILD";
-                    break;
-                case ChatType.Officer:
-                    text = "OFFICER";
-                    break;
-                case ChatType.Yell:
-                    text = "YELL";
-                    break;
-                case ChatType.WhisperTo:
-                    text = "WHISPER";
-                    break;
-                case ChatType.Emote:
-                    text = "EMOTE";
-                    break;
-                case ChatType.Channel:
-                    text = "CHANNEL";
-                    break;
-                case ChatType.RaidWarning:
-                    text = "RAID_WARNING";
-                    break;
-                case ChatType.Battleground:
-                    text = "BATTLEGROUND";
-                    break;
-            }
-            if (chatType != ChatType.Channel)
-            {
-                string text2 = (chatType == ChatType.WhisperTo) ? string.Format("SendChatMessage('{0}','{1}',GetDefaultLanguage('player'), '{2}')", content, text, channel) : string.Format("SendChatMessage('{0}','{1}',GetDefaultLanguage('player'))", content, text);
-                Lua.DoString(text2);
-            }
-            else
-            {
-                string[] array = new string[]
-                {
-                    "SendChatMessage(\"",
-                    content,
-                    "\", \"",
-                    text,
-                    "\", GetDefaultLanguage(\"player\"), GetChannelName(\"",
-                    channel,
-                    "\"));"
-                };
-                string text3 = string.Concat(array);
-                Lua.DoString(text3);
-            }
-        }
+		public static void SendChatMessage(string content, ChatType chatType, string channel)
+		{
+			string destinationType;
+			switch (chatType)
+			{
+				case ChatType.Say:
+					destinationType = "SAY";
+					break;
+				case ChatType.Party:
+					destinationType = "PARTY";
+					break;
+				case ChatType.Raid:
+					destinationType = "RAID";
+					break;
+				case ChatType.Guild:
+					destinationType = "GUILD";
+					break;
+				case ChatType.Officer:
+					destinationType = "OFFICER";
+					break;
+				case ChatType.Yell:
+					destinationType = "YELL";
+					break;
+				case ChatType.WhisperTo:
+					destinationType = "WHISPER";
+					break;
+				case ChatType.Emote:
+					destinationType = "EMOTE";
+					break;
+				case ChatType.Channel:
+					destinationType = "CHANNEL";
+					break;
+				case ChatType.RaidWarning:
+					destinationType = "RAID_WARNING";
+					break;
+				case ChatType.Battleground:
+					destinationType = "BATTLEGROUND";
+					break;
+				default:
+					return;
+			}
 
-        public static event ChatMessageHandler NewChatMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onChatMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onChatMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onChatMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onChatMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+			string escapedContent = Lua.Escape(content ?? string.Empty);
+			string escapedChannel = Lua.Escape(channel ?? string.Empty);
+			if (chatType == ChatType.Channel)
+			{
+				Lua.DoString("SendChatMessage('{0}', '{1}', GetDefaultLanguage('player'), GetChannelName('{2}'))", escapedContent, destinationType, escapedChannel);
+				return;
+			}
 
-        public static event ChatMessageHandler NewSayMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onSayMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onSayMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onSayMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onSayMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+			if (chatType == ChatType.WhisperTo)
+			{
+				Lua.DoString("SendChatMessage('{0}', '{1}', GetDefaultLanguage('player'), '{2}')", escapedContent, destinationType, escapedChannel);
+				return;
+			}
 
-        public static event ChatMessageHandler NewPartyMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onPartyMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onPartyMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onPartyMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onPartyMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+			Lua.DoString("SendChatMessage('{0}', '{1}', GetDefaultLanguage('player'))", escapedContent, destinationType);
+		}
 
-        public static event ChatMessageHandler NewRaidMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onRaidMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onRaidMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onRaidMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onRaidMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		internal static void Update()
+		{
+			// HB-style chat dispatch comes from Lua.Events via Lua.ProcessEvents().
+			// Keep this pulse hook as a no-op so existing pulse code does not need to change.
+		}
 
-        public static event ChatMessageHandler NewRaidLeaderMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onRaidLeaderMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onRaidLeaderMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onRaidLeaderMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onRaidLeaderMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		private static void OnLuaChatEvent(object sender, LuaEventArgs e)
+		{
+			switch (e.EventName)
+			{
+				case "CHAT_MSG_ADDON":
+					Addon?.Invoke(new ChatAddonEventArgs(e));
+					break;
+				case "CHAT_MSG_AFK":
+					Afk?.Invoke(new ChatAuthoredEventArgs(e));
+					break;
+				case "CHAT_MSG_BATTLEGROUND":
+					Battleground?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_BATTLEGROUND_LEADER":
+					BattlegroundLeader?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_BG_SYSTEM_ALLIANCE":
+					AllianceBattleground?.Invoke(new ChatSimpleMessageEventArgs(e));
+					break;
+				case "CHAT_MSG_BG_SYSTEM_HORDE":
+					HordeBattleground?.Invoke(new ChatSimpleMessageEventArgs(e));
+					break;
+				case "CHAT_MSG_BG_SYSTEM_NEUTRAL":
+					NeutralBattleground?.Invoke(new ChatSimpleMessageEventArgs(e));
+					break;
+				case "CHAT_MSG_CHANNEL":
+					Channel?.Invoke(new ChatChannelSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_DND":
+					Dnd?.Invoke(new ChatAuthoredEventArgs(e));
+					break;
+				case "CHAT_MSG_EMOTE":
+					Emote?.Invoke(new ChatAuthoredEventArgs(e));
+					break;
+				case "CHAT_MSG_GUILD":
+					Guild?.Invoke(new ChatGuildEventArgs(e));
+					break;
+				case "CHAT_MSG_MONSTER_EMOTE":
+					MonsterEmote?.Invoke(new ChatMonsterEventArgs(e));
+					break;
+				case "CHAT_MSG_MONSTER_PARTY":
+					MonsterParty?.Invoke(new ChatMonsterEventArgs(e));
+					break;
+				case "CHAT_MSG_MONSTER_SAY":
+					MonsterSay?.Invoke(new ChatMonsterSayEventArgs(e));
+					break;
+				case "CHAT_MSG_MONSTER_WHISPER":
+					MonsterWhisper?.Invoke(new ChatMonsterEventArgs(e));
+					break;
+				case "CHAT_MSG_MONSTER_YELL":
+					MonsterYell?.Invoke(new ChatMonsterEventArgs(e));
+					break;
+				case "CHAT_MSG_OFFICER":
+					Officer?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_PARTY":
+					Party?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_PARTY_LEADER":
+					PartyLeader?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_RAID":
+					Raid?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_RAID_BOSS_EMOTE":
+					RaidBossEmote?.Invoke(new ChatMonsterEventArgs(e));
+					break;
+				case "CHAT_MSG_RAID_BOSS_WHISPER":
+					RaidBossWhisper?.Invoke(new ChatMonsterEventArgs(e));
+					break;
+				case "CHAT_MSG_RAID_LEADER":
+					RaidLeader?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_RAID_WARNING":
+					RaidWarning?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_SAY":
+					Say?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_SYSTEM":
+					System?.Invoke(new ChatSimpleMessageEventArgs(e));
+					break;
+				case "CHAT_MSG_TEXT_EMOTE":
+					TextEmote?.Invoke(new ChatAuthoredEventArgs(e));
+					break;
+				case "CHAT_MSG_WHISPER":
+					Whisper?.Invoke(new ChatWhisperEventArgs(e));
+					break;
+				case "CHAT_MSG_WHISPER_INFORM":
+					WhisperTo?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+				case "CHAT_MSG_YELL":
+					Yell?.Invoke(new ChatLanguageSpecificEventArgs(e));
+					break;
+			}
+		}
 
-        public static event ChatMessageHandler NewGuildMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onGuildMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onGuildMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onGuildMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onGuildMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		private static int ToInt32(object value)
+		{
+			if (value == null)
+				return 0;
 
-        public static event ChatMessageHandler NewOfficerMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onOfficerMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onOfficerMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onOfficerMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onOfficerMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+			return Convert.ToInt32(value, CultureInfo.InvariantCulture);
+		}
 
-        public static event ChatMessageHandler NewYellMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onYellMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onYellMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onYellMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onYellMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		public delegate void ChatMessageHandlerEx<T>(T e) where T : ChatMessageBaseEventArgs;
 
-        public static event ChatMessageHandler NewChannelMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onChannelMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onChannelMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onChannelMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onChannelMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		public class ChatMessageBaseEventArgs : LuaEventArgs
+		{
+			internal ChatMessageBaseEventArgs(LuaEventArgs from)
+				: base(from.EventName, from.FireTimeStamp, from.Args)
+			{
+			}
+		}
 
-        public static event ChatMessageHandler NewWhisperFromMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onWhisperFromMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onWhisperFromMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onWhisperFromMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onWhisperFromMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		public class ChatAddonEventArgs : ChatMessageBaseEventArgs
+		{
+			internal ChatAddonEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
 
-        public static event ChatMessageHandler NewWhisperToMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onWhisperToMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onWhisperToMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onWhisperToMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onWhisperToMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+			public string Prefix => Args[0]?.ToString() ?? string.Empty;
+			public string Message => Args[1]?.ToString() ?? string.Empty;
+			public string Type => Args[2]?.ToString() ?? string.Empty;
+			public string Sender => Args[3]?.ToString() ?? string.Empty;
+		}
 
-        public static event ChatMessageHandler NewEmoteMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onEmoteMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onEmoteMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onEmoteMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onEmoteMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		public class ChatSimpleMessageEventArgs : ChatMessageBaseEventArgs
+		{
+			internal ChatSimpleMessageEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
 
-        public static event ChatMessageHandler NewBattlegroundMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onBattlegroundMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onBattlegroundMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onBattlegroundMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onBattlegroundMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+			public string Message => Args[0]?.ToString() ?? string.Empty;
+		}
 
-        public static event ChatMessageHandler NewBattlegroundLeaderMessage
-        {
-            add
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onBattlegroundLeaderMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Combine(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onBattlegroundLeaderMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-            remove
-            {
-                ChatMessageHandler chatMessageHandler = WoWChat._onBattlegroundLeaderMessage;
-                ChatMessageHandler chatMessageHandler2;
-                do
-                {
-                    chatMessageHandler2 = chatMessageHandler;
-                    ChatMessageHandler chatMessageHandler3 = (ChatMessageHandler)Delegate.Remove(chatMessageHandler2, value);
-                    chatMessageHandler = Interlocked.CompareExchange<ChatMessageHandler>(ref WoWChat._onBattlegroundLeaderMessage, chatMessageHandler3, chatMessageHandler2);
-                }
-                while (chatMessageHandler != chatMessageHandler2);
-            }
-        }
+		public class ChatAuthoredEventArgs : ChatSimpleMessageEventArgs
+		{
+			internal ChatAuthoredEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
 
-        private static void RaiseChatEvent(ChatMessageEventArgs e)
-        {
-            if (WoWChat._onChatMessage != null)
-            {
-                WoWChat._onChatMessage(e);
-            }
-            ChatType chatType = e.Message.ChatType;
-            switch (chatType)
-            {
-                case ChatType.Say:
-                    if (WoWChat._onSayMessage != null)
-                    {
-                        WoWChat._onSayMessage(e);
-                    }
-                    break;
-                case ChatType.Party:
-                    if (WoWChat._onPartyMessage != null)
-                    {
-                        WoWChat._onPartyMessage(e);
-                    }
-                    break;
-                case ChatType.Raid:
-                    if (WoWChat._onRaidMessage != null)
-                    {
-                        WoWChat._onRaidMessage(e);
-                    }
-                    break;
-                case ChatType.Guild:
-                    if (WoWChat._onGuildMessage != null)
-                    {
-                        WoWChat._onGuildMessage(e);
-                    }
-                    break;
-                case ChatType.Officer:
-                    if (WoWChat._onOfficerMessage != null)
-                    {
-                        WoWChat._onOfficerMessage(e);
-                    }
-                    break;
-                case ChatType.Yell:
-                    if (WoWChat._onYellMessage != null)
-                    {
-                        WoWChat._onYellMessage(e);
-                    }
-                    break;
-                case ChatType.WhisperInform:
-                    if (WoWChat._onWhisperFromMessage != null)
-                    {
-                        WoWChat._onWhisperFromMessage(e);
-                    }
-                    break;
-                case ChatType.WhisperTo:
-                    if (WoWChat._onWhisperToMessage != null)
-                    {
-                        WoWChat._onWhisperToMessage(e);
-                    }
-                    break;
-                case ChatType.Emote:
-                    if (WoWChat._onEmoteMessage != null)
-                    {
-                        WoWChat._onEmoteMessage(e);
-                    }
-                    break;
-                case ChatType.Channel:
-                    if (WoWChat._onChannelMessage != null)
-                    {
-                        WoWChat._onChannelMessage(e);
-                    }
-                    break;
-                case ChatType.RaidLeader:
-                    if (WoWChat._onRaidLeaderMessage != null)
-                    {
-                        WoWChat._onRaidLeaderMessage(e);
-                    }
-                    break;
-                case ChatType.Battleground:
-                    if (WoWChat._onBattlegroundMessage != null)
-                    {
-                        WoWChat._onBattlegroundMessage(e);
-                    }
-                    break;
-                case ChatType.BattlegroundLeader:
-                    if (WoWChat._onBattlegroundLeaderMessage != null)
-                    {
-                        WoWChat._onBattlegroundLeaderMessage(e);
-                    }
-                    break;
-            }
-        }
+			public string Author => Args[1]?.ToString() ?? string.Empty;
+		}
 
-        private static Memory Memory
-        {
-            get { return ObjectManager.Wow; }
-        }
+		public class ChatLanguageSpecificEventArgs : ChatAuthoredEventArgs
+		{
+			internal ChatLanguageSpecificEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
 
-        private static uint Position
-        {
-            get { return Memory.Read<uint>(12382196U); }
-        }
+			public string Language => Args[2]?.ToString() ?? string.Empty;
+		}
 
-        private static uint GetChatMessagePtr(uint index)
-        {
-            uint circularBufferPosition = WoWChat.Position - 1U;
-            uint adjustedIndex = (circularBufferPosition + index) % 60U;
-            uint messagePtr = 12016224U + adjustedIndex * 6080U;
-            return messagePtr;
-        }
+		public class ChatChannelSpecificEventArgs : ChatLanguageSpecificEventArgs
+		{
+			internal ChatChannelSpecificEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
 
-        internal static void Update()
-        {
-            if (WoWChat._isFirstRead)
-            {
-                WoWChat._lastReadPosition = WoWChat.Position;
-                WoWChat._isFirstRead = false;
-            }
-            else
-            {
-                uint position = WoWChat.Position;
-                if (position != WoWChat._lastReadPosition)
-                {
-                    uint messageCount;
-                    if (position > WoWChat._lastReadPosition)
-                    {
-                        messageCount = position - WoWChat._lastReadPosition;
-                    }
-                    else
-                    {
-                        int positionDiff = (int)(WoWChat._lastReadPosition - 60U);
-                        positionDiff += (int)position;
-                        positionDiff = Math.Abs(positionDiff);
-                        messageCount = (uint)positionDiff;
-                    }
-                    for (uint messageIndex = 0U; messageIndex < messageCount; messageIndex += 1U)
-                    {
-                        WoWChatMessage woWChatMessage = new WoWChatMessage(WoWChat.GetChatMessagePtr(messageIndex));
-                        WoWChat.RaiseChatEvent(new ChatMessageEventArgs(woWChatMessage));
-                    }
-                    WoWChat._lastReadPosition = position;
-                }
-            }
-        }
-    }
+			public string ChannelNameWithNumber => Args[3]?.ToString() ?? string.Empty;
+			public string Target => Args[4]?.ToString() ?? string.Empty;
+			public string ChatFlags => Args[5]?.ToString() ?? string.Empty;
+			public int ZoneFlags => ToInt32(Args[6]);
+			public int ChannelNumber => ToInt32(Args[7]);
+			public string ChannelName => Args[8]?.ToString() ?? string.Empty;
+			public int LineId => ToInt32(Args[9]);
+		}
+
+		public class ChatGuildEventArgs : ChatMessageBaseEventArgs
+		{
+			internal ChatGuildEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
+
+			public string Message => Args[0]?.ToString() ?? string.Empty;
+			public string Author => Args[1]?.ToString() ?? string.Empty;
+			public string Language => Args[2]?.ToString() ?? string.Empty;
+		}
+
+		public class ChatMonsterEventArgs : ChatMessageBaseEventArgs
+		{
+			internal ChatMonsterEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
+
+			public string Message => Args[0]?.ToString() ?? string.Empty;
+			public string MonsterName => Args[1]?.ToString() ?? string.Empty;
+		}
+
+		public class ChatMonsterSayEventArgs : ChatMonsterEventArgs
+		{
+			internal ChatMonsterSayEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
+
+			public string Language => Args[2]?.ToString() ?? string.Empty;
+			public string Receiver => Args[4]?.ToString() ?? string.Empty;
+		}
+
+		public class ChatWhisperEventArgs : ChatLanguageSpecificEventArgs
+		{
+			internal ChatWhisperEventArgs(LuaEventArgs from)
+				: base(from)
+			{
+			}
+
+			public string Status => Args[5]?.ToString() ?? string.Empty;
+			public int MessageId => ToInt32(Args[6]);
+		}
+	}
 }

@@ -400,7 +400,14 @@ namespace Styx
 					OldProfile = oldProf,
 					NewProfile = newProf
 				};
-				_onNewProfileLoaded?.Invoke(args);
+				try
+				{
+					_onNewProfileLoaded?.Invoke(args);
+				}
+				catch (Exception ex)
+				{
+					Logging.WriteException(ex);
+				}
 			}
 
 			internal static void RaiseOuterProfileLoaded(Logic.Profiles.Profile oldProf, Logic.Profiles.Profile newProf)
@@ -410,7 +417,16 @@ namespace Styx
 					OldProfile = oldProf,
 					NewProfile = newProf
 				};
-				_onNewOuterProfileLoaded?.Invoke(args);
+				// Wrap invocation: a faulty subscriber (e.g. older ProfessionBuddy build)
+				// must not propagate its NPE back through LoadEmpty() into the UI thread.
+				try
+				{
+					_onNewOuterProfileLoaded?.Invoke(args);
+				}
+				catch (Exception ex)
+				{
+					Logging.WriteException(ex);
+				}
 			}
 
 			public class NewProfileLoadedEventArgs : EventArgs

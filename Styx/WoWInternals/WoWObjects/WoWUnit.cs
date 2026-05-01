@@ -463,27 +463,7 @@ namespace Styx.WoWInternals.WoWObjects
             }
         }
 
-        public bool IsFlying
-        {
-            get
-            {
-                bool hasFlag = (MovementFlags & 33554432) != 0;
-                if (hasFlag)
-                {
-                    Memory? wow = ObjectManager.Wow;
-                    if (wow == null)
-                        return false;
-
-                    uint ptr = wow.Read<uint>(BaseAddress + 3936);
-                    if (ptr == 0)
-                        return true;
-
-                    if (wow.Read<uint>(ptr + 20) != 3)
-                        return true;
-                }
-                return false;
-            }
-        }
+        public bool IsFlying => MovementInfo.IsFlying;
 
         #endregion
 
