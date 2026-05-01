@@ -267,6 +267,7 @@ namespace Tripper.Navigation
                 NativeMethods.SetAreaCost((uint)AreaType.InteractUnit, 1.66f);
                 NativeMethods.SetAreaCost((uint)AreaType.InteractObject, 1.66f);
                 NativeMethods.SetAreaCost((uint)AreaType.Blackspot, 60.0f);
+                NativeMethods.SetAreaCost((uint)AreaType.KnownBuilding, 1.66f);
                 NativeMethods.SetAreaCost((uint)AreaType.Horde, 1.66f);
                 NativeMethods.SetAreaCost((uint)AreaType.Alliance, 1.66f);
                 

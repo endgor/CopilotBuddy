@@ -164,7 +164,7 @@ namespace Styx.Logic.Pathing
             }
             else
             {
-                AddBlackspotAndReverse(duration * 2);
+                AddBlackspotAndReverse(3000);
                 ResetUnstickAttempts();
             }
 
@@ -207,7 +207,7 @@ namespace Styx.Logic.Pathing
                 return;
 
             Logging.WriteDebug("[STUCK] All attempts failed — adding blackspot and reversing.");
-            BlackspotManager.AddBlackspot(me.Location, 5f, 3f);
+            BlackspotManager.AddGlobalBlackspot(me.Location, 4f, 5f);
             WoWMovement.MoveStop();
             StyxWoW.Sleep(100);
             WoWMovement.Move(WoWMovement.MovementDirection.Backwards);

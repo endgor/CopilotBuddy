@@ -176,14 +176,35 @@ namespace Styx.Logic.Pathing
                 uint mapId = GetCurrentMapId();
                 var start = new System.Numerics.Vector3(from.X, from.Y, from.Z);
                 var end = new System.Numerics.Vector3(to.X, to.Y, to.Z);
-                var result = TripperNavigator.FindPath(mapId, start, end, true);
-                if (result == null || !result.Succeeded || result.Points == null || result.Points.Length == 0)
+				try
+				{
+					TripperNavigator.EnsureTilesAroundPosition(mapId, start, LoadTilesAroundRadius);
+					TripperNavigator.EnsureTilesAroundPosition(mapId, end, LoadTilesAroundRadius);
+				}
+				catch { }
+
+				BlackspotManager.EnsureBlackspotsMarked();
+
+				var result = TripperNavigator.FindPath(mapId, start, end, true);
+				if (result == null || !result.Succeeded || result.IsPartialPath || result.Points == null || result.Points.Length == 0)
                     return null;
-                float dist = 0f;
+
                 var pts = result.Points;
+				float dist = System.Numerics.Vector3.Distance(start, pts[0]);
+				dist += System.Numerics.Vector3.Distance(pts[pts.Length - 1], end);
+				if (dist > maxDistance)
+					return null;
+
                 for (int i = 1; i < pts.Length; i++)
+				{
+					if (dist > maxDistance)
+						return null;
+
                     dist += System.Numerics.Vector3.Distance(pts[i - 1], pts[i]);
-                if (dist > maxDistance) return null;
+				}
+				if (dist > maxDistance)
+					return null;
+
                 return dist;
             }
             catch
@@ -627,17 +648,26 @@ namespace Styx.Logic.Pathing
 					}
 					else
 					{
-						// HB 4.3.4: path generation failed — return failure WITHOUT stopping movement.
-						// HB never calls MoveStop here; the behavior tree resumes and
-						// retries on the next tick. Calling MoveStop would halt the character,
-						// causing WoW to auto-sit after ~4s of idleness.
+						// HB 4.3.4: path generation failed.
+						// For close targets (< 20y) on the ground, fall back to direct CTM.
+						// Navmesh tiles may not be loaded at the exact mob position (slopes,
+						// special terrain); a direct click is safe at this range.
+						if (distance < 20f && !me.MovementInfo.IsFlying)
+						{
+							PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(destination.X, destination.Y, destination.Z));
+							return MoveResult.Moved;
+						}
 						return MoveResult.PathGenerationFailed;
 					}
 				}
 				else
 				{
-					// HB 4.3.4: no navmesh available — return failure WITHOUT stopping movement.
-					// HB never calls MoveStop here (MeshNavigator returns PathGenerationFailed only).
+					// HB 4.3.4: no navmesh available.
+					if (distance < 20f && !me.MovementInfo.IsFlying)
+					{
+						PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(destination.X, destination.Y, destination.Z));
+						return MoveResult.Moved;
+					}
 					return MoveResult.PathGenerationFailed;
 				}
 
@@ -764,7 +794,7 @@ namespace Styx.Logic.Pathing
 							if (me2 != null)
 							{
 								Logging.WriteDebug("[NAV] {0} unstick attempts failed — adding blackspot at current location.", MaxUnstickAttempts);
-								BlackspotManager.AddBlackspot(me2.Location, 5f, 3f);
+								BlackspotManager.AddGlobalBlackspot(me2.Location, 4f, 5f);
 							}
 							_unstickAttempts = 0;
 							_currentPath.Clear();
@@ -946,8 +976,21 @@ namespace Styx.Logic.Pathing
 
 		public static bool CanNavigateFully(WoWPoint start, WoWPoint destination)
 		{
+			return CanNavigateFully(start, destination, 8192);
+		}
+
+		public static bool CanNavigateFully(WoWPoint start, WoWPoint destination, int maxHops)
+		{
+			if (NavigationProvider != null)
+			{
+				return NavigationProvider.CanNavigateFully(start, destination, maxHops);
+			}
+
 			if (!IsNavigatorLoaded)
 				return true; // Assume we can if no mesh loaded
+
+			if (maxHops <= 0)
+				return false;
 
 			uint mapId = (uint)(GetCurrentMapId());
 			var startVec = new Vector3(start.X, start.Y, start.Z);
@@ -968,10 +1011,36 @@ namespace Styx.Logic.Pathing
 			// path.Succeeded && !path.IsPartialPath
 			if (result.Status.Succeeded && !result.IsPartialPath)
 			{
-				return true;
+				return result.PathLength <= maxHops;
 			}
 
 			return false;
+		}
+
+		public static bool CanNavigateWithin(WoWPoint start, WoWPoint destination, float distanceTolerance)
+		{
+			if (!IsNavigatorLoaded)
+				return true;
+
+			uint mapId = (uint)(GetCurrentMapId());
+			var startVec = new Vector3(start.X, start.Y, start.Z);
+			var endVec = new Vector3(destination.X, destination.Y, destination.Z);
+
+			try
+			{
+				TripperNavigator.EnsureTilesAroundPosition(mapId, startVec, LoadTilesAroundRadius);
+				TripperNavigator.EnsureTilesAroundPosition(mapId, endVec, LoadTilesAroundRadius);
+			}
+			catch { }
+
+			BlackspotManager.EnsureBlackspotsMarked();
+
+			var result = TripperNavigator.FindPath(mapId, startVec, endVec, true);
+			if (!result.Status.Succeeded || result.Points == null || result.Points.Length == 0)
+				return false;
+
+			Vector3 lastPoint = result.Points[result.Points.Length - 1];
+			return Vector3.DistanceSquared(lastPoint, endVec) < distanceTolerance * distanceTolerance;
 		}
 
 		public static bool CanNavigateFully(WoWPoint destination)

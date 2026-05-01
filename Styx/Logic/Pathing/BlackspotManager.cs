@@ -28,7 +28,7 @@ namespace Styx.Logic.Pathing
         /// <summary>
         /// Area type used for blackspots (Misc7 = 26, same as HB).
         /// </summary>
-        private const byte BlackspotAreaType = 26;
+        private const byte BlackspotAreaType = (byte)AreaType.Misc7;
         
         /// <summary>
         /// High cost assigned to blackspot polygons (same as HB).
@@ -63,20 +63,6 @@ namespace Styx.Logic.Pathing
             Navigator.OnNavigationProviderChanged += OnNavigationProviderChanged;
 
             // also subscribe immediately to Tripper navigator; this covers the common case
-            try
-            {
-                var nav = Navigator.TripperNavigator; // create/get navigator
-                if (nav != null)
-                {
-                    nav.TileLoaded += OnTileLoaded;
-                }
-            }
-            catch (Exception)
-            {
-                // Ignore if navigator not available yet
-            }
-
-            // Subscribe also to Tripper navigator directly for older versions or when provider not set
             try
             {
                 var nav = Navigator.TripperNavigator; // create/get navigator

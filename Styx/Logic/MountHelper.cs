@@ -217,7 +217,32 @@ namespace Styx.Logic
                     CreatureSpell = WoWSpell.FromId(CreatureSpellId);
                     if (CreatureSpell != null)
                     {
-                        Type = (MountType)CreatureSpell.SpellEffect1.MiscValueB;
+                        // Try Cata+ MiscValueB classification first (Mount.dbc, values 225-248).
+                        int miscValueB = CreatureSpell.SpellEffect1.MiscValueB;
+                        if (Enum.IsDefined(typeof(MountType), miscValueB))
+                        {
+                            Type = (MountType)miscValueB;
+                        }
+                        else
+                        {
+                            // WotLK 3.3.5a has no Mount.dbc — MiscValueB is always 0.
+                            // Classify by inspecting spell effects for flight-speed auras.
+                            // Flying mounts have ModIncreaseFlightSpeed / ModSpeedFlight on at least one effect.
+                            // Ground mounts only have SPELL_AURA_MOUNTED + ground speed.
+                            Type = MountType.Ground; // default to ground
+                            foreach (var effect in CreatureSpell.SpellEffects)
+                            {
+                                if (effect == null) continue;
+                                if (effect.AuraType == WoWApplyAuraType.ModIncreaseFlightSpeed ||
+                                    effect.AuraType == WoWApplyAuraType.ModSpeedFlight ||
+                                    effect.AuraType == WoWApplyAuraType.ModFlightSpeedAlways ||
+                                    effect.AuraType == WoWApplyAuraType.ModFlightSpeedNotStack)
+                                {
+                                    Type = MountType.Flying;
+                                    break;
+                                }
+                            }
+                        }
                     }
                     else
                     {

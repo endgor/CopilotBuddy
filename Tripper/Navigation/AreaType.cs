@@ -59,6 +59,9 @@ namespace Tripper.Navigation
         /// <summary>Blackspot area - manually marked as unwalkable.</summary>
         Blackspot = 17,
 
+        /// <summary>Known building area - building/interior navigation helper.</summary>
+        KnownBuilding = 18,
+
         /// <summary>Miscellaneous area type 1.</summary>
         Misc1 = 20,
 
@@ -69,6 +72,24 @@ namespace Tripper.Navigation
         Misc3 = 22,
 
         /// <summary>Miscellaneous area type 4.</summary>
-        Misc4 = 23
+        Misc4 = 23,
+
+        /// <summary>Miscellaneous area type 5.</summary>
+        Misc5 = 24,
+
+        /// <summary>Miscellaneous area type 6.</summary>
+        Misc6 = 25,
+
+        /// <summary>Miscellaneous area type 7.</summary>
+        Misc7 = 26,
+
+        /// <summary>Miscellaneous area type 8.</summary>
+        Misc8 = 27,
+
+        /// <summary>Miscellaneous area type 9.</summary>
+        Misc9 = 28,
+
+        /// <summary>Miscellaneous area type 10.</summary>
+        Misc10 = 29
     }
 }
