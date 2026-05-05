@@ -61,7 +61,7 @@ namespace Styx.Logic.Pathing
 			4820, // Halls of Reflection
 		};
 
-		public static float PathPrecision { get; set; } = 1.6f; // HB 3.3.5a / 6.2.3 exact value
+		public static float PathPrecision { get; set; } = 2f; // HB 6.2.3 MeshNavigator constructor value
 		public static int LoadTilesAroundRadius { get; set; } = 2;
 		public static float FlyingMountHeight { get; set; } = 25f;
 
@@ -85,10 +85,22 @@ namespace Styx.Logic.Pathing
 		{
 			get
 			{
-				_stuckHandler ??= new StuckHandler();
+				if (_stuckHandler == null)
+				{
+					_stuckHandler = new StuckHandler();
+					_stuckHandler.OnSetAsCurrent();
+				}
 				return _stuckHandler;
 			}
-			set => _stuckHandler = value;
+			set
+			{
+				if (ReferenceEquals(value, _stuckHandler))
+					return;
+
+				value?.OnSetAsCurrent();
+				_stuckHandler?.OnRemoveAsCurrent();
+				_stuckHandler = value;
+			}
 		}
 
 		public static WoWPoint Destination => _destination;
@@ -160,6 +172,41 @@ namespace Styx.Logic.Pathing
         /// </summary>
         public static bool IsNavigatorLoaded => _navigator != null && _navigator.IsLoaded;
 
+		/// <summary>
+		/// HB 6.2.3 MeshNavigator.method_28: OnlyWhileAlive polygons are allowed while alive,
+		/// and excluded while dead/ghost-running.
+		/// </summary>
+		private static void ApplyAliveQueryFilter(bool isAlive)
+		{
+			try
+			{
+				if (_navigator == null || !_navigator.IsLoaded)
+					return;
+
+				ushort onlyWhileAlive = (ushort)TripperNav.AbilityFlags.OnlyWhileAlive;
+				ushort include = _navigator.GetIncludeFlags();
+				ushort exclude = _navigator.GetExcludeFlags();
+
+				if (isAlive)
+				{
+					exclude = (ushort)(exclude & ~onlyWhileAlive);
+					include = (ushort)(include | onlyWhileAlive);
+				}
+				else
+				{
+					include = (ushort)(include & ~onlyWhileAlive);
+					exclude = (ushort)(exclude | onlyWhileAlive);
+				}
+
+				_navigator.SetIncludeFlags(include);
+				_navigator.SetExcludeFlags(exclude);
+			}
+			catch
+			{
+				// Match navigation's fail-soft behavior: pathfinding will decide with the current filter.
+			}
+		}
+
         /// <summary>
         /// Computes the path distance between two points using TripperNavigator.
         /// Returns null if no path could be generated or if the calculated
@@ -184,6 +231,7 @@ namespace Styx.Logic.Pathing
 				catch { }
 
 				BlackspotManager.EnsureBlackspotsMarked();
+				ApplyAliveQueryFilter(StyxWoW.Me?.IsAlive ?? true);
 
 				var result = TripperNavigator.FindPath(mapId, start, end, true);
 				if (result == null || !result.Succeeded || result.IsPartialPath || result.Points == null || result.Points.Length == 0)
@@ -397,6 +445,8 @@ namespace Styx.Logic.Pathing
 			{
 				return MoveResult.Failed;
 			}
+
+			ApplyAliveQueryFilter(me.IsAlive);
 
 			// Check if we're already at the destination
 			float distance = me.Location.Distance(destination);
@@ -613,26 +663,11 @@ namespace Styx.Logic.Pathing
 					LogPathResult(result, me.Location, destination, mapId);
 					if (result.Status.Succeeded && result.Points != null && result.Points.Length > 0)
 					{
-						// HB 4.3.4: if the path is partial (navmesh doesn't fully connect
-						// start to destination), log it and consider flight paths.
+						// HB 6.2.3: if the path is partial (navmesh doesn't fully connect
+						// start to destination), log it but still follow the partial path.
 						if (result.IsPartialPath)
 						{
 							Logging.WriteDebug("Could not generate full path from {0} to {1}", me.Location, destination);
-
-							// COPILOTBUDDY ENHANCEMENT (not in HB): try flight paths on partial
-							// paths regardless of distance. HB only checks flights BEFORE
-							// pathfinding (distance > threshold). We add this because our
-							// pre-loaded tiles may miss corridors that HB's on-demand loading
-							// would find, resulting in partial paths where HB gets full paths.
-							if (FlightPaths.ShouldTakeFlightpath(me.Location, destination, me.MovementInfo.RunSpeed))
-							{
-								if (FlightPaths.SetFlightPathUsage(me.Location, destination, out _, out _))
-								{
-									return MoveResult.PathGenerated;
-								}
-							}
-							// No flight path available — follow the partial path anyway
-							// (HB 4.3.4 logs warning but still follows partial paths).
 						}
 
 						foreach (var point in result.Points)
@@ -648,26 +683,11 @@ namespace Styx.Logic.Pathing
 					}
 					else
 					{
-						// HB 4.3.4: path generation failed.
-						// For close targets (< 20y) on the ground, fall back to direct CTM.
-						// Navmesh tiles may not be loaded at the exact mob position (slopes,
-						// special terrain); a direct click is safe at this range.
-						if (distance < 20f && !me.MovementInfo.IsFlying)
-						{
-							PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(destination.X, destination.Y, destination.Z));
-							return MoveResult.Moved;
-						}
 						return MoveResult.PathGenerationFailed;
 					}
 				}
 				else
 				{
-					// HB 4.3.4: no navmesh available.
-					if (distance < 20f && !me.MovementInfo.IsFlying)
-					{
-						PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(destination.X, destination.Y, destination.Z));
-						return MoveResult.Moved;
-					}
 					return MoveResult.PathGenerationFailed;
 				}
 
@@ -1007,11 +1027,11 @@ namespace Styx.Logic.Pathing
 
 			var result = TripperNavigator.FindPath(mapId, startVec, endVec, true);
 			
-			// HB 4.3.4 MeshNavigator.CanNavigateFully:
-			// path.Succeeded && !path.IsPartialPath
-			if (result.Status.Succeeded && !result.IsPartialPath)
+			// HB 4.3.4 MeshNavigator.CanNavigateFully(from, to, maxHops):
+			// path.Succeeded && !path.IsPartialPath && path.Points.Length - 1 <= maxHops
+			if (result.Status.Succeeded && !result.IsPartialPath && result.Points != null)
 			{
-				return result.PathLength <= maxHops;
+				return result.Points.Length - 1 <= maxHops;
 			}
 
 			return false;
