@@ -41,6 +41,25 @@ namespace Styx.WoWInternals
 
 		private static readonly List<TimedMovementEntry> _timedMovements = new List<TimedMovementEntry>();
 
+		public sealed class MovementEventArgs : EventArgs
+		{
+			public MovementEventArgs(MovementDirection direction, bool stop)
+			{
+				Direction = direction;
+				Stop = stop;
+			}
+
+			public MovementDirection Direction;
+			public bool Stop;
+		}
+
+		internal static event Action<MovementEventArgs>? OnMovementFlagsChanged;
+
+		private static void RaiseMovementFlagsChanged(MovementDirection direction, bool stop)
+		{
+			OnMovementFlagsChanged?.Invoke(new MovementEventArgs(direction, stop));
+		}
+
 		/// <summary>
 		/// FEAT-01: Pulse processes timed movement entries, stopping directions whose timer has expired.
 		/// Called from WoWPulsator on each tick.
@@ -201,8 +220,16 @@ namespace Styx.WoWInternals
 
 		public static void MoveStop()
 		{
+			WoWUnit? activeMover = ActiveMover ?? ObjectManager.Me;
+			if ((activeMover == null || !activeMover.MovementInfo.IsMoving)
+				&& ClickToMoveInfo.Type == ClickToMoveType.None
+				&& (ActiveInputControl.Flags & MovementDirection.AllAllowed) == MovementDirection.None)
+			{
+				return;
+			}
+
 			// Stop keyboard movement — single batched DoString (see StopMovement)
-			StopMovement(MovementDirection.AllAllowed);
+			MoveStop(MovementDirection.AllAllowed);
 			
 			// HB 4.3.4: always stop CTM unconditionally (smethod_5).
 			// Previous code only stopped for Move/NpcInteract/Loot, missing
@@ -212,6 +239,10 @@ namespace Styx.WoWInternals
 
 		public static void MoveStop(MovementDirection direction)
 		{
+			direction &= ActiveInputControl.Flags;
+			if (direction == MovementDirection.None)
+				return;
+
 			StopMovement(direction);
 		}
 
@@ -236,7 +267,10 @@ namespace Styx.WoWInternals
 				sb.Append("DescendStop();");
 			
 			if (sb.Length > 0)
+			{
 				Lua.DoString(sb.ToString());
+				RaiseMovementFlagsChanged(direction, true);
+			}
 		}
 
 		public static void StopFace()
@@ -345,6 +379,8 @@ namespace Styx.WoWInternals
 					executor.Execute();
 				}
 			}
+
+			RaiseMovementFlagsChanged(MovementDirection.ClickToMove, false);
 		}
 
 		/// <summary>
@@ -370,6 +406,8 @@ namespace Styx.WoWInternals
 				executor.AddLine("retn");
 				executor.Execute();
 			}
+
+			RaiseMovementFlagsChanged(MovementDirection.ClickToMove, true);
 		}
 
 		public static void Face(WoWPoint target)
@@ -425,6 +463,9 @@ namespace Styx.WoWInternals
 
 		public static void Move(MovementDirection direction)
 		{
+			if (ActiveInputControl.Flags.HasFlag(direction))
+				return;
+
 			Move(direction, true);
 		}
 
@@ -437,6 +478,15 @@ namespace Styx.WoWInternals
 
 		public static void Move(MovementDirection direction, bool start)
 		{
+			if (!start)
+			{
+				MoveStop(direction);
+				return;
+			}
+
+			if (ActiveInputControl.Flags.HasFlag(direction))
+				return;
+
 			StyxWoW.ResetAfk();
 
 			// Batch all direction commands into a single Lua.DoString to avoid
@@ -470,7 +520,10 @@ namespace Styx.WoWInternals
 			}
 
 			if (sb.Length > 0)
+			{
 				Lua.DoString(sb.ToString());
+				RaiseMovementFlagsChanged(direction, !start);
+			}
 		}
 
 		public static void Jump()
