@@ -72,7 +72,20 @@ namespace PartyBot
 			}
 
 			if (_remotingClient == null)
+		{
+			try
+			{
 				_remotingClient = new RemotingClient();
+			}
+			catch (Exception ex)
+			{
+				Logging.Write(System.Drawing.Color.Red,
+					"[DiscoBot] Cannot connect to leader: {0}", ex.Message);
+				Logging.Write(System.Drawing.Color.Orange,
+					"[DiscoBot] Start the LeaderPlugin on the leader instance first, then click Start again.");
+				return;
+			}
+		}
 
 			if (!_hooked)
 			{
@@ -335,7 +348,7 @@ namespace PartyBot
 						new Decorator(ctx => ctx == null, new ActionAlwaysSucceed()),
 						// switch on Message type
 						new Switch<string>(
-							ctx => ((BotMessage)ctx).Message,
+							ctx => ctx is BotMessage m ? m.Message : null,
 							new SwitchArgument<string>("Vendor",
 								new TreeSharp.Action(ctx =>
 								{
