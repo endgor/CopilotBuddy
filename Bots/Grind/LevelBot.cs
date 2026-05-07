@@ -143,12 +143,17 @@ namespace Bots.Grind
 
             Targeting.Instance.IncludeTargetsFilter += LevelBotIncludeTargetsFilter;
             LootTargeting.Instance.IncludeTargetsFilter += LevelbotIncludeLootsFilter;
+
+            // HB 6.2.3 AvoidanceNavigationProvider pattern: register world obstacle avoidance
+            // so the bot routes around forges, mailboxes, and similar navmesh-absent objects.
+            Bots.DungeonBuddy.Avoidance.WorldObstacleManager.Initialize();
         }
 
         public override void Stop()
         {
             Targeting.Instance.IncludeTargetsFilter -= LevelBotIncludeTargetsFilter;
             LootTargeting.Instance.IncludeTargetsFilter -= LevelbotIncludeLootsFilter;
+            Bots.DungeonBuddy.Avoidance.WorldObstacleManager.Shutdown();
         }
 
         private static CombatRoutine Routine => RoutineManager.Current;
@@ -1075,8 +1080,9 @@ namespace Bots.Grind
 
         private static bool NeedToSell()
         {
+            if (StyxWoW.Me == null) return false;
             // HB 4.3.4 smethod_11 — no FindVendorsAutomatically check
-            if (ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Sell) == null)
+            if (ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Sell) == null)
                 return false;
             return Vendors.ForceSell || StyxWoW.Me.FreeNormalBagSlots <= ProfileManager.CurrentProfile.MinFreeBagSlots;
         }
@@ -1086,17 +1092,18 @@ namespace Bots.Grind
             // HB 4.3.4 smethod_12
             if (!CharacterSettings.Instance.TrainNewSkills && !Vendors.ForceTrainer)
                 return false;
-            if (ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Train) == null)
+            if (ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Train) == null)
                 return false;
             return Vendors.ForceTrainer || Vendors.NeedClassTraining;
         }
 
         private static bool NeedToRepair()
         {
+            if (StyxWoW.Me == null) return false;
             // HB 4.3.4 smethod_13 — no FindVendorsAutomatically check
             if (Vendors.RepairDisabled)
                 return false;
-            if (ProfileManager.CurrentProfile.VendorManager.GetClosestVendor(Vendor.VendorType.Repair) == null)
+            if (ProfileManager.CurrentProfile?.VendorManager?.GetClosestVendor(Vendor.VendorType.Repair) == null)
                 return false;
 
             // HB 4.3.4: update repair cost periodically
