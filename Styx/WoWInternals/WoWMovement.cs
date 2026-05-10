@@ -376,7 +376,7 @@ namespace Styx.WoWInternals
 				allocatedMemory.Write<WoWPoint>("ClickPos", clickPos);
 				allocatedMemory.Write<ulong>("GUID", guid);
 
-				using (new FrameLock())
+				lock (executor.AssemblyLock)
 				{
 					executor.Clear();
 					executor.AddLine("push {0}", (uint)BitConverter.SingleToInt32Bits(facing));
@@ -409,7 +409,7 @@ namespace Styx.WoWInternals
 			LocalPlayer? me = ObjectManager.Me;
 			if (me == null) return;
 
-			using (new FrameLock())
+			lock (executor.AssemblyLock)
 			{
 				executor.Clear();
 				executor.AddLine("mov ecx, {0}", me.BaseAddress);
