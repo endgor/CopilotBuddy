@@ -327,23 +327,27 @@ namespace Styx.Logic.BehaviorTree
 
 			// sync ticks-per-second slider value (per-character)
 			TicksPerSecond = CharacterSettings.Instance.TicksPerSecond;
-
-			// Split-tick approach (hybrid of HB 4.3.4 + 6.2.3):
-			// AcquireFrame is NOT used here — it's applied briefly inside
-			// RunTickBody only around the pulse phase (WoWPulsator + BotEvents).
-			// This avoids freezing WoW for the entire tick body (~50ms in combat),
-			// which caused 15 FPS.  The behavior tree runs without FrameLock so
-			// WoW can render between the few Execute() calls it makes.
-			//
-			// HB 4.3.4/6.2.3: read cache is ALWAYS enabled within the tick body.
-			// UseFrameLock controls only the Execute()/EndScene FrameLock scope (see RunTickBody).
-			// Cache disabled = hundreds of ReadProcessMemory per tick in dense zones (Dalaran = 200+ objects) = lag.
 			var sw = Stopwatch.StartNew();
-
-			using (StyxWoW.Memory.TemporaryCacheState(true))
+			if (StyxSettings.Instance.UseFrameLock)
 			{
-				StyxWoW.Memory.ClearCache();
-				RunTickBody();
+				using (StyxWoW.Memory.AcquireFrame(true))
+				using (StyxWoW.Memory.TemporaryCacheState(true))
+				{
+					StyxWoW.Memory.ClearCache();
+					RunTickBody();
+				}
+			}
+			else
+			{
+				// Soft frame mode: keep continuous execution for the tick without hard frame grab.
+				// This avoids per-call EndScene waits when the game is throttled (background/low FPS)
+				// while reducing the visual tearing seen with hard frame lock.
+				using (StyxWoW.Memory.AcquireFrame(false))
+				using (StyxWoW.Memory.TemporaryCacheState(true))
+				{
+					StyxWoW.Memory.ClearCache();
+					RunTickBody();
+				}
 			}
 
 			// HB 6.2.3: Force-release leaked frame lock (runs for BOTH branches)
@@ -362,6 +366,13 @@ namespace Styx.Logic.BehaviorTree
 
 			// HB 6.2.3 pattern: sleep OUTSIDE AcquireFrame so WoW can render
 			int remainingMs = (int)Math.Ceiling(1000.0 / TicksPerSecond - sw.Elapsed.TotalMilliseconds);
+			if (remainingMs <= 0)
+			{
+				Logging.WriteDebug("[PERF] Tick took {0:F0}ms (budget {1:F0}ms) - over budget by {2:F0}ms",
+					sw.Elapsed.TotalMilliseconds,
+					1000.0 / TicksPerSecond,
+					-remainingMs);
+			}
 			if (remainingMs > 0)
 			{
 				Thread.Sleep(remainingMs);
@@ -404,28 +415,12 @@ namespace Styx.Logic.BehaviorTree
 				return;
 			}
 
-			// Pulse subsystems if in game (before coroutine checks).
-			// When UseFrameLock is ON, wrap the pulse in a brief FrameLock so
-			// all Execute() calls during ObjectManager.Update, LuaEvents,
-			// Targeting, plugins, and combat routine pulse are batched into one
-			// continuous-mode session (~10-15ms).  WoW is frozen only here.
-			// The behavior tree below runs WITHOUT FrameLock — each Execute()
-			// waits for a frame individually, letting WoW render between calls.
 			if (StyxWoW.IsInGame)
 			{
-				if (StyxSettings.Instance.UseFrameLock)
-				{
-					using (new FrameLock())
-					{
-						WoWPulsator.Pulse(Current?.PulseFlags ?? PulseFlags.All);
-						BotEvents.RaisePulse(EventArgs.Empty);
-					}
-				}
-				else
-				{
-					WoWPulsator.Pulse(Current?.PulseFlags ?? PulseFlags.All);
-					BotEvents.RaisePulse(EventArgs.Empty);
-				}
+				PulseFlags flags = Current?.PulseFlags ?? PulseFlags.All;
+
+				WoWPulsator.Pulse(flags);
+				BotEvents.RaisePulse(EventArgs.Empty);
 			}
 
 			// HB 6.2.3: Run Composite_0 (InGame + Taxi pre-checks via coroutine)
