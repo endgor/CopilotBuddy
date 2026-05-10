@@ -46,18 +46,13 @@ public class ForcedMoveTo : ForcedBehavior
     {
         return (Composite)new Action((ActionSucceedDelegate)(context =>
         {
+            if (ObjectManager.Me.Location.DistanceSqr(this.Location) <= this.Precision * this.Precision)
+            {
+                this.hasReachedLocation = true;
+            }
             if (Mount.ShouldMount(this.Location))
                 Mount.StateMount((LocationRetriever)(() => this.Location));
-            MoveResult moveResult = Navigator.MoveTo(this.Location);
-            if (moveResult == MoveResult.ReachedDestination)
-            {
-                this.hasReachedLocation = true;
-            }
-            else if (moveResult == MoveResult.Failed || moveResult == MoveResult.PathGenerationFailed)
-            {
-                Logging.Write("MoveTo failed to move to the location: {0}", (object)this.Location);
-                this.hasReachedLocation = true;
-            }
+            Navigator.MoveTo(this.Location);
         }));
     }
 
@@ -70,7 +65,9 @@ public class ForcedMoveTo : ForcedBehavior
             PlayerQuest questById = StyxWoW.Me.QuestLog.GetQuestById(this.QuestId);
             if (this.hasReachedLocation)
                 return true;
-            return questById == null || questById.IsCompleted;
+            if (questById != null)
+                return questById.IsCompleted;
+            return false;
         }
     }
 
