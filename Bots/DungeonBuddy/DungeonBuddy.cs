@@ -60,11 +60,8 @@ namespace Bots.DungeonBuddy
         private static CombatRoutine Routine => RoutineManager.Current;
 
         // Timers
-        private readonly Stopwatch _proposalDelay = new();
         private readonly Stopwatch _requeueDelay = new();
         private readonly WaitTimer _proposalAcceptTimer = new WaitTimer(TimeSpan.FromMinutes(2.0));
-        private readonly Random _rng = new();
-        private int _proposalWaitMs;  // Délai aléatoire avant AcceptProposal
 
         // State tracking
         private uint _lastMapId;
@@ -967,70 +964,65 @@ namespace Bots.DungeonBuddy
                     )
                 ),
 
-                // --- PROPOSAL: random delayed accept (HB method_99 branch) ---
+                // --- PROPOSAL: HB method_99..107 parity ---
                 new Decorator(
                     ctx => CanAcceptLfgProposal(),
                     new Sequence(
                         new Action(ctx =>
                         {
-                            if (_proposalWaitMs == 0)
-                            {
-                                _proposalWaitMs = _rng.Next(1000, 3000);
-                                _proposalDelay.Restart();
-                                Logging.Write("[DungeonBuddy] Proposal received, accepting in {0}ms", _proposalWaitMs);
-                            }
+                            Logging.Write("[DungeonBuddy] Accepting dungeon invite");
+                            return RunStatus.Success;
+                        }),
+                        new Action(ctx =>
+                        {
+                            LfgManager.AcceptProposal();
+                            return RunStatus.Success;
+                        }),
+                        new Action(ctx =>
+                        {
+                            _proposalAcceptTimer.Reset();
                             return RunStatus.Success;
                         }),
                         new WaitContinue(
                             TimeSpan.FromSeconds(60),
-                            ctx => _proposalDelay.ElapsedMilliseconds >= _proposalWaitMs || LfgManager.ProposalFailed || LfgManager.ProposalSucceeded || StyxWoW.Me.Combat,
-                            new ActionAlwaysSucceed()),
-                        new PrioritySelector(
-                            new DecoratorContinue(
-                                ctx => LfgManager.ProposalSucceeded && DungeonManager.CurrentDungeon != null,
-                                new Sequence(
-                                    new Action(ctx =>
-                                    {
-                                        DungeonManager.Clear();
-                                        BossManager.Reset();
-                                        _activeDungeonBehavior = null;
-                                        return RunStatus.Success;
-                                    }),
-                                    new Action(ctx =>
-                                    {
-                                        _lastObservedLfgDungeonId = 0U;
-                                        return RunStatus.Success;
-                                    }),
-                                    new WaitContinue(
-                                        TimeSpan.FromSeconds(4),
-                                        ctx => !StyxWoW.IsInWorld,
-                                        new ActionAlwaysSucceed())
-                                )
-                            ),
-                            new Decorator(
-                                ctx => LfgManager.ProposalPending && !LfgManager.ProposalFailed && !LfgManager.ProposalSucceeded,
-                                new Sequence(
-                                    new Action(ctx =>
-                                    {
-                                        Logging.Write("[DungeonBuddy] Accepting dungeon invite");
-                                        LfgManager.AcceptProposal();
-                                        _proposalAcceptTimer.Reset();
-                                        return RunStatus.Success;
-                                    }),
-                                    new Action(ctx =>
-                                    {
-                                        _proposalWaitMs = 0;
-                                        return RunStatus.Success;
-                                    })
-                                )
-                            ),
-                            new Action(ctx =>
-                            {
-                                _proposalWaitMs = 0;
-                                LfgManager.ResetProposalFlags();
-                                return RunStatus.Success;
-                            })
-                        )
+                            ctx => LfgManager.ProposalFailed || LfgManager.ProposalSucceeded || StyxWoW.Me.Combat,
+                            new Sequence(
+                                new DecoratorContinue(
+                                    ctx => LfgManager.ProposalSucceeded && DungeonManager.CurrentDungeon != null,
+                                    new Sequence(
+                                        new Action(ctx =>
+                                        {
+                                            DungeonManager.Clear();
+                                            _activeDungeonBehavior = null;
+                                            return RunStatus.Success;
+                                        }),
+                                        new Action(ctx =>
+                                        {
+                                            _lastObservedLfgDungeonId = 0U;
+                                            return RunStatus.Success;
+                                        }),
+                                        new WaitContinue(
+                                            TimeSpan.FromSeconds(4),
+                                            ctx => !StyxWoW.IsInWorld,
+                                            new ActionAlwaysSucceed())
+                                    )
+                                ),
+                                new Action(ctx =>
+                                {
+                                    LfgManager.ProposalFailed = false;
+                                    return RunStatus.Success;
+                                }),
+                                new Action(ctx =>
+                                {
+                                    LfgManager.ProposalSucceeded = false;
+                                    return RunStatus.Success;
+                                }),
+                                new Action(ctx =>
+                                {
+                                    LfgManager.ProposalPending = false;
+                                    return RunStatus.Success;
+                                })
+                            ))
                     )
                 ),
 
@@ -1334,8 +1326,7 @@ namespace Bots.DungeonBuddy
             bool needsMaintenance = Vendors.NeedClassTraining ||
                                     ShouldRepairInSoloFarm(this) ||
                                     ShouldBuyDrinksInSoloFarm(this) ||
-                                    ShouldSellItemsInSoloFarm(this) ||
-                                    ShouldMailItemsInSoloFarm(this);
+                                    ShouldSellItemsInSoloFarm(this);
 
             if (!needsMaintenance)
                 return true;
