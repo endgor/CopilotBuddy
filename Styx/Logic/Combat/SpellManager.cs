@@ -447,7 +447,21 @@ namespace Styx.Logic.Combat
 		{
 			if (spell == null)
 				return false;
-			CastSpellById(spell.Id, target?.Guid ?? 0UL);
+
+			ulong castTargetGuid = target?.Guid ?? 0UL;
+
+			// WotLK combo finisher: SPELL_ATTR1_REQ_COMBO_POINTS1 = 0x10 (bit 4 of AttributesEx).
+			// Confirmed from live memory: SnD (5171) AttributesEx=0x5000010.
+			// BuffSelf passes Me.Guid → sub_72BDB0 @ 0x80D661 calls CanAttack(player, self) = false
+			// → silent drop. Remap to CurrentTarget so CanAttack passes.
+			if ((spell.AttributesEx & 0x50u) != 0)
+			{
+				WoWUnit? comboTarget = StyxWoW.Me?.CurrentTarget;
+				if (comboTarget != null)
+					castTargetGuid = comboTarget.Guid;
+			}
+
+			CastSpellById(spell.Id, castTargetGuid);
 			return true;
 		}
 

@@ -109,6 +109,11 @@ namespace Styx.Logic.Combat
             }
         }
 
+        public uint AttributesEx
+        {
+            get { return _spellEntry.AttributesEx; }
+        }
+
         public int Id
         {
             get { return _id; }
