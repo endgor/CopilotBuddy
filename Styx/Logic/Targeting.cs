@@ -26,6 +26,7 @@ namespace Styx.Logic
         private RemoveTargetsFilterDelegate _removeTargetsFilterHandlers;
         private WeighTargetsDelegate _weighTargetsFilterHandlers;
         private static readonly HashSet<uint> _blacklistedMobIds;
+        private static readonly HashSet<uint> hashSet_0;
         // from original HB: special quest mobs used in include filter
         private static readonly HashSet<uint> _specialQuestMobIds = new HashSet<uint>
         {
@@ -75,6 +76,7 @@ namespace Styx.Logic
             hashSet.Add(23537U);
             hashSet.Add(18729U);
             Targeting._blacklistedMobIds = hashSet;
+            Targeting.hashSet_0 = hashSet;
         }
 
         public static double PullDistance
@@ -391,9 +393,9 @@ namespace Styx.Logic
         {
             try
             {
-                if (!(StyxWoW.Me == null))
+                using (StyxWoW.Memory.AcquireFrame())
                 {
-                    if (StyxWoW.IsInGame)
+                    if (!(StyxWoW.Me == null) && StyxWoW.IsInGame)
                     {
                         List<WoWObject> initialObjectList = this.GetInitialObjectList();
                         Delegate e = this._removeTargetsFilterHandlers;
@@ -469,122 +471,101 @@ namespace Styx.Logic
 
         protected virtual void DefaultRemoveTargetsFilter(List<WoWObject> units)
         {
-            Blacklist.Flush();
-            bool flag = StyxWoW.Me.IsInParty || StyxWoW.Me.IsInRaid;
-            double collectionRangeSq = Targeting.CollectionRange * Targeting.CollectionRange;
-            Profile currentProfile = ProfileManager.CurrentProfile;
-
-            // Level bounds (from 3.3.5a — not in 4.3.4 but needed for WotLK)
-            int minLevel = 0;
-            int maxLevel = 1000;
-            var currentGrindArea = StyxWoW.AreaManager.CurrentGrindArea;
-            if (currentGrindArea != null && !StyxWoW.Me.Combat)
+            using (StyxWoW.Memory.AcquireFrame())
             {
-                minLevel = currentGrindArea.TargetMinLevel;
-                maxLevel = currentGrindArea.TargetMaxLevel;
-            }
+                Blacklist.Flush();
 
-            // Party/raid guid sets for combat protection
-            HashSet<ulong> minionGuids = new HashSet<ulong>();
-            HashSet<ulong> playerGuids = new HashSet<ulong>();
-            if (StyxWoW.Me.IsInRaid)
-            {
-                foreach (WoWPlayer member in StyxWoW.Me.RaidMembers)
+                bool flag = StyxWoW.Me.IsInParty || StyxWoW.Me.IsInRaid;
+                double num = Targeting.CollectionRange * Targeting.CollectionRange;
+                Profile currentProfile = ProfileManager.CurrentProfile;
+
+                HashSet<ulong> hashSet = new HashSet<ulong>();
+                HashSet<ulong> hashSet2 = new HashSet<ulong>();
+                if (StyxWoW.Me.IsInRaid)
                 {
-                    if (member == null) continue;
-                    playerGuids.Add(member.Guid);
-                    foreach (WoWUnit min in member.Minions)
-                        minionGuids.Add(min.Guid);
-                }
-            }
-            else if (StyxWoW.Me.IsInParty)
-            {
-                foreach (WoWPlayer member in StyxWoW.Me.PartyMembers)
-                {
-                    if (member == null) continue;
-                    playerGuids.Add(member.Guid);
-                    foreach (WoWUnit min in member.Minions)
-                        minionGuids.Add(min.Guid);
-                }
-            }
-
-            bool mounted = StyxWoW.Me.Mounted;
-            bool isInsideBattleground = Battlegrounds.IsInsideBattleground;
-
-            // Hard distance cap - units beyond this are stale pointers or server
-            // ghosts; no mob in WoW 3.3.5a can legitimately aggro from this far.
-            double hardDistCapSq = 300.0 * 300.0; // 300 yd
-
-            for (int i = units.Count - 1; i >= 0; i--)
-            {
-                WoWObject obj = units[i];
-                if (obj == null || !(obj is WoWUnit) || !obj.IsValid)
-                {
-                    units.RemoveAt(i);
-                    continue;
-                }
-                WoWUnit unit = (WoWUnit)obj;
-
-                // PERF: early distance pre-filter — eliminates 95% of units in dense zones (Dalaran,
-                // cities) with a single DistanceSqr read before touching any other property.
-                // In Dalaran 200+ units are present; without this, DefaultRemoveTargetsFilter reads
-                // 10+ properties per unit → 2000+ ReadProcessMemory per tick → 26 000/s → overload.
-                // Keep units that are in combat (could be attacking party) even if far.
-                if (unit.DistanceSqr > collectionRangeSq && !unit.Combat)
-                {
-                    units.RemoveAt(i);
-                    continue;
-                }
-
-                // Remove stale/impossibly-distant objects before any combat
-                // protection can keep them alive (fixes 4347-yard phantom targets).
-                if (unit.DistanceSqr > hardDistCapSq)
-                {
-                    units.RemoveAt(i);
-                    continue;
-                }
-
-                bool isPlayer = unit is WoWPlayer;
-                bool combat = unit.Combat;
-
-                // Layer 1: In party/raid combat, protect units targeting party members or party pets
-                if (isPlayer || !combat || !flag || (!playerGuids.Contains(unit.CurrentTargetGuid) && !minionGuids.Contains(unit.Guid)))
-                {
-                    bool isAlive = unit.IsAlive;
-                    bool petAggro = unit.PetAggro;
-                    // Layer 2: In combat, protect aggroed/targeting units
-                    if (isPlayer || !combat || !isAlive || (!petAggro && !unit.Aggro && !unit.IsTargetingMeOrPet && !unit.IsTargetingAnyMinion))
+                    using (List<WoWPlayer>.Enumerator enumerator = StyxWoW.Me.RaidMembers.GetEnumerator())
                     {
-                        double distSq = unit.DistanceSqr;
-                        bool isFriendly = unit.IsFriendly;
-                        // Layer 3: In combat, protect hostile units targeting me within range
-                        if (!isPlayer || !combat || !isAlive || distSq >= collectionRangeSq || isFriendly || (!unit.IsTargetingMeOrPet && !unit.IsTargetingAnyMinion))
+                        while (enumerator.MoveNext())
                         {
-                            uint entry = unit.Entry;
-                            WoWPoint location = unit.Location;
-
-                            // Big removal OR-chain (matches HB 4.3.4 + 3.3.5a level bounds)
-                            if (_blacklistedMobIds.Contains(entry)
-                                || unit.Level < minLevel
-                                || unit.Level > maxLevel
-                                || Blacklist.Contains(unit.Guid, false)
-                                || unit.Dead
-                                || distSq > collectionRangeSq
-                                || unit.OnTaxi
-                                || unit.IsFlightMaster
-                                || (unit.IsFlying && !isInsideBattleground)
-                                || (unit.TaggedByOther && !flag)
-                                || (currentProfile != null && (currentProfile.AvoidMobs.Contains(entry) || currentProfile.AvoidMobs.Contains(unit.Name)))
-                                || (currentProfile != null && (Targeting.IsTooNearBlackspot(currentProfile.Blackspots, location) || this.IsNotWithinHotspotRange(location, false)))
-                                || unit.IsCritter
-                                || unit.IsNonCombatPet
-                                || !unit.Attackable
-                                || (mounted && this.IsNotWithinHotspotRange(location, false))
-                                || isFriendly)
+                            WoWPlayer woWPlayer = enumerator.Current;
+                            hashSet2.Add(woWPlayer.Guid);
+                            foreach (WoWUnit woWUnit in woWPlayer.Minions)
                             {
-                                units.RemoveAt(i);
+                                hashSet.Add(woWUnit.Guid);
                             }
                         }
+                    }
+                }
+
+                if (StyxWoW.Me.IsInParty)
+                {
+                    foreach (WoWPlayer woWPlayer2 in StyxWoW.Me.PartyMembers)
+                    {
+                        hashSet2.Add(woWPlayer2.Guid);
+                        foreach (WoWUnit woWUnit2 in woWPlayer2.Minions)
+                        {
+                            hashSet.Add(woWUnit2.Guid);
+                        }
+                    }
+                }
+
+                bool isInsideBattleground = Battlegrounds.IsInsideBattleground;
+
+                for (int i = units.Count - 1; i >= 0; i--)
+                {
+                    WoWObject woWObject = units[i];
+                    if (!(woWObject == null) && woWObject is WoWUnit)
+                    {
+                        bool isPlayer = woWObject is WoWPlayer;
+                        WoWUnit woWUnit3 = (WoWUnit)woWObject;
+                        bool combat = woWUnit3.Combat;
+
+                        if (isPlayer || !combat || !flag || (!hashSet2.Contains(woWUnit3.CurrentTargetGuid) && !hashSet.Contains(woWUnit3.Guid)))
+                        {
+                            bool isAlive = woWUnit3.IsAlive;
+                            bool petAggro = woWUnit3.PetAggro;
+
+                            if (isPlayer || !combat || !isAlive || (!petAggro && !woWUnit3.Aggro && !woWUnit3.IsTargetingMeOrPet && !woWUnit3.IsTargetingAnyMinion))
+                            {
+                                double distanceSqr = woWUnit3.DistanceSqr;
+                                bool isFriendly = woWUnit3.IsFriendly;
+
+                                if (!isPlayer || !combat || !isAlive || distanceSqr >= num || isFriendly || (!woWUnit3.IsTargetingMeOrPet && !woWUnit3.IsTargetingAnyMinion))
+                                {
+                                    uint entry = woWUnit3.Entry;
+                                    WoWPoint location = woWUnit3.Location;
+                                    bool removed = Targeting.hashSet_0.Contains(entry) || Blacklist.Contains(woWUnit3.Guid, false) || woWUnit3.Dead || distanceSqr > num || woWUnit3.OnTaxi || woWUnit3.IsFlightMaster || (woWUnit3.IsFlying && !isInsideBattleground) || (woWUnit3.TaggedByOther && !flag);
+
+                                    if (!removed && currentProfile != null)
+                                    {
+                                        removed = currentProfile.AvoidMobs.Contains(entry) || currentProfile.AvoidMobs.Contains(woWUnit3.Name);
+                                    }
+
+                                    if (!removed)
+                                    {
+                                        bool tooNearBlackspot = Targeting.IsTooNearBlackspot(currentProfile != null ? currentProfile.Blackspots : null, location);
+                                        if (tooNearBlackspot)
+                                        {
+                                            removed = true;
+                                        }
+
+                                        if (!removed && (woWUnit3.IsCritter || woWUnit3.IsNonCombatPet || !woWUnit3.Attackable || isFriendly))
+                                        {
+                                            removed = true;
+                                        }
+                                    }
+
+                                    if (removed)
+                                    {
+                                        units.RemoveAt(i);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        units.RemoveAt(i);
                     }
                 }
             }
@@ -592,76 +573,66 @@ namespace Styx.Logic
 
         protected virtual void DefaultIncludeTargetsFilter(List<WoWObject> incomingUnits, HashSet<WoWObject> outgoingUnits)
         {
-            // HB 6.2.3 fix: use IsBeingAttacked (threat table read) alongside Combat.
-            // StyxWoW.Me.Combat can drop to false for 1-3 frames after a kill while
-            // a second mob is still actively attacking — IsBeingAttacked stays true
-            // because the threat entry persists, so adds are never missed mid-combat.
-            bool isInCombat = StyxWoW.Me.Combat
-                || StyxWoW.Me.IsBeingAttacked
-                || StyxWoW.Me.Minions.Any(m => m.Combat);
-
-            foreach (WoWObject woWObject in incomingUnits)
+            using (StyxWoW.Memory.AcquireFrame())
             {
-                bool isInsideBattleground = Battlegrounds.IsInsideBattleground;
-                WoWUnit unit = woWObject.ToUnit();
+                bool isInCombat = StyxWoW.Me.Combat
+                    || StyxWoW.Me.IsBeingAttacked
+                    || StyxWoW.Me.Minions.Any(m => m.Combat);
 
-                if (isInCombat)
+                foreach (WoWObject woWObject in incomingUnits)
                 {
-                    // Player branch (HB 4.3.4 lines 503-512)
-                    if (!isInsideBattleground && woWObject is WoWPlayer)
-                    {
-                        WoWPlayer woWPlayer = woWObject.ToPlayer();
-                        if (woWPlayer != null
-                            && (woWPlayer.Aggro || woWPlayer.PetAggro || woWPlayer.IsTargetingAnyMinion || woWPlayer.IsTargetingMeOrPet)
-                            && woWPlayer.Combat
-                            && !woWPlayer.IsFriendly)
-                        {
-                            outgoingUnits.Add(woWPlayer);
-                        }
-                    }
-                    else
-                    {
-                        // Special quest mob check (HB 4.3.4 lines 518-530, hashSet_2)
-                        if (_specialQuestMobIds.Contains(unit.Entry))
-                        {
-                            if (unit.TaggedByMe && unit.HealthPercent < 99.0)
-                            {
-                                outgoingUnits.Add(unit);
-                                continue;
-                            }
-                            if ((StyxWoW.Me.QuestLog.ContainsQuest(12678U) || StyxWoW.Me.QuestLog.ContainsQuest(12722U))
-                                && unit.DistanceSqr < 400.0
-                                && unit.NpcEmoteState == 431U) // EmoteState.STATE_COWER
-                            {
-                                outgoingUnits.Add(unit);
-                                continue;
-                            }
-                        }
+                    bool isInsideBattleground = Battlegrounds.IsInsideBattleground;
+                    WoWUnit unit = woWObject.ToUnit();
 
-                        // Normal unit combat include (HB 4.3.4 lines 530-535)
-                        // + IsTargetingMeOrPet: covers mobs whose threat-table entry hasn't
-                        //   populated yet (e.g. adds that aggro while killing another mob).
-                        //   The remove filter already protects these units; the include filter
-                        //   must also recognise them so FirstUnit is never null mid-combat.
-                        if (unit.Aggro || (unit.Fleeing && unit.TaggedByMe) || unit.IsTargetingAnyMinion || unit.IsTargetingMeOrPet)
+                    if (isInCombat)
+                    {
+                        if (!isInsideBattleground && woWObject is WoWPlayer)
                         {
-                            outgoingUnits.Add(unit);
+                            WoWPlayer woWPlayer = woWObject.ToPlayer();
+                            if (woWPlayer != null
+                                && (woWPlayer.Aggro || woWPlayer.PetAggro || woWPlayer.IsTargetingAnyMinion || woWPlayer.IsTargetingMeOrPet)
+                                && woWPlayer.Combat
+                                && !woWPlayer.IsFriendly)
+                            {
+                                outgoingUnits.Add(woWPlayer);
+                            }
+                        }
+                        else
+                        {
+                            if (_specialQuestMobIds.Contains(unit.Entry))
+                            {
+                                if (unit.TaggedByMe && unit.HealthPercent < 99.0)
+                                {
+                                    outgoingUnits.Add(unit);
+                                    continue;
+                                }
+                                if ((StyxWoW.Me.QuestLog.ContainsQuest(12678U) || StyxWoW.Me.QuestLog.ContainsQuest(12722U))
+                                    && unit.DistanceSqr < 400.0
+                                    && unit.NpcEmoteState == 431U)
+                                {
+                                    outgoingUnits.Add(unit);
+                                    continue;
+                                }
+                            }
+
+                            if (unit.Aggro || (unit.Fleeing && unit.TaggedByMe) || unit.IsTargetingAnyMinion || unit.IsTargetingMeOrPet)
+                            {
+                                outgoingUnits.Add(unit);
+                            }
                         }
                     }
                 }
-            }
 
-            // BotPoi Kill AFTER the loop (HB 4.3.4 lines 537-544)
-            // With dungeon/raid exclusion
-            if (!StyxWoW.Me.CurrentMap.IsDungeon && !StyxWoW.Me.CurrentMap.IsRaid)
-            {
-                WoWObject asObject;
-                if (BotPoi.Current.Type == PoiType.Kill
-                    && (asObject = BotPoi.Current.AsObject) != null
-                    && asObject.IsValid
-                    && !outgoingUnits.Contains(asObject))
+                if (!StyxWoW.Me.CurrentMap.IsDungeon && !StyxWoW.Me.CurrentMap.IsRaid)
                 {
-                    outgoingUnits.Add(asObject);
+                    WoWObject asObject;
+                    if (BotPoi.Current.Type == PoiType.Kill
+                        && (asObject = BotPoi.Current.AsObject) != null
+                        && asObject.IsValid
+                        && !outgoingUnits.Contains(asObject))
+                    {
+                        outgoingUnits.Add(asObject);
+                    }
                 }
             }
         }
@@ -671,109 +642,99 @@ namespace Styx.Logic
         /// </summary>
         protected virtual void DefaultTargetWeight(List<TargetPriority> units)
         {
-            bool inCombat = StyxWoW.Me.PetInCombat || StyxWoW.Me.Combat;
-            LocalPlayer me = StyxWoW.Me;
-            Profile currentProfile = ProfileManager.CurrentProfile;
-
-            // HB 4.3.4: inline batch MassTraceLine for LOS before scoring.
-            bool[] losResults = null;
-            if (!Battlegrounds.IsInsideBattleground)
+            using (StyxWoW.Memory.AcquireFrame())
             {
-                WorldLine[] traceLines = new WorldLine[units.Count];
-                WoWPoint traceLinePos = StyxWoW.Me.GetTraceLinePos();
-                for (int i = units.Count - 1; i >= 0; i--)
+                bool inCombat = StyxWoW.Me.PetInCombat || StyxWoW.Me.Combat;
+                LocalPlayer me = StyxWoW.Me;
+                Profile currentProfile = ProfileManager.CurrentProfile;
+
+                bool[] losResults = null;
+                if (!Battlegrounds.IsInsideBattleground)
                 {
-                    traceLines[i] = new WorldLine(traceLinePos, units[i].Object.ToUnit().GetTraceLinePos());
+                    WorldLine[] traceLines = new WorldLine[units.Count];
+                    WoWPoint traceLinePos = StyxWoW.Me.GetTraceLinePos();
+                    for (int i = units.Count - 1; i >= 0; i--)
+                    {
+                        traceLines[i] = new WorldLine(traceLinePos, units[i].Object.ToUnit().GetTraceLinePos());
+                    }
+                    GameWorld.MassTraceLine(traceLines, GameWorld.CGWorldFrameHitFlags.HitTestLOS, out losResults);
                 }
-                GameWorld.MassTraceLine(traceLines, GameWorld.CGWorldFrameHitFlags.HitTestLOS, out losResults);
-            }
 
-            for (int j = units.Count - 1; j >= 0; j--)
-            {
-                WoWUnit unit = units[j].Object.ToUnit();
-                double num = 200.0 - 2.0 * unit.Distance;
-                double distance = unit.Distance;
-                ulong guid = unit.Guid;
-                ulong currentTargetGuid = unit.CurrentTargetGuid;
-
-                if (!inCombat)
+                for (int j = units.Count - 1; j >= 0; j--)
                 {
-                    // Elite distance-gated removal (HB 4.3.4)
-                    if (currentProfile != null && !currentProfile.TargetElites && unit.Elite)
+                    WoWUnit unit = units[j].Object.ToUnit();
+                    double num = 200.0 - 2.0 * unit.Distance;
+                    double distance = unit.Distance;
+                    ulong guid = unit.Guid;
+                    ulong currentTargetGuid = unit.CurrentTargetGuid;
+
+                    if (!inCombat)
                     {
-                        if (distance > 20.0)
+                        if (currentProfile != null && !currentProfile.TargetElites && unit.Elite)
                         {
-                            units.RemoveAt(j);
-                            continue;
+                            if (distance > 20.0)
+                            {
+                                units.RemoveAt(j);
+                                continue;
+                            }
+                            num -= 1000.0;
                         }
-                        num -= 1000.0;
-                    }
 
-                    // Blacklist distance-gated removal (HB 4.3.4)
-                    if (Blacklist.Contains(guid))
-                    {
-                        if (distance > 20.0)
+                        if (Blacklist.Contains(guid))
                         {
-                            units.RemoveAt(j);
-                            continue;
+                            if (distance > 20.0)
+                            {
+                                units.RemoveAt(j);
+                                continue;
+                            }
+                            num -= 1000.0;
                         }
-                        num -= 1000.0;
-                    }
 
-                    // Reaction score, gated by distance < 30.0 (HB 4.3.4)
-                    if (unit.MyReaction <= WoWUnitReaction.Neutral && distance < 30.0)
-                    {
-                        num += (30.0 - distance) * (double)(WoWUnitReaction.Friendly - unit.MyReaction);
-                    }
+                        if (unit.MyReaction <= WoWUnitReaction.Neutral && distance < 30.0)
+                        {
+                            num += (30.0 - distance) * (double)(WoWUnitReaction.Friendly - unit.MyReaction);
+                        }
 
-                    // CurrentTarget or POI Kill bonus (HB 4.3.4: +150)
-                    if (currentTargetGuid == guid || (BotPoi.Current.Type == PoiType.Kill && BotPoi.Current.Guid == unit.Guid))
-                    {
-                        num += 150.0;
-                    }
+                        if (currentTargetGuid == guid || (BotPoi.Current.Type == PoiType.Kill && BotPoi.Current.Guid == unit.Guid))
+                        {
+                            num += 150.0;
+                        }
 
-                    // Pet penalty (HB 4.3.4)
-                    if (unit.IsPet)
-                    {
-                        num -= 50.0;
-                    }
+                        if (unit.IsPet)
+                        {
+                            num -= 50.0;
+                        }
 
-                    // Aggro range bonus (HB 4.3.4)
-                    float myAggroRange = unit.MyAggroRange;
-                    if (myAggroRange != 0f && distance < (double)(myAggroRange + 5f))
-                    {
-                        num += 100.0;
-                    }
+                        float myAggroRange = unit.MyAggroRange;
+                        if (myAggroRange != 0f && distance < (double)(myAggroRange + 5f))
+                        {
+                            num += 100.0;
+                        }
 
-                    // LOS bonus/penalty (HB 4.3.4: MassTraceLine returns true=blocked)
-                    if (losResults != null && !losResults[j])
-                    {
-                        num += 25.0;
+                        if (losResults != null && !losResults[j])
+                        {
+                            num += 25.0;
+                        }
+                        else
+                        {
+                            num -= 25.0;
+                        }
                     }
                     else
                     {
-                        num -= 25.0;
+                        if (me.GotTarget && me.CurrentTarget.MaxMana > 1U && me.CurrentTarget.ManaPercent > 0.0)
+                        {
+                            num += unit.ManaPercent;
+                        }
+                        num -= unit.HealthPercent;
+                        if (!unit.CanSelect)
+                        {
+                            num -= 1000.0;
+                        }
                     }
 
-                    // HB 6.2.3 removed GetAggroWithin from scoring (was O(N²), too
-                    // expensive for external-process RPM).  Kept for reference:
-                    // num -= (double)(5 * Targeting.GetAggroWithin(unit.Location, 15f));
+                    units[j].Score += num;
                 }
-                else
-                {
-                    // Combat scoring (HB 4.3.4)
-                    if (me.GotTarget && me.CurrentTarget.MaxMana > 1U && me.CurrentTarget.ManaPercent > 0.0)
-                    {
-                        num += unit.ManaPercent;
-                    }
-                    num -= unit.HealthPercent;
-                    if (!unit.CanSelect)
-                    {
-                        num -= 1000.0;
-                    }
-                }
-
-                units[j].Score += num;
             }
         }
 

@@ -213,7 +213,7 @@ namespace Styx.Logic.Pathing
                     {
                         float neededFacing = WoWMathHelper.CalculateNeededFacing(myLocation, destination);
                         WoWPoint p = GetPointInDirection(myLocation, 10f, neededFacing, WoWMathHelper.DegreesToRadians(60f));
-                        Navigator.PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(p.X, p.Y, p.Z));
+                        Navigator.PlayerMover.MoveTowards(p);
                     }
                     // Druid flight form while swimming
                     else if (!me.HasAura("Sea Legs") && me.IsSwimming &&
@@ -314,7 +314,7 @@ namespace Styx.Logic.Pathing
                 {
                     // Only re-issue CTM if not already moving to the exact same point
                     if (!activeMover.IsMoving || ctm.ClickPos != flightPoint || !ctm.IsClickMoving)
-                        Navigator.PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(flightPoint.X, flightPoint.Y, flightPoint.Z));
+                        Navigator.PlayerMover.MoveTowards(flightPoint);
 
                     // Second ascent check after issuing movement command
                     if (MountHelper.Mounted && ((!hasSeaLegs && !activeMover.IsFlying) || (hasSeaLegs && !activeMover.IsSwimming)))
@@ -323,7 +323,7 @@ namespace Styx.Logic.Pathing
                         WoWMovement.Move(WoWMovement.MovementDirection.Forward | WoWMovement.MovementDirection.JumpAscend);
                         StyxWoW.Sleep(100);
                         WoWMovement.MoveStop(WoWMovement.MovementDirection.Forward | WoWMovement.MovementDirection.JumpAscend);
-                        Navigator.PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(flightPoint.X, flightPoint.Y, flightPoint.Z));
+                        Navigator.PlayerMover.MoveTowards(flightPoint);
                         return;
                     }
                 }
@@ -504,7 +504,7 @@ namespace Styx.Logic.Pathing
                     };
                 }
                 _polyNavMapId = mapId;
-                _polyNav = new PolyNav(area, AerialBlackspotManager.Blackspots);
+                _polyNav = new PolyNav(area, Styx.Logic.Pathing.FlightorNavigation.BlackspotManager.Blackspots);
             }
 
             Vector2[] rawPath = _polyNav.FindPath(from, to);

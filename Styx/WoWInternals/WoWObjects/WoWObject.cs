@@ -565,7 +565,7 @@ namespace Styx.WoWInternals.WoWObjects
                 throw new InvalidOperationException("Cannot read descriptor on invalid object");
 
             field *= 4U;
-            uint descriptorPtr = ObjectManager.Wow.Read<uint>(BaseAddress + 8U);
+            uint descriptorPtr = ObjectManager.Wow.Read<uint>(BaseAddress + DescriptorOffset);
             return ObjectManager.Wow.Read<T>(descriptorPtr + field);
         }
 
@@ -577,7 +577,7 @@ namespace Styx.WoWInternals.WoWObjects
             {
                 uint descriptorPtr = Memory.Read<uint>(BaseAddress + DescriptorOffset);
                 if (descriptorPtr == 0U) return default;
-                
+
                 return Memory.Read<T>(descriptorPtr + (uint)offset);
             }
             catch

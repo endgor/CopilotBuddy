@@ -17,7 +17,7 @@ namespace Styx.Logic.Pathing
     /// Direct port of HB 6.2.3 Class469 (MeshNavigator stuck handler).
     /// Sequence: Dismount → Jump(1x, LOS-gated) → StrafeFwdL → StrafeFwdR → Dismount2 → StrafeL → StrafeR → Blackspot+Reverse
     /// </summary>
-    internal class StuckHandler : IStuckHandler
+    internal class DefaultStuckHandler : StuckHandler
     {
         private const float UnstickResetDistanceSqr = 100f;
         private const float DismountRaycastDistance = 3f;
@@ -39,13 +39,13 @@ namespace Styx.Logic.Pathing
         private bool _triedStrafeRight;
         private bool _isCurrent;
 
-        public StuckHandler()
+        public DefaultStuckHandler()
         {
             _lastCheckLocation = WoWPoint.Empty;
             _movementStopwatch.Restart();
         }
 
-        public void OnSetAsCurrent()
+        public override void OnSetAsCurrent()
         {
             if (_isCurrent)
                 return;
@@ -55,7 +55,7 @@ namespace Styx.Logic.Pathing
             _isCurrent = true;
         }
 
-        public void OnRemoveAsCurrent()
+        public override void OnRemoveAsCurrent()
         {
             if (!_isCurrent)
                 return;
@@ -79,7 +79,7 @@ namespace Styx.Logic.Pathing
             }
         }
 
-        public bool IsStuck()
+        public override bool IsStuck()
         {
             var me = ObjectManager.Me;
             if (me == null)
@@ -120,7 +120,7 @@ namespace Styx.Logic.Pathing
             return false;
         }
 
-        public void Unstick()
+        public override void Unstick()
         {
             var me = ObjectManager.Me;
             if (me == null)
@@ -209,7 +209,7 @@ namespace Styx.Logic.Pathing
             _movementStopwatch.Restart();
         }
 
-        public void Reset()
+        public override void Reset()
         {
             _movementStopwatch.Restart();
             _lastCheckLocation = WoWPoint.Empty;
@@ -226,15 +226,8 @@ namespace Styx.Logic.Pathing
             _triedStrafeRight = false;
         }
 
-        /// <summary>
-        /// HB 6.2.3 pattern: CTMStop → Move → Sleep(duration) → MoveStop → Sleep(200).
-        /// ClickToMoveStop() must precede keyboard movement to cancel any pending CTM;
-        /// without it, WoW's CTM state machine keeps driving the character toward the
-        /// old click target during the strafe, leaving the character facing sideways.
-        /// </summary>
         private void MoveInDirection(WoWMovement.MovementDirection direction, int milliseconds)
         {
-            WoWMovement.ClickToMoveStop(); // Cancel pending CTM before keyboard movement
             WoWMovement.Move(direction);
             StyxWoW.Sleep(milliseconds);
             WoWMovement.MoveStop(direction);

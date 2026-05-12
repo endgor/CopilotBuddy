@@ -15,7 +15,7 @@ namespace Styx.Logic.Pathing
 
         bool CanNavigateFully(WoWPoint from, WoWPoint to, int maxHops);
 
-        IStuckHandler StuckHandler { get; set; }
+        StuckHandler StuckHandler { get; set; }
 
         bool AtLocation(WoWPoint point1, WoWPoint point2);
     }

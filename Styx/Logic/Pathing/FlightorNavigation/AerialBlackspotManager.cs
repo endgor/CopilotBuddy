@@ -1,5 +1,4 @@
-// AerialBlackspotManager.cs — Ported from HB 6.2.3 Styx/Pathing/FlightorNavigation/BlackspotManager.cs
-// Renamed to AerialBlackspotManager to avoid collision with the ground BlackspotManager.
+// BlackspotManager.cs — Ported from HB 6.2.3 Styx/Pathing/FlightorNavigation/BlackspotManager.cs
 // Manages polygon-based no-fly zones per map and faction (cities, phased areas, etc.).
 // WotLK: only maps 0 (EK), 1 (Kalimdor), 530 (Outland), 571 (Northrend) are populated.
 
@@ -24,7 +23,7 @@ namespace Styx.Logic.Pathing.FlightorNavigation
     /// Manages polygon-based aerial blackspots that Flightor avoids during flight.
     /// Ported from HB 6.2.3 BlackspotManager; WotLK-only default data.
     /// </summary>
-    public static class AerialBlackspotManager
+    public static class BlackspotManager
     {
         // (mapId, faction) → list of polygons
         private static readonly Dictionary<Tuple<uint, WoWFactionGroup>, List<Vector2[]>> _blackspots =

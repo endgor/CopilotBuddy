@@ -134,6 +134,9 @@ namespace Bots.DungeonBuddy
             _lootRollHandler = OnStartLootRoll;
             Lua.Events.AttachEvent("START_LOOT_ROLL", _lootRollHandler);
 
+            // HB 6.2.3: DungeonBot.Start() wires AvoidanceNavigationProvider so MoveTo() routes
+            // around obstacles. Our equivalent: delegate injection via WorldObstacleManager.
+            Bots.DungeonBuddy.Avoidance.WorldObstacleManager.Initialize();
         }
 
         public override void Stop()
@@ -147,6 +150,8 @@ namespace Bots.DungeonBuddy
             Targeting.Instance = new Targeting();
             DungeonManager.Clear();
             BossManager.Reset();
+            // HB 6.2.3: unset AvoidanceNavigationProvider on stop. Our equivalent: Shutdown().
+            Bots.DungeonBuddy.Avoidance.WorldObstacleManager.Shutdown();
             Bots.DungeonBuddy.Avoidance.AvoidanceManager.Clear();
             _activeDungeonBehavior = null;
         }
@@ -2431,7 +2436,7 @@ namespace Bots.DungeonBuddy
                 player.DistanceSqr < 10000.0 &&
                 Math.Abs(player.Z - StyxWoW.Me.Z) < 30f)
             {
-                Navigator.PlayerMover.MoveTowards(new Tripper.XNAMath.Vector3(moveTo.X, moveTo.Y, moveTo.Z));
+                Navigator.PlayerMover.MoveTowards(moveTo);
             }
 
             return moveTo;

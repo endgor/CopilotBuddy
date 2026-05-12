@@ -7,8 +7,14 @@ namespace Tripper.Navigation
     /// Represents the result of a pathfinding operation.
     /// Contains the calculated path points, polygon information, flags, and status.
     /// </summary>
-    public sealed class PathFindResult
+    public class PathFindResult
     {
+        /// <summary>
+        /// Mesh manager that produced this result.
+        /// HB 6.2.3 exposes this on PathFindResult for manager-level follow-up queries.
+        /// </summary>
+        public IMeshManager? Manager { get; internal set; }
+
         /// <summary>
         /// Time elapsed during pathfinding operation.
         /// </summary>
@@ -117,6 +123,7 @@ namespace Tripper.Navigation
             Aborted = false;
             IsPartialPath = false;
             FailStep = PathFindStep.None;
+            Manager = null;
         }
 
         /// <summary>

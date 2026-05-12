@@ -5,6 +5,8 @@
 
 using System;
 using System.Globalization;
+using System.Xml.Linq;
+using Styx.Logic.Profiles;
 
 namespace Styx.Logic.Pathing.FlightorAnnotation
 {
@@ -22,6 +24,27 @@ namespace Styx.Logic.Pathing.FlightorAnnotation
             Dismount = dismount;
             Location = location;
             Radius = radius;
+        }
+
+        public static IndoorEntrance FromXml(XElement element)
+        {
+            WoWPoint location = ProfileHelper.ParseLocation(element);
+            bool dismount = true;
+            float radius = 4f;
+
+            XAttribute? dismountAttribute = element.Attribute("Dismount");
+            if (dismountAttribute != null && !bool.TryParse(dismountAttribute.Value, out dismount))
+            {
+                throw new ProfileAttributeExpectedException<int>(dismountAttribute, Array.Empty<string>());
+            }
+
+            XAttribute? radiusAttribute = element.Attribute("Radius");
+            if (radiusAttribute != null && !float.TryParse(radiusAttribute.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out radius))
+            {
+                throw new ProfileAttributeExpectedException<int>(radiusAttribute, Array.Empty<string>());
+            }
+
+            return new IndoorEntrance(location, dismount, radius);
         }
 
         /// <summary>Whether to dismount on arrival at this entrance.</summary>

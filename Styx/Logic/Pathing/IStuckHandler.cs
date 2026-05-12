@@ -1,36 +1,21 @@
-using System;
-
 namespace Styx.Logic.Pathing
 {
-    /// <summary>
-    /// Interface for handling stuck detection and recovery.
-    /// </summary>
-    public interface IStuckHandler
+    public abstract class StuckHandler
     {
-        /// <summary>
-        /// Checks if the player is currently stuck.
-        /// </summary>
-        /// <returns>True if stuck, false otherwise.</returns>
-        bool IsStuck();
+        public abstract bool IsStuck();
 
-        /// <summary>
-        /// Attempts to unstick the player.
-        /// </summary>
-        void Unstick();
+        public abstract void Unstick();
 
-        /// <summary>
-        /// Resets the stuck handler state.
-        /// </summary>
-        void Reset();
+        public virtual void Reset()
+        {
+        }
 
-        /// <summary>
-        /// Called when this stuck handler becomes the active navigation stuck handler.
-        /// </summary>
-        void OnSetAsCurrent();
+        public virtual void OnSetAsCurrent()
+        {
+        }
 
-        /// <summary>
-        /// Called when this stuck handler is no longer the active navigation stuck handler.
-        /// </summary>
-        void OnRemoveAsCurrent();
+        public virtual void OnRemoveAsCurrent()
+        {
+        }
     }
 }

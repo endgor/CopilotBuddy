@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Tripper.Navigation
 {
@@ -30,15 +31,33 @@ namespace Tripper.Navigation
         /// Gets the tile identifier for a given world position.
         /// Matches Navigation.dll's 1:1 raw-tile WorldToTile conversion.
         /// </summary>
+        public static TileIdentifier GetByPosition(Vector3 pos)
+        {
+            return GetByPosition(pos.X, pos.Y);
+        }
+
+        public static TileIdentifier GetByPosition(ref Vector3 pos)
+        {
+            return GetByPosition(pos.X, pos.Y);
+        }
+
+        public static TileIdentifier GetByPosition(Vector2 pos)
+        {
+            return GetByPosition(pos.X, pos.Y);
+        }
+
+        /// <summary>
+        /// Gets the tile identifier for a given world position.
+        /// Matches Navigation.cpp WorldToTile for 1x1 MaNGOS tiles.
+        /// </summary>
         /// <param name="x">World X position.</param>
         /// <param name="y">World Y position.</param>
         /// <returns>TileIdentifier for the position.</returns>
         public static TileIdentifier GetByPosition(float x, float y)
         {
-            const float tileSize = 533.33333f;
-            const float gridOrigin = 32.0f * tileSize;
-            int tileX = (int)((gridOrigin - x) / tileSize);
-            int tileY = (int)((gridOrigin - y) / tileSize);
+            const float gridOrigin = 32.0f * MapConsts.TileSize;
+            int tileX = (int)((gridOrigin - x) / MapConsts.TileSize);
+            int tileY = (int)((gridOrigin - y) / MapConsts.TileSize);
             return new TileIdentifier(tileX, tileY);
         }
 
@@ -63,10 +82,7 @@ namespace Tripper.Navigation
         /// </summary>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return (X * 397) ^ Y;
-            }
+            return Y * 64 + X;
         }
 
         /// <summary>
@@ -74,7 +90,7 @@ namespace Tripper.Navigation
         /// </summary>
         public override string ToString()
         {
-            return $"Tile({X}, {Y})";
+            return string.Format("<{0}, {1}>", X, Y);
         }
 
         public static bool operator ==(TileIdentifier left, TileIdentifier right)

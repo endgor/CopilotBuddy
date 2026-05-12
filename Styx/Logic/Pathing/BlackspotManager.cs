@@ -67,14 +67,6 @@ namespace Styx.Logic.Pathing
         private const float BlackspotAreaCost = 60f;
 
         /// <summary>
-        /// Polygon flag bit used to exclude blackspot polygons from pathfinding entirely.
-        /// 0x0800 is unused in WoW navmesh polygon flags.
-        /// Cost-only approach (area 17 = 60x) fails when no alternate navmesh path exists.
-        /// Setting this bit + excluding it from the global filter makes polygons truly impassable.
-        /// </summary>
-        private const ushort BlackspotPolyFlag = 0x0800;
-        
-        /// <summary>
         /// Maximum polygons to query for a single blackspot.
         /// </summary>
         private const int MaxPolygonsPerBlackspot = 8192;
@@ -97,7 +89,10 @@ namespace Styx.Logic.Pathing
         {
             // Subscribe to profile changes to load blackspots from profile
             BotEvents.Profile.OnNewProfileLoaded += OnNewProfileLoaded;
-            
+
+            // Clear session blackspots on bot stop so stuck-handler marks don't persist across runs.
+            BotEvents.OnBotStopped += OnBotStopped;
+
             // maintain tile subscription when navigation provider switches (HB 6.2.3)
             Navigator.OnNavigationProviderChanged += OnNavigationProviderChanged;
 
@@ -168,7 +163,16 @@ namespace Styx.Logic.Pathing
         }
 
         // HB 6.2.3: rewire tile subscription when provider changes
-        private static void OnNavigationProviderChanged(object sender, NavigationProviderChangedEventArgs<INavigationProvider> e)
+        private static void OnBotStopped(EventArgs args)
+        {
+            // Clear session (non-global) blackspots. StuckHandler uses AddBlackspot (non-global),
+            // so those should not persist into the next session. Global blackspots (from file) are
+            // intentional and stay. Restores navmesh polygon areas back to originals.
+            ClearBlackspots();
+        }
+
+        // HB 6.2.3: rewire tile subscription when provider changes
+        private static void OnNavigationProviderChanged(object sender, NavigationProviderChangedEventArgs<NavigationProvider> e)
         {
             try
             {
@@ -349,15 +353,10 @@ namespace Styx.Logic.Pathing
                 
             try
             {
-                NativeMethods.SetAreaCost(BlackspotAreaType, BlackspotAreaCost);
-
-                // Exclude the blackspot polygon flag so marked polys are truly impassable,
-                // not just expensive. Cost=60 is ignored when no alternate path exists.
-                ushort currentExclude = NativeMethods.GetExcludeFlags();
-                NativeMethods.SetExcludeFlags((ushort)(currentExclude | BlackspotPolyFlag));
+                NativeMethods.SetAreaCost(0u, (int)BlackspotAreaType, BlackspotAreaCost);
 
                 _areaCostInitialized = true;
-                Logging.WriteDebug($"[Blackspot] Area cost initialized: area {BlackspotAreaType} = {BlackspotAreaCost}, excludeFlags = 0x{(currentExclude | BlackspotPolyFlag):X4}");
+                Logging.WriteDebug($"[Blackspot] Area cost initialized: area {BlackspotAreaType} = {BlackspotAreaCost}x");
             }
             catch (Exception ex)
             {
@@ -533,11 +532,6 @@ namespace Styx.Logic.Pathing
                     uint status = NativeMethods.SetPolyArea(mapId, polyRef, BlackspotAreaType);
                     if ((status & 0x40000000) != 0) // DT_SUCCESS
                     {
-                        // OR in the exclude flag. Use saved original flags as base so we
-                        // never wipe walkable/swim/etc bits if GetPolyFlags had failed earlier.
-                        ushort baseFlags = _originalPolyFlags.TryGetValue(key, out ushort orig) ? orig : (ushort)0x0001;
-                        NativeMethods.SetPolyFlags(mapId, polyRef, (ushort)(baseFlags | BlackspotPolyFlag));
-
                         if (!affectedPolys.Contains(key))
                             affectedPolys.Add(key);
                         markedCount++;

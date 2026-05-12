@@ -225,6 +225,9 @@ namespace Styx.Logic
 			if (me == null || me.Level < 20)
 				return false;
 
+			if (me.Mounted)
+				return false;
+
 			if (!CanMount())
 				return false;
 
@@ -410,6 +413,9 @@ namespace Styx.Logic
 		{
 			LocalPlayer? me = Me;
 			if (me == null)
+				return false;
+
+			if (me.Mounted)
 				return false;
 
 			if (Battlegrounds.IsInsideBattleground || me.IsInInstance)
