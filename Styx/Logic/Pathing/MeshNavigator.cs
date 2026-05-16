@@ -373,22 +373,67 @@ namespace Styx.Logic.Pathing
 				}
 
 				// Drift detection (HB 6.2.3 method_15)
-				// Guard: if the player is falling (dismount/drop) the check would always fire
-				// and regenerate the path mid-air. HB method_15 returns true (= still on path)
-				// whenever IsFalling. Port: (.hb 6.2.3/Styx/Pathing/MeshNavigator.cs method_15 line 1)
+				// Uses navmesh RaycastBlocked as primary check: if the player can see the next
+				// waypoint through the navmesh, we are still on path. Only when the raycast
+				// is blocked AND the hit is not near the waypoint AND 2D perp distance exceeds
+				// PathPrecision do we regenerate. Off-mesh connection segments are skipped
+				// (HB method_15: Flags[Index-1] & OffMeshConnection → return true = on path).
 				if (!_suppressDriftCheck && _currentPathIndex > 0 && _currentPathIndex < _currentPath.Count
 				    && !(WoWMovement.ActiveMover ?? StyxWoW.Me).IsFalling)
 				{
-					WoWPoint segA = _currentPath[_currentPathIndex - 1];
-					WoWPoint segB = _currentPath[_currentPathIndex];
-					float driftDist = DistanceToLineSegment2D(me.Location, segA, segB);
-					if (driftDist * driftDist > PathPrecision * PathPrecision)
+					// Skip drift check on off-mesh connection segments (HB method_15).
+					bool isOffMeshSeg = _currentFlags != null && (_currentPathIndex - 1) < _currentFlags.Length
+					    && (_currentFlags[_currentPathIndex - 1] & TripperNav.StraightPathFlags.OffMeshConnection) != 0;
+
+					if (!isOffMeshSeg)
 					{
-						Logging.WriteDiagnostic("Generating new path because we are not on the old path anymore!");
-						_currentPath.Clear();
-						_currentPathIndex = 0;
-						_cachedPushAheadIndex = -1;
-						return MoveTo(destination, precision, destinationName);
+						bool offPath;
+						if (Navigator.IsNavigatorLoaded)
+						{
+							uint mapId = (uint)me.MapId;
+							var playerVec = new Vector3(me.Location.X, me.Location.Y, me.Location.Z);
+							WoWPoint nextWp = _currentPath[_currentPathIndex];
+							var nextVec = new Vector3(nextWp.X, nextWp.Y, nextWp.Z);
+							bool blocked = TripperNavigator.RaycastBlocked(mapId, playerVec, nextVec, out float hitT, _factionAreaType);
+							if (!blocked)
+							{
+								// Clear line-of-sight to next waypoint — still on path.
+								offPath = false;
+							}
+							else if (Math.Abs(hitT) < 1e-5f)
+							{
+								// Hit immediately at player position — on path.
+								offPath = false;
+							}
+							else
+							{
+								// Compute hit point and check if it is near the target waypoint.
+								WoWPoint hitPoint = new WoWPoint(
+									me.Location.X + (nextWp.X - me.Location.X) * hitT,
+									me.Location.Y + (nextWp.Y - me.Location.Y) * hitT,
+									me.Location.Z + (nextWp.Z - me.Location.Z) * hitT);
+								bool hitCloseToWaypoint = IsAtPoint(hitPoint, nextWp);
+								// Fallback 2D perp-distance to confirm we are truly off-path.
+								float perpDist = DistanceToLineSegment2D(me.Location, _currentPath[_currentPathIndex - 1], nextWp);
+								offPath = !hitCloseToWaypoint && perpDist * perpDist >= PathPrecision * PathPrecision;
+							}
+						}
+						else
+						{
+							// Navigator not loaded — fall back to pure 2D geometry.
+							float driftDist = DistanceToLineSegment2D(me.Location,
+								_currentPath[_currentPathIndex - 1], _currentPath[_currentPathIndex]);
+							offPath = driftDist * driftDist > PathPrecision * PathPrecision;
+						}
+
+						if (offPath)
+						{
+							Logging.WriteDiagnostic("Generating new path because we are not on the old path anymore!");
+							_currentPath.Clear();
+							_currentPathIndex = 0;
+							_cachedPushAheadIndex = -1;
+							return MoveTo(destination, precision, destinationName);
+						}
 					}
 				}
 
@@ -695,6 +740,11 @@ namespace Styx.Logic.Pathing
 					using (StyxWoW.Memory.ReleaseFrame(true))
 					{
 						int waitSlice = Math.Max(10, 1000 / Math.Max(1, (int)TreeRoot.TicksPerSecond));
+						// HB 6.2.3 method_16: cancel path after 4s in combat.
+						bool inCombat = false;
+						DateTime? combatStart = null;
+						bool aborted = false;
+
 						while (!navTask.Wait(waitSlice))
 						{
 							try
@@ -707,6 +757,30 @@ namespace Styx.Logic.Pathing
 								}
 							}
 							catch { }
+
+							inCombat = StyxWoW.Me?.IsActuallyInCombat == true;
+							if (inCombat)
+							{
+								if (combatStart == null)
+									combatStart = DateTime.UtcNow;
+								else if ((DateTime.UtcNow - combatStart.Value).TotalSeconds > 4.0)
+								{
+									Logging.WriteDiagnostic(System.Windows.Media.Colors.Red,
+										"Path search aborted due to combat.");
+									aborted = true;
+									break;
+								}
+							}
+							else
+							{
+								combatStart = null;
+							}
+						}
+
+						if (aborted)
+						{
+							navTask.Dispose();
+							return false;
 						}
 					}
 					result = navTask.Result;
@@ -808,37 +882,59 @@ namespace Styx.Logic.Pathing
 
 		/// <summary>
 		/// HB 6.2.3 MeshNavigator.method_14: skips waypoints the player has already passed.
+		/// Uses navmesh RaycastBlocked from player to each successive waypoint; stops at the
+		/// first blocked segment. Special case: off-mesh connection — project player onto the
+		/// off-mesh segment and advance if already at the projected point (smethod_3 / method_27).
 		/// </summary>
 		private void SkipPassedWaypoints(LocalPlayer me)
 		{
-			if (_currentPath.Count < 2 || me == null)
+			if (_currentPath.Count < 2 || me == null || !Navigator.IsNavigatorLoaded)
 				return;
 
-			WoWPoint playerPos = me.Location;
-			int skipTo = 0;
+			uint mapId = (uint)me.MapId;
+			var playerVec = new Vector3(me.Location.X, me.Location.Y, me.Location.Z);
 
-			for (int i = 0; i < _currentPath.Count - 1; i++)
+			int idx = 1;
+			while (idx < _currentPath.Count)
 			{
-				WoWPoint wp = _currentPath[i];
-				WoWPoint nextWp = _currentPath[i + 1];
-
-				float sx = nextWp.X - wp.X;
-				float sy = nextWp.Y - wp.Y;
-				float segLenSqr = sx * sx + sy * sy;
-				if (segLenSqr < 0.01f)
-					continue;
-
-				float px = playerPos.X - wp.X;
-				float py = playerPos.Y - wp.Y;
-				float t = (px * sx + py * sy) / segLenSqr;
-				float perpDist = DistanceToLineSegment2D(playerPos, wp, nextWp);
-
-				if (t > 0.8f && perpDist < 8f)
-					skipTo = i + 1;
-				else
+				// HB method_14: stop at off-mesh connection boundary.
+				if (_currentFlags != null && (idx - 1) < _currentFlags.Length
+				    && (_currentFlags[idx - 1] & TripperNav.StraightPathFlags.OffMeshConnection) != 0)
 					break;
+
+				var wpVec = new Vector3(_currentPath[idx].X, _currentPath[idx].Y, _currentPath[idx].Z);
+				bool blocked = TripperNavigator.RaycastBlocked(mapId, playerVec, wpVec, out _, _factionAreaType);
+				if (blocked)
+					break;
+				idx++;
 			}
 
+			int skipTo = idx - 1;
+
+			// HB method_14 off-mesh special case (smethod_3 / method_27):
+			// if we stopped at an off-mesh connection, project the player onto the segment and
+			// advance the index if we have already reached the projected point.
+			if (skipTo >= 0 && skipTo < _currentPath.Count - 1
+			    && _currentFlags != null && skipTo < _currentFlags.Length
+			    && (_currentFlags[skipTo] & TripperNav.StraightPathFlags.OffMeshConnection) != 0)
+			{
+				var area = (_currentPolyTypes != null && skipTo < _currentPolyTypes.Length)
+					? _currentPolyTypes[skipTo] : TripperNav.AreaType.Ground;
+
+				// Only advance if the off-mesh is a traversal type (not Elevator/Portal/Interact).
+				if (area != TripperNav.AreaType.Elevator && area != TripperNav.AreaType.Portal
+				    && area != TripperNav.AreaType.DefendersPortal && area != TripperNav.AreaType.HordePortal
+				    && area != TripperNav.AreaType.AlliancePortal && area != TripperNav.AreaType.InteractUnit
+				    && area != TripperNav.AreaType.InteractObject)
+				{
+					WoWPoint proj = ProjectOnSegment(me.Location, _currentPath[skipTo], _currentPath[skipTo + 1]);
+					if (IsAtPoint(me.Location, proj))
+						skipTo++;
+				}
+			}
+
+			if (skipTo >= 2)
+				Logging.WriteDiagnostic("[MeshNavigator] Skipped {0} path nodes", skipTo);
 			if (skipTo > 0)
 				_currentPathIndex = skipTo;
 		}
@@ -1209,6 +1305,21 @@ namespace Styx.Logic.Pathing
 			float ex = point.X - closestX;
 			float ey = point.Y - closestY;
 			return (float)Math.Sqrt(ex * ex + ey * ey);
+		}
+
+		/// <summary>
+		/// HB 6.2.3 MeshNavigator.smethod_3: project point P onto segment [A, B], clamped to [0, 1].
+		/// Used in SkipPassedWaypoints off-mesh special case.
+		/// </summary>
+		private static WoWPoint ProjectOnSegment(WoWPoint p, WoWPoint a, WoWPoint b)
+		{
+			float abX = b.X - a.X, abY = b.Y - a.Y, abZ = b.Z - a.Z;
+			float abLenSqr = abX * abX + abY * abY + abZ * abZ;
+			if (abLenSqr < 0.0001f) return a;
+			float t = ((p.X - a.X) * abX + (p.Y - a.Y) * abY + (p.Z - a.Z) * abZ) / abLenSqr;
+			if (t < 0f) return a;
+			if (t > 1f) return b;
+			return new WoWPoint(a.X + abX * t, a.Y + abY * t, a.Z + abZ * t);
 		}
 
 		#endregion
