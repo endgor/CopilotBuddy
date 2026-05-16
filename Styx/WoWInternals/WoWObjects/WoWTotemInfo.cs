@@ -96,11 +96,10 @@ namespace Styx.WoWInternals.WoWObjects
                 if (string.IsNullOrEmpty(name))
                     return 0;
                 
-                // Try to get spell ID from spell book
+                // GetSpellLink in WotLK 3.3.5a takes a spell name, not a spellbook slot index.
+                // The Cata-style GetSpellLink(i, 'spell') doesn't exist here — use GetSpellLink(name) directly.
                 var spellId = Lua.GetReturnVal<int>(
-                    $"local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo('{name}'); " +
-                    $"if name then for i=1,500 do local sName = GetSpellBookItemName(i, 'spell'); if sName == name then " +
-                    $"local link = GetSpellLink(i, 'spell'); if link then return tonumber(link:match('spell:(%d+)')) or 0; end end end end return 0", 0);
+                    $"local spellName = GetSpellInfo('{name}'); if spellName then local link = GetSpellLink(spellName); if link then return tonumber(link:match('spell:(%d+)')) or 0; end end return 0", 0);
                 
                 return spellId;
             }
