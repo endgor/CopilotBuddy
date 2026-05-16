@@ -281,6 +281,11 @@ namespace Styx.Logic
 
 				StyxWoW.Sleep(250);
 			}
+
+			// Mount succeeded — any stale cant-mount spots near this location are now invalid.
+			// (e.g. spots recorded during a previous combat pass at this exact location)
+			if (me.Mounted)
+				RemoveCantMountSpotsNear(me.Location, 10f);
 		}
 
 		private static int GetMountIndex(string mountName)
@@ -339,15 +344,12 @@ namespace Styx.Logic
 					return false;
 			}
 
-			bool canMount = me.IsOutdoors && !me.IsSwimming && !me.Combat;
-
-			if (!canMount)
-			{
-				AddCantMountSpot(location);
+			// Transient states: combat, swimming, indoors — don't permanently blacklist the location.
+			// Cant-mount spots are only for permanent geometry (low ceiling), not transient conditions.
+			if (!me.IsOutdoors || me.IsSwimming || me.Combat)
 				return false;
-			}
 
-			// HB 4.3.4 ceiling raycast — prevent mount attempts in low-ceiling areas
+			// HB 4.3.4 ceiling raycast — permanent geometry: low ceiling blocks mount.
 			float boundingHeight = me.BoundingHeight;
 			WoWPoint headPos = location + new WoWPoint(0f, 0f, boundingHeight);
 			WoWPoint aboveHead = headPos + new WoWPoint(0f, 0f, boundingHeight / 2f);
@@ -390,6 +392,15 @@ namespace Styx.Logic
 		public static void ClearCantMountSpots()
 		{
 			_cantMountSpots.Clear();
+		}
+
+		/// <summary>
+		/// Removes all cant-mount spots within <paramref name="radius"/> yards of <paramref name="center"/>.
+		/// Call after a successful mount or harvest to clean up stale entries.
+		/// </summary>
+		public static void RemoveCantMountSpotsNear(WoWPoint center, float radius)
+		{
+			_cantMountSpots.RemoveAll(spot => spot.Distance(center) < radius);
 		}
 
 		[Obsolete("StateMount(LocationRetriever) should be used.")]
