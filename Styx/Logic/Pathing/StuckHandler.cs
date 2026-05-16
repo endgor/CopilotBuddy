@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Media;
@@ -13,7 +14,7 @@ namespace Styx.Logic.Pathing
 {
     /// <summary>
     /// Handles stuck detection and recovery for WoW 3.3.5a.
-    /// Stuck detection: HB 4.3.4 Class485.method_0() — WaitTimer(2s) + straight-line RunSpeed/2 threshold.
+    /// Stuck detection: HB 6.2.3 Class469 — 500ms Stopwatch + Navigator.PathDistance + movement-stop reset.
     /// Unstick sequence: Dismount → Jump(1x, LOS-gated) → StrafeFwdL → StrafeFwdR → Dismount2 → StrafeL → StrafeR → Blackspot+Reverse
     /// </summary>
     internal class DefaultStuckHandler : StuckHandler
@@ -23,7 +24,8 @@ namespace Styx.Logic.Pathing
         private const float JumpRaycastDistance = 2f;
 
         private readonly WaitTimer _mountUpBlockTimer = new WaitTimer(TimeSpan.FromSeconds(10.0));
-        private readonly WaitTimer _stuckCheckTimer = new WaitTimer(TimeSpan.FromSeconds(2.0));
+        // HB 6.2.3 Class469: Stopwatch replaces the 2-second WaitTimer.
+        private readonly Stopwatch _stopwatch = new Stopwatch();
 
         private WoWPoint _lastCheckLocation = WoWPoint.Empty;
         private WoWPoint _lastUnstickLocation = WoWPoint.Empty;
@@ -40,7 +42,7 @@ namespace Styx.Logic.Pathing
         public DefaultStuckHandler()
         {
             _lastCheckLocation = WoWPoint.Empty;
-            _stuckCheckTimer.Reset();
+            _stopwatch.Start();
         }
 
         public override void OnSetAsCurrent()
@@ -70,20 +72,20 @@ namespace Styx.Logic.Pathing
 
         private void OnMovementFlagsChanged(WoWMovement.MovementEventArgs e)
         {
-            // HB 4.3.4 Class485: no timer reset on movement stop — the 2-second
-            // stuck check timer runs continuously and independently of movement events.
-            // Resetting it here would prevent detection during waypoint-to-waypoint navigation.
+            // HB 6.2.3 Class469.method_1: restart the stopwatch and clear the reference
+            // location whenever the player stops moving. This prevents false stuck detections
+            // between waypoints when the bot intentionally stops (e.g. targeting, looting).
+            if (e.Stop)
+            {
+                _stopwatch.Restart();
+                _lastCheckLocation = WoWPoint.Empty;
+            }
         }
 
         public override bool IsStuck()
         {
             var me = ObjectManager.Me;
             if (me == null)
-                return false;
-
-            // HB 4.3.4 Class485.IsStuck(): never fire stuck detection during combat —
-            // ranged classes (Balance Druid, Mage, etc.) stand still intentionally.
-            if (me.Combat)
                 return false;
 
             if (me.Stunned || me.Fleeing || me.Dazed || me.Rooted)
@@ -96,37 +98,41 @@ namespace Styx.Logic.Pathing
             if (activeMover == null || !activeMover.IsMe)
                 return false;
 
-            // HB 4.3.4 Class485.method_0(): check only every 2 seconds.
-            if (!_stuckCheckTimer.IsFinished)
+            // HB 6.2.3 Class469.IsStuck(): 500ms minimum interval.
+            if (_stopwatch.ElapsedMilliseconds < 500L)
                 return false;
-
-            _stuckCheckTimer.Reset();
 
             WoWPoint currentLocation = activeMover.Location;
-            if (_lastCheckLocation == WoWPoint.Empty)
+            if (_lastCheckLocation != WoWPoint.Empty)
             {
-                _lastCheckLocation = currentLocation;
-                return false;
+                float expectedDist = GetExpectedDistance(activeMover, _stopwatch.Elapsed);
+                float? pathDist = Navigator.PathDistance(_lastCheckLocation, currentLocation, expectedDist);
+                if (pathDist != null && pathDist < expectedDist)
+                {
+                    Logging.WriteVerbose(Colors.Red,
+                        "We are stuck! (TPS: {0:F1}, Latency: {1}, loc: {2})!",
+                        GameStats.TicksPerSecond,
+                        StyxWoW.WoWClient.Latency,
+                        currentLocation);
+                    LogNearestGameObject();
+                    _lastCheckLocation = currentLocation;
+                    return true;
+                }
             }
 
-            // Straight-line distance — no PathDistance / navmesh query (HB 4.3.4 exact pattern).
-            // Threshold: RunSpeed / 2 ≈ 3.5 yards in 2 seconds at base run speed.
-            bool movedEnough = currentLocation.Distance(_lastCheckLocation) > activeMover.MovementInfo.RunSpeed / 2f;
-            if (movedEnough)
-            {
-                _lastCheckLocation = currentLocation;
-                return false;
-            }
+            _stopwatch.Restart();
+            _lastCheckLocation = currentLocation;
+            return false;
+        }
 
-            Logging.WriteVerbose(Colors.Red, "We are stuck! (TPS: {0:F1}, Latency: {1}, loc: {2})!",
-                GameStats.TicksPerSecond,
-                StyxWoW.WoWClient.Latency,
-                currentLocation);
-            LogNearestGameObject();
-            // HB 4.3.4: do NOT update _lastCheckLocation when stuck.
-            // Next 2-second tick will still compare from the same reference point,
-            // keeping stuck detection active until Unstick() actually moves the bot.
-            return true;
+        // HB 6.2.3 Class469.method_3: expected travel distance over elapsed time.
+        // WotLK: MovementInfo has SwimSpeed (offset 0xA4) and RunSpeed (offset 0x94).
+        // IsSwimming is a flag on WoWUnit (movement flag 0x200000 at offset 0xA30).
+        private static float GetExpectedDistance(WoWUnit unit, TimeSpan elapsed)
+        {
+            var mi = unit.MovementInfo;
+            float speed = unit.IsSwimming ? mi.SwimSpeed : mi.RunSpeed;
+            return speed * (float)elapsed.TotalSeconds * 0.6f;
         }
 
         public override void Unstick()
@@ -215,12 +221,12 @@ namespace Styx.Logic.Pathing
                 ResetUnstickAttempts();
             }
 
-            _stuckCheckTimer.Reset();
+            _stopwatch.Restart();
         }
 
         public override void Reset()
         {
-            _stuckCheckTimer.Reset();
+            _stopwatch.Restart();
             _lastCheckLocation = WoWPoint.Empty;
             ResetUnstickAttempts();
         }
