@@ -200,16 +200,25 @@ namespace Styx.Logic.Inventory.Frames.MailBox
 				if (itemList.Count >= 11)
 					itemList.RemoveRange(0, 11);
 
+				// Snapshot item count BEFORE send, with fresh memory read.
+				// HB 3.3.5a: clear cache so we read the actual in-game bag state,
+				// not the tick-cached snapshot from before entering the mail behavior.
+				StyxWoW.Memory.ClearCache();
 				var currentItems = ObjectManager.GetObjectsOfType<WoWItem>();
 				int count = currentItems.Count;
 
 				SendMail(recipient, batch.Count > 0 ? batch[0].Name : "items", "", copper, batch.ToArray());
 
+				// Wait for WoW to remove the mailed items from the bag (server acknowledgment).
+				// Must clear cache each iteration so we see the updated bag state.
 				int startTick = Environment.TickCount;
-				while (currentItems.Count >= count && Environment.TickCount - startTick < 10000)
+				while (Environment.TickCount - startTick < 10000)
 				{
-					currentItems = ObjectManager.GetObjectsOfType<WoWItem>();
 					StyxWoW.Sleep(250);
+					StyxWoW.Memory.ClearCache();
+					currentItems = ObjectManager.GetObjectsOfType<WoWItem>();
+					if (currentItems.Count < count)
+						break; // items removed — mail confirmed
 				}
 			}
 		}
