@@ -70,9 +70,7 @@ namespace CopilotBuddy.UI
 
             // Log version (HB 4.3.4: "Honorbuddy v{0} started.")
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            string verStr = $"{version.Major}.{version.Minor}.{version.Build}";
-            Title = $"CopilotBuddy v{verStr} — HonorBuddy port by Likon69";
-            Logging.Write("CopilotBuddy v{0} started. Based on HonorBuddy by Apoc, raphus, highvoltz. Ported to WotLK 3.3.5a by Likon69.", verStr);
+            Logging.Write("CopilotBuddy v{0}.{1}.{2} started. Original HonorBuddy by Apoc, raphus, highvoltz, bobby53, xanathos, chinajade. Ported to WotLK 3.3.5a by Likon69.", version.Major, version.Minor, version.Build);
         }
 
         #endregion
@@ -118,29 +116,46 @@ namespace CopilotBuddy.UI
             UpdateInfoPanel();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// WPF best practice: restore window geometry here — fires when the Win32 handle is
+        /// created but BEFORE the window is shown.  Position applied here takes effect on the
+        /// first rendered pixel with no visual flash (unlike Window_Loaded which fires after
+        /// the window is already visible and the XAML size has been applied).
+        /// </summary>
+        protected override void OnSourceInitialized(EventArgs e)
         {
-            // Load UI settings and restore window position/size
+            base.OnSourceInitialized(e);
             try
             {
-                UISettings.Instance.Load();
-                
-                if (UISettings.Instance.MainWindowWidth > 0)
-                    this.Width = UISettings.Instance.MainWindowWidth;
-                if (UISettings.Instance.MainWindowHeight > 0)
-                    this.Height = UISettings.Instance.MainWindowHeight;
-                if (UISettings.Instance.MainWindowLocationX >= 0)
-                    this.Left = UISettings.Instance.MainWindowLocationX;
-                if (UISettings.Instance.MainWindowLocationY >= 0)
-                    this.Top = UISettings.Instance.MainWindowLocationY;
-                if (UISettings.Instance.MainWindowState != WindowState.Minimized)
-                    this.WindowState = UISettings.Instance.MainWindowState;
-                    
+                var s = UISettings.Instance; // singleton already loaded in its ctor
+
+                // Size — must be positive
+                if (s.MainWindowWidth > 0)  this.Width  = s.MainWindowWidth;
+                if (s.MainWindowHeight > 0) this.Height = s.MainWindowHeight;
+
+                // Position — reject -32000 (Windows "off-screen" sentinel for minimized windows)
+                if (s.MainWindowLocationX > -32000) this.Left = s.MainWindowLocationX;
+                if (s.MainWindowLocationY > -32000) this.Top  = s.MainWindowLocationY;
+
+                // State — never restore Minimized (window would start hidden)
+                if (s.MainWindowState != WindowState.Minimized)
+                    this.WindowState = s.MainWindowState;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("[UISettings] Failed to restore window geometry: " + ex.Message);
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Window geometry is already restored in OnSourceInitialized above.
+            // Only do non-geometry UI setup here.
+            try
+            {
                 // Restore Enhanced Mode checkbox state
                 if (UISettings.Instance.EnhancedMode)
-                {
                     EnhancedMode.IsChecked = true;
-                }
             }
             catch { /* Ignore errors on first run */ }
 
@@ -469,7 +484,33 @@ namespace CopilotBuddy.UI
                 StopBot();
             }
 
-            // Save all settings (HB 4.3.4 pattern - save at close)
+            // Persist window geometry FIRST so that SaveSettings() below
+            // already writes the correct coordinates to UISettings.xml.
+            // Use RestoreBounds so we always capture the Normal-state rect
+            // even when the window is currently maximized.
+            try
+            {
+                Rect bounds = (this.WindowState == WindowState.Normal)
+                    ? new Rect(this.Left, this.Top, this.Width, this.Height)
+                    : this.RestoreBounds;
+
+                if (!bounds.IsEmpty && !double.IsNaN(bounds.X))
+                {
+                    UISettings.Instance.MainWindowLocationX = (int)bounds.X;
+                    UISettings.Instance.MainWindowLocationY = (int)bounds.Y;
+                    UISettings.Instance.MainWindowWidth     = (int)bounds.Width;
+                    UISettings.Instance.MainWindowHeight    = (int)bounds.Height;
+                }
+                UISettings.Instance.MainWindowState = this.WindowState;
+                UISettings.Instance.Save();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("[UISettings] Failed to save window geometry: " + ex.Message);
+            }
+
+            // Save all other per-character settings (HB 4.3.4 pattern).
+            // UISettings is already flushed above with the correct geometry.
             SaveSettings();
 
             // Release process mutex so another CopilotBuddy can claim this WoW
@@ -479,21 +520,6 @@ namespace CopilotBuddy.UI
                 _processMutex = null;
             }
             catch { /* Mutex may already be released */ }
-
-            // Save window position/size
-            try
-            {
-                if (this.WindowState == WindowState.Normal)
-                {
-                    UISettings.Instance.MainWindowWidth = (int)this.Width;
-                    UISettings.Instance.MainWindowHeight = (int)this.Height;
-                    UISettings.Instance.MainWindowLocationX = (int)this.Left;
-                    UISettings.Instance.MainWindowLocationY = (int)this.Top;
-                }
-                UISettings.Instance.MainWindowState = this.WindowState;
-                UISettings.Instance.Save();
-            }
-            catch { /* Ignore errors */ }
 
             // Cleanup
             Logging.OnLogMessage -= OnLogMessage;
