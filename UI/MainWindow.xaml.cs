@@ -69,8 +69,10 @@ namespace CopilotBuddy.UI
             InitializeInfoTimer();
 
             // Log version (HB 4.3.4: "Honorbuddy v{0} started.")
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            Logging.Write("CopilotBuddy v{0}.{1}.{2} started. Original HonorBuddy by Apoc, raphus, highvoltz, bobby53, xanathos, chinajade. Ported to WotLK 3.3.5a by Likon69.", version.Major, version.Minor, version.Build);
+            // AssemblyVersion is intentionally not set in .csproj (causes BAML crash under .NET 10).
+            const string BotVersion = "1.0.5";
+            Title = $"CopilotBuddy v{BotVersion}";
+            Logging.Write("CopilotBuddy v{0} started. Original HonorBuddy by Apoc, raphus, highvoltz, bobby53, xanathos, chinajade. Ported to WotLK 3.3.5a by Likon69.", BotVersion);
         }
 
         #endregion
