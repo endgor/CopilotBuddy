@@ -219,11 +219,18 @@ namespace Styx.Logic
 			// Auto-detect mount if enabled
 			AutoDetectMount();
 
-			if (string.IsNullOrEmpty(LevelbotSettings.Instance.MountName))
-				return false;
-
 			LocalPlayer? me = Me;
 			if (me == null || me.Level < 20)
+				return false;
+
+			// Choose the right mount for this zone up front so the guard and log are accurate.
+			bool canFly = me.MovementInfo.CanFly;
+			string flyingMountName = CharacterSettings.Instance.FlyingMountName;
+			string effectiveMountName = (canFly && !string.IsNullOrEmpty(flyingMountName))
+				? flyingMountName
+				: LevelbotSettings.Instance.MountName;
+
+			if (string.IsNullOrEmpty(effectiveMountName))
 				return false;
 
 			if (me.Mounted)
@@ -233,7 +240,7 @@ namespace Styx.Logic
 				return false;
 
 			WoWMovement.MoveStop();
-			Logging.Write("Mounting: {0}", LevelbotSettings.Instance.MountName);
+			Logging.Write("Mounting: {0}{1}", effectiveMountName, canFly ? " [flying]" : "");
 			StyxWoW.Sleep(200);
 
 			DoMount();
@@ -246,7 +253,12 @@ namespace Styx.Logic
 			LocalPlayer? me = Me;
 			if (me == null) return;
 
-			string mountName = LevelbotSettings.Instance.MountName;
+			// Use flying mount in fly zones, ground mount everywhere else.
+			bool canFly = me.MovementInfo.CanFly;
+			string flyingMountName = CharacterSettings.Instance.FlyingMountName;
+			string mountName = (canFly && !string.IsNullOrEmpty(flyingMountName))
+				? flyingMountName
+				: LevelbotSettings.Instance.MountName;
 			if (string.IsNullOrEmpty(mountName)) return;
 
 			// Handle Blood Elf Paladin mount name differences
