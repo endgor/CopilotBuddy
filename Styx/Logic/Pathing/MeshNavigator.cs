@@ -886,9 +886,9 @@ namespace Styx.Logic.Pathing
 			}
 			catch { }
 
-			// HB: FindNearestPoly at waypoint with tight extents (0.5,3,0.5), then Raycast to lookahead.
+			// HB: FindNearestPoly at waypoint with tight extents (0.5,3,0.5) nav-space = WoW (0.5,0.5,3).
 			// Clear = hitT >= 1.0f (Detour float.MaxValue clamped to 1.0f by our DLL).
-			var tightExtents = new Vector3(0.5f, 3f, 0.5f);
+			var tightExtents = new Vector3(0.5f, 0.5f, 3f);
 			var status = TripperNavigator.RaycastWithExtents(mapId, waypointVec, lookaheadVec, tightExtents,
 				out float hitT, out _, out _, out _);
 
