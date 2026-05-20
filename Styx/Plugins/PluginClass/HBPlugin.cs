@@ -12,6 +12,14 @@ namespace Styx.Plugins.PluginClass
 		{
 		}
 
+		public virtual void OnEnable()
+		{
+		}
+
+		public virtual void OnDisable()
+		{
+		}
+
 		public abstract void Pulse();
 
 		public virtual void OnButtonPress()
