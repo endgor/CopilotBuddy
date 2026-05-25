@@ -30,6 +30,14 @@
         <TextBlock Text="Plugins"/>
       </Viewbox>
     </Button>
+    <Button x:Name="btnReportBug"
+            Margin="240,0,0,37.96" VerticalAlignment="Bottom" Height="25.96"
+            HorizontalAlignment="Left" Width="112"
+            Click="btnReportBug_Click">
+      <Viewbox Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Text="Report a Bug"/>
+      </Viewbox>
+    </Button>
     <!-- Bottom buttons row 1 (lower) -->
     <Button x:Name="btnClassConfig"
             Margin="8,0,0,8" VerticalAlignment="Bottom" Height="25.96"

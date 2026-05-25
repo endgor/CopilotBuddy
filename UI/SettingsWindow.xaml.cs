@@ -115,6 +115,15 @@ namespace CopilotBuddy.UI
             new PluginsWindow { Owner = this }.ShowDialog();
         }
 
+        private void btnReportBug_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://discord.gg/zA3mjdbr3J",
+                UseShellExecute = true
+            });
+        }
+
         private void btnDevTools_Click(object sender, RoutedEventArgs e)
         {
             new DeveloperToolsWindow().Show();
