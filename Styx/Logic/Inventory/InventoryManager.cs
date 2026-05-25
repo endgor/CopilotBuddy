@@ -159,21 +159,41 @@ namespace Styx.Logic.Inventory
                 return true;
 
             // Standard mail check
-            if (item.IsSoulbound || item.IsConjured)
+            if (item.IsSoulbound)
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item is soulbound", item.Name);
                 return false;
+            }
+            if (item.IsConjured)
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item is conjured", item.Name);
+                return false;
+            }
 
             // Check protected items
             if (ProtectedItemsManager.Contains(item.Entry))
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item is a protected item", item.Name);
                 return false;
+            }
             if (ProtectedItemsManager.Contains(item.Name.ToLower()))
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item is a protected item", item.Name);
                 return false;
+            }
 
             // Check item quality
             if (!currentProfile.MailQualities.Contains(item.Quality))
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item doesn't meet the itemqualitys specified in the profile", item.Name);
                 return false;
+            }
 
             if (item.ItemInfo.Bond == WoWItemBondType.Quest)
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item is a questitem", item.Name);
                 return false;
+            }
 
             // Check if item is in bag with correct stack count
             string luaCheck = string.Format(
@@ -184,7 +204,10 @@ namespace Styx.Logic.Inventory
 
             var result = Lua.GetReturnValues(luaCheck, "hax.lua");
             if (result[0] != "true")
+            {
+                Logging.WriteDebug("Can't mail item:{0}. Item is equipped", item.Name);
                 return false;
+            }
 
             // Don't mail food or drink
             if (itemName == foodName || itemName == drinkName ||
