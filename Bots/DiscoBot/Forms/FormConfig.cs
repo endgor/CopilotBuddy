@@ -60,7 +60,6 @@ namespace PartyBot.Forms
 
 		// Designer-generated controls
 		private IContainer? components;
-		private SplitContainer splitContainer1 = null!;
 		private CheckBox cbDoNothing = null!;
 		private CheckBox cbAutoAcceptSharedQuests = null!;
 		private CheckBox cbWaitForRessInDungeons = null!;
@@ -82,7 +81,6 @@ namespace PartyBot.Forms
 
 		private void InitializeComponent()
 		{
-			splitContainer1 = new SplitContainer();
 			cbDoNothing = new CheckBox();
 			cbAutoAcceptSharedQuests = new CheckBox();
 			cbWaitForRessInDungeons = new CheckBox();
@@ -95,131 +93,112 @@ namespace PartyBot.Forms
 			btnLevelbotSettings = new Button();
 			btnSaveAndClose = new Button();
 
-			splitContainer1.Panel1.SuspendLayout();
-			splitContainer1.Panel2.SuspendLayout();
-			splitContainer1.SuspendLayout();
 			((ISupportInitialize)nudFollowDistance).BeginInit();
 			SuspendLayout();
 
-			// splitContainer1
-			splitContainer1.Dock = DockStyle.Fill;
-			splitContainer1.Location = new System.Drawing.Point(0, 0);
-			splitContainer1.Name = "splitContainer1";
-			splitContainer1.Size = new System.Drawing.Size(480, 280);
-			splitContainer1.SplitterDistance = 300;
-			splitContainer1.TabIndex = 0;
-			splitContainer1.Panel1.Controls.Add(cbDoNothing);
-			splitContainer1.Panel1.Controls.Add(cbAutoAcceptSharedQuests);
-			splitContainer1.Panel1.Controls.Add(cbWaitForRessInDungeons);
-			splitContainer1.Panel1.Controls.Add(cbLootInDungeons);
-			splitContainer1.Panel1.Controls.Add(nudFollowDistance);
-			splitContainer1.Panel1.Controls.Add(cbAcceptGroupInvitesFromLeader);
-			splitContainer1.Panel1.Controls.Add(label1);
-			splitContainer1.Panel1.Controls.Add(cbAcceptDungeonInvites);
-			splitContainer1.Panel2.Controls.Add(btnLevelbotSettings);
-			splitContainer1.Panel2.Controls.Add(btnSaveAndClose);
-			splitContainer1.Panel2.Controls.Add(cbAcceptBattlefieldPorts);
-
-			// label1
+			// label1 — "Follow Distance:" label
 			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(3, 6);
+			label1.Location = new System.Drawing.Point(12, 14);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(87, 13);
 			label1.TabIndex = 0;
 			label1.Text = "Follow Distance:";
 
 			// nudFollowDistance
-			nudFollowDistance.Location = new System.Drawing.Point(96, 3);
+			nudFollowDistance.Location = new System.Drawing.Point(120, 11);
 			nudFollowDistance.Maximum = new decimal(new int[] { 30, 0, 0, 0 });
 			nudFollowDistance.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
 			nudFollowDistance.Name = "nudFollowDistance";
-			nudFollowDistance.Size = new System.Drawing.Size(50, 20);
+			nudFollowDistance.Size = new System.Drawing.Size(55, 20);
 			nudFollowDistance.TabIndex = 1;
 			nudFollowDistance.Value = new decimal(new int[] { 5, 0, 0, 0 });
 
 			// cbLootInDungeons
 			cbLootInDungeons.AutoSize = true;
-			cbLootInDungeons.Location = new System.Drawing.Point(3, 30);
+			cbLootInDungeons.Location = new System.Drawing.Point(12, 42);
 			cbLootInDungeons.Name = "cbLootInDungeons";
-			cbLootInDungeons.Size = new System.Drawing.Size(107, 17);
 			cbLootInDungeons.TabIndex = 2;
 			cbLootInDungeons.Text = "Loot In Dungeons";
 			cbLootInDungeons.UseVisualStyleBackColor = true;
 
 			// cbWaitForRessInDungeons
 			cbWaitForRessInDungeons.AutoSize = true;
-			cbWaitForRessInDungeons.Location = new System.Drawing.Point(3, 53);
+			cbWaitForRessInDungeons.Location = new System.Drawing.Point(12, 68);
 			cbWaitForRessInDungeons.Name = "cbWaitForRessInDungeons";
-			cbWaitForRessInDungeons.Size = new System.Drawing.Size(152, 17);
 			cbWaitForRessInDungeons.TabIndex = 3;
 			cbWaitForRessInDungeons.Text = "Wait For Ress In Dungeons";
 			cbWaitForRessInDungeons.UseVisualStyleBackColor = true;
 
+			// cbAcceptBattlefieldPorts — moved next to other checkboxes
+			cbAcceptBattlefieldPorts.AutoSize = true;
+			cbAcceptBattlefieldPorts.Location = new System.Drawing.Point(12, 94);
+			cbAcceptBattlefieldPorts.Name = "cbAcceptBattlefieldPorts";
+			cbAcceptBattlefieldPorts.TabIndex = 4;
+			cbAcceptBattlefieldPorts.Text = "Accept Battlefield Ports";
+			cbAcceptBattlefieldPorts.UseVisualStyleBackColor = true;
+
 			// cbAcceptGroupInvitesFromLeader
 			cbAcceptGroupInvitesFromLeader.AutoSize = true;
-			cbAcceptGroupInvitesFromLeader.Location = new System.Drawing.Point(3, 76);
+			cbAcceptGroupInvitesFromLeader.Location = new System.Drawing.Point(12, 120);
 			cbAcceptGroupInvitesFromLeader.Name = "cbAcceptGroupInvitesFromLeader";
-			cbAcceptGroupInvitesFromLeader.Size = new System.Drawing.Size(188, 17);
-			cbAcceptGroupInvitesFromLeader.TabIndex = 4;
+			cbAcceptGroupInvitesFromLeader.TabIndex = 5;
 			cbAcceptGroupInvitesFromLeader.Text = "Accept Group Invites From Leader";
 			cbAcceptGroupInvitesFromLeader.UseVisualStyleBackColor = true;
 
 			// cbAcceptDungeonInvites
 			cbAcceptDungeonInvites.AutoSize = true;
-			cbAcceptDungeonInvites.Location = new System.Drawing.Point(3, 99);
+			cbAcceptDungeonInvites.Location = new System.Drawing.Point(12, 146);
 			cbAcceptDungeonInvites.Name = "cbAcceptDungeonInvites";
-			cbAcceptDungeonInvites.Size = new System.Drawing.Size(145, 17);
-			cbAcceptDungeonInvites.TabIndex = 5;
+			cbAcceptDungeonInvites.TabIndex = 6;
 			cbAcceptDungeonInvites.Text = "Accept Dungeon Invites";
 			cbAcceptDungeonInvites.UseVisualStyleBackColor = true;
 
 			// cbAutoAcceptSharedQuests
 			cbAutoAcceptSharedQuests.AutoSize = true;
-			cbAutoAcceptSharedQuests.Location = new System.Drawing.Point(3, 122);
+			cbAutoAcceptSharedQuests.Location = new System.Drawing.Point(12, 172);
 			cbAutoAcceptSharedQuests.Name = "cbAutoAcceptSharedQuests";
-			cbAutoAcceptSharedQuests.Size = new System.Drawing.Size(162, 17);
-			cbAutoAcceptSharedQuests.TabIndex = 6;
+			cbAutoAcceptSharedQuests.TabIndex = 7;
 			cbAutoAcceptSharedQuests.Text = "Auto Accept Shared Quests";
 			cbAutoAcceptSharedQuests.UseVisualStyleBackColor = true;
 
 			// cbDoNothing
 			cbDoNothing.AutoSize = true;
-			cbDoNothing.Location = new System.Drawing.Point(3, 145);
+			cbDoNothing.Location = new System.Drawing.Point(12, 198);
 			cbDoNothing.Name = "cbDoNothing";
-			cbDoNothing.Size = new System.Drawing.Size(124, 17);
-			cbDoNothing.TabIndex = 7;
+			cbDoNothing.TabIndex = 8;
 			cbDoNothing.Text = "Do Nothing (Leader)";
 			cbDoNothing.UseVisualStyleBackColor = true;
 
-			// cbAcceptBattlefieldPorts
-			cbAcceptBattlefieldPorts.AutoSize = true;
-			cbAcceptBattlefieldPorts.Location = new System.Drawing.Point(3, 6);
-			cbAcceptBattlefieldPorts.Name = "cbAcceptBattlefieldPorts";
-			cbAcceptBattlefieldPorts.Size = new System.Drawing.Size(140, 17);
-			cbAcceptBattlefieldPorts.TabIndex = 0;
-			cbAcceptBattlefieldPorts.Text = "Accept Battlefield Ports";
-			cbAcceptBattlefieldPorts.UseVisualStyleBackColor = true;
-
 			// btnLevelbotSettings
-			btnLevelbotSettings.Location = new System.Drawing.Point(3, 30);
+			btnLevelbotSettings.Location = new System.Drawing.Point(12, 234);
 			btnLevelbotSettings.Name = "btnLevelbotSettings";
-			btnLevelbotSettings.Size = new System.Drawing.Size(160, 23);
-			btnLevelbotSettings.TabIndex = 1;
+			btnLevelbotSettings.Size = new System.Drawing.Size(150, 27);
+			btnLevelbotSettings.TabIndex = 9;
 			btnLevelbotSettings.Text = "Levelbot Settings...";
 			btnLevelbotSettings.UseVisualStyleBackColor = true;
 
 			// btnSaveAndClose
-			btnSaveAndClose.Location = new System.Drawing.Point(3, 59);
+			btnSaveAndClose.Location = new System.Drawing.Point(170, 234);
 			btnSaveAndClose.Name = "btnSaveAndClose";
-			btnSaveAndClose.Size = new System.Drawing.Size(160, 23);
-			btnSaveAndClose.TabIndex = 2;
+			btnSaveAndClose.Size = new System.Drawing.Size(110, 27);
+			btnSaveAndClose.TabIndex = 10;
 			btnSaveAndClose.Text = "Save && Close";
 			btnSaveAndClose.UseVisualStyleBackColor = true;
 
 			// FormConfig
+			AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(480, 280);
-			Controls.Add(splitContainer1);
+			ClientSize = new System.Drawing.Size(294, 276);
+			Controls.Add(label1);
+			Controls.Add(nudFollowDistance);
+			Controls.Add(cbLootInDungeons);
+			Controls.Add(cbWaitForRessInDungeons);
+			Controls.Add(cbAcceptBattlefieldPorts);
+			Controls.Add(cbAcceptGroupInvitesFromLeader);
+			Controls.Add(cbAcceptDungeonInvites);
+			Controls.Add(cbAutoAcceptSharedQuests);
+			Controls.Add(cbDoNothing);
+			Controls.Add(btnLevelbotSettings);
+			Controls.Add(btnSaveAndClose);
 			FormBorderStyle = FormBorderStyle.FixedSingle;
 			MaximizeBox = false;
 			MinimizeBox = false;
@@ -227,13 +206,9 @@ namespace PartyBot.Forms
 			Text = "PartyBot Configuration";
 			Load += new EventHandler(FormConfig_Load);
 
-			splitContainer1.Panel1.ResumeLayout(false);
-			splitContainer1.Panel1.PerformLayout();
-			splitContainer1.Panel2.ResumeLayout(false);
-			splitContainer1.Panel2.PerformLayout();
-			splitContainer1.ResumeLayout(false);
 			((ISupportInitialize)nudFollowDistance).EndInit();
 			ResumeLayout(false);
+			PerformLayout();
 		}
 	}
 }
