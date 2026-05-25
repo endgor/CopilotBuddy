@@ -167,6 +167,16 @@ namespace Bots.Gatherbuddy
             if (ProfileManager.CurrentProfile == null)
                 throw new InvalidOperationException("[GatherBuddy] No profile loaded.");
 
+            // WotLK 3.3.5a requires a mining pick in bags to mine.
+            // IDs: 2901 (Mining Pick), 9465 (Dark Iron Mining Pick), 43012 (Gnomish Army Knife)
+            if (GatherbuddySettings.Instance.GatherMinerals)
+            {
+                uint[] miningPickIds = { 2901u, 9465u, 43012u };
+                bool hasMiningPick = StyxWoW.Me.CarriedItems.Any(i => Array.IndexOf(miningPickIds, i.Entry) >= 0);
+                if (!hasMiningPick)
+                    Logging.Write("You don't have a mining pick in your inventory and gathering minerals is enabled.");
+            }
+
             ReloadWaypoints();
 
             // HB 6.2.3: invalidate cached PolyNav after loading blackspots so the flight engine

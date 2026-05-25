@@ -796,6 +796,7 @@ namespace Bots.Grind
                                 // Fallback - check if we can still loot
                                 new TreeSharp.Action(ctx =>
                                 {
+                                    Logging.Write("Loot timer exceeded, blacklisting lootable.");
                                     SleepForLag();
                                     bool canStillLoot = BotPoi.Current.Type switch
                                     {
@@ -807,6 +808,11 @@ namespace Bots.Grind
                                     {
                                         Logging.Write("I can't tell if we looted, blacklisting it just to be safe.");
                                         Blacklist.Add(BotPoi.Current.Guid, new TimeSpan(0, 10, 0));
+                                    }
+                                    else
+                                    {
+                                        Logging.Write("Lootable isn't lootable, blacklisting.");
+                                        Blacklist.Add(BotPoi.Current.Guid, TimeSpan.FromMinutes(5));
                                     }
                                     BotPoi.Clear("Done looting");
                                 })
