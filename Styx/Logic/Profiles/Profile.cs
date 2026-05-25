@@ -147,7 +147,22 @@ namespace Styx.Logic.Profiles
 			}
 		}
 
-		public GrindArea? GrindArea { get; set; }
+		private GrindArea? _grindArea;
+
+		/// <summary>
+		/// The grind area for this profile.
+		/// Falls back to parent profile if not set — matches HB 4.3.4 behavior.
+		/// </summary>
+		public GrindArea? GrindArea
+		{
+			get
+			{
+				if (_grindArea != null)
+					return _grindArea;
+				return Parent?.GrindArea;
+			}
+			set => _grindArea = value;
+		}
 
 		public HotspotManager? HotspotManager { get; set; }
 
@@ -728,6 +743,7 @@ namespace Styx.Logic.Profiles
 							foreach (uint faction in Factions)
 								GrindArea.Factions.Add((int)faction);
 						}
+						Logging.WriteDebug("Warning: 'Factions' has been moved to the 'GrindArea'. Please reflect this change in your profiles.");
 						break;
 					case "hotspots":
 						handled = true;
@@ -743,6 +759,7 @@ namespace Styx.Logic.Profiles
 							foreach (uint faction in _factions)
 								GrindArea.Factions.Add((int)faction);
 						}
+						Logging.WriteDebug("Warning: 'Factions' has been moved to the 'GrindArea'. Please reflect this change in your profiles.");
 						break;
 					case "quest":
 					case "questinfo":
@@ -983,15 +1000,25 @@ namespace Styx.Logic.Profiles
 			}
 		}
 
+		/// <summary>
+		/// Returns all profiles (this + subprofiles recursively) sorted by nesting depth descending.
+		/// Deepest subprofiles come first so the most specific level range wins in GetProfileForLevel.
+		/// Matches HB 4.3.4 method_0 + smethod_0 behavior.
+		/// </summary>
 		public List<Profile> GetScopeSortedProfiles()
 		{
-			List<Profile> result = new List<Profile> { this };
+			var withDepth = new List<(int Depth, Profile Profile)>();
+			CollectWithDepth(0, withDepth);
+			// Deepest (most nested) first — outer profile (depth 0) comes last as fallback
+			withDepth.Sort((a, b) => b.Depth.CompareTo(a.Depth));
+			return withDepth.ConvertAll(x => x.Profile);
+		}
+
+		private void CollectWithDepth(int depth, List<(int Depth, Profile Profile)> result)
+		{
+			result.Add((depth, this));
 			foreach (Profile sub in SubProfiles)
-			{
-				result.AddRange(sub.GetScopeSortedProfiles());
-			}
-			result.Sort((a, b) => (b.MaxLevel - b.MinLevel).CompareTo(a.MaxLevel - a.MinLevel));
-			return result;
+				sub.CollectWithDepth(depth + 1, result);
 		}
 
 		public bool Equals(Profile? other)
