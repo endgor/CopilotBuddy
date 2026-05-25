@@ -28,17 +28,21 @@
 
     <!--
       UI namespace : protégé entièrement.
-      Les classes code-behind XAML sont public donc déjà couvertes par KeepPublicApi,
-      mais le BAML (XAML compilé) référence les types par nom → on skip tout le namespace
-      pour éviter tout risque de mismatch BAML/assembly à l'exécution.
+      WPF XAML compilé en BAML référence les types par nom complet à l'exécution.
+      RenameProperties/Events = false couvre les bindings, mais des helpers
+      internes dans ce namespace pourraient être référencés par des ResourceDictionary
+      ou des convertisseurs de valeur. Skip total pour éviter tout crash BAML.
     -->
     <SkipNamespace name="CopilotBuddy.UI" />
 
     <!--
-      P/Invoke vers Navigation.dll : méthodes public static extern.
-      Couvertes par KeepPublicApi mais on skip le namespace par sécurité.
+      NativeMethods est une classe 'internal' — non couverte par KeepPublicApi.
+      Elle contient deux DllImport sans EntryPoint explicite (CalculatePathEx,
+      FreePathResult) dont le nom C# doit correspondre à l'export de Navigation.dll.
+      On skip uniquement cette classe ; les types publics du namespace (Navigator,
+      PathFindResult, etc.) sont déjà protégés par KeepPublicApi.
     -->
-    <SkipNamespace name="Tripper.Navigation" />
+    <SkipType name="Tripper.Navigation.NativeMethods" />
 
   </Module>
 </Obfuscator>
