@@ -28,6 +28,14 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <!-- Exclude standalone tool projects from the main bot build -->
+  <ItemGroup>
+    <Compile Remove="Tools\**" />
+    <EmbeddedResource Remove="Tools\**" />
+    <None Remove="Tools\**" />
+    <Content Remove="Tools\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <Page Remove="UI\App.xaml" />
   </ItemGroup>

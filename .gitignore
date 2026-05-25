@@ -43,3 +43,6 @@ obfuscator/
 
 /docs
 /docs_hb/_site
+
+# Database backups
+datadb/*.backup
