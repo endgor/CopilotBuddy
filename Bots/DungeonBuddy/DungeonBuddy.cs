@@ -62,6 +62,8 @@ namespace Bots.DungeonBuddy
         // Timers
         private readonly Stopwatch _requeueDelay = new();
         private readonly WaitTimer _proposalAcceptTimer = new WaitTimer(TimeSpan.FromMinutes(2.0));
+        // Polls GetLFGMode() as fallback for missed LFG_PROPOSAL_SHOW / LFG_ROLE_CHECK_SHOW events.
+        private readonly WaitTimer _lfgPollTimer = new WaitTimer(TimeSpan.FromMilliseconds(750));
 
         // State tracking
         private uint _lastMapId;
@@ -937,6 +939,29 @@ namespace Bots.DungeonBuddy
         private Composite CreateLfgBehavior()
         {
             return new PrioritySelector(
+                // --- POLLING FALLBACK: update flags via GetLFGMode() when events are missed ---
+                // Some WotLK private servers don't fire LFG_PROPOSAL_SHOW / LFG_ROLE_CHECK_SHOW
+                // reliably. Poll every 750ms so the event-driven flags stay in sync.
+                // Returns Failure always so the PrioritySelector continues to the real handlers.
+                new Decorator(
+                    ctx => _lfgPollTimer.IsFinished,
+                    new Action(ctx =>
+                    {
+                        _lfgPollTimer.Reset();
+                        string mode = Lua.GetReturnVal<string>("return GetLFGMode() or ''", 0);
+                        if (mode == "proposal" && !LfgManager.ProposalPending)
+                        {
+                            Logging.Write("[DungeonBuddy] LFG proposal detected via polling (LFG_PROPOSAL_SHOW missed)");
+                            LfgManager.ProposalPending = true;
+                        }
+                        else if (mode == "rolecheck" && !LfgManager.RoleCheckPending)
+                        {
+                            Logging.Write("[DungeonBuddy] LFG role check detected via polling (LFG_ROLE_CHECK_SHOW missed)");
+                            LfgManager.RoleCheckPending = true;
+                        }
+                        return RunStatus.Failure;
+                    })),
+
                 // --- RESURRECT REQUEST (HB method_97 branch) ---
                 new Decorator(
                     ctx => LfgManager.ResurrectRequestPending,
@@ -1078,7 +1103,11 @@ namespace Bots.DungeonBuddy
                         new Action(ctx =>
                         {
                             Logging.Write("[DungeonBuddy] Role check in progress");
-                            Lua.DoString("LFDRoleCheckPopupAcceptButton:Click() StaticPopup1Button1:Click()");
+                            // CompleteLFGRoleCheck() is confirmed taint-free (IDA: 0x553E20, no
+                            // CheckPermissions call). Direct API call is more reliable than clicking
+                            // LFDRoleCheckPopupAcceptButton which may silently fail if the frame
+                            // isn't loaded yet.
+                            Lua.DoString("CompleteLFGRoleCheck()");
                             return RunStatus.Success;
                         }),
                         new Action(ctx =>
