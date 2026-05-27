@@ -110,7 +110,7 @@ namespace Bots.Gatherbuddy
         public override bool   IsPrimaryType => true;
         public override bool   RequiresProfile => true;
         public override PulseFlags PulseFlags => PulseFlags.All;
-        public override object ConfigurationForm => new GatherBuddySettingsWindow();
+        public override System.Windows.Window ConfigurationWindow => new GatherBuddySettingsWindow();
 
         public override Composite Root
         {

@@ -1,5 +1,6 @@
 using Styx.WoWInternals.WoWObjects;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 
@@ -50,6 +51,7 @@ namespace Styx.Helpers
         private bool _useMount;
         private bool _useRandomMount;
         private string _lastUsedPath;
+        private List<string> _recentProfiles = new List<string>();
         private PropertyChangedEventHandler _propertyChangedHandler;
 
         /// <summary>
@@ -401,6 +403,22 @@ namespace Styx.Helpers
             }
         }
 
+        public List<string> RecentProfiles
+        {
+            get => _recentProfiles;
+            set { _recentProfiles = value ?? new List<string>(); OnPropertyChanged(nameof(RecentProfiles)); }
+        }
+
+        public void AddRecentProfile(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return;
+            _recentProfiles.Remove(path);
+            _recentProfiles.Insert(0, path);
+            if (_recentProfiles.Count > 10)
+                _recentProfiles.RemoveAt(10);
+            OnPropertyChanged(nameof(RecentProfiles));
+        }
+
         [DefaultValue(75)]
         [Setting]
         public int MountDistance
@@ -430,6 +448,52 @@ namespace Styx.Helpers
             add => _propertyChangedHandler += value;
             remove => _propertyChangedHandler -= value;
         }
+
+        // Profile overrides
+        private bool _overrideProfileSettings;
+        private bool _ignoreCheckpoints;
+
+        [Setting]
+        [DefaultValue(false)]
+        public bool OverrideProfileSettings
+        {
+            get => _overrideProfileSettings;
+            set { _overrideProfileSettings = value; OnPropertyChanged(nameof(OverrideProfileSettings)); }
+        }
+
+        [Setting]
+        [DefaultValue(false)]
+        public bool IgnoreCheckpoints
+        {
+            get => _ignoreCheckpoints;
+            set { _ignoreCheckpoints = value; OnPropertyChanged(nameof(IgnoreCheckpoints)); }
+        }
+
+        // Sell settings
+        private bool _sellGrey;
+        private bool _sellWhite;
+        private bool _sellGreen;
+        private bool _sellBlue;
+        private bool _sellPurple;
+
+        [Setting] [DefaultValue(true)]  public bool SellGrey   { get => _sellGrey;   set { _sellGrey   = value; OnPropertyChanged(nameof(SellGrey));   } }
+        [Setting] [DefaultValue(false)] public bool SellWhite  { get => _sellWhite;  set { _sellWhite  = value; OnPropertyChanged(nameof(SellWhite));  } }
+        [Setting] [DefaultValue(false)] public bool SellGreen  { get => _sellGreen;  set { _sellGreen  = value; OnPropertyChanged(nameof(SellGreen));  } }
+        [Setting] [DefaultValue(false)] public bool SellBlue   { get => _sellBlue;   set { _sellBlue   = value; OnPropertyChanged(nameof(SellBlue));   } }
+        [Setting] [DefaultValue(false)] public bool SellPurple { get => _sellPurple; set { _sellPurple = value; OnPropertyChanged(nameof(SellPurple)); } }
+
+        // Mail settings
+        private bool _mailGrey;
+        private bool _mailWhite;
+        private bool _mailGreen;
+        private bool _mailBlue;
+        private bool _mailPurple;
+
+        [Setting] [DefaultValue(false)] public bool MailGrey   { get => _mailGrey;   set { _mailGrey   = value; OnPropertyChanged(nameof(MailGrey));   } }
+        [Setting] [DefaultValue(false)] public bool MailWhite  { get => _mailWhite;  set { _mailWhite  = value; OnPropertyChanged(nameof(MailWhite));  } }
+        [Setting] [DefaultValue(false)] public bool MailGreen  { get => _mailGreen;  set { _mailGreen  = value; OnPropertyChanged(nameof(MailGreen));  } }
+        [Setting] [DefaultValue(false)] public bool MailBlue   { get => _mailBlue;   set { _mailBlue   = value; OnPropertyChanged(nameof(MailBlue));   } }
+        [Setting] [DefaultValue(false)] public bool MailPurple { get => _mailPurple; set { _mailPurple = value; OnPropertyChanged(nameof(MailPurple)); } }
 
         private void OnPropertyChanged(string propertyName)
         {

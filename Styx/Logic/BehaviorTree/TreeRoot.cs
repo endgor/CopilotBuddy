@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using CommonBehaviors.Actions;
 using Styx.Common;
@@ -26,6 +27,7 @@ namespace Styx.Logic.BehaviorTree
 		private static string _goalText = "";
 		private static readonly object _stateLock = new object();
 		private static WindowPlacement? _lastNonMinimizedPlacement;
+		private static EventHandler<ShutdownRequestedEventArgs>? _onShutdownRequested;
 
 		// HB 6.2.3: Coroutine pre-tick checks (ns47.Class678 → HookCoroutineTask)
 		private static HookCoroutineTask? _inGameCheck;
@@ -539,6 +541,9 @@ namespace Styx.Logic.BehaviorTree
 					// This must be called BEFORE the worker thread starts (like HB 3.3.5a smethod_3)
 					BotEvents.RaiseBotStart();
 
+					// Raise OnBotStartRequested — same pattern as HB Legion
+					BotEvents.RaiseBotStartRequested();
+
 					// Worker thread transitions to Running once it starts ticking
 					_workerThread = new Thread(WorkerThread);
 					_workerThread.IsBackground = true;
@@ -570,6 +575,7 @@ namespace Styx.Logic.BehaviorTree
 		/// </summary>
 		public static void Stop(string? reason = null)
 		{
+			Thread threadToInterrupt = null;
 			lock (_stateLock)
 			{
 				if (State != TreeRootState.Running && State != TreeRootState.Starting && State != TreeRootState.Paused)
@@ -577,10 +583,18 @@ namespace Styx.Logic.BehaviorTree
 
 				Logging.Write(Colors.DeepSkyBlue, "Bot stopping! Reason: {0}", reason ?? "User request");
 				State = TreeRootState.Stopping;
+				threadToInterrupt = _workerThread;
+
+				// Raise OnBotStopRequested — same pattern as HB Legion
+				BotEvents.RaiseBotStopRequested();
 			}
-			// HB 6.2.3: Stop() returns immediately. The worker thread sees
-			// State == Stopping, exits its while loop, and does cleanup in
-			// its own finally block. No Join(), no blocking the UI thread.
+			// Wake the worker if it is sleeping between ticks so it sees State == Stopping
+			// immediately instead of waiting up to (1000/TPS) ms.
+			// Thread.Interrupt() only affects managed waits (Thread.Sleep, Monitor.Wait etc.);
+			// it is a no-op if the thread is executing native code or running a tick.
+			threadToInterrupt?.Interrupt();
+			// Stop() returns immediately. The worker thread sees State == Stopping,
+			// exits its while loop, and does cleanup in its own finally block.
 		}
 
 		private static void WorkerThread()
@@ -603,6 +617,10 @@ namespace Styx.Logic.BehaviorTree
 				State = TreeRootState.Running;
 			}
 
+			// HB Legion pattern: fire OnBotStarted AFTER State = Running,
+			// so UI (BCP overlay) can enable/disable buttons correctly.
+			BotEvents.RaiseBotStarted();
+
 			try
 			{
 				// Main tick loop — exits when Stop() sets State to Stopping
@@ -611,6 +629,11 @@ namespace Styx.Logic.BehaviorTree
 				{
 					Tick();
 				}
+			}
+			catch (ThreadInterruptedException)
+			{
+				// Stop() called Thread.Interrupt() to wake us from sleep — normal shutdown.
+				Logging.WriteDebug("[TreeRoot] Worker thread interrupted by Stop() — stopping cleanly.");
 			}
 			catch (Exception ex)
 			{
@@ -645,6 +668,73 @@ namespace Styx.Logic.BehaviorTree
 		}
 
 		/// <summary>
+		/// Stops the bot with an optional exit code. If closeWow is true, shuts down the application.
+		/// </summary>
+		public static void Shutdown(HonorbuddyExitCode exitCode = HonorbuddyExitCode.Default, bool closeWow = false)
+		{
+			RaiseShutdownRequested(exitCode, closeWow);
+			Stop();
+			if (closeWow)
+			{
+				System.Windows.Application.Current?.Shutdown((int)exitCode);
+			}
+		}
+
+		/// <summary>
+		/// HB 6.2.3: Blocks until the worker thread has fully stopped (or timeout expires).
+		/// Returns true if stopped, false if timeout was reached.
+		/// Cannot be called from the bot thread (deadlock).
+		/// </summary>
+		public static bool WaitForStop(int timeoutMs = -1)
+		{
+			if (Thread.CurrentThread == _workerThread)
+				throw new InvalidOperationException("WaitForStop cannot be called from the bot thread.");
+			if (timeoutMs != -1 && timeoutMs < 0)
+				throw new ArgumentOutOfRangeException("timeoutMs", "Timeout cannot be negative.");
+			return _workerThread == null || _workerThread.Join(timeoutMs == -1 ? Timeout.Infinite : timeoutMs);
+		}
+
+		/// <summary>
+		/// HB 6.2.3: Fired when the application is requesting a full shutdown (e.g. exit button, OS signal).
+		/// Plugins and routines can subscribe to perform cleanup before exit.
+		/// </summary>
+		public static event EventHandler<ShutdownRequestedEventArgs> OnShutdownRequested
+		{
+			add
+			{
+				EventHandler<ShutdownRequestedEventArgs>? current = _onShutdownRequested;
+				EventHandler<ShutdownRequestedEventArgs>? updated;
+				do
+				{
+					updated = current;
+					var combined = (EventHandler<ShutdownRequestedEventArgs>?)Delegate.Combine(updated, value);
+					current = Interlocked.CompareExchange(ref _onShutdownRequested, combined, updated);
+				}
+				while (current != updated);
+			}
+			remove
+			{
+				EventHandler<ShutdownRequestedEventArgs>? current = _onShutdownRequested;
+				EventHandler<ShutdownRequestedEventArgs>? updated;
+				do
+				{
+					updated = current;
+					var removed = (EventHandler<ShutdownRequestedEventArgs>?)Delegate.Remove(updated, value);
+					current = Interlocked.CompareExchange(ref _onShutdownRequested, removed, updated);
+				}
+				while (current != updated);
+			}
+		}
+
+		/// <summary>
+		/// Raises OnShutdownRequested. Called by Shutdown() before stopping the bot.
+		/// </summary>
+		internal static void RaiseShutdownRequested(HonorbuddyExitCode exitCode, bool closeWow)
+		{
+			_onShutdownRequested?.Invoke(null, new ShutdownRequestedEventArgs(exitCode, closeWow));
+		}
+
+		/// <summary>
 		/// Current activity text — displayed in the StatusBar at the bottom of the UI.
 		/// Fires OnStatusTextChanged event (same as HB 4.3.4).
 		/// </summary>
@@ -670,8 +760,12 @@ namespace Styx.Logic.BehaviorTree
 		public static event EventHandler<StatusTextChangedEventArgs> OnStatusTextChanged;
 
 		/// <summary>
+		/// Event fired when GoalText changes — same pattern as OnStatusTextChanged.
+		/// </summary>
+		public static event EventHandler<GoalTextChangedEventArgs> OnGoalTextChanged;
+
+		/// <summary>
 		/// High-level goal text — displayed in the Info panel.
-		/// Same as HB 4.3.4 (no event, polled by UpdateInfoPanel timer).
 		/// </summary>
 		public static string GoalText
 		{
@@ -682,7 +776,9 @@ namespace Styx.Logic.BehaviorTree
 				{
 					Logging.WriteDebug("Goal: {0}", value);
 				}
+				string oldGoal = _goalText;
 				_goalText = value;
+				OnGoalTextChanged?.Invoke(null, new GoalTextChangedEventArgs(oldGoal, value));
 			}
 		}
 	}

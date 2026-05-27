@@ -1,4 +1,6 @@
 using System;
+using Styx.CommonBot.Routines;
+using Styx.Logic.Combat;
 using TreeSharp;
 
 namespace Styx.Combat.CombatRoutine
@@ -148,6 +150,22 @@ namespace Styx.Combat.CombatRoutine
 
 		public virtual void ShutDown()
 		{
+		}
+
+		// -----------------------------------------------------------------
+		// Capability support (HB 6.2.3 pattern)
+		// -----------------------------------------------------------------
+
+		public virtual CapabilityFlags SupportedCapabilities => CapabilityFlags.None;
+
+		public bool HasCapability(CapabilityFlags capability)
+		{
+			return capability != CapabilityFlags.None && (SupportedCapabilities & capability) == capability;
+		}
+
+		protected CapabilityState GetCapabilityState(CapabilityFlags capability)
+		{
+			return RoutineManager.GetCapabilityState(capability);
 		}
 
 		protected CombatRoutine()

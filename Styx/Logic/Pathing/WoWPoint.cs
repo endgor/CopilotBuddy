@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using Styx.Helpers;
 
@@ -81,6 +82,31 @@ namespace Styx.Logic.Pathing
 			float dx = X - other.X;
 			float dy = Y - other.Y;
 			return dx * dx + dy * dy;
+		}
+
+		public float DistanceSquared(WoWPoint other)
+		{
+			float dx = X - other.X;
+			float dy = Y - other.Y;
+			float dz = Z - other.Z;
+			return dx * dx + dy * dy + dz * dz;
+		}
+
+		public float Distance2DSquared(WoWPoint other)
+		{
+			return Distance2DSqr(other);
+		}
+
+		public float Distance2DSquared(System.Numerics.Vector3 other)
+		{
+			float dx = X - other.X;
+			float dy = Y - other.Y;
+			return dx * dx + dy * dy;
+		}
+
+		public static implicit operator Vector3(WoWPoint p)
+		{
+			return new Vector3(p.X, p.Y, p.Z);
 		}
 
 		public void Normalize()

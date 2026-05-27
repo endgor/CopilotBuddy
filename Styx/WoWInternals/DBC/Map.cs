@@ -182,6 +182,16 @@ namespace Styx.WoWInternals.DBC
         /// Returns true if this is an arena map.
         /// </summary>
         public bool IsArena => MapType == MapType.Arena;
+
+        /// <summary>
+        /// Returns the parent map ID, or -1 if none. WotLK 3.3.5a DBC has no parent map field.
+        /// </summary>
+        public int ParentMapId => -1;
+
+        /// <summary>
+        /// Returns true if this is a garrison map. Always false in WotLK — garrisons are WoD+.
+        /// </summary>
+        public bool IsGarrison => false;
         
         /// <summary>
         /// Returns true if this is an instance (5-man dungeon).

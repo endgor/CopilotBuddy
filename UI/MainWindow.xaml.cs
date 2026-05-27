@@ -182,6 +182,7 @@ namespace CopilotBuddy.UI
 
                         // HB 6.2.3 smethod_3: Start minimize guard thread + event handlers
                         TreeRoot.Initialize();
+                        BotEvents.OnBotStarted += BotEvents_OnBotStarted;
                         BotEvents.OnBotStopped += BotEvents_OnBotStopped;
 
                         // Log character info (HB 4.3.4 pattern after attach)
@@ -490,10 +491,25 @@ namespace CopilotBuddy.UI
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Stop bot if running
-            if (_isRunning)
+            // HB 6.2.3/Legion pattern: close all auxiliary windows first.
+            foreach (Window window in System.Windows.Application.Current.Windows.Cast<Window>().ToList())
             {
-                StopBot();
+                if (!ReferenceEquals(window, this))
+                    window.Close();
+            }
+
+            // Stop bot and wait for worker shutdown before process teardown.
+            if (TreeRoot.State != TreeRootState.Stopped)
+            {
+                TreeRoot.Stop("Main window is closing");
+                if (!WaitForTreeRootStop(5000))
+                    Logging.Write("Bot thread hung during window close");
+            }
+
+            // Disable all plugins so overlay/hotkeys and plugin-owned resources are released.
+            foreach (var pluginContainer in Styx.Plugins.PluginManager.Plugins)
+            {
+                pluginContainer.Enabled = false;
             }
 
             // Persist window geometry FIRST so that SaveSettings() below
@@ -537,15 +553,30 @@ namespace CopilotBuddy.UI
 
             // Cleanup
             Logging.OnLogMessage -= OnLogMessage;
+            BotEvents.OnBotStarted -= BotEvents_OnBotStarted;
             BotEvents.OnBotStopped -= BotEvents_OnBotStopped;
             _infoTimer?.Stop();
+        }
+
+        private static bool WaitForTreeRootStop(int timeoutMs)
+        {
+            var sw = Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds < timeoutMs)
+            {
+                if (TreeRoot.State == TreeRootState.Stopped)
+                    return true;
+
+                Thread.Sleep(50);
+            }
+
+            return TreeRoot.State == TreeRootState.Stopped;
         }
 
         #endregion
 
         #region Logging
 
-        private void OnLogMessage(ReadOnlyCollection<LogMessage> messages)
+        private void OnLogMessage(ReadOnlyCollection<Logging.LogMessage> messages)
         {
             if (Thread.CurrentThread != Dispatcher.Thread)
             {
@@ -797,6 +828,23 @@ namespace CopilotBuddy.UI
             SetStatus("CopilotBuddy Stopped");
         }
 
+        private void BotEvents_OnBotStarted(EventArgs args)
+        {
+            if (Dispatcher.Thread != Thread.CurrentThread)
+            {
+                Dispatcher.BeginInvoke(new Action<EventArgs>(BotEvents_OnBotStarted), args);
+                return;
+            }
+
+            _isRunning = true;
+            btnStart.Visibility = Visibility.Hidden;
+            btnStopGroup.Visibility = Visibility.Visible;
+            btnLoadProfile.IsEnabled = false;
+            cmbBotSelector.IsEnabled = false;
+            btnSettings.IsEnabled = false;
+            SetStatus("Running...");
+        }
+
         private void cmbBotSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbBotSelector.SelectedItem == null) return;
@@ -860,6 +908,14 @@ namespace CopilotBuddy.UI
                 return;
             }
 
+            var configWindow = BotManager.Current.ConfigurationWindow;
+            if (configWindow != null)
+            {
+                configWindow.Owner = this;
+                configWindow.ShowDialog();
+                return;
+            }
+
             var configForm = BotManager.Current.ConfigurationForm;
             if (configForm == null)
             {
@@ -867,21 +923,7 @@ namespace CopilotBuddy.UI
                 return;
             }
 
-            if (configForm is System.Windows.Window window)
-            {
-                window.Owner = this;
-                window.ShowDialog();
-            }
-            else if (configForm is System.Windows.Forms.Form winForm)
-            {
-                // WinForms support — external bots (LazyRaider etc.) use WinForms config dialogs
-                winForm.ShowDialog();
-            }
-            else
-            {
-                Logging.Write("[{0}] ConfigurationForm type not supported: {1}",
-                    BotManager.Current.Name, configForm.GetType().Name);
-            }
+            configForm.ShowDialog();
         }
 
         private void btnClassConfig_Click(object sender, RoutedEventArgs e)

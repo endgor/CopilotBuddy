@@ -189,6 +189,12 @@ namespace Styx.CommonBot.Coroutines
             return true;
         }
 
+        /// <summary>HB 6.2.3: Land and dismount. In WotLK equivalent to Dismount.</summary>
+        public static Task<bool> LandAndDismount(string? reason = null)
+        {
+            return Dismount(reason);
+        }
+
         /// <summary>
         /// HB 6.2.3: Navigate to a point with logging throttle.
         /// </summary>

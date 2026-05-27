@@ -16,6 +16,8 @@ namespace Styx
 		private static OnBotStartDelegate _onBotStarted;
 		private static OnBotStopDelegate _onBotStop;
 		private static OnBotStopDelegate _onBotStopped;
+		private static OnBotStartDelegate _onBotStartRequested;
+		private static OnBotStopDelegate _onBotStopRequested;
 		private static EventHandler _onPulse;
 		private static OnBotStartDelegate _onBotStartComplete;
 		private static OnBotStopDelegate _onBotStopping;
@@ -166,6 +168,62 @@ namespace Styx
 			}
 		}
 
+		public static event OnBotStartDelegate OnBotStartRequested
+		{
+			add
+			{
+				OnBotStartDelegate handler = _onBotStartRequested;
+				OnBotStartDelegate compare;
+				do
+				{
+					compare = handler;
+					OnBotStartDelegate combined = (OnBotStartDelegate)Delegate.Combine(compare, value);
+					handler = Interlocked.CompareExchange(ref _onBotStartRequested, combined, compare);
+				}
+				while (handler != compare);
+			}
+			remove
+			{
+				OnBotStartDelegate handler = _onBotStartRequested;
+				OnBotStartDelegate compare;
+				do
+				{
+					compare = handler;
+					OnBotStartDelegate removed = (OnBotStartDelegate)Delegate.Remove(compare, value);
+					handler = Interlocked.CompareExchange(ref _onBotStartRequested, removed, compare);
+				}
+				while (handler != compare);
+			}
+		}
+
+		public static event OnBotStopDelegate OnBotStopRequested
+		{
+			add
+			{
+				OnBotStopDelegate handler = _onBotStopRequested;
+				OnBotStopDelegate compare;
+				do
+				{
+					compare = handler;
+					OnBotStopDelegate combined = (OnBotStopDelegate)Delegate.Combine(compare, value);
+					handler = Interlocked.CompareExchange(ref _onBotStopRequested, combined, compare);
+				}
+				while (handler != compare);
+			}
+			remove
+			{
+				OnBotStopDelegate handler = _onBotStopRequested;
+				OnBotStopDelegate compare;
+				do
+				{
+					compare = handler;
+					OnBotStopDelegate removed = (OnBotStopDelegate)Delegate.Remove(compare, value);
+					handler = Interlocked.CompareExchange(ref _onBotStopRequested, removed, compare);
+				}
+				while (handler != compare);
+			}
+		}
+
 		public static event OnBotChangedDelegate OnBotChanged
 		{
 			add
@@ -221,6 +279,10 @@ namespace Styx
 		{
 			_onBotStarted?.Invoke(EventArgs.Empty);
 		}
+
+		internal static void RaiseBotStartRequested() => _onBotStartRequested?.Invoke(EventArgs.Empty);
+
+		internal static void RaiseBotStopRequested() => _onBotStopRequested?.Invoke(EventArgs.Empty);
 
 		internal static void RaiseBotStopped()
 		{

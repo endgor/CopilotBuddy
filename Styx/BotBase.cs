@@ -11,7 +11,9 @@ namespace Styx
 
 		public abstract PulseFlags PulseFlags { get; }
 
-		public virtual object ConfigurationForm => null;
+		public virtual System.Windows.Forms.Form ConfigurationForm => null;
+
+		public virtual System.Windows.Window ConfigurationWindow => null;
 
 		public virtual bool IsPrimaryType => true;
 

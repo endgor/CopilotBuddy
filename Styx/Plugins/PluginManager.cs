@@ -30,6 +30,11 @@ namespace Styx.Plugins
         /// </summary>
         public static List<PluginContainer> Plugins { get; private set; }
 
+        /// <summary>
+        /// Gets the path to the Plugins directory.
+        /// </summary>
+        public static string PluginsDirectory => Path.Combine(Logging.ApplicationPath, "Plugins");
+
         static PluginManager()
         {
             Plugins = new List<PluginContainer>();

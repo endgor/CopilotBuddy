@@ -129,7 +129,7 @@
                 Width="120"
                 Height="25"
                 Click="btnStart_Click">
-            <Viewbox Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,2">
+            <Viewbox Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Start"/>
             </Viewbox>
         </Button>

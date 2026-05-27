@@ -54,7 +54,7 @@ namespace Bots.DungeonBuddy
         /// This allows the main UI's "Bot Config" button to work when
         /// DungeonBuddy is selected (previously ConfigurationForm was null).
         /// </summary>
-        public override object ConfigurationForm => new Forms.FormConfig();
+        public override System.Windows.Window ConfigurationWindow => new Forms.FormConfig();
 
         private PrioritySelector? _root;
         private static CombatRoutine Routine => RoutineManager.Current;

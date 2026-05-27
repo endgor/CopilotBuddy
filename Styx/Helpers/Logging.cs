@@ -27,34 +27,34 @@ namespace Styx.Helpers
     }
 
     /// <summary>
-    /// Represents a single log message with level, color, timestamp and content.
-    /// </summary>
-    public class LogMessage
-    {
-        public LogLevel Level { get; set; }
-        public WpfColor Color { get; set; }
-        public DateTime Timestamp { get; set; }
-        public string Message { get; set; }
-
-        public LogMessage(LogLevel level, WpfColor color, DateTime timestamp, string message)
-        {
-            Level = level;
-            Color = color;
-            Timestamp = timestamp;
-            Message = message;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("[{0:HH:mm:ss.fff}] [{1}] {2}", Timestamp, Level.ToString()[0], Message);
-        }
-    }
-
-    /// <summary>
     /// Logging system compatible with Honorbuddy WoD style.
     /// </summary>
     public static class Logging
     {
+        /// <summary>
+        /// Represents a single log message with level, color, timestamp and content.
+        /// </summary>
+        public class LogMessage
+        {
+            public LogLevel Level { get; set; }
+            public WpfColor Color { get; set; }
+            public DateTime Timestamp { get; set; }
+            public string Message { get; set; }
+
+            public LogMessage(LogLevel level, WpfColor color, DateTime timestamp, string message)
+            {
+                Level = level;
+                Color = color;
+                Timestamp = timestamp;
+                Message = message;
+            }
+
+            public override string ToString()
+            {
+                return string.Format("[{0:HH:mm:ss.fff}] [{1}] {2}", Timestamp, Level.ToString()[0], Message);
+            }
+        }
+
         #region Properties
 
         /// <summary>

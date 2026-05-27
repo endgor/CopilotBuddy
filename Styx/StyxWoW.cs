@@ -1,5 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using CopilotBuddy.Buddy.Overlay;
 using Styx.Logic;
 using Styx.Logic.AreaManagement;
 using Styx.Logic.BehaviorTree;
@@ -8,6 +12,7 @@ using Styx.WoWInternals;
 using Styx.WoWInternals.Misc;
 using Styx.WoWInternals.WoWCache;
 using Styx.WoWInternals.WoWObjects;
+using Styx.WoWInternals.World;
 using GreenMagic;
 
 namespace Styx
@@ -20,6 +25,7 @@ namespace Styx
         private static WoWDb? _db;
         private static AreaManager? _areaManager;
         private static WoWClient? _woWClient;
+        private static OverlayManager? _overlayManager;
 
         #endregion
 
@@ -163,8 +169,32 @@ namespace Styx
         /// </summary>
         public static Memory? Memory => ObjectManager.Wow;
 
+        public static OverlayManager Overlay
+        {
+            get
+            {
+                if (_overlayManager == null)
+                {
+                    _overlayManager = new OverlayManager(ObjectManager.WoWProcess, null, System.Windows.Application.Current.Dispatcher);
+                    _overlayManager.Activate();
+                    if (!_overlayManager.IsDesktopCompositionEnabled)
+                    {
+                        Task.Delay(9000).ContinueWith(_ => _overlayManager.Deactivate());
+                        _overlayManager.AddToast("Deactivating the overlay because Desktop Composition is disabled ", 7000);
+                        Styx.Helpers.Logging.Write(Colors.Red, "Deactivating the overlay because Desktop Composition is disabled which causes a significant drop in FPS while overlay is active. We recommend enabling Desktop Composition because the overlay provides a safe way for Honorbuddy and 3rd party extensions to display in-game notifications and UI elements");
+                    }
+                }
+                return _overlayManager;
+            }
+        }
+
         /// <summary>HB 6.2.3: Thread-safe Random instance for humanization.</summary>
         public static Random Random { get; } = new Random();
+
+        /// <summary>
+        /// HB 6.2.3+ WorldScene stub. WotLK has no phased world map; GetMaps() returns empty.
+        /// </summary>
+        public static WorldScene WorldScene { get; } = new WorldScene();
 
         #endregion
 
@@ -218,6 +248,7 @@ namespace Styx
             _db = null;
             _areaManager = null;
             _woWClient = null;
+            _overlayManager = null;
         }
 
         #endregion

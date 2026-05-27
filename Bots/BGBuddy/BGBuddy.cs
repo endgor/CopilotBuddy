@@ -121,7 +121,7 @@ namespace Bots.BGBuddy
 
         public override PulseFlags PulseFlags => PulseFlags.All;
 
-        public override object ConfigurationForm => new Forms.ConfigWindow();
+        public override System.Windows.Window ConfigurationWindow => new Forms.ConfigWindow();
 
         public override bool IsPrimaryType => false;
 

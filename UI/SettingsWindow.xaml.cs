@@ -104,10 +104,11 @@ namespace CopilotBuddy.UI
         private void btnBotConfig_Click(object sender, RoutedEventArgs e)
         {
             if (BotManager.Current == null) return;
+            var configWindow = BotManager.Current.ConfigurationWindow;
+            if (configWindow != null) { configWindow.Owner = this; configWindow.ShowDialog(); return; }
             var configForm = BotManager.Current.ConfigurationForm;
             if (configForm == null) return;
-            if (configForm is System.Windows.Window window) { window.Owner = this; window.ShowDialog(); }
-            else if (configForm is System.Windows.Forms.Form winForm) { winForm.ShowDialog(); }
+            configForm.ShowDialog();
         }
 
         private void btnPlugins_Click(object sender, RoutedEventArgs e)

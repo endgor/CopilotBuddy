@@ -69,6 +69,8 @@ namespace Styx.CommonBot
             BotEvents.Player.OnMobKilled += OnMobKilled;
             BotEvents.Player.OnMobLooted += OnMobLooted;
             BotEvents.Player.OnLevelUp += OnLevelUp;
+            // Initialize ToastNotifier so it subscribes to BotEvents before gameplay starts.
+            ToastNotifier.EnsureLoaded();
         }
 
         #endregion

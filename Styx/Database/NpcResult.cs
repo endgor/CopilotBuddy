@@ -1,6 +1,8 @@
 #nullable disable
 using System.Data.SQLite;
+using Styx;
 using Styx.Logic.Pathing;
+using Styx.WoWInternals;
 
 namespace Styx.Database
 {
@@ -89,5 +91,18 @@ namespace Styx.Database
         /// Gets the location as a WoWPoint.
         /// </summary>
         public WoWPoint Location => new WoWPoint(X, Y, Z);
+
+        public bool IsHostile
+        {
+            get
+            {
+                if (Faction == 0) return false;
+                var myTemplate = StyxWoW.Me?.FactionTemplate;
+                if (myTemplate == null) return false;
+                var npcTemplate = WoWFactionTemplate.FromId(Faction);
+                if (npcTemplate == null) return false;
+                return myTemplate.GetReactionTowards(npcTemplate) < WoWUnitReaction.Neutral;
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Styx.Combat.CombatRoutine;
+using Styx.CommonBot.Routines;
 using Styx.Helpers;
 using Styx.Loaders;
 using Styx.WoWInternals;
@@ -219,6 +220,42 @@ namespace Styx.Logic.Combat
 				}
 			}
 			return false;
+		}
+
+		// -----------------------------------------------------------------
+		// Capability state storage (one slot per flag bit, 32 entries)
+		// -----------------------------------------------------------------
+
+		private static readonly CapabilityState[] _capabilityStates = new CapabilityState[32];
+
+		public static event EventHandler<CapabilityStateChangedArgs> OnCapabilityStateChanged;
+
+		public static void SetCapabilityState(CapabilityFlags capability, CapabilityState state, string reason)
+		{
+			int index = GetFlagIndex((uint)capability);
+			CapabilityState old = _capabilityStates[index];
+			if (old == state) return;
+			_capabilityStates[index] = state;
+			OnCapabilityStateChanged?.Invoke(null, new CapabilityStateChangedArgs(capability, old, state));
+		}
+
+		public static CapabilityState GetCapabilityState(CapabilityFlags capability)
+		{
+			return _capabilityStates[GetFlagIndex((uint)capability)];
+		}
+
+		/// <summary>Returns the index of the least-significant set bit (log2 for power-of-2 values).</summary>
+		private static int GetFlagIndex(uint value)
+		{
+			int n = ((value > 0xFFFFU) ? 1 : 0) << 4;
+			value >>= n;
+			int t = ((value > 0xFFU) ? 1 : 0) << 3;
+			value >>= t;   n |= t;
+			t = ((value > 0xFU) ? 1 : 0) << 2;
+			value >>= t;   n |= t;
+			t = ((value > 0x3U) ? 1 : 0) << 1;
+			value >>= t;   n |= t;
+			return n | (int)(value >> 1);
 		}
 
 		private sealed class DefaultCombatRoutine : CombatRoutine
