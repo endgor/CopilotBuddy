@@ -99,7 +99,10 @@ namespace Styx.Logic.Profiles
 
 		private static void LoadProfileForLevel()
 		{
-			CurrentProfile = GetProfileForLevel(ObjectManager.Me?.Level ?? 1);
+			var profile = GetProfileForLevel(ObjectManager.Me?.Level ?? 1);
+			CurrentProfile = profile;
+			if (profile != null)
+				Logging.WriteDebug("Selected sub-profile: {0} (L{1}-{2})", profile.Name, profile.MinLevel, profile.MaxLevel);
 		}
 
 		private static Profile? GetProfileForLevel(int level)
@@ -119,6 +122,9 @@ namespace Styx.Logic.Profiles
 				{
 					return sortedProfiles[i];
 				}
+				Logging.WriteDebug("Skipping sub-profile '{0}' (L{1}-{2}, continent {3}) — current: level {4}, map {5}",
+					sortedProfiles[i].Name, sortedProfiles[i].MinLevel, sortedProfiles[i].MaxLevel,
+					sortedProfiles[i].ContinentId, level, mapId);
 			}
 			return null;
 		}
@@ -138,6 +144,7 @@ namespace Styx.Logic.Profiles
 			}
 
 			StyxWoW.AreaManager.SetArea(null);
+			Logging.WriteDebug("Loading profile from {0}", path);
 			CurrentOuterProfile = new Profile(path, null);
 			LoadProfileForLevel();
 		}
