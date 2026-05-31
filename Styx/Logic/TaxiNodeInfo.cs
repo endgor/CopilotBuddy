@@ -187,6 +187,67 @@ namespace Styx.Logic
         }
 
         /// <summary>
+        /// Returns the TaxiNodeInfo for the node the player is currently standing at.
+        /// Reads the DBC node ID from CGTaxiMap global dword_C0D7EC (WotLK 3.3.5a 0xC0D7EC).
+        /// Equivalent to HB 4.3.4 Class577.CurrentNode.
+        /// </summary>
+        public static TaxiNodeInfo GetCurrent()
+        {
+            var wow = ObjectManager.Wow;
+            if (wow == null)
+                return null;
+
+            uint id = wow.Read<uint>((uint)GlobalOffsets.TaxiCurrentNodeId);
+            if (id == 0)
+                return null;
+
+            return FromId(id);
+        }
+
+        /// <summary>
+        /// Returns the number of nodes in the active taxi frame.
+        /// Reads CGTaxiMap global dword_C0D7E4 (WotLK 3.3.5a 0xC0D7E4).
+        /// Equivalent to HB 4.3.4 Class577.NodeCount.
+        /// </summary>
+        public static uint GetNodeCount()
+        {
+            var wow = ObjectManager.Wow;
+            if (wow == null)
+                return 0;
+
+            return wow.Read<uint>((uint)GlobalOffsets.TaxiNodeCount);
+        }
+
+        /// <summary>
+        /// Returns the TaxiNodeInfo for the path table entry at the given 0-based index.
+        /// Reads: *(*(uint*)0xC0DC38 + 48*index) = DBC record ptr; record[0] = DBC node ID.
+        /// Equivalent to HB 4.3.4 Class577.method_1(index).
+        /// </summary>
+        public static TaxiNodeInfo GetByTableIndex(uint index)
+        {
+            var wow = ObjectManager.Wow;
+            if (wow == null)
+                return null;
+
+            // dword_C0DC38 holds a pointer to the path entry array.
+            uint tableBase = wow.Read<uint>((uint)GlobalOffsets.TaxiNodeTablePtr);
+            if (tableBase == 0)
+                return null;
+
+            // Each entry is 48 bytes; offset 0 holds a pointer to the DBC record.
+            uint dbcRecordPtr = wow.Read<uint>(tableBase + 48u * index);
+            if (dbcRecordPtr == 0)
+                return null;
+
+            // First DWORD of the DBC record is the node ID.
+            uint dbcId = wow.Read<uint>(dbcRecordPtr);
+            if (dbcId == 0)
+                return null;
+
+            return FromId(dbcId);
+        }
+
+        /// <summary>
         /// Get all known taxi nodes
         /// </summary>
         public static List<TaxiNodeInfo> GetAll()
