@@ -285,6 +285,10 @@ namespace Styx.Loaders
                     "System.IO.Packaging.dll",               // System.IO.Packaging.Package
                     "System.Windows.Forms.dll",
                     "System.Drawing.Common.dll",
+                    // Modern .NET plugin support
+                    "System.Text.Json.dll",                         // JsonSerializer, JsonPropertyName, etc.
+                    "System.Text.Encodings.Web.dll",                 // JsonSerializerOptions encoder
+                    "System.Buffers.dll",                            // ArrayPool used by System.Text.Json
                 };
                 foreach (var refName in essentialRefs)
                 {

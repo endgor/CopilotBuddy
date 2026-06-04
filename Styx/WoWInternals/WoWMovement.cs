@@ -25,6 +25,10 @@ namespace Styx.WoWInternals
 		private const uint CTM_Stop_Function = 0x0072B3A0;  // 7517088 decimal (CGPlayer_C__ClickToMoveStop)
 		// Click to move base address - FROM HB 3.3.5a (0xCA11D8)
 		private const uint ClickToMove_Base = 0xCA11D8;  // 13243864 decimal
+		// CTM TurnSpeed field — offset 0x4 from CTM_Base. Confirmed via IDA on 3.3.5a 12340.
+		// CGPlayer_C__ClickToMove overwrites this with CMovementData.TurnSpeed on each call,
+		// so we write our custom value AFTER the native call.
+		private const uint CTM_TurnSpeed = ClickToMove_Base + 0x4;  // 0xCA11DC
 		// Pointer slot to active CGInputControl — CGInputControl__GetActive returns dword_C24954
 		// i.e., read the uint at 0xC24954 to get the actual struct address
 		private const uint ActiveInputControl_Ptr = 0xC24954; // 3.3.5a 12340 — stores pointer to CGInputControl
@@ -40,6 +44,22 @@ namespace Styx.WoWInternals
 		private const uint CGInputControl_ToggleControlBit = 0x5FBE10;
 
 		#endregion
+
+		// Null = use game default (CMovementData.TurnSpeed or π).
+		// Set via CtmTurnSpeed property. Applied after each native CTM call.
+		private static float? _ctmTurnSpeed;
+
+		/// <summary>
+		/// Overrides the CTM turn speed written to the CTM struct (0xCA11DC) after each
+		/// ClickToMove call. The game normally resets this to CMovementData.TurnSpeed (or π)
+		/// on every CTM invocation — setting this property keeps your value in place.
+		/// Set to null to restore default game behavior.
+		/// </summary>
+		public static float? CtmTurnSpeed
+		{
+			get => _ctmTurnSpeed;
+			set => _ctmTurnSpeed = value;
+		}
 
 		#region FEAT-01: Timed movement queue
 
@@ -382,6 +402,12 @@ namespace Styx.WoWInternals
 					executor.Execute();
 				}
 			}
+
+			// Write custom TurnSpeed AFTER the native call — CGPlayer_C__ClickToMove overwrites
+			// flt_CA11DC with CMovementData.TurnSpeed internally, so we must set it after.
+			// Default in game is π (3.14159) or the unit's CMovementData.TurnSpeed.
+			if (_ctmTurnSpeed.HasValue)
+				ObjectManager.Wow?.Write(CTM_TurnSpeed, _ctmTurnSpeed.Value);
 
 			RaiseMovementFlagsChanged(MovementDirection.ClickToMove, false);
 		}

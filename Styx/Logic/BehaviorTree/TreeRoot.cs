@@ -145,6 +145,11 @@ namespace Styx.Logic.BehaviorTree
 
 		// ARCH-03: Track fall state
 		private static bool _wasFalling;
+
+		// HB 4.3.4 ns3/Class3.cs pattern: periodic reactive AFK check.
+		// ResetAfk() is called every tick (proactive). If WoW still flags AFK
+		// (e.g. after login/disconnect), we send a spacebar to clear it.
+		private static readonly Stopwatch _afkCheckTimer = Stopwatch.StartNew();
 		private static int _fallStartTick;
 
 		/// <summary>
@@ -414,6 +419,21 @@ namespace Styx.Logic.BehaviorTree
 
 				WoWPulsator.Pulse(flags);
 				BotEvents.RaisePulse(EventArgs.Empty);
+
+				// HB 4.3.4 ns3/Class3.cs: proactive reset every tick so LastHardwareAction
+				// never goes stale during idle periods (waiting for respawn, standing, etc.)
+				StyxWoW.ResetAfk();
+
+				// Reactive check every 30s: if WoW still reports AFK (e.g. after reconnect
+				// or login), send spacebar to dismiss the AFK dialog.
+				// From HB 4.3.4 ns3/Class3.smethod_1: KeyboardManager.KeyUpDown(' ')
+				if (_afkCheckTimer.Elapsed.TotalSeconds >= 30.0)
+				{
+					_afkCheckTimer.Restart();
+					var afkResult = Lua.GetReturnValues("return UnitIsAFK(\"player\")");
+					if (afkResult != null && afkResult.Count > 0 && afkResult[0] == "1")
+						KeyboardManager.KeyUpDown(' ');
+				}
 			}
 
 			// HB 6.2.3: Run Composite_0 (InGame + Taxi pre-checks via coroutine)
