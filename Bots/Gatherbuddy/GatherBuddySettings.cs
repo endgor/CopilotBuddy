@@ -111,7 +111,7 @@ namespace Bots.Gatherbuddy
         /// <summary>
         /// Blacklist duration for failed nodes (seconds)
         /// </summary>
-        [Setting, DefaultValue(20)]
+        [Setting, DefaultValue(45)]
         public int BlacklistTimer { get; set; }
 
         // ═══════════════════════════════════════════════════════════
@@ -140,7 +140,7 @@ namespace Bots.Gatherbuddy
         /// <summary>
         /// Number of free bag slots below which the bot goes to vendor.
         /// </summary>
-        [Setting, DefaultValue(2)]
+        [Setting, DefaultValue(1)]
         public int MinFreeBagSlots { get; set; }
 
         /// <summary>

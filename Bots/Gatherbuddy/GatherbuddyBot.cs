@@ -5,6 +5,7 @@ using System.Linq;
 using Bots.Grind;
 using CommonBehaviors.Actions;
 using Styx;
+using Styx.Common;
 using Styx.CommonBot;
 using Styx.Helpers;
 using Styx.Logic;
@@ -125,7 +126,10 @@ namespace Bots.Gatherbuddy
         /// <summary>Elapsed time since the last Start() call.</summary>
         public static TimeSpan RunningTime => DateTime.Now.Subtract(_sessionStart);
 
-        public override void Pulse() { }
+        public override void Pulse()
+        {
+            Navigator.PathPrecision = MathEx.Clamp(StyxWoW.Me.MovementInfo.CurrentSpeed * 0.15f, 1.5f, 10f);
+        }
 
         #endregion
 
@@ -769,8 +773,7 @@ namespace Bots.Gatherbuddy
 
         /// <summary>
         /// Returns true when MailToAlt is on, a recipient is set, a mailbox exists in the profile,
-        /// and there are non-soulbound items that qualify, AND bags are getting full or mailbox is nearby.
-        /// HB 3.3.5a smethod_12: don't go to mailbox if it's far away AND bags still have 30+ free slots.
+        /// and bags have reached the configured free-slot threshold with items that qualify.
         /// </summary>
         private bool NeedsMailing(object ctx)
         {
@@ -790,13 +793,11 @@ namespace Bots.Gatherbuddy
             // Cooldown: don't loop back to mailbox immediately after a successful mail run
             if (DateTime.UtcNow - _lastMailedAt < MailCooldown) return false;
 
-            // HB 3.3.5a: skip mailbox if it's far away AND bags are mostly empty (>= 30 free slots)
-            var mailbox = ProfileManager.CurrentProfile.MailboxManager.GetClosestMailbox();
-            if (mailbox == null) return false;
+            if (ProfileManager.CurrentProfile.MailboxManager.GetClosestMailbox() == null)
+                return false;
 
-            bool mailboxClose = StyxWoW.Me.Location.Distance(mailbox.Location) < 200f;
-            bool bagsNearlyFull = StyxWoW.Me.FreeBagSlots < 30;
-            if (!mailboxClose && !bagsNearlyFull) return false;
+            if (StyxWoW.Me.FreeBagSlots > s.MinFreeBagSlots)
+                return false;
 
             return GetItemsToMail().Length > 0;
         }
@@ -876,7 +877,10 @@ namespace Bots.Gatherbuddy
                     if (!mailboxGo.WithinInteractRange)
                     {
                         TreeRoot.StatusText = "Approaching mailbox";
-                        Navigator.MoveTo(mailboxGo.Location);
+                        if (Flightor.CanFly)
+                            Flightor.MoveTo(mailboxGo.Location, 10f);
+                        else
+                            Navigator.MoveTo(mailboxGo.Location);
                         return RunStatus.Running;
                     }
 
@@ -1159,8 +1163,9 @@ namespace Bots.Gatherbuddy
                             || (ctx is WoWObject wCtx && wCtx != _currentNode),
                         new Action(ctx =>
                         {
+                            bool lootVisible = LootFrame.Instance.IsVisible;
                             _gatherTimer.Reset();
-                            if (!StyxWoW.Me.Combat)
+                            if (lootVisible)
                             {
                                 if (ctx is WoWObject ctxNode)
                                     Blacklist.Add(ctxNode.Guid, TimeSpan.FromSeconds(2.0));
