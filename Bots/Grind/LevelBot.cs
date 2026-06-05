@@ -319,8 +319,10 @@ namespace Bots.Grind
                         )
                     )
                 )),
-                // Ghost - near corpse, retrieve it (HB 4.3.4 pattern: DecoratorNeedToTakeCorpse wraps retrieval behavior)
-                new Levelbot.Decorators.Death.DecoratorNeedToTakeCorpse(
+                // Ghost - near corpse, retrieve it.
+                // HB 4.3.4 LevelBot.smethod_89: IsGhost && Distance(CorpsePoint) < 40f.
+                new Decorator(
+                    ctx => StyxWoW.Me.IsGhost && StyxWoW.Me.Location.Distance(StyxWoW.Me.CorpsePoint) < 40f,
                     CreateCorpseRetrievalBehavior()
                 ),
                 // Succeed if dead or ghost (to prevent other behaviors from running)
