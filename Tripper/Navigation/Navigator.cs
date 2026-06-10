@@ -20,35 +20,21 @@ namespace Tripper.Navigation
         private readonly object _meshLock = new object();
         private readonly Dictionary<string, QueryFilter> _queryFilters = new Dictionary<string, QueryFilter>();
         private QueryFilter _currentQueryFilter = null!;
-        private readonly WorldMeshManager _worldMesh;
-        private readonly GarrisonMeshManager _garrisonMesh;
         private bool _isDisposed;
         private DateTime _lastGarbageCollect = DateTime.UtcNow;
 
-        // HB 6.2.3 pattern: prevent GC of native callback delegate
+        // Prevent GC of native callback delegate (root the delegate for the DLL's lifetime)
         private NativeMethods.TileLoadedCallbackDelegate? _nativeTileLoadedCallback;
-        // Prevent GC — same pattern as _nativeTileLoadedCallback
-        private NativeMethods.NavLogCallbackDelegate? _nativeLogCallback;
 
         #endregion
 
         #region Events
 
         /// <summary>
-        /// Raised when a tile is loaded into the navmesh.
+        /// Raised when an ADT tile is loaded into the navmesh.
+        /// 1x1 MaNGOS-style: one event per ADT (no sub-tile decomposition).
         /// </summary>
         public event EventHandler<TileLoadedEventArgs>? TileLoaded;
-
-        /// <summary>
-        /// HB-compatible alias for TileLoaded.
-        /// </summary>
-        public event EventHandler<TileLoadedEventArgs>? OnTileLoaded;
-
-        /// <summary>
-        /// HB-compatible sub-tile event alias.
-        /// 1x1 MaNGOS tiles do not have sub-tiles, so this mirrors OnTileLoaded.
-        /// </summary>
-        public event EventHandler<TileLoadedEventArgs>? OnSubTileLoaded;
 
         /// <summary>
         /// Raised when a map is fully loaded.
@@ -59,21 +45,6 @@ namespace Tripper.Navigation
         /// Raised during pathfinding progress.
         /// </summary>
         public event EventHandler<PathProgressEventArgs>? PathProgress;
-
-        /// <summary>
-        /// HB-compatible alias for PathProgress.
-        /// </summary>
-        public event EventHandler<PathFindProgressEventArgs>? OnPathFindProgress;
-
-        /// <summary>
-        /// HB-compatible alias for MapLoaded.
-        /// </summary>
-        public event EventHandler<MapLoadedEventArgs>? OnMapLoaded;
-
-        /// <summary>
-        /// HB-compatible navigator log event.
-        /// </summary>
-        public event NavigatorLogMessage? OnNavigatorLogMessage;
 
         /// <summary>
         /// Raised when a navigation log message is generated.
@@ -138,108 +109,79 @@ namespace Tripper.Navigation
         #region Initialization
 
         /// <summary>
-        /// HB-compatible world mesh manager facade.
-        /// </summary>
-        public WorldMeshManager WorldMesh => _worldMesh;
-
-        /// <summary>
-        /// HB-compatible garrison mesh manager facade.
-        /// WotLK does not use garrisons.
-        /// </summary>
-        public GarrisonMeshManager GarrisonMesh => _garrisonMesh;
-
-        /// <summary>
-        /// Primary map identifier string. WotLK uses numeric map IDs, so this is informational.
-        /// </summary>
-        public string? PrimaryMapName => CurrentMapId == 0 ? null : CurrentMapId.ToString();
-
-        /// <summary>
-        /// Loaded map names. Kept for HB API surface parity.
-        /// </summary>
-        public string[] MapNames => PrimaryMapName == null ? Array.Empty<string>() : new[] { PrimaryMapName };
-
-        /// <summary>
         /// Initializes a new instance of the Navigator class.
         /// </summary>
         public Navigator()
         {
-            _worldMesh = new WorldMeshManager(this);
-            _garrisonMesh = new GarrisonMeshManager(this);
             InitializeQueryFilters();
             ResetQueryFilter();
         }
 
         /// <summary>
-        /// HB-compatible overload that uses the current map.
-        /// </summary>
-        public PathFindResult FindPath(Vector3 start, Vector3 end)
-        {
-            if (_garrisonMesh.IsLoaded && IsWithinGarrison(start) && IsWithinGarrison(end))
-            {
-                return _garrisonMesh.FindPath(start, end);
-            }
-
-            return _worldMesh.FindPath(start, end);
-        }
-
-        /// <summary>
-        /// WotLK has no garrisons.
-        /// </summary>
-        public bool IsWithinGarrison(Vector3 location)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// WotLK has no garrisons.
-        /// </summary>
-        public bool IsWithinGarrison(Vector2 location)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// WotLK has no garrisons.
-        /// </summary>
-        public bool IsWithinGarrison(float x, float y)
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Initializes default query filters for different movement scenarios.
+        /// CopilotBuddy 1x1 MaNGOS-style: Default / Horde / Alliance / DK start variants.
         /// </summary>
         private void InitializeQueryFilters()
         {
-            // HB 6.2.3: dictionary_0["Default"] = WowNavigator.GetNewDefaultQueryFilter()
-            WowQueryFilter defaultWow = GetNewDefaultQueryFilter();
-            _queryFilters["Default"] = ToQueryFilter(defaultWow);
+            _queryFilters["Default"] = NewDefaultQueryFilter();
 
-            // HB 6.2.3 smethod_2() — Horde filter
-            WowQueryFilter hordeWow = GetNewDefaultQueryFilter();
-            hordeWow.ExcludeFlags |= AbilityFlags.Alliance;
-            hordeWow.AreaCosts[AreaType.Alliance] = 50.0f;
-            _queryFilters["Horde"] = ToQueryFilter(hordeWow);
+            QueryFilter horde = NewDefaultQueryFilter();
+            horde.ExcludeFlags |= AbilityFlags.Alliance;
+            horde.AreaCosts[AreaType.Alliance] = 50.0f;
+            _queryFilters["Horde"] = horde;
 
-            // HB 6.2.3 smethod_1() — Alliance filter
-            WowQueryFilter allianceWow = GetNewDefaultQueryFilter();
-            allianceWow.ExcludeFlags |= AbilityFlags.Horde;
-            allianceWow.AreaCosts[AreaType.Horde] = 50.0f;
-            _queryFilters["Alliance"] = ToQueryFilter(allianceWow);
+            QueryFilter alliance = NewDefaultQueryFilter();
+            alliance.ExcludeFlags |= AbilityFlags.Horde;
+            alliance.AreaCosts[AreaType.Horde] = 50.0f;
+            _queryFilters["Alliance"] = alliance;
 
-            WowQueryFilter hordeDeathKnightWow = GetNewDefaultQueryFilter();
-            hordeDeathKnightWow.ExcludeFlags |= AbilityFlags.Alliance;
-            hordeDeathKnightWow.AreaCosts[AreaType.Alliance] = 50.0f;
-            hordeDeathKnightWow.ExcludeFlags &= ~AbilityFlags.Transport;
-            hordeDeathKnightWow.IncludeFlags |= AbilityFlags.Transport;
-            _queryFilters["Horde_DeathKnightStart"] = ToQueryFilter(hordeDeathKnightWow);
+            QueryFilter hordeDK = NewDefaultQueryFilter();
+            hordeDK.ExcludeFlags |= AbilityFlags.Alliance;
+            hordeDK.AreaCosts[AreaType.Alliance] = 50.0f;
+            hordeDK.ExcludeFlags &= ~AbilityFlags.Transport;
+            hordeDK.IncludeFlags |= AbilityFlags.Transport;
+            _queryFilters["Horde_DeathKnightStart"] = hordeDK;
 
-            WowQueryFilter allianceDeathKnightWow = GetNewDefaultQueryFilter();
-            allianceDeathKnightWow.ExcludeFlags |= AbilityFlags.Horde;
-            allianceDeathKnightWow.AreaCosts[AreaType.Horde] = 50.0f;
-            allianceDeathKnightWow.ExcludeFlags &= ~AbilityFlags.Transport;
-            allianceDeathKnightWow.IncludeFlags |= AbilityFlags.Transport;
-            _queryFilters["Alliance_DeathKnightStart"] = ToQueryFilter(allianceDeathKnightWow);
+            QueryFilter allianceDK = NewDefaultQueryFilter();
+            allianceDK.ExcludeFlags |= AbilityFlags.Horde;
+            allianceDK.AreaCosts[AreaType.Horde] = 50.0f;
+            allianceDK.ExcludeFlags &= ~AbilityFlags.Transport;
+            allianceDK.IncludeFlags |= AbilityFlags.Transport;
+            _queryFilters["Alliance_DeathKnightStart"] = allianceDK;
+        }
+
+        /// <summary>
+        /// Default query filter with 1x1 MaNGOS-style area costs.
+        /// Mirrors Honorbuddy WoD defaults (Road=1.0, Ground=1.66, etc).
+        /// </summary>
+        private static QueryFilter NewDefaultQueryFilter()
+        {
+            return new QueryFilter
+            {
+                IncludeFlags = AbilityFlags.All,
+                ExcludeFlags = AbilityFlags.Unwalkable | AbilityFlags.Transport,
+                AreaCosts = new Dictionary<AreaType, float>
+                {
+                    { AreaType.Ground, 1.66f },
+                    { AreaType.Water, 3.33f },
+                    { AreaType.Road, 1.0f },
+                    { AreaType.Lava, 55.0f },
+                    { AreaType.Fall, 1.7f },
+                    { AreaType.Gate, 1.66f },
+                    { AreaType.Elevator, 3.16f },
+                    { AreaType.Portal, 1.66f },
+                    { AreaType.DefendersPortal, 3.16f },
+                    { AreaType.HordePortal, 1.66f },
+                    { AreaType.AlliancePortal, 1.66f },
+                    { AreaType.Blocked, 100.0f },
+                    { AreaType.InteractUnit, 1.66f },
+                    { AreaType.InteractObject, 1.66f },
+                    { AreaType.Blackspot, 60.0f },
+                    { AreaType.KnownBuilding, 1.66f },
+                    { AreaType.Horde, 1.66f },
+                    { AreaType.Alliance, 1.66f },
+                }
+            };
         }
 
         /// <summary>
@@ -260,93 +202,29 @@ namespace Tripper.Navigation
         }
 
         /// <summary>
-        /// Stores a HB-compatible query filter by name.
+        /// Stores a query filter by name.
         /// </summary>
-        public void StoreQueryFilter(string name, WowQueryFilter filter)
+        public void StoreQueryFilter(string name, QueryFilter filter)
         {
             if (filter == null)
             {
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            _queryFilters[name] = ToQueryFilter(filter);
+            _queryFilters[name] = filter.Clone();
         }
 
         /// <summary>
-        /// HB-compatible static default filter factory.
+        /// Gets a stored query filter.
         /// </summary>
-        public static WowQueryFilter GetNewDefaultQueryFilter()
-        {
-            WowQueryFilter filter = new WowQueryFilter
-            {
-                IncludeFlags = AbilityFlags.All,
-                ExcludeFlags = AbilityFlags.Unwalkable | AbilityFlags.Transport
-            };
-            SetDefaultQueryFilterCosts(filter);
-            return filter;
-        }
-
-        /// <summary>
-        /// HB-compatible helper for applying default area costs.
-        /// </summary>
-        public static void SetDefaultQueryFilterCosts(WowQueryFilter filter)
-        {
-            if (filter == null)
-            {
-                throw new ArgumentNullException(nameof(filter));
-            }
-
-            filter.AreaCosts[AreaType.Ground] = 1.66f;
-            filter.AreaCosts[AreaType.Water] = 3.33f;
-            filter.AreaCosts[AreaType.Road] = 1.0f;
-            filter.AreaCosts[AreaType.Lava] = 55.0f;
-            filter.AreaCosts[AreaType.Fall] = 1.7f;
-            filter.AreaCosts[AreaType.Gate] = 1.66f;
-            filter.AreaCosts[AreaType.Elevator] = 3.16f;
-            filter.AreaCosts[AreaType.Portal] = 1.66f;
-            filter.AreaCosts[AreaType.DefendersPortal] = 3.16f;
-            filter.AreaCosts[AreaType.HordePortal] = 1.66f;
-            filter.AreaCosts[AreaType.AlliancePortal] = 1.66f;
-            filter.AreaCosts[AreaType.Blocked] = 100.0f;
-            filter.AreaCosts[AreaType.InteractUnit] = 1.66f;
-            filter.AreaCosts[AreaType.InteractObject] = 1.66f;
-            filter.AreaCosts[AreaType.Blackspot] = 60.0f;
-            filter.AreaCosts[AreaType.KnownBuilding] = 1.66f;
-            filter.AreaCosts[AreaType.Horde] = 1.66f;
-            filter.AreaCosts[AreaType.Alliance] = 1.66f;
-        }
-
-        /// <summary>
-        /// HB-compatible faction filter factory.
-        /// </summary>
-        public static WowQueryFilter GetNewFactionQueryFilter(bool horde)
-        {
-            WowQueryFilter filter = GetNewDefaultQueryFilter();
-            if (horde)
-            {
-                filter.ExcludeFlags |= AbilityFlags.Alliance;
-                filter.AreaCosts[AreaType.Alliance] = 50.0f;
-            }
-            else
-            {
-                filter.ExcludeFlags |= AbilityFlags.Horde;
-                filter.AreaCosts[AreaType.Horde] = 50.0f;
-            }
-
-            return filter;
-        }
-
-        /// <summary>
-        /// Gets a stored HB-compatible query filter.
-        /// </summary>
-        public WowQueryFilter? GetStoredQueryFilter(string name)
+        public QueryFilter? GetStoredQueryFilter(string name)
         {
             if (!_queryFilters.TryGetValue(name, out QueryFilter? filter))
             {
                 return null;
             }
 
-            return ToWowQueryFilter(filter);
+            return filter.Clone();
         }
 
         /// <summary>
@@ -404,9 +282,7 @@ namespace Tripper.Navigation
                     // Sync managed filter to native filter once mesh layer is ready.
                     ApplyCurrentQueryFilterToNative();
 
-                    // HB 6.2.3 pattern: register tile loaded callback (mirrors WorldMeshManager.method_3)
-                    // Guard separately — DLL may not export SetTileLoadedCallback_C yet.
-                    // Do NOT let a missing export abort the entire load.
+                    // Register tile loaded callback (1x1: one fire per ADT).
                     try
                     {
                         _nativeTileLoadedCallback = OnNativeTileLoaded;
@@ -415,18 +291,6 @@ namespace Tripper.Navigation
                     catch (EntryPointNotFoundException)
                     {
                         Log("SetTileLoadedCallback_C not exported by Navigation.dll — tile events disabled");
-                    }
-
-                    // Register log callback — fires DLL internal events into OnNavigatorLogMessage.
-                    // Same pattern as SetTileLoadedCallback_C.
-                    try
-                    {
-                        _nativeLogCallback = (msg) => OnNavigatorLogMessage?.Invoke(msg);
-                        NativeMethods.SetNavLogCallback(_nativeLogCallback);
-                    }
-                    catch (EntryPointNotFoundException)
-                    {
-                        Log("SetNavLogCallback_C not exported by Navigation.dll — DLL log bridge disabled");
                     }
 
                     IsLoaded = true;
@@ -647,7 +511,6 @@ namespace Tripper.Navigation
                         {
                             Elapsed = stopwatch.Elapsed,
                             Status = status,
-                            Manager = _worldMesh,
                             Points = points,
                             Flags = flags,
                             Polygons = polygons,
@@ -1528,7 +1391,6 @@ namespace Tripper.Navigation
 
         /// <summary>
         /// Sets faction-aware query filter based on player faction.
-        /// Ported from HB 6.2.3 WowNavigator.SetFactionQueryFilter.
         /// Excludes the opposite faction's ability flag and applies a 50x cost penalty
         /// on the opposite faction's area type (prevents pathing through enemy-only areas).
         /// </summary>
@@ -1537,27 +1399,10 @@ namespace Tripper.Navigation
         {
             try
             {
-                string? primaryMapName = PrimaryMapName;
-                if (!string.IsNullOrWhiteSpace(primaryMapName))
+                string mapFilter = isHorde ? "Horde" : "Alliance";
+                if (SetQueryFilterByStored(mapFilter))
                 {
-                    string mapFilter = (isHorde ? "Horde" : "Alliance") + "_" + primaryMapName;
-                    if (SetQueryFilterByStored(mapFilter))
-                    {
-                        return;
-                    }
-                }
-
-                if (isHorde)
-                {
-                    _currentQueryFilter = _queryFilters["Horde"].Clone();
-                    ApplyCurrentQueryFilterToNative();
-                    Log("Faction filter set: Horde (excluding Alliance paths)");
-                }
-                else
-                {
-                    _currentQueryFilter = _queryFilters["Alliance"].Clone();
-                    ApplyCurrentQueryFilterToNative();
-                    Log("Faction filter set: Alliance (excluding Horde paths)");
+                    Log($"Faction filter set: {mapFilter} (excluding {(isHorde ? "Alliance" : "Horde")} paths)");
                 }
             }
             catch (Exception ex)
@@ -1567,48 +1412,12 @@ namespace Tripper.Navigation
         }
 
         /// <summary>
-        /// HB-compatible map change API. In WotLK integration, map name values are numeric map ids.
+        /// Sets the current map id and raises the MapLoaded event.
         /// </summary>
-        public void ChangeMap(ICollection<string> mapNames)
+        public void ChangeMap(uint mapId)
         {
-            if (mapNames == null)
-            {
-                throw new ArgumentNullException(nameof(mapNames));
-            }
-
-            string[] names = mapNames.Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
-            if (names.Length == 0)
-            {
-                CurrentMapId = 0;
-                RaiseMapLoaded(CurrentMapId);
-                return;
-            }
-
-            if (uint.TryParse(names[^1], out uint mapId))
-            {
-                CurrentMapId = mapId;
-            }
-
-            var args = new MapLoadedEventArgs(CurrentMapId)
-            {
-                Names = names,
-                IsTiled = true
-            };
-            MapLoaded?.Invoke(this, args);
-            OnMapLoaded?.Invoke(this, args);
-        }
-
-        /// <summary>
-        /// Returns the active mesh manager for a location.
-        /// </summary>
-        public IMeshManager GetManagerFromLocation(Vector3 location)
-        {
-            if (_garrisonMesh.IsLoaded && IsWithinGarrison(location))
-            {
-                return _garrisonMesh;
-            }
-
-            return _worldMesh;
+            CurrentMapId = mapId;
+            RaiseMapLoaded(CurrentMapId);
         }
 
         /// <summary>
@@ -1934,15 +1743,20 @@ namespace Tripper.Navigation
 
         /// <summary>
         /// HB-compatible tile load helper.
+        /// Triggers streaming of the 1x1 MaNGOS tile containing the given world position.
         /// </summary>
         public bool LoadTile(TileIdentifier wowTile)
         {
-            return _worldMesh.LoadTile(wowTile);
+            // Compute the tile center and ensure it (plus 5x5 ring) is loaded.
+            float tileCenterX = (32.0f - wowTile.X - 0.5f) * MapConsts.TileSize;
+            float tileCenterY = (32.0f - wowTile.Y - 0.5f) * MapConsts.TileSize;
+            EnsureTilesAroundPosition(CurrentMapId, new Vector3(tileCenterX, tileCenterY, 0f), 0);
+            return IsTileLoaded(CurrentMapId, wowTile.X, wowTile.Y);
         }
 
         /// <summary>
-        /// HB-compatible tile unload API.
-        /// Navigation.dll streams tiles and does not expose explicit unload-all.
+        /// HB-compatible tile unload API. Navigation.dll streams tiles and
+        /// does not expose explicit unload-all; tiles evict on their own schedule.
         /// </summary>
         public void UnloadAllTiles()
         {
@@ -2005,68 +1819,22 @@ namespace Tripper.Navigation
         private void RaisePathProgress(PathFindResult result)
         {
             PathProgress?.Invoke(this, new PathProgressEventArgs(result));
-            OnPathFindProgress?.Invoke(this, new PathFindProgressEventArgs(result.Elapsed));
         }
 
         private void RaiseTileLoaded(uint mapId, int tileX, int tileY)
         {
-            var args = new TileLoadedEventArgs(mapId, tileX, tileY);
-            TileLoaded?.Invoke(this, args);
-            OnTileLoaded?.Invoke(this, args);
-
-            // V5 mmtile format: each ADT contains a 4×4 grid of 16 Detour sub-tiles.
-            // Fire OnSubTileLoaded once per sub-tile so consumers get fine-grained events,
-            // matching HB 6.2.3 WorldMeshManager.eventHandler_1 behaviour.
-            if (OnSubTileLoaded != null)
-            {
-                var adt = new TileIdentifier(tileX, tileY);
-                int n = MeshMapCalculator.Default.SubTilesPerAdt;
-                for (int subX = 0; subX < n; subX++)
-                {
-                    for (int subY = 0; subY < n; subY++)
-                    {
-                        TileIdentifier detourTile = MeshMapCalculator.Default.GetDetourTile(adt, subX, subY);
-                        OnSubTileLoaded.Invoke(this, new TileLoadedEventArgs(mapId, detourTile.X, detourTile.Y));
-                    }
-                }
-            }
+            // 1x1 MaNGOS-style reading: one event per ADT tile.
+            TileLoaded?.Invoke(this, new TileLoadedEventArgs(mapId, tileX, tileY));
         }
 
         private void RaiseMapLoaded(uint mapId)
         {
-            var args = new MapLoadedEventArgs(mapId)
-            {
-                Names = MapNames,
-                IsTiled = true
-            };
-            MapLoaded?.Invoke(this, args);
-            OnMapLoaded?.Invoke(this, args);
+            MapLoaded?.Invoke(this, new MapLoadedEventArgs(mapId));
         }
 
         private void Log(string message)
         {
             LogMessage?.Invoke(message);
-            OnNavigatorLogMessage?.Invoke(message);
-        }
-
-        private static QueryFilter ToQueryFilter(WowQueryFilter filter)
-        {
-            return new QueryFilter
-            {
-                IncludeFlags = filter.IncludeFlags,
-                ExcludeFlags = filter.ExcludeFlags,
-                AreaCosts = new Dictionary<AreaType, float>(filter.AreaCosts)
-            };
-        }
-
-        private static WowQueryFilter ToWowQueryFilter(QueryFilter filter)
-        {
-            return new WowQueryFilter
-            {
-                IncludeFlags = filter.IncludeFlags,
-                ExcludeFlags = filter.ExcludeFlags,
-                AreaCosts = new Dictionary<AreaType, float>(filter.AreaCosts)
-            };
         }
 
         #endregion
@@ -2086,7 +1854,7 @@ namespace Tripper.Navigation
                 // Unregister native callback before GC can collect the delegate
                 if (_nativeTileLoadedCallback != null)
                 {
-                    NativeMethods.SetTileLoadedCallback(null!);
+                    try { NativeMethods.SetTileLoadedCallback(null!); } catch { }
                     _nativeTileLoadedCallback = null;
                 }
 
