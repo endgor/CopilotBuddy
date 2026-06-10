@@ -1,5 +1,7 @@
 namespace Tripper.Navigation
 {
-    // HB 6.2.3 Tripper/Navigation/NavigatorLogMessage.cs
+    /// <summary>
+    /// Delegate for log messages emitted by the navigator.
+    /// </summary>
     public delegate void NavigatorLogMessage(string msg);
 }

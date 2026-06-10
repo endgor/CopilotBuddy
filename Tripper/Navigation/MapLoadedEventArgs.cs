@@ -2,21 +2,16 @@ using System;
 
 namespace Tripper.Navigation
 {
-    // HB 6.2.3 Tripper/Navigation/MapLoadedEventArgs.cs
+    /// <summary>
+    /// Event arguments for the <see cref="Navigator.MapLoaded"/> event.
+    /// </summary>
     public class MapLoadedEventArgs : EventArgs
     {
-        public MapLoadedEventArgs()
-        {
-        }
-
         public MapLoadedEventArgs(uint mapId)
         {
-            Names = mapId == 0 ? Array.Empty<string>() : new[] { mapId.ToString() };
-            IsTiled = true;
+            MapId = mapId;
         }
 
-        public string[] Names { get; set; } = Array.Empty<string>();
-
-        public bool IsTiled { get; set; }
+        public uint MapId { get; }
     }
 }

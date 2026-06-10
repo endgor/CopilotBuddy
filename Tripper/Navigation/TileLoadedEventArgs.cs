@@ -2,33 +2,21 @@ using System;
 
 namespace Tripper.Navigation
 {
-    // HB 6.2.3 Tripper/Navigation/TileLoadedEventArgs.cs
+    /// <summary>
+    /// Event arguments for the <see cref="Navigator.TileLoaded"/> event.
+    /// 1x1 MaNGOS-style reading: one event per ADT tile loaded by Navigation.dll.
+    /// </summary>
     public class TileLoadedEventArgs : EventArgs
     {
-        public TileLoadedEventArgs()
-        {
-        }
-
         public TileLoadedEventArgs(uint mapId, int tileX, int tileY)
         {
             MapId = mapId;
-            Tile = new TileIdentifier(tileX, tileY);
+            TileX = tileX;
+            TileY = tileY;
         }
 
-        public TileIdentifier Tile { get; set; }
-
-        public uint MapId { get; set; }
-
-        public int TileX
-        {
-            get => Tile.X;
-            set => Tile = new TileIdentifier(value, Tile.Y);
-        }
-
-        public int TileY
-        {
-            get => Tile.Y;
-            set => Tile = new TileIdentifier(Tile.X, value);
-        }
+        public uint MapId { get; }
+        public int TileX { get; }
+        public int TileY { get; }
     }
 }
