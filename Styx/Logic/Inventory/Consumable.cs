@@ -97,24 +97,34 @@ namespace Styx.Logic.Inventory
 
         /// <summary>
         /// Checks if an item is food.
+        /// HB 4.3.4 Consumable.smethod_1: spell name "Food" OR "Refreshment".
+        /// "Refreshment" covers WotLK Mage conjured food (Conjured Mana Strudel, etc.).
         /// </summary>
         private static bool IsFood(WoWItem item)
         {
             if ((int)item.ItemInfo.ItemClass != (int)WoWItemClass.Consumable)
                 return false;
 
-            return item.ItemSpells.Any(s => s.ActualSpell.Name == "Food");
+            return item.ItemSpells.Any(s =>
+                s.ActualSpell != null &&
+                (s.ActualSpell.Name == "Food" || s.ActualSpell.Name == "Refreshment"));
         }
 
         /// <summary>
         /// Checks if an item is a drink.
+        /// HB 4.3.4 Consumable.smethod_3: spell name "Drink", "Starfire Espresso" or "Refreshment".
+        /// "Refreshment" covers WotLK Mage conjured water; "Starfire Espresso" is a buff food.
         /// </summary>
         private static bool IsDrink(WoWItem item)
         {
             if ((int)item.ItemInfo.ItemClass != (int)WoWItemClass.Consumable)
                 return false;
 
-            return item.ItemSpells.Any(s => s.ActualSpell.Name == "Drink");
+            return item.ItemSpells.Any(s =>
+                s.ActualSpell != null &&
+                (s.ActualSpell.Name == "Drink" ||
+                 s.ActualSpell.Name == "Starfire Espresso" ||
+                 s.ActualSpell.Name == "Refreshment"));
         }
 
         /// <summary>
