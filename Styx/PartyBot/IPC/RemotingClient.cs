@@ -85,7 +85,7 @@ namespace PartyBot.IPC
 						string? line = reader.ReadLine();
 						if (line == null) break;
 
-						BotMessage? message = JsonSerializer.Deserialize<BotMessage>(line);
+						BotMessage? message = JsonSerializer.Deserialize<BotMessage>(line, _jsonOptions);
 						if (message == null) continue;
 
 						if (message.Timestamp > _lastTimestamp || _lastTimestamp == DateTime.MinValue)
@@ -126,6 +126,12 @@ namespace PartyBot.IPC
 		private ClientBotMessageRecievedEventArgs? _handler;
 		private readonly Thread _thread;
 		private DateTime _lastTimestamp;
+		// BotMessage exposes its data as public fields (no properties). System.Text.Json
+		// only deserializes properties by default — opt in to fields so the wire payload
+		// (populated on the server side with IncludeFields=true) actually fills the object.
+		// Without this the member sees LeaderName='', LeaderGuid=0, LeaderXYZ=(0,0,0)
+		// and the auto-accept compare fails (inviter name vs '' → no match).
+		private static readonly JsonSerializerOptions _jsonOptions = new() { IncludeFields = true };
 	}
 }
 
