@@ -77,6 +77,29 @@ namespace Styx.Loaders
                     // ignore if assembly not available
                 }
             }
+
+            // WCF assemblies — only present when the System.ServiceModel.* NuGet packages
+            // are restored (shipped next to CopilotBuddy.exe). Force-load them here so they
+            // appear in AppDomain.CurrentDomain.GetAssemblies() and so a compiled plugin can
+            // actually instantiate ChannelFactory<>, NetNamedPipeBinding, etc. at runtime.
+            var wcfAssemblyNames = new[] {
+                "System.ServiceModel",
+                "System.ServiceModel.Primitives",
+                "System.ServiceModel.NetNamedPipe"
+            };
+            foreach (var name in wcfAssemblyNames)
+            {
+                try
+                {
+                    var asm = Assembly.Load(new AssemblyName(name));
+                    if (asm != null && !string.IsNullOrEmpty(asm.Location))
+                        AddReference(asm.Location);
+                }
+                catch
+                {
+                    // ignore if assembly not available
+                }
+            }
         }
 
         public Assembly CompiledAssembly { get; private set; }
@@ -289,6 +312,8 @@ namespace Styx.Loaders
                     "System.Text.Json.dll",                         // JsonSerializer, JsonPropertyName, etc.
                     "System.Text.Encodings.Web.dll",                 // JsonSerializerOptions encoder
                     "System.Buffers.dll",                            // ArrayPool used by System.Text.Json
+                    // WCF support for plugins that use NetNamedPipeBinding (e.g. HBRelogHelper)
+                    "System.ServiceModel.dll",
                 };
                 foreach (var refName in essentialRefs)
                 {
@@ -308,6 +333,25 @@ namespace Styx.Loaders
                 if (File.Exists(drawingCommonPath) && !references.Any(r => r.Display?.Contains("System.Drawing.Common") == true))
                 {
                     references.Add(MetadataReference.CreateFromFile(drawingCommonPath));
+                }
+
+                // WCF assemblies ship via NuGet (System.ServiceModel.* packages) and are
+                // copied next to CopilotBuddy.exe. They are NOT in the .NET shared runtime
+                // since .NET 5+, so we have to load them from the application directory.
+                // HBRelogHelper needs ChannelFactory<>, NetNamedPipeBinding, EndpointAddress,
+                // ServiceContractAttribute, OperationContractAttribute, CommunicationState.
+                var wcfAssemblies = new[] {
+                    "System.ServiceModel.dll",
+                    "System.ServiceModel.Primitives.dll",
+                    "System.ServiceModel.NetNamedPipe.dll",
+                };
+                foreach (var asmName in wcfAssemblies)
+                {
+                    var asmPath = Path.Combine(appDir, asmName);
+                    if (File.Exists(asmPath) && !references.Any(r => r.Display?.Contains(asmName) == true))
+                    {
+                        references.Add(MetadataReference.CreateFromFile(asmPath));
+                    }
                 }
             }
 
