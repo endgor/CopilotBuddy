@@ -4,6 +4,9 @@ namespace Styx.Patchables
 {
     public enum ClientDb
     {
+        // IDs 235-471 verified against Wow_12340.exe (3.3.5a) ClientDb_RegisterBase
+        // via IDA Pro. Each value MUST match the third arg of the a1(&g_XxxDB, ...) call.
+        // Do not add = value to entries unless inserting; sequence must stay continuous.
         Achievement = 235,
         Achievement_Criteria,
         Achievement_Category,
@@ -179,8 +182,7 @@ namespace Styx.Patchables
         SpellDispelType,
         SpellDuration,
         SpellEffectCameraShakes,
-        // HB 4.3.4 entries required by Profession/Archaeology
-        SpellCastingRequirements = 10068128,
+        // SpellCastingRequirements = removed: not in 3.3.5a ClientDb_RegisterBase
         SpellFocusObject,
         SpellIcon,
         SpellItemEnchantment,
@@ -191,9 +193,8 @@ namespace Styx.Patchables
         SpellRadius,
         SpellRange,
         SpellRuneCost,
-        // HB 4.3.4 archaeology-related tables
-        SpellReagents = 10068940,
-        SpellTotems = 10069136,
+        // SpellReagents = removed: not in 3.3.5a ClientDb_RegisterBase
+        // SpellTotems = removed: not in 3.3.5a ClientDb_RegisterBase
         SpellShapeshiftForm,
         SpellVisual,
         SpellVisualEffectName,
@@ -245,6 +246,6 @@ namespace Styx.Patchables
         ObjectEffectPackage,
         ObjectEffectPackageElem,
         SoundFilter,
-        SoundFilterElem
+        SoundFilterElem,
     }
 }
