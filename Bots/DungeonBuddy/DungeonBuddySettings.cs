@@ -38,6 +38,22 @@ namespace Bots.DungeonBuddy
         public bool UseFrameLock { get; set; }
 
         // ═══════════════════════════════════════════════════════════
+        // ROLE
+        // ═══════════════════════════════════════════════════════════
+
+        [Setting, DefaultValue(QueueRole.Auto)]
+        [Category("Advanced")]
+        [DisplayName("Role")]
+        [Description("Specifies which role to queue with. If set to auto then role is automatically chosed based on your current spec")]
+        public QueueRole Role { get; set; }
+
+        [Setting, DefaultValue(false)]
+        [Category("Advanced")]
+        [DisplayName("Tank In Random Groups (UNSAFE)")]
+        [Description("Enables queuing as tank in random LFG. This is unsafe and not recommended. Use at your own risk")]
+        public bool TankInRandomGroups { get; set; }
+
+        // ═══════════════════════════════════════════════════════════
         // DUNGEON
         // ═══════════════════════════════════════════════════════════
 
