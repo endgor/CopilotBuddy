@@ -41,6 +41,11 @@ namespace Styx.Helpers
         public static float BGsLostPerHour { get; private set; }
         public static float HonorPerHour { get; private set; }
 
+        // Derived properties used by the HBRelogHelper plugin (net.pipe://localhost/HBRelog).
+        public static bool IsMeasuring => _isRunning;
+        public static uint BGsCompleted => BGsWon + BGsLost;
+        public static float BGsPerHour => CalculatePerHour(BGsCompleted, SessionTime);
+
         public static TimeSpan SessionTime
         {
             get
