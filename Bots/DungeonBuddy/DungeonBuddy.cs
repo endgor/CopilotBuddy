@@ -1251,9 +1251,10 @@ namespace Bots.DungeonBuddy
                             ctx => !_hasSetRole,
                             new Action(ctx =>
                             {
-                                LfgManager.SetRole(PartyRole.Dps);
+                                // Applies the Role setting (Auto/Tank/Healer/Damage) from
+                                // DungeonBuddySettings before the first queue.
+                                LfgManager.SetLfgRoles();
                                 _hasSetRole = true;
-                                Logging.Write("[DungeonBuddy] Role set to Dps");
                                 return RunStatus.Success;
                             })
                         ),
