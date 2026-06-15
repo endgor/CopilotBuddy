@@ -1460,12 +1460,16 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                if (IsPlayer)
-                {
-                    WoWPlayer? player = ToPlayer();
-                    return player != null && player.IsHorde == ObjectManager.Me!.IsHorde;
-                }
-                return MyReaction >= WoWUnitReaction.Friendly;
+                // Ported from HB Legion 3.0.904 WoWUnit.cs:3471 (and HB 6.2.3 line 3426).
+                // The previous port overrode this for players to use player.IsHorde ==
+                // ObjectManager.Me.IsHorde, which breaks cross-realm BGs: the WoW server
+                // assigns BG team membership via the unit reaction API (not via the
+                // hard-coded race faction), so a Horde player in the Alliance team still
+                // reports as Friendly/Hostile through GetReactionTowards. Comparing the
+                // raw race flag in the port was the invention that made the bot attack
+                // its own cross-realm allies.
+                return MyReaction >= WoWUnitReaction.Friendly
+                       && OtherReaction >= WoWUnitReaction.Friendly;
             }
         }
 
@@ -1473,18 +1477,23 @@ namespace Styx.WoWInternals.WoWObjects
         {
             get
             {
-                if (IsPlayer)
-                {
-                    WoWPlayer? player = ToPlayer();
-                    return player != null && player.IsHorde == ObjectManager.Me!.IsAlliance;
-                }
-                return MyReaction <= WoWUnitReaction.Unfriendly;
+                // Ported from HB Legion 3.0.904 WoWUnit.cs:3478. 6.2.3 used the OR of
+                // both reactions; Legion dropped the redundant MyReaction half because
+                // in modern clients the two directions stay in sync for player units.
+                return OtherReaction <= WoWUnitReaction.Unfriendly;
             }
         }
 
         public bool IsNeutral => MyReaction == WoWUnitReaction.Neutral;
 
         public WoWUnitReaction MyReaction => ObjectManager.Me!.GetReactionTowards(this);
+
+        // Reciprocal reaction — how THIS unit sees the local player. Required by
+        // IsFriendly/IsHostile per HB Legion 3.0.904 WoWUnit.cs:3461 (private
+        // WoWUnitReaction_0 property, renamed to OtherReaction for clarity). The
+        // native GetReactionTowards call returns the BG-team-aware reaction, which
+        // is what makes cross-realm BG allies register as Friendly.
+        public WoWUnitReaction OtherReaction => GetReactionTowards(ObjectManager.Me!);
 
         public bool IsTargetingMeOrPet
         {
