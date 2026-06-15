@@ -1,4 +1,6 @@
 using System;
+using Styx.CommonBot;
+using Styx.CommonBot.Routines;
 using Styx.Helpers;
 using Styx.Logic;
 using Styx.Logic.Combat;
@@ -7,6 +9,23 @@ using Styx.WoWInternals;
 
 namespace Styx
 {
+	/// <summary>
+	/// HB 6.2.3 Pulsator.Pulse — ported verbatim from
+	/// C:\Users\Texy6\Desktop\newhcb\hb decompile\.hb 6.2.3\Honorbuddy\Styx\Pulsator.cs
+	///
+	/// Pulse order matches HB 6.2.3 exactly:
+	///   Objects   → ObjectManager.Update + Blacklist.Flush
+	///   Lua       → Lua.ProcessEvents
+	///   InfoPanel → InfoPanel.Update
+	///   Looting   → LootTargeting.Pulse
+	///   Targeting → Targeting.Pulse + HealTargeting.Pulse
+	///   BotEvents → BotEvents.PulseEvents
+	///   Plugins   → PluginManager.Pulse
+	///   Routine   → CapabilityManager.Pulse + RoutineManager.Current.Pulse
+	///
+	/// Removed (not in HB 6.2.3): WoWChat, WoWMovement.Pulse, Mount.Pulse,
+	/// AvoidanceManager.Pulse, NavAvoidanceUpdater.Invoke.
+	/// </summary>
 	public static class WoWPulsator
 	{
 		public static void Pulse(PulseFlags flags)
@@ -16,16 +35,12 @@ namespace Styx
 				if ((flags & PulseFlags.Objects) != (PulseFlags)0U)
 				{
 					ObjectManager.Update();
+					Blacklist.Flush();
 				}
 
 				if ((flags & PulseFlags.Lua) != (PulseFlags)0U)
 				{
 					Lua.ProcessEvents();
-				}
-
-				if ((flags & PulseFlags.WoWChat) != (PulseFlags)0U)
-				{
-					WoWChat.Update();
 				}
 
 				if ((flags & PulseFlags.InfoPanel) != (PulseFlags)0U)
@@ -41,24 +56,9 @@ namespace Styx
 				if ((flags & PulseFlags.Targeting) != (PulseFlags)0U)
 				{
 					Targeting.Instance.Pulse();
+					HealTargeting.Instance.Pulse();
 				}
 
-				// BUG-07 fix: Pulse movement to flush timed movement entries
-				WoWMovement.Pulse();
-
-				// Required for StuckHandler.OnMountUp cancellation to work.
-				// Without this, the OnMountUp event never fires and the 10-second
-				// mount-block after a stuck dismount has no effect.
-				Mount.Pulse();
-
-				// BUG-07 fix: Pulse avoidance zones (was missing per audit)
-				Styx.Logic.Pathing.AvoidanceManager.Pulse();
-
-				// HB 6.2.3 AvoidanceNavigationProvider pattern:
-				// Update geometric obstacle avoidance zones so Navigator.MoveTo()
-				// can redirect the bot around registered world obstacles (forge, mailbox, etc.).
-				// Set by WorldObstacleManager.Initialize() — no-op when no bots have registered.
-				Styx.Logic.Pathing.Navigator.NavAvoidanceUpdater?.Invoke();
 
 				if ((flags & PulseFlags.BotEvents) != (PulseFlags)0U)
 				{
@@ -72,6 +72,7 @@ namespace Styx
 
 				if (RoutineManager.Current != null)
 				{
+					CapabilityManager.Instance.Pulse();
 					RoutineManager.Current.Pulse();
 				}
 			}
