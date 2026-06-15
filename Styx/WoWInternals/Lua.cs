@@ -252,6 +252,14 @@ namespace Styx.WoWInternals
                 if (string.IsNullOrEmpty(value) || value.Equals("nil", StringComparison.OrdinalIgnoreCase))
                     return default(T)!;
 
+                // WoW returns numeric values as hex strings prefixed with "0x" (e.g. GUIDs).
+                // Convert.ChangeType / integer Parse(string) don't accept the prefix —
+                // strip it and use NumberStyles.HexNumber so 0x000000000000002E -> 0x2E.
+                if (value.StartsWith("0x", StringComparison.OrdinalIgnoreCase) && IsLuaIntegerType(typeof(T)))
+                {
+                    return ParseInteger<T>(value.Substring(2));
+                }
+
                 // Convert to target type
                 return (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
             }
@@ -260,6 +268,34 @@ namespace Styx.WoWInternals
                 Logging.WriteDebug("Exception in GetReturnVal<{0}>: {1}", typeof(T).Name, ex.Message);
                 return default(T)!;
             }
+        }
+
+        private static bool IsLuaIntegerType(Type t)
+        {
+            return t == typeof(ulong) || t == typeof(uint)
+                || t == typeof(long) || t == typeof(int)
+                || t == typeof(ushort) || t == typeof(short)
+                || t == typeof(byte) || t == typeof(sbyte);
+        }
+
+        // Parse an integer string (already stripped of the "0x" prefix) with
+        // NumberStyles.HexNumber. Convert.ChangeType has no 4-arg overload that
+        // accepts NumberStyles, so dispatch to the correct per-type Parse overload.
+        private static T ParseInteger<T>(string hex)
+        {
+            var styles = System.Globalization.NumberStyles.HexNumber;
+            var provider = CultureInfo.InvariantCulture;
+
+            if (typeof(T) == typeof(ulong))  return (T)(object)ulong.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(uint))   return (T)(object)uint.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(long))   return (T)(object)long.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(int))    return (T)(object)int.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(ushort)) return (T)(object)ushort.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(short))  return (T)(object)short.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(byte))   return (T)(object)byte.Parse(hex, styles, provider);
+            if (typeof(T) == typeof(sbyte))  return (T)(object)sbyte.Parse(hex, styles, provider);
+
+            return (T)Convert.ChangeType(hex, typeof(T), provider);
         }
 
         public static void DoString(string lua)
@@ -281,6 +317,20 @@ namespace Styx.WoWInternals
             {
                 string lower = val.ToLower();
                 return (T)(object)(lower != "false" && lower != "0");
+            }
+
+            // WoW returns numeric values as hex strings prefixed with "0x" (e.g. GUIDs).
+            // Mirror GetReturnVal's handling so ParseLuaValue behaves identically.
+            if (val.StartsWith("0x", StringComparison.OrdinalIgnoreCase) && IsLuaIntegerType(typeof(T)))
+            {
+                try
+                {
+                    return ParseInteger<T>(val.Substring(2));
+                }
+                catch
+                {
+                    return default(T)!;
+                }
             }
 
             try
