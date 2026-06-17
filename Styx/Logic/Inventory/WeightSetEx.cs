@@ -114,11 +114,14 @@ public class WeightSetEx : IDisposable
 
       // Capture for closure (replacing Class461)
       WoWClass playerClass = StyxWoW.Me.Class;
+      // HB 3.3.5a requires groupIndex parameter for GetTalentTabInfo to return correct pointsSpent
+      // Without it, the function returns 0 for all tabs, defaulting to spec=1 (Balance for Druid)
+      int groupIndex = Lua.GetReturnVal<int>("return GetActiveTalentGroup()", 0U);
       List<int> talentPoints = new List<int>((IEnumerable<int>) new int[3]
       {
-        Lua.GetReturnVal<int>("return GetTalentTabInfo(1)", 4U),
-        Lua.GetReturnVal<int>("return GetTalentTabInfo(2)", 4U),
-        Lua.GetReturnVal<int>("return GetTalentTabInfo(3)", 4U)
+        Lua.GetReturnVal<int>($"return GetTalentTabInfo(1, false, false, {groupIndex})", 4U),
+        Lua.GetReturnVal<int>($"return GetTalentTabInfo(2, false, false, {groupIndex})", 4U),
+        Lua.GetReturnVal<int>($"return GetTalentTabInfo(3, false, false, {groupIndex})", 4U)
       });
       int specIndex = talentPoints.IndexOf(talentPoints.Max()) + 1;
 
@@ -221,19 +224,16 @@ public class WeightSetEx : IDisposable
             totalScore += this.GetStatScore(Stat.BlueSocket, 1f);
         }
       }
-      if (itemInfo.ItemClass == WoWItemClass.Armor)
+      if (itemInfo.ItemClass == WoWItemClass.Armor
+          && itemInfo.ArmorClass != WoWItemArmorClass.Misc
+          && itemInfo.ArmorClass != WoWItemArmorClass.None)
       {
+        // HB 5.4.8/6.2.3 logic: |wanted - armor| + 1 (penalizes off-spec armor)
+        // HB 4.3.4 had a bug: Math.Max(wanted+1-armor, 1) clamped penalty to 1 for worse armor
         int armorClass = (int) itemInfo.ArmorClass;
         int wantedArmorClass = (int) this.GetWantedArmorClass();
-        if (armorClass == wantedArmorClass)
-        {
-          totalScore *= 2f;
-        }
-        else
-        {
-          int val1 = wantedArmorClass + 1 - armorClass;
-          totalScore /= (float) Math.Max(val1, 1);
-        }
+        int diff = Math.Abs(wantedArmorClass - armorClass);
+        totalScore /= (float)(diff + 1);
       }
     }
     return totalScore;
