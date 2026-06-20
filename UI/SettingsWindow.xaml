@@ -100,23 +100,7 @@
           </Grid>
         </GroupBox>
 
-        <!-- Mesh GroupBox -->
-        <GroupBox x:Name="gbMesh" Header="Meshes"
-                  Foreground="White" Height="199" Width="224" Margin="4">
-          <Grid>
-            <Label x:Name="lblMeshFolderPath" Content="Mesh Folder Path:" Foreground="White"
-                   HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="txtMeshPath" HorizontalAlignment="Left" Margin="8,27.96,0,0" TextWrapping="NoWrap"
-                     VerticalAlignment="Top" Width="196" IsReadOnly="True"
-                     Text="{Binding Path=StyxSettings.MeshesFolderPath, Mode=OneWay}"/>
-            <Button Click="btnChangeMeshPath_Click" x:Name="btnChangeMeshPath"
-                    Content="Change" Margin="8,56,0,0" Height="21"
-                    VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
-            <TextBlock Foreground="LightGray" Margin="8,85,8,8" TextWrapping="Wrap" VerticalAlignment="Top">
-              <Run Text="Select the folder containing Trinity mmaps tiles extracted with map extractor."/>
-            </TextBlock>
-          </Grid>
-        </GroupBox>
+        
 
         <!-- Vendors GroupBox -->
         <GroupBox x:Name="gbVendors" Header="Vendors &amp; Flight Paths"

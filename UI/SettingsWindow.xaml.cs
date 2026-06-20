@@ -130,29 +130,7 @@ namespace CopilotBuddy.UI
             new DeveloperToolsWindow().Show();
         }
 
-        private void btnChangeMeshPath_Click(object sender, RoutedEventArgs e)
-        {
-            var folderDialog = new System.Windows.Forms.FolderBrowserDialog
-            {
-                Description = "Select the folder containing mmaps (Trinity mesh tiles)",
-                ShowNewFolderButton = true
-            };
-
-            // Set initial directory if path exists
-            if (!string.IsNullOrEmpty(StyxSettings.Instance.MeshesFolderPath) && 
-                System.IO.Directory.Exists(StyxSettings.Instance.MeshesFolderPath))
-            {
-                folderDialog.SelectedPath = StyxSettings.Instance.MeshesFolderPath;
-            }
-
-            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                StyxSettings.Instance.MeshesFolderPath = folderDialog.SelectedPath;
-                txtMeshPath.Text = folderDialog.SelectedPath;
-                StyxSettings.Instance.Save();
-            }
         }
-    }
 
     /// <summary>
     /// Data context for binding both CharacterSettings and StyxSettings

@@ -24,7 +24,6 @@ namespace Styx.Helpers
             Logging.LoggingLevel = _loggingLevel;
         }
 
-        private string _meshesFolderPath = "";
         private string[]? _enabledPlugins;
         private int _formLocationX = 20;
         private int _formLocationY = 20;
@@ -38,16 +37,6 @@ namespace Styx.Helpers
         private bool _useFrameLock = true;
 
         /// <summary>
-        /// Path to meshes folder.
-        /// </summary>
-        [DefaultValue("")]
-        [Setting]
-        public string MeshesFolderPath
-        {
-            get { return _meshesFolderPath; }
-            set { _meshesFolderPath = value; }
-        }
-
         /// <summary>
         /// List of enabled plugins.
         /// </summary>
