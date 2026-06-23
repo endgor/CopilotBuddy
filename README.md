@@ -16,8 +16,8 @@ Just extract the archive next to your WoW 3.3.5a client, double-click `CopilotBu
 
 | Mirror | Download |
 | --- | --- |
-| **Mega.nz** | https://mega.nz/file/HEQQTJ7S#SYoV2KF1TmJYRSxpD-7glqjbSmGWG18QtvnPsknB8Q0 |
-| **Google Drive** | https://drive.google.com/file/d/1KtNk-fCmAHaMVOHJeO65jmfsF-ct94VN/view |
+| **Mega.nz** | https://mega.nz/file/iN4FVISI#s41tkwqg-7rQRWap8BrnnE9fCCtWHG4nilflzyJLuH0 |
+| **Google Drive** | https://drive.google.com/file/d/1_JsG9NNmTxUV-3PA_38eaDptDn6nn-Jg/view |
 
 > Both mirrors host the same package. If one is down or full, try the other. Checksums are listed in the Discord.
 
