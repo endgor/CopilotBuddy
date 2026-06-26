@@ -1,0 +1,3 @@
+[submodule "Routines/Singular-wotlk"]
+	path = Routines/Singular-wotlk
+	url = git@github.com:Likon69/Singular-wotlk.git
